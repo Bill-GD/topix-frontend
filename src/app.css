@@ -1,2 +1,6 @@
 @import 'tailwindcss';
 @plugin '@tailwindcss/forms';
+
+.tippy-box {
+  @apply rounded-md p-1;
+}
