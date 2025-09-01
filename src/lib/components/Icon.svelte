@@ -1,17 +1,16 @@
 <script lang="ts">
-  import { Icons, type IconProps } from '@/utils/component-types';
+  import { Icons, IconSize, type IconProps } from '@/utils/component-types';
 
-  let { type, hover = false }: IconProps = $props();
+  let { type, hover = false, size = 'md' }: IconProps = $props();
 
   const color = Icons[type].color;
-  // const iconName = Icons[type].icon.iconName;
   const icon = Icons[type].icon.icon;
 </script>
 
 {#if icon[4]}
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    class={['h-6', 'w-6', color, hover && 'hover:scale-150', 'transition-transform']}
+    class={[...IconSize[size], color, hover && 'hover:scale-150', 'transition-transform']}
     viewBox="0 0 {icon[0]} {icon[1]}"
     role="img"
   >

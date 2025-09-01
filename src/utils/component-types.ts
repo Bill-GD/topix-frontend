@@ -23,6 +23,12 @@ export interface ButtonProps {
   children?: Snippet;
 }
 
+export const IconSize = {
+  sm: ['h-5', 'w-5'],
+  md: ['h-6', 'w-6'],
+  lg: ['h-8', 'w-8'],
+};
+
 export const Icons = {
   home: { color: 'text-white', icon: faHouse },
   search: { color: 'text-white', icon: faMagnifyingGlass },
@@ -39,10 +45,16 @@ export const Icons = {
 export interface IconProps {
   type: keyof typeof Icons;
   hover?: boolean;
+  size?: keyof typeof IconSize;
 }
 
 export interface NavItemProps {
   title: string;
   href: string;
   onclick?: VoidFunction | undefined;
+}
+
+export interface FlairProps {
+  title: string;
+  color: string;
 }

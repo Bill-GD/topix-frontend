@@ -10,6 +10,6 @@
   onclick={props.onclick}
   href={props.href}
 >
-  <span class="hidden text-white md:inline">{props.title}</span>
+  <span class="hidden text-2xl text-white md:inline">{props.title}</span>
   {@render props.children()}
 </a>
