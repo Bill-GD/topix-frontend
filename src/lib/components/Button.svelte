@@ -52,37 +52,35 @@ A pre-made button component.
     @apply bg-transparent outline hover:text-white;
   }
 
-  @layer components {
-    .btn-dark {
-      @apply btn bg-gray-700 hover:bg-gray-600 active:bg-gray-500;
-    }
+  .btn-dark {
+    @apply btn bg-gray-700 hover:bg-gray-600 active:bg-gray-500;
+  }
 
-    .btn-primary {
-      @apply btn bg-sky-500 hover:bg-sky-600 active:bg-sky-700;
-    }
+  .btn-primary {
+    @apply btn bg-sky-500 hover:bg-sky-600 active:bg-sky-700;
+  }
 
-    .btn-danger {
-      @apply btn bg-red-500 hover:bg-red-600 active:bg-red-700;
-    }
+  .btn-danger {
+    @apply btn bg-red-500 hover:bg-red-600 active:bg-red-700;
+  }
 
-    .btn-success {
-      @apply btn bg-green-700 hover:bg-green-800 active:bg-green-900;
-    }
+  .btn-success {
+    @apply btn bg-green-700 hover:bg-green-800 active:bg-green-900;
+  }
 
-    .btn-dark-outline {
-      @apply btn outlined text-gray-700 outline-gray-700 hover:bg-gray-700 active:bg-gray-500 active:outline-gray-500;
-    }
+  .btn-dark-outline {
+    @apply btn outlined text-gray-700 outline-gray-700 hover:bg-gray-700 active:bg-gray-500 active:outline-gray-500;
+  }
 
-    .btn-primary-outline {
-      @apply btn outlined text-sky-500 outline-sky-500 hover:bg-sky-500 active:bg-sky-700 active:outline-sky-700;
-    }
+  .btn-primary-outline {
+    @apply btn outlined text-sky-500 outline-sky-500 hover:bg-sky-500 active:bg-sky-700 active:outline-sky-700;
+  }
 
-    .btn-danger-outline {
-      @apply btn outlined text-red-500 outline-red-500 hover:bg-red-500 active:bg-red-700 active:outline-red-700;
-    }
+  .btn-danger-outline {
+    @apply btn outlined text-red-500 outline-red-500 hover:bg-red-500 active:bg-red-700 active:outline-red-700;
+  }
 
-    .btn-success-outline {
-      @apply btn outlined text-green-700 outline-green-700 hover:bg-green-700 active:bg-green-900 active:outline-green-900;
-    }
+  .btn-success-outline {
+    @apply btn outlined text-green-700 outline-green-700 hover:bg-green-700 active:bg-green-900 active:outline-green-900;
   }
 </style>
