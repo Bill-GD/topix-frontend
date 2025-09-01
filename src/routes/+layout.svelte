@@ -5,6 +5,9 @@
   import '../app.css';
   import type { LayoutProps } from './$types';
   import type { NavItem } from '@/utils/types';
+  import { PUBLIC_API_PORT, PUBLIC_API_SERVER } from '$env/static/public';
+
+  setContext('API_URL', `${PUBLIC_API_SERVER}:${PUBLIC_API_PORT}`);
 
   let { children, data }: LayoutProps = $props();
 
@@ -14,12 +17,10 @@
     { title: 'Chat', href: '/chat', icon: 'message' },
     { title: 'Groups', href: '/groups', icon: 'group' },
   ];
-
-  setContext('API_URL', `${data.env.API_SERVER}:${data.env.API_PORT}`);
 </script>
 
 <main class="flex h-dvh items-center justify-between bg-gray-950 text-white">
-  <aside
+  <nav
     class="flex h-dvh w-fit flex-col items-center gap-4 border-r border-gray-700 px-1 py-3 lg:px-3"
   >
     <div class="hidden w-full p-2 text-end text-2xl lg:inline">topix</div>
@@ -37,7 +38,7 @@
         imageURL="https://st3.depositphotos.com/6672868/13701/v/450/depositphotos_137014128-stock-illustration-user-profile-icon.jpg"
       ></NavigationAccount>
     </div>
-  </aside>
+  </nav>
 
   <div class="flex h-dvh flex-auto flex-col justify-start">
     {@render children?.()}
