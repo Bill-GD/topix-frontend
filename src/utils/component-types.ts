@@ -1,4 +1,5 @@
 import {
+  faBars,
   faFaceAngry,
   faFaceFrownOpen,
   faFaceLaugh,
@@ -35,6 +36,7 @@ export const Icons = {
   group: { color: 'text-white', icon: faUserGroup },
   message: { color: 'text-white', icon: faMessage },
   reply: { color: 'text-white', icon: faReply },
+  menu: { color: 'text-white', icon: faBars },
   like: { color: 'text-sky-600', icon: faThumbsUp },
   heart: { color: 'text-red-500', icon: faHeart },
   laugh: { color: 'text-yellow-500', icon: faFaceLaugh },
@@ -51,10 +53,15 @@ export interface IconProps {
 export interface NavItemProps {
   title: string;
   href: string;
-  onclick?: VoidFunction | undefined;
 }
 
 export interface FlairProps {
   title: string;
   color: string;
+}
+
+export interface NavAccountProps {
+  displayName: string;
+  username: string;
+  imageURL: string;
 }
