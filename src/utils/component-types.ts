@@ -39,5 +39,10 @@ export const Icons = {
 export interface IconProps {
   type: keyof typeof Icons;
   hover?: boolean;
+}
+
+export interface NavItemProps {
+  title: string;
+  href: string;
   onclick?: VoidFunction | undefined;
 }
