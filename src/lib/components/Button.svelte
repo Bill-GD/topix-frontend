@@ -1,22 +1,5 @@
-<!-- 
-@component
-A pre-made button component.
-@prop `type` One of: `primary`, `danger`, `dark`, `success`. Default is `primary`.
-@prop `outline` Toggles outline variant.
-@prop `href` Automatically uses `<a>`, redirecting works as normal
-@prop `onclick`
-@prop `disabled` Disables button if `href` not provided.
--->
-
 <script lang="ts">
-  import type { Snippet } from 'svelte';
-
-  const ButtonTypes = {
-    primary: '',
-    danger: '',
-    dark: '',
-    success: '',
-  } as const;
+  import type { ButtonProps } from '@/utils/component-types';
 
   let {
     type,
@@ -26,14 +9,7 @@ A pre-made button component.
     disabled = false,
     children,
     ...otherProps
-  }: {
-    type: keyof typeof ButtonTypes;
-    outline?: boolean;
-    href?: string | undefined;
-    onclick?: VoidFunction | undefined;
-    disabled?: boolean;
-    children?: Snippet;
-  } = $props();
+  }: ButtonProps = $props();
 
   const buttonClass = `btn-${type}${outline ? '-outline' : ''}`;
   const textColor = buttonClass !== 'btn' && !buttonClass.includes('outline') ? 'text-white' : '';
@@ -54,6 +30,16 @@ A pre-made button component.
     {@render children?.()}
   </button>
 {/if}
+
+<!-- 
+@component
+A pre-made button component.
+@prop `type` One of: `primary`, `danger`, `dark`, `success`. Default is `primary`.
+@prop `outline` Toggles outline variant.
+@prop `href` Automatically uses `<a>`, redirecting works as normal
+@prop `onclick`
+@prop `disabled` Disables button if `href` not provided.
+-->
 
 <style lang="postcss">
   @reference 'tailwindcss';
