@@ -1,7 +1,7 @@
 <script lang="ts">
   import { Icons, IconSize, type IconProps } from '@/utils/component-types';
 
-  let { type, hover = false, size = 'md' }: IconProps = $props();
+  let { type, hover = false, size = 'md', class: className }: IconProps = $props();
 
   const color = Icons[type].color;
   const icon = Icons[type].icon.icon;
@@ -10,7 +10,8 @@
 {#if icon[4]}
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    class={[...IconSize[size], color, hover && 'hover:scale-150', 'transition-transform']}
+    class="transition-transform {className} {color} {IconSize[size].join(' ')} {hover &&
+      'hover:scale-150'}"
     viewBox="0 0 {icon[0]} {icon[1]}"
     role="img"
   >

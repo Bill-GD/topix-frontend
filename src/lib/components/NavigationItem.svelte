@@ -1,8 +1,7 @@
 <script lang="ts">
   import type { NavItemProps } from '@/utils/component-types';
-  import type { Snippet } from 'svelte';
 
-  let props: NavItemProps & { children: Snippet } = $props();
+  let props: NavItemProps = $props();
 </script>
 
 <a

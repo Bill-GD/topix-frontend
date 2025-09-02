@@ -12,6 +12,7 @@ import {
   faUserGroup,
 } from '@fortawesome/free-solid-svg-icons';
 import type { Snippet } from 'svelte';
+import type { HTMLAttributes } from 'svelte/elements';
 
 export type ButtonType = 'primary' | 'danger' | 'dark' | 'success';
 
@@ -44,7 +45,7 @@ export const Icons = {
   angry: { color: 'text-red-500', icon: faFaceAngry },
 } as const;
 
-export interface IconProps {
+export interface IconProps extends HTMLAttributes<SVGElement> {
   type: keyof typeof Icons;
   hover?: boolean;
   size?: keyof typeof IconSize;
@@ -53,6 +54,7 @@ export interface IconProps {
 export interface NavItemProps {
   title: string;
   href: string;
+  children: Snippet;
 }
 
 export interface FlairProps {
@@ -60,7 +62,7 @@ export interface FlairProps {
   color: string;
 }
 
-export interface NavAccountProps {
+export interface NavAccountProps extends HTMLAttributes<HTMLDivElement> {
   displayName: string;
   username: string;
   imageURL: string;
