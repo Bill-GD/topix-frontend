@@ -10,9 +10,10 @@ import {
   faReply,
   faThumbsUp,
   faUserGroup,
+  faXmark,
 } from '@fortawesome/free-solid-svg-icons';
 import type { Snippet } from 'svelte';
-import type { HTMLAttributes } from 'svelte/elements';
+import type { HTMLAttributes, HTMLButtonAttributes, HTMLInputAttributes } from 'svelte/elements';
 
 export type ButtonType = 'primary' | 'danger' | 'dark' | 'success';
 
@@ -38,6 +39,7 @@ export const Icons = {
   message: { color: 'text-white', icon: faMessage },
   reply: { color: 'text-white', icon: faReply },
   menu: { color: 'text-white', icon: faBars },
+  close: { color: 'text-white', icon: faXmark },
   like: { color: 'text-sky-600', icon: faThumbsUp },
   heart: { color: 'text-red-500', icon: faHeart },
   laugh: { color: 'text-yellow-500', icon: faFaceLaugh },
@@ -48,6 +50,12 @@ export const Icons = {
 export interface IconProps extends HTMLAttributes<SVGElement> {
   type: keyof typeof Icons;
   hover?: boolean;
+  size?: keyof typeof IconSize;
+  color?: string;
+}
+
+export interface IconButtonProps extends HTMLButtonAttributes {
+  icon: keyof typeof Icons;
   size?: keyof typeof IconSize;
 }
 
@@ -66,4 +74,12 @@ export interface NavAccountProps extends HTMLAttributes<HTMLDivElement> {
   displayName: string;
   username: string;
   imageURL: string;
+}
+
+export interface InputProps extends HTMLInputAttributes {
+  clearable?: boolean;
+}
+export interface FloatingLabelInputProps extends HTMLInputAttributes {
+  clearable?: boolean;
+  children: Snippet;
 }

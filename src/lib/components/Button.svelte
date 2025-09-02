@@ -45,7 +45,7 @@ A pre-made button component.
   @reference 'tailwindcss';
 
   @utility btn {
-    @apply cursor-pointer rounded-md px-4 py-2 text-base transition-all duration-100 ease-in-out hover:bg-gray-200 active:bg-gray-300 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-gray-900 dark:text-white dark:hover:bg-gray-800 dark:active:bg-gray-700;
+    @apply cursor-pointer rounded-md px-4 py-2 text-base text-white transition-all duration-100 ease-in-out disabled:cursor-not-allowed disabled:opacity-50;
   }
 
   @utility outlined {

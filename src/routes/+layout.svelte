@@ -43,5 +43,5 @@
     {@render children?.()}
   </div>
 
-  <aside class="hidden h-dvh w-1/4 p-3 lg:block"></aside>
+  <aside class="hidden h-dvh p-3 md:block md:w-1/3 lg:w-1/4"></aside>
 </main>

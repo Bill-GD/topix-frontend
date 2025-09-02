@@ -1,3 +1,5 @@
+let num = Date.now();
+
 export function getContrastColor(hex: string): 'black' | 'white' {
   const r = parseInt(hex.slice(0, 2), 16);
   const g = parseInt(hex.slice(2, 4), 16);
@@ -5,4 +7,8 @@ export function getContrastColor(hex: string): 'black' | 'white' {
 
   const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
   return luminance > 0.5 ? 'black' : 'white';
+}
+
+export function generateId(): string {
+  return (++num).toString(36);
 }
