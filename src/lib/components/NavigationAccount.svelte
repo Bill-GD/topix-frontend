@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { NavAccountProps } from '@/utils/component-types';
+  import type { NavAccountProps } from '@/lib/components/types';
   import Icon from './Icon.svelte';
 
   let { displayName, username, imageURL, class: className }: NavAccountProps = $props();

@@ -1,17 +1,21 @@
 <script lang="ts">
-  import { Icon, NavigationAccount, NavigationItem } from '@/lib/components';
-  import { setContext } from 'svelte';
   import 'tippy.js/dist/tippy.css';
   import '../app.css';
+  import { setContext } from 'svelte';
   import type { LayoutProps } from './$types';
-  import type { NavItem } from '@/utils/types';
   import { PUBLIC_API_PORT, PUBLIC_API_SERVER } from '$env/static/public';
+  import { Icon, NavigationAccount, NavigationItem } from '@/lib/components';
+  import { Icons } from '@/lib/components/types';
 
   setContext('API_URL', `${PUBLIC_API_SERVER}:${PUBLIC_API_PORT}`);
 
   let { children, data }: LayoutProps = $props();
 
-  const navItems: NavItem[] = [
+  const navItems: {
+    title: string;
+    href: string;
+    icon: keyof typeof Icons;
+  }[] = [
     { title: 'Home', href: '/', icon: 'home' },
     { title: 'Search', href: '/search', icon: 'search' },
     { title: 'Chat', href: '/chat', icon: 'message' },

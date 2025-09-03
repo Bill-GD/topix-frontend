@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Icons, IconSize, type IconProps } from '@/utils/component-types';
+  import { Icons, IconSize, type IconProps } from '@/lib/components/types';
 
   let {
     type,

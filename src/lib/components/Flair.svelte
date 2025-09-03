@@ -1,6 +1,6 @@
 <script lang="ts">
-  import type { FlairProps } from '@/utils/component-types';
-  import { getContrastColor } from '@/utils/helpers';
+  import type { FlairProps } from '@/lib/components/types';
+  import { getContrastColor } from '@/lib/utils/helpers';
 
   let props: FlairProps = $props();
   let textColor = $derived(getContrastColor(props.color));

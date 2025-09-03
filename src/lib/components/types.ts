@@ -1,3 +1,5 @@
+// component-related types
+
 import {
   faBars,
   faFaceAngry,

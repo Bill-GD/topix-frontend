@@ -1,6 +1,6 @@
 <script lang="ts">
-  import type { InputProps } from '@/utils/component-types';
-  import { generateId } from '@/utils/helpers';
+  import type { InputProps } from '@/lib/components/types';
+  import { generateId } from '@/lib/utils/helpers';
   import IconButton from './IconButton.svelte';
 
   let {

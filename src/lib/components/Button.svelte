@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { ButtonProps } from '@/utils/component-types';
+  import type { ButtonProps } from '@/lib/components/types';
 
   let {
     type,

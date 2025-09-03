@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { IconButtonProps } from '@/utils/component-types';
+  import type { IconButtonProps } from '@/lib/components/types';
   import Icon from './Icon.svelte';
 
   let {
