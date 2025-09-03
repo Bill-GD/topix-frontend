@@ -14,10 +14,10 @@ export function generateId(): string {
 }
 
 export function getLogTimestamp(date: Date): string {
-  const h = padIntLeft(date.getHours(), 2, '0'),
-    m = padIntLeft(date.getMinutes(), 2, '0'),
-    s = padIntLeft(date.getSeconds(), 2, '0'),
-    ms = padIntLeft(date.getMilliseconds(), 2, '0');
+  const h = padIntLeft(date.getHours(), 2, '0');
+  const m = padIntLeft(date.getMinutes(), 2, '0');
+  const s = padIntLeft(date.getSeconds(), 2, '0');
+  const ms = padIntLeft(date.getMilliseconds(), 2, '0');
 
   return `${h}:${m}:${s}.${ms}`;
 }

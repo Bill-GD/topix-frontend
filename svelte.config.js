@@ -14,6 +14,10 @@ const config = {
     adapter: adapter(),
     alias: {
       '@': 'src',
+    },
+    env: {
+      publicPrefix: '',
+      privatePrefix: '_'
     }
   },
 };

@@ -3,11 +3,11 @@
   import '../app.css';
   import { setContext } from 'svelte';
   import type { LayoutProps } from './$types';
-  import { PUBLIC_API_PORT, PUBLIC_API_SERVER } from '$env/static/public';
+  import { API_PORT, API_SERVER } from '$env/static/public';
   import { Icon, NavigationAccount, NavigationItem } from '@/lib/components';
   import { Icons } from '@/lib/components/types';
 
-  setContext('API_URL', `${PUBLIC_API_SERVER}:${PUBLIC_API_PORT}`);
+  setContext('API_URL', `${API_SERVER}:${API_PORT}`);
 
   let { children, data }: LayoutProps = $props();
 
