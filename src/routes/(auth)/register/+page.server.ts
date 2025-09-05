@@ -1,4 +1,4 @@
-import { fail } from '@sveltejs/kit';
+import { fail, redirect } from '@sveltejs/kit';
 import type { Actions } from './$types';
 import { AxiosHandler } from '@/lib/utils/axios-handler';
 import { capitalize } from '@/lib/utils/helpers';
@@ -38,5 +38,7 @@ export const actions: Actions = {
       }
       return fail(res.status, { email, username, ...res, message });
     }
+
+    return redirect(303, '/verify');
   },
 };

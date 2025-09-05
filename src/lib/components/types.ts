@@ -19,9 +19,7 @@ import type { Snippet } from 'svelte';
 import type {
   ClassValue,
   HTMLAttributeAnchorTarget,
-  HTMLAttributes,
-  HTMLButtonAttributes,
-  HTMLInputAttributes,
+  HTMLInputTypeAttribute,
 } from 'svelte/elements';
 
 export type ButtonType = 'primary' | 'danger' | 'dark' | 'success';
@@ -66,9 +64,12 @@ export interface IconProps {
   class?: ClassValue | undefined | null;
 }
 
-export interface IconButtonProps extends HTMLButtonAttributes {
+export interface IconButtonProps {
   icon: keyof typeof Icons;
   size?: keyof typeof IconSize;
+  onclick?: VoidFunction | undefined;
+  disabled?: boolean | undefined | null;
+  class?: ClassValue | undefined | null;
 }
 
 export interface NavItemProps {
@@ -82,18 +83,32 @@ export interface FlairProps {
   color: string;
 }
 
-export interface NavAccountProps extends HTMLAttributes<HTMLDivElement> {
+export interface NavAccountProps {
   displayName: string;
   username: string;
   imageURL: string;
+  class?: ClassValue | undefined | null;
 }
 
-export interface InputProps extends HTMLInputAttributes {
+export interface InputProps {
   clearable?: boolean;
+  id: string | null;
+  value?: string;
+  type?: HTMLInputTypeAttribute | undefined | null;
+  class?: ClassValue | undefined | null;
+  required?: boolean | undefined | null;
+  name?: string | undefined | null;
+  placeholder?: string | undefined | null;
 }
-export interface FloatingLabelInputProps extends HTMLInputAttributes {
+
+export interface FloatingLabelInputProps {
   clearable?: boolean;
   children: Snippet;
+  value?: string;
+  type?: HTMLInputTypeAttribute | undefined | null;
+  class?: ClassValue | undefined | null;
+  required?: boolean | undefined | null;
+  name?: string | undefined | null;
 }
 
 export interface LinkProps {

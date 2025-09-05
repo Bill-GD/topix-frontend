@@ -9,10 +9,10 @@
     class: className,
     name: inputName,
     required = false,
+    value = '',
   }: FloatingLabelInputProps = $props();
 
   const id = $props.id();
-  let value = $state<string>('');
 </script>
 
 <div class="relative w-fit {className}">
