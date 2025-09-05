@@ -5,5 +5,5 @@ export type ApiResponse = {
   readonly message: string;
   readonly status: number;
   readonly error: string | object | null;
-  readonly data: object;
+  readonly data: object | null;
 };

@@ -1,8 +1,7 @@
 import { fail } from '@sveltejs/kit';
 import type { Actions } from './$types';
-import axios, { AxiosError } from 'axios';
-import { getApiUrl } from '@/lib/utils/helpers';
-import type { ApiResponse } from '@/lib/utils/types';
+import { AxiosHandler } from '@/lib/utils/axios-handler';
+import { capitalize } from '@/lib/utils/helpers';
 
 export const actions: Actions = {
   default: async (event) => {
@@ -15,9 +14,11 @@ export const actions: Actions = {
       confirmPassword: `${formData.get('confirm-password')}`,
     };
 
+    const { email, username } = dto;
+
     for (const v of Object.values(dto)) {
       if (v.length <= 0) {
-        return fail(400, { missing: true });
+        return fail(400, { email, username, missing: true });
       }
     }
 
@@ -25,18 +26,17 @@ export const actions: Actions = {
       /^[a-zA-Z0-9]+([._-][0-9a-zA-Z]+)*@[a-zA-Z0-9]+([.-][0-9a-zA-Z]+)*\.[a-zA-Z]{2,}$/;
 
     if (!RegExp(emailRegex).test(dto.email)) {
-      return fail(400, { email: true });
+      return fail(400, { email, username, invalid: true });
     }
 
-    try {
-      await axios.post('/auth/register', dto, {
-        baseURL: getApiUrl(),
-      });
-    } catch (error) {
-      if (error instanceof AxiosError) {
-        return fail(error.response?.status ?? 500, error.response?.data as ApiResponse);
+    const res = await AxiosHandler.post('/auth/register', dto);
+    if (!res.success) {
+      let message = res.message;
+      if (res.message.toLowerCase().includes('exception')) {
+        if (res.error instanceof Array) message = capitalize(res.error[0]);
+        if (typeof res.error === 'string') message = res.error;
       }
-      console.error(error);
+      return fail(res.status, { email, username, ...res, message });
     }
   },
 };

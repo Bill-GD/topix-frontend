@@ -31,3 +31,7 @@ export function padIntLeft(num: number, length: number, char: string): string {
 export function getApiUrl(): string {
   return `${API_SERVER}:${API_PORT}`;
 }
+
+export function capitalize(str: string): string {
+  return `${str.charAt(0).toUpperCase()}${str.slice(1)}`;
+}

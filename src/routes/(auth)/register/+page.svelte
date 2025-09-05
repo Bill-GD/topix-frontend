@@ -9,12 +9,16 @@
   let message = $state<string>('');
 </script>
 
+<svelte:head>
+  <title>Register - topix</title>
+</svelte:head>
+
 <p class="text-5xl font-semibold">Sign Up</p>
 
 <form class="mt-8 flex flex-col gap-6" method="post">
   {#if form?.missing}<Error>All fields must not be empty.</Error>{/if}
   {#if form?.email}<Error>Email format is invalid.</Error>{/if}
-  {#if !form?.success}<Error>{form?.message}</Error>{/if}
+  {#if form?.success === false}<Error>{form?.message}</Error>{/if}
 
   <div class="flex flex-col gap-4">
     <FloatingLabelInput class="w-full" name="email" type="email" required>Email</FloatingLabelInput>
