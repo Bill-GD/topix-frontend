@@ -1,9 +1,9 @@
 import { page } from '@vitest/browser/context';
 import { describe, expect, it } from 'vitest';
 import { render } from 'vitest-browser-svelte';
-import Layout from '@/routes/+layout.svelte';
+import Layout from '@/routes/(app)/+layout.svelte';
 
-describe('/+page.svelte', () => {
+describe('(app)/+layout.svelte', () => {
   it('should render all nav items', async () => {
     render(Layout);
     page

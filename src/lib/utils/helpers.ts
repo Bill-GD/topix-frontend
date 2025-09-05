@@ -1,3 +1,5 @@
+import { API_PORT, API_SERVER } from '$env/static/public';
+
 let num = Date.now();
 
 export function getContrastColor(hex: string): 'black' | 'white' {
@@ -24,4 +26,8 @@ export function getLogTimestamp(date: Date): string {
 
 export function padIntLeft(num: number, length: number, char: string): string {
   return `${num}`.padStart(length, char);
+}
+
+export function getApiUrl(): string {
+  return `${API_SERVER}:${API_PORT}`;
 }
