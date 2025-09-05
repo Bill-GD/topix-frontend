@@ -6,3 +6,5 @@ export { default as NavigationAccount } from './NavigationAccount.svelte';
 export { default as FloatingLabelInput } from './FloatingLabelInput.svelte';
 export { default as Input } from './Input.svelte';
 export { default as IconButton } from './IconButton.svelte';
+export { default as Link } from './Link.svelte';
+export { default as Error } from './Error.svelte';

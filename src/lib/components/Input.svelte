@@ -11,6 +11,7 @@
     required,
     clearable = false,
     value = $bindable(''),
+    name: inputName,
   }: InputProps = $props();
 </script>
 
@@ -19,9 +20,10 @@
   {type}
   {id}
   {required}
+  {placeholder}
+  name={inputName ?? id}
   bind:value
   autocomplete="off"
-  {placeholder}
 />
 
 {#if clearable && value.length > 0}

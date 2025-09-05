@@ -11,22 +11,20 @@ import {
   faMessage,
   faReply,
   faThumbsUp,
+  faTriangleExclamation,
   faUserGroup,
   faXmark,
 } from '@fortawesome/free-solid-svg-icons';
 import type { Snippet } from 'svelte';
-import type { HTMLAttributes, HTMLButtonAttributes, HTMLInputAttributes } from 'svelte/elements';
+import type {
+  ClassValue,
+  HTMLAttributeAnchorTarget,
+  HTMLAttributes,
+  HTMLButtonAttributes,
+  HTMLInputAttributes,
+} from 'svelte/elements';
 
 export type ButtonType = 'primary' | 'danger' | 'dark' | 'success';
-
-export interface ButtonProps {
-  type: ButtonType;
-  outline?: boolean;
-  href?: string | undefined;
-  onclick?: VoidFunction | undefined;
-  disabled?: boolean;
-  children?: Snippet;
-}
 
 export const IconSize = {
   sm: ['h-5', 'w-5'],
@@ -35,6 +33,7 @@ export const IconSize = {
 };
 
 export const Icons = {
+  error: { color: 'text-red-400', icon: faTriangleExclamation },
   home: { color: 'text-white', icon: faHouse },
   search: { color: 'text-white', icon: faMagnifyingGlass },
   group: { color: 'text-white', icon: faUserGroup },
@@ -49,11 +48,22 @@ export const Icons = {
   angry: { color: 'text-red-500', icon: faFaceAngry },
 } as const;
 
-export interface IconProps extends HTMLAttributes<SVGElement> {
+export interface ButtonProps {
+  type: ButtonType;
+  outline?: boolean;
+  href?: string | undefined;
+  onclick?: VoidFunction | undefined;
+  disabled?: boolean;
+  children?: Snippet;
+  class?: ClassValue | undefined | null;
+}
+
+export interface IconProps {
   type: keyof typeof Icons;
   hover?: boolean;
   size?: keyof typeof IconSize;
   color?: string;
+  class?: ClassValue | undefined | null;
 }
 
 export interface IconButtonProps extends HTMLButtonAttributes {
@@ -84,4 +94,16 @@ export interface InputProps extends HTMLInputAttributes {
 export interface FloatingLabelInputProps extends HTMLInputAttributes {
   clearable?: boolean;
   children: Snippet;
+}
+
+export interface LinkProps {
+  href?: string | undefined | null;
+  class?: ClassValue | undefined | null;
+  target?: HTMLAttributeAnchorTarget | undefined | null;
+  children: Snippet;
+}
+
+export interface ErrorProps {
+  children: Snippet;
+  class?: ClassValue | undefined | null;
 }

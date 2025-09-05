@@ -8,6 +8,7 @@
     onclick,
     disabled = false,
     children,
+    class: className,
     ...otherProps
   }: ButtonProps = $props();
 
@@ -17,7 +18,7 @@
 
 {#if href}
   <a
-    class={[buttonClass, textColor, 'no-underline', 'inline-flex']}
+    class="{buttonClass} {textColor} {className} inline-flex no-underline"
     role="button"
     {href}
     {onclick}
@@ -26,7 +27,12 @@
     {@render children?.()}
   </a>
 {:else}
-  <button class={[buttonClass, textColor, 'font-semibold']} {onclick} {disabled} {...otherProps}>
+  <button
+    class="{buttonClass} {textColor} {className} font-semibold"
+    {onclick}
+    {disabled}
+    {...otherProps}
+  >
     {@render children?.()}
   </button>
 {/if}
