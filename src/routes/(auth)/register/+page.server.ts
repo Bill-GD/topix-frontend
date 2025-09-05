@@ -39,6 +39,6 @@ export const actions: Actions = {
       return fail(res.status, { email, username, ...res, message });
     }
 
-    return redirect(303, '/verify');
+    return redirect(303, `/verify/${res.data!['id']}`);
   },
 };

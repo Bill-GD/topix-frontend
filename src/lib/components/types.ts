@@ -50,6 +50,7 @@ export interface ButtonProps {
   type: ButtonType;
   outline?: boolean;
   href?: string | undefined;
+  formaction?: string | undefined;
   onclick?: VoidFunction | undefined;
   disabled?: boolean;
   children?: Snippet;

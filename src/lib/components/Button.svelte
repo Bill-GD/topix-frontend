@@ -9,6 +9,7 @@
     disabled = false,
     children,
     class: className,
+    formaction,
     ...otherProps
   }: ButtonProps = $props();
 
@@ -29,6 +30,7 @@
 {:else}
   <button
     class="{buttonClass} {textColor} {className} font-semibold"
+    {formaction}
     {onclick}
     {disabled}
     {...otherProps}

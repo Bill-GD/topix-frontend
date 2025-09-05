@@ -9,7 +9,15 @@ export class AxiosHandler {
     let res: ApiResponse;
 
     try {
-      res = this.getResponse(await axios.get(url, { baseURL: this.API_URL, headers }));
+      res = this.getResponse(
+        await axios.get(url, {
+          baseURL: this.API_URL,
+          headers: {
+            Accept: 'application/json',
+            ...headers,
+          },
+        }),
+      );
     } catch (error) {
       res = this.handleError(error);
     }
@@ -17,11 +25,19 @@ export class AxiosHandler {
     return res;
   }
 
-  static async post(url: string, dto: object, headers?: AxiosHeaders): Promise<ApiResponse> {
+  static async post(url: string, dto?: object, headers?: AxiosHeaders): Promise<ApiResponse> {
     let res: ApiResponse;
 
     try {
-      res = this.getResponse(await axios.post(url, dto, { baseURL: this.API_URL, headers }));
+      res = this.getResponse(
+        await axios.post(url, dto, {
+          baseURL: this.API_URL,
+          headers: {
+            Accept: 'application/json',
+            ...headers,
+          },
+        }),
+      );
     } catch (error) {
       res = this.handleError(error);
     }

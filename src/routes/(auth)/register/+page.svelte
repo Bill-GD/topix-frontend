@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { getContext } from 'svelte';
   import { Button, FloatingLabelInput, Link, Error } from '@/lib/components';
   import type { PageProps } from './$types';
 
@@ -10,7 +9,7 @@
   <title>Register - topix</title>
 </svelte:head>
 
-<p class="text-5xl font-semibold">Sign Up</p>
+<p class="text-4xl font-semibold">Sign up for topix</p>
 
 <form class="mt-8 flex flex-col gap-6" method="post">
   {#if form?.missing}<Error>All fields must not be empty.</Error>{/if}
@@ -40,7 +39,7 @@
       Confirm password
     </FloatingLabelInput>
 
-    <Button class="" type="success">Register</Button>
+    <Button type="success">Register</Button>
   </div>
 
   <hr class="text-gray-700" />
