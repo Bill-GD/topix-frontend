@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Button, FloatingLabelInput, Link, Error } from '@/lib/components';
+  import { Button, Error, FloatingLabelInput, Link } from '@/lib/components';
   import type { PageProps } from './$types';
 
   let { form }: PageProps = $props();
@@ -31,11 +31,11 @@
       Username
     </FloatingLabelInput>
 
-    <FloatingLabelInput class="w-full" name="password" type="password" required>
+    <FloatingLabelInput class="w-full" name="password" type="password" peekable required>
       Password
     </FloatingLabelInput>
 
-    <FloatingLabelInput class="w-full" name="confirm-password" type="password" required>
+    <FloatingLabelInput class="w-full" name="confirm-password" type="password" peekable required>
       Confirm password
     </FloatingLabelInput>
 

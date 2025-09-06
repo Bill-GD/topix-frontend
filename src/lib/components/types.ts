@@ -2,6 +2,8 @@
 
 import {
   faBars,
+  faEye,
+  faEyeSlash,
   faFaceAngry,
   faFaceFrownOpen,
   faFaceLaugh,
@@ -31,6 +33,8 @@ export const IconSize = {
 };
 
 export const Icons = {
+  eye: { color: 'text-white', icon: faEye },
+  eyeSlash: { color: 'text-white', icon: faEyeSlash },
   error: { color: 'text-red-400', icon: faTriangleExclamation },
   home: { color: 'text-white', icon: faHouse },
   search: { color: 'text-white', icon: faMagnifyingGlass },
@@ -70,6 +74,7 @@ export interface IconButtonProps {
   size?: keyof typeof IconSize;
   onclick?: VoidFunction | undefined;
   disabled?: boolean | undefined | null;
+  type?: 'submit' | 'reset' | 'button' | undefined | null;
   class?: ClassValue | undefined | null;
 }
 
@@ -93,6 +98,7 @@ export interface NavAccountProps {
 
 export interface InputProps {
   clearable?: boolean;
+  peekable?: boolean;
   id: string | null;
   value?: string;
   type?: HTMLInputTypeAttribute | undefined | null;
@@ -104,6 +110,7 @@ export interface InputProps {
 
 export interface FloatingLabelInputProps {
   clearable?: boolean;
+  peekable?: boolean;
   children: Snippet;
   value?: string;
   type?: HTMLInputTypeAttribute | undefined | null;

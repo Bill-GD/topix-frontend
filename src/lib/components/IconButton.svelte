@@ -8,6 +8,7 @@
     onclick,
     disabled = false,
     class: className,
+    type,
   }: IconButtonProps = $props();
   let hover = $state<boolean>(false);
 </script>
@@ -17,7 +18,8 @@
   {onclick}
   onmouseenter={() => (hover = true)}
   onmouseleave={() => (hover = false)}
+  {type}
   {disabled}
 >
-  <Icon type={icon} color={hover ? 'text-black' : 'text-gray-400'} {size}></Icon>
+  <Icon type={icon} color={hover ? 'text-gray-400' : 'text-gray-600'} {size}></Icon>
 </button>

@@ -5,6 +5,7 @@
   let {
     children,
     clearable = false,
+    peekable = false,
     type,
     class: className,
     name: inputName,
@@ -21,6 +22,7 @@
     {id}
     {type}
     {clearable}
+    {peekable}
     name={inputName}
     bind:value
     placeholder=" "
