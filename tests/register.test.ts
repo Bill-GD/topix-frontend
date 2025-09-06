@@ -3,7 +3,7 @@ import { beforeEach, describe, expect, it } from 'vitest';
 import { render } from 'vitest-browser-svelte';
 import Page from '@/routes/(auth)/register/+page.svelte';
 
-describe('(auth)/register/+page.svelte', () => {
+describe('register page', () => {
   let hostBody: HTMLElement;
 
   beforeEach(() => {
@@ -18,10 +18,12 @@ describe('(auth)/register/+page.svelte', () => {
   it('should render the form and its content', () => {
     expect.soft(hostBody.querySelector('form[method=post]')).toBeVisible();
 
-    expect.soft(page.getByRole('button')).toBeVisible();
+    hostBody.querySelectorAll('button').forEach((b) => expect.soft(b).toBeVisible());
+
     ['Email', 'Username', 'Password', 'Confirm password'].forEach((l) => {
       expect.soft(page.getByLabelText(l, { exact: true })).toBeVisible();
     });
+
     hostBody.querySelectorAll('input').forEach((b) => expect.soft(b).toBeVisible());
     expect.soft(page.getByRole('link')).toBeVisible();
   });

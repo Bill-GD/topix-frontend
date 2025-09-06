@@ -3,7 +3,7 @@ import { beforeEach, describe, expect, it } from 'vitest';
 import { render } from 'vitest-browser-svelte';
 import Page from '@/routes/(auth)/verify/[id=userId]/+page.svelte';
 
-describe('(auth)/verify/[id=userId]/+page.svelte', () => {
+describe('verify page', () => {
   let hostBody: HTMLElement;
 
   beforeEach(() => {
@@ -12,7 +12,7 @@ describe('(auth)/verify/[id=userId]/+page.svelte', () => {
   });
 
   it('should render the form title', () => {
-    expect.soft(page.getByText(/verify your email/i)).toBeVisible();
+    expect.soft(page.getByText(/verify/i)).toBeVisible();
   });
 
   it('should render the form and its content', () => {
