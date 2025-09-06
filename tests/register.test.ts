@@ -1,41 +1,37 @@
 import { page } from '@vitest/browser/context';
-import { describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it } from 'vitest';
 import { render } from 'vitest-browser-svelte';
 import Page from '@/routes/(auth)/register/+page.svelte';
 
 describe('(auth)/register/+page.svelte', () => {
-  it('should render the form title', () => {
+  let hostBody: HTMLElement;
+
+  beforeEach(() => {
     render(Page);
+    hostBody = document.body;
+  });
+
+  it('should render the form title', () => {
     expect.soft(page.getByText(/sign up for topix/i)).toBeVisible();
   });
 
   it('should render the form and its content', () => {
-    render(Page);
-    expect.soft(page.getByRole('form', { name: 'signup' })).toBeVisible();
+    expect.soft(hostBody.querySelector('form[method=post]')).toBeVisible();
 
     expect.soft(page.getByRole('button')).toBeVisible();
     ['Email', 'Username', 'Password', 'Confirm password'].forEach((l) => {
       expect.soft(page.getByLabelText(l, { exact: true })).toBeVisible();
     });
-    page
-      .getByRole('textbox')
-      .all()
-      .forEach((b) => expect.soft(b).toBeVisible());
+    hostBody.querySelectorAll('input').forEach((b) => expect.soft(b).toBeVisible());
     expect.soft(page.getByRole('link')).toBeVisible();
   });
 
   it('all inputs should be required', async () => {
-    render(Page);
-
-    page
-      .getByRole('textbox')
-      .all()
-      .forEach((el) => expect.soft(el).toBeRequired());
+    hostBody.querySelectorAll('input').forEach((el) => expect.soft(el).toBeRequired());
   });
 
   // doesnt actually run server-side code
   // it('should check for email validity', async () => {
-  //   render(Page);
 
   //   const inputs = ['Email', 'Username', 'Password', 'Confirm password'].map((el) =>
   //     page.getByPlaceholder(el),

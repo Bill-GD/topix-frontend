@@ -6,8 +6,6 @@ export default defineConfig({
   plugins: [tailwindcss(), sveltekit()],
   test: {
     globals: true,
-    // include: ['tests/**/*.{test,spec}.{js,ts}'],
-    // exclude: ['src/lib/server/**'],
     coverage: {
       enabled: true,
       reporter: 'html',

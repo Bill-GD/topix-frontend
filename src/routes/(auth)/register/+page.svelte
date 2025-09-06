@@ -11,7 +11,7 @@
 
 <p class="text-4xl font-semibold">Sign up for topix</p>
 
-<form class="mt-8 flex flex-col gap-6" aria-label="signup" method="post">
+<form class="mt-8 flex flex-col gap-6" method="post">
   {#if form?.missing}<Error>All fields must not be empty.</Error>{/if}
   {#if form?.invalid}<Error>Email format is invalid.</Error>{/if}
   {#if form?.success === false}<Error>{form?.message}</Error>{/if}

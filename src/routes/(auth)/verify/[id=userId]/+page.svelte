@@ -20,12 +20,12 @@
   <p class="mt-8 {message.startsWith('The') ? 'text-green-700' : ''}">{message}</p>
 {/if}
 
-<form class="mt-8 flex flex-col gap-6" aria-label="verify" method="post">
+<form class="mt-8 flex flex-col gap-6" method="post">
   {#if form?.missing}<Error>You must enter the code.</Error>{/if}
   {#if form?.success === false}<Error>{form?.message}</Error>{/if}
 
   <div class="flex flex-col gap-4">
-    <FloatingLabelInput class="w-full" name="otp" type="text" required>Code</FloatingLabelInput>
+    <FloatingLabelInput class="w-full" name="otp" type="text">Code</FloatingLabelInput>
 
     <Button formaction="?/otp" type="success">Send</Button>
     <Button formaction="?/resend" type="dark">Send again</Button>
