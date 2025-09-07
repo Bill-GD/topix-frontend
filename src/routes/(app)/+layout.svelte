@@ -17,11 +17,9 @@
   ];
 </script>
 
-<main class="flex h-dvh items-center justify-between bg-gray-950 text-white">
-  <nav
-    class="flex h-dvh w-fit flex-col items-center gap-4 border-r border-gray-700 px-1 py-3 lg:px-3"
-  >
-    <div class="hidden w-full p-2 text-end text-2xl lg:inline">topix</div>
+<main>
+  <nav>
+    <span>topix</span>
 
     {#each navItems as item}
       <NavigationItem title={item.title} href={item.href}>
@@ -37,9 +35,33 @@
     ></NavigationAccount>
   </nav>
 
-  <div class="flex h-dvh flex-auto flex-col justify-start">
+  <div>
     {@render children?.()}
   </div>
 
-  <aside class="hidden h-dvh p-3 md:block md:w-1/3 lg:w-1/4"></aside>
+  <aside class=""></aside>
 </main>
+
+<style lang="postcss">
+  @reference "@/app.css";
+
+  main {
+    @apply flex h-dvh items-center justify-between bg-gray-950 text-white;
+  }
+
+  nav {
+    @apply flex h-dvh w-fit flex-col items-center gap-4 border-r border-gray-700 px-1 py-3 lg:px-3;
+  }
+
+  span {
+    @apply hidden w-full p-2 text-end text-2xl lg:inline;
+  }
+
+  div {
+    @apply flex h-dvh flex-auto flex-col justify-start;
+  }
+
+  aside {
+    @apply hidden h-dvh p-3 md:block md:w-1/3 lg:w-1/4;
+  }
+</style>

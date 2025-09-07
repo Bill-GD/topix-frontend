@@ -46,19 +46,19 @@ export class AxiosHandler {
   }
 
   private static handleError(error: unknown): ApiResponse {
-    if (error instanceof AxiosError) {
+    if (error instanceof AxiosError && error.response) {
       return this.getResponse(error.response!);
-    } else {
-      const typed = error as Error;
-      console.error(typed);
-      return {
-        success: false,
-        status: 500,
-        data: null,
-        error: typed.name,
-        message: typed.message,
-      };
     }
+
+    const typed = error as Error;
+    console.error(typed.cause);
+    return {
+      success: false,
+      status: 500,
+      data: null,
+      error: typed.name,
+      message: typed.message,
+    };
   }
 
   private static getResponse(res: AxiosResponse): ApiResponse {

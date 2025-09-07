@@ -9,13 +9,13 @@
   <title>Register - topix</title>
 </svelte:head>
 
-<p class="text-4xl font-semibold">Sign in to your account</p>
+<p>Sign in to your account</p>
 
-<form class="mt-8 flex flex-col gap-6" method="post">
+<form method="post">
   {#if form?.missing}<Error>All fields must not be empty.</Error>{/if}
   {#if form?.success === false}<Error>{form?.message}</Error>{/if}
 
-  <div class="flex flex-col gap-4">
+  <div>
     <FloatingLabelInput
       class="w-full"
       name="username"
@@ -35,7 +35,21 @@
 
   <hr class="text-gray-700" />
 
-  <div>
-    <Link href="/register">Don't have an account?</Link>
-  </div>
+  <Link href="/register">Don't have an account?</Link>
 </form>
+
+<style lang="postcss">
+  @reference "@/app.css";
+
+  p {
+    @apply text-4xl font-semibold;
+  }
+
+  form {
+    @apply mt-8 flex flex-col gap-6;
+  }
+
+  div {
+    @apply flex flex-col gap-4;
+  }
+</style>
