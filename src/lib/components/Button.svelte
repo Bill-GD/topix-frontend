@@ -19,7 +19,7 @@
 
 {#if href}
   <a
-    class="{buttonClass} {textColor} {className} inline-flex no-underline"
+    class={[buttonClass, textColor, 'inline-flex no-underline', className]}
     role="button"
     {href}
     {onclick}
@@ -29,7 +29,7 @@
   </a>
 {:else}
   <button
-    class="{buttonClass} {textColor} {className} font-semibold"
+    class={[buttonClass, textColor, 'font-semibold', className]}
     {formaction}
     {onclick}
     {disabled}

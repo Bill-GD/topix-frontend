@@ -12,3 +12,14 @@ export const CookieName = {
   accessToken: '_at',
   refreshToken: '_rt',
 } as const;
+
+export type User = {
+  id: number;
+  username: string;
+  displayName: string;
+  description: string | null;
+  profilePicture: string | null;
+  followerCount: number;
+  followingCount: number;
+  role: 'user' | 'admin';
+};

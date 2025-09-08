@@ -5,9 +5,9 @@
   let { children, class: className }: ErrorProps = $props();
 </script>
 
-<div class={className}>
+<div class={['boundary', className]}>
   <Icon class="flex-1/6" type="error"></Icon>
-  <p>
+  <p class="text-content">
     {@render children()}
   </p>
 </div>
@@ -15,11 +15,11 @@
 <style lang="postcss">
   @reference "@/app.css";
 
-  div {
+  .boundary {
     @apply flex items-center rounded-lg border-2 border-red-500 bg-red-200 p-3;
   }
 
-  p {
+  .text-content {
     @apply flex-5/6 font-semibold text-red-500;
   }
 </style>
