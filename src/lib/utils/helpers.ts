@@ -1,4 +1,7 @@
 import { API_PORT, API_SERVER } from '$env/static/public';
+import type { Cookies } from '@sveltejs/kit';
+import { AxiosHandler } from './axios-handler';
+import { CookieName, type ApiResponse } from './types';
 
 let num = Date.now();
 
@@ -34,4 +37,14 @@ export function getApiUrl(): string {
 
 export function capitalize(str: string): string {
   return `${str.charAt(0).toUpperCase()}${str.slice(1)}`;
+}
+
+export async function checkLogin(cookies: Cookies): Promise<boolean> {
+  let res: ApiResponse;
+  try {
+    res = await AxiosHandler.get('/auth/check', cookies.get(CookieName.accessToken));
+  } catch (err) {
+    return false;
+  }
+  return res.success;
 }

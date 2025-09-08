@@ -6,7 +6,7 @@
 </script>
 
 <svelte:head>
-  <title>Register - topix</title>
+  <title>Login - topix</title>
 </svelte:head>
 
 <p>Sign in to your account</p>

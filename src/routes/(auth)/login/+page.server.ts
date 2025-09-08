@@ -1,11 +1,12 @@
-import { fail, redirect } from '@sveltejs/kit';
-import type { Actions } from './$types';
+import { CookieName } from '@/lib/utils/types';
 import { AxiosHandler } from '@/lib/utils/axios-handler';
 import { capitalize } from '@/lib/utils/helpers';
+import { fail, redirect } from '@sveltejs/kit';
+import type { Actions } from './$types';
 
 export const actions: Actions = {
-  default: async (event) => {
-    const formData = await event.request.formData();
+  default: async ({ request, cookies }) => {
+    const formData = await request.formData();
 
     const dto = {
       username: `${formData.get('username')}`,
@@ -30,8 +31,15 @@ export const actions: Actions = {
       return fail(res.status, { username, ...res, message });
     }
 
-    console.log(res.data);
+    cookies.set(CookieName.accessToken, `${res.data!['accessToken']}`, {
+      path: '/',
+      maxAge: 86400000,
+    });
+    cookies.set(CookieName.refreshToken, `${res.data!['refreshToken']}`, {
+      path: '/',
+      maxAge: 86400000 * 14,
+    });
 
-    return redirect(303, '/home');
+    redirect(303, '/home');
   },
 };

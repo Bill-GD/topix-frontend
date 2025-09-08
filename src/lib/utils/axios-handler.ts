@@ -1,11 +1,15 @@
-import axios, { AxiosError, AxiosHeaders, type AxiosResponse } from 'axios';
+import axios, { AxiosError, type AxiosResponse, type RawAxiosRequestHeaders } from 'axios';
 import { getApiUrl } from './helpers';
 import { type ApiResponse } from './types';
 
 export class AxiosHandler {
   private static API_URL = getApiUrl();
 
-  static async get(url: string, headers?: AxiosHeaders): Promise<ApiResponse> {
+  static async get(
+    url: string,
+    token?: string,
+    headers?: RawAxiosRequestHeaders,
+  ): Promise<ApiResponse> {
     let res: ApiResponse;
 
     try {
@@ -14,8 +18,11 @@ export class AxiosHandler {
           baseURL: this.API_URL,
           headers: {
             Accept: 'application/json',
+            Authorization: token ? `Bearer ${token}` : undefined,
+            'Content-Type': 'application/json',
             ...headers,
           },
+          withCredentials: true,
         }),
       );
     } catch (error) {
@@ -25,7 +32,12 @@ export class AxiosHandler {
     return res;
   }
 
-  static async post(url: string, dto?: object, headers?: AxiosHeaders): Promise<ApiResponse> {
+  static async post(
+    url: string,
+    dto?: object,
+    token?: string,
+    headers?: RawAxiosRequestHeaders,
+  ): Promise<ApiResponse> {
     let res: ApiResponse;
 
     try {
@@ -34,8 +46,11 @@ export class AxiosHandler {
           baseURL: this.API_URL,
           headers: {
             Accept: 'application/json',
+            Authorization: token ? `Bearer ${token}` : undefined,
+            'Content-Type': 'application/json',
             ...headers,
           },
+          withCredentials: true,
         }),
       );
     } catch (error) {
