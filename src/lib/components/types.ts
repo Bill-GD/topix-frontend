@@ -110,7 +110,8 @@ export interface IconButtonProps {
 export interface InputProps {
   clearable?: boolean;
   peekable?: boolean;
-  id: string | null;
+  textarea?: boolean;
+  id?: string | null;
   value?: string;
   type?: HTMLInputTypeAttribute | undefined | null;
   class?: ClassValue | undefined | null;

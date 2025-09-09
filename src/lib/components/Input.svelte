@@ -10,6 +10,7 @@
     id = generateId(),
     type,
     required,
+    textarea = false,
     clearable = false,
     peekable = false,
     value = $bindable(''),
@@ -21,16 +22,28 @@
   let peeking = $state<boolean>(false);
 </script>
 
-<input
-  class={['main-input', className]}
-  type={peeking ? 'text' : type}
-  {id}
-  {required}
-  {placeholder}
-  name={inputName ?? id}
-  bind:value
-  autocomplete="off"
-/>
+{#if textarea}
+  <textarea
+    class={['main-input', className]}
+    {id}
+    {required}
+    {placeholder}
+    name={inputName ?? id}
+    bind:value
+    autocomplete="off"
+  ></textarea>
+{:else}
+  <input
+    class={['main-input', className]}
+    type={peeking ? 'text' : type}
+    {id}
+    {required}
+    {placeholder}
+    name={inputName ?? id}
+    bind:value
+    autocomplete="off"
+  />
+{/if}
 
 {#if clearable && value.length > 0}
   <IconButton

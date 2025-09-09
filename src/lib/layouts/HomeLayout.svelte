@@ -50,7 +50,7 @@
             <a href="/user/{self.username}" class="block px-4 py-2 hover:bg-gray-700">Profile</a>
           </li>
           <li>
-            <a href="/settings" class="block px-4 py-2 hover:bg-gray-700">Settings</a>
+            <a href="/settings/account" class="block px-4 py-2 hover:bg-gray-700">Settings</a>
           </li>
           <li>
             <a href="/logout" class="block px-4 py-2 hover:bg-gray-700">Log out</a>
