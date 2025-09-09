@@ -2,6 +2,7 @@
 
 import {
   faBars,
+  faChevronLeft,
   faEye,
   faEyeSlash,
   faFaceAngry,
@@ -34,6 +35,7 @@ export const IconSize = {
 };
 
 export const Icons = {
+  back: faChevronLeft,
   eye: faEye,
   eyeSlash: faEyeSlash,
   error: faTriangleExclamation,
