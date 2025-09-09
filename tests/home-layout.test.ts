@@ -1,11 +1,18 @@
 import { page } from '@vitest/browser/context';
-import { describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it } from 'vitest';
 import { render } from 'vitest-browser-svelte';
-import Layout from '@/routes/(app)/+layout.svelte';
+import Layout from '@/lib/layouts/HomeLayout.svelte';
 
 describe('home layout', () => {
+  beforeEach(() => {
+    render(Layout, {
+      self: { username: 'test', displayName: 'test' },
+      children: () => {},
+      right: () => {},
+    });
+  });
+
   it('should render all nav items', async () => {
-    render(Layout);
     page
       .getByRole('link')
       .all()
@@ -13,7 +20,6 @@ describe('home layout', () => {
   });
 
   it('should render account picture', async () => {
-    render(Layout);
     expect.soft(page.getByAltText('profile')).toBeInTheDocument();
   });
 

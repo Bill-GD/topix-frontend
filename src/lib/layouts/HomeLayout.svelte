@@ -1,10 +1,8 @@
 <script lang="ts">
-  import type { LayoutProps } from '../$types';
   import { Icon, NavigationItem } from '@/lib/components';
-  import { Icons } from '@/lib/components/types';
-  import type { User } from '@/lib/utils/types';
+  import { Icons, type HomeLayoutProps } from '@/lib/components/types';
 
-  let { children, data }: LayoutProps = $props();
+  let { children, right, self }: HomeLayoutProps = $props();
 
   const navItems: {
     title: string;
@@ -16,7 +14,6 @@
     { title: 'Chat', href: '/chat', icon: 'message' },
     { title: 'Groups', href: '/groups', icon: 'group' },
   ];
-  const self = data.self as User;
 
   let showMenu = $state<boolean>(false);
   let hover = $state<boolean>(false);
@@ -33,7 +30,7 @@
     {/each}
 
     <div
-      class="mt-auto"
+      class="mt-auto ml-auto"
       role="button"
       tabindex="0"
       onmouseenter={() => (hover = true)}
@@ -53,6 +50,9 @@
             <a href="/user/{self.username}" class="block px-4 py-2 hover:bg-gray-700">Profile</a>
           </li>
           <li>
+            <a href="/settings" class="block px-4 py-2 hover:bg-gray-700">Settings</a>
+          </li>
+          <li>
             <a href="/logout" class="block px-4 py-2 hover:bg-gray-700">Log out</a>
           </li>
         </ul>
@@ -60,23 +60,23 @@
 
       <!-- svelte-ignore a11y_click_events_have_key_events -->
       <div
-        class="flex w-fit cursor-pointer items-center justify-end rounded-full p-2 hover:bg-gray-900 active:bg-gray-900 lg:w-full lg:gap-3"
+        class="account-item"
         role="button"
         tabindex="0"
         onclick={() => {
           if (hover) showMenu = !showMenu;
         }}
       >
+        <div class="flex flex-col">
+          <span class="hidden text-xl text-white md:inline">{self.displayName}</span>
+          <span class="hidden text-sm text-gray-500 md:inline">@{self.username}</span>
+        </div>
+
         <img
           class="h-10 w-10 rounded-full"
           src={self.profilePicture ?? '/images/default-user-profile-icon.jpg'}
           alt="profile"
         />
-        <div class="flex flex-col">
-          <span class="hidden text-xl text-white lg:inline">{self.displayName}</span>
-          <span class="hidden text-sm text-gray-500 lg:inline">@{self.username}</span>
-        </div>
-        <Icon class="hidden lg:ml-10 lg:inline" type="menu"></Icon>
       </div>
     </div>
   </nav>
@@ -85,7 +85,9 @@
     {@render children?.()}
   </div>
 
-  <aside></aside>
+  <aside>
+    {@render right?.()}
+  </aside>
 </main>
 
 <style lang="postcss">
@@ -95,12 +97,16 @@
     @apply flex h-dvh items-center justify-between bg-gray-950 text-white;
   }
 
-  .nav-title {
-    @apply hidden w-full p-2 text-end text-2xl lg:inline;
+  nav {
+    @apply flex h-dvh flex-col items-center gap-4 border-r border-r-gray-700 px-1 py-3 md:w-1/4 md:px-3;
   }
 
-  nav {
-    @apply flex h-dvh w-fit flex-col items-center gap-4 border-r border-gray-700 px-1 py-3 lg:px-3;
+  .nav-title {
+    @apply hidden w-full p-2 text-end text-2xl md:inline;
+  }
+
+  .account-item {
+    @apply flex w-fit cursor-pointer items-center justify-end rounded-full px-4 py-2 hover:bg-gray-900 active:bg-gray-900 md:w-full md:gap-4;
   }
 
   .main-content {
@@ -108,6 +114,6 @@
   }
 
   aside {
-    @apply hidden h-dvh p-3 md:block md:w-1/3 lg:w-1/4;
+    @apply hidden h-dvh p-3 md:block md:w-1/4;
   }
 </style>

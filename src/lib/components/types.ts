@@ -23,6 +23,7 @@ import type {
   HTMLAttributeAnchorTarget,
   HTMLInputTypeAttribute,
 } from 'svelte/elements';
+import type { User } from '../utils/types';
 
 export type ButtonType = 'primary' | 'danger' | 'dark' | 'success';
 
@@ -80,6 +81,12 @@ export interface FloatingLabelInputProps {
   class?: ClassValue | undefined | null;
   required?: boolean | undefined | null;
   name?: string | undefined | null;
+}
+
+export interface HomeLayoutProps {
+  children?: Snippet;
+  right?: Snippet;
+  self: Partial<User>;
 }
 
 export interface IconProps {

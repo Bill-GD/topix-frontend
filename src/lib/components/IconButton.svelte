@@ -20,6 +20,6 @@
   @reference '@/app.css';
 
   .main-button {
-    @apply w-fit cursor-pointer rounded-full p-1;
+    @apply flex w-fit cursor-pointer items-center rounded-full p-2;
   }
 </style>
