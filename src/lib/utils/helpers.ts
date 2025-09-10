@@ -47,3 +47,8 @@ export async function checkLogin(cookies: Cookies): Promise<boolean> {
     return false;
   }
 }
+
+export function deleteTokens(cookies: Cookies): void {
+  cookies.delete(CookieName.accessToken, { path: '/' });
+  cookies.delete(CookieName.refreshToken, { path: '/' });
+}

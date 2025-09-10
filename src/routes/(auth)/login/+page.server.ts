@@ -33,11 +33,13 @@ export const actions: Actions = {
 
     cookies.set(CookieName.accessToken, `${res.data!['accessToken']}`, {
       path: '/',
-      maxAge: 86400000,
+      httpOnly: false,
+      maxAge: 86400,
     });
     cookies.set(CookieName.refreshToken, `${res.data!['refreshToken']}`, {
       path: '/',
-      maxAge: 86400000 * 14,
+      httpOnly: false,
+      maxAge: 86400 * 14,
     });
 
     redirect(303, '/home');

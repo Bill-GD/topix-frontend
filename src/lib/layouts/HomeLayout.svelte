@@ -53,7 +53,11 @@
             <a href="/settings/account" class="block px-4 py-2 hover:bg-gray-700">Settings</a>
           </li>
           <li>
-            <a href="/logout" class="block px-4 py-2 hover:bg-gray-700">Log out</a>
+            <a
+              data-sveltekit-preload-data="tap"
+              href="/logout"
+              class="block px-4 py-2 hover:bg-gray-700">Log out</a
+            >
           </li>
         </ul>
       </div>

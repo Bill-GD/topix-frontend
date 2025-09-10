@@ -1,11 +1,19 @@
-import type { Handle } from '@sveltejs/kit';
+import { redirect, type Handle } from '@sveltejs/kit';
 import { requestLogger } from './lib/middlewares';
+import { CookieName } from './lib/utils/types';
 
 export const handle: Handle = async ({ event, resolve }) => {
   const startTime = performance.now();
 
-  const res = await resolve(event);
-  requestLogger(event, res, startTime);
+  event.locals.hasAT = event.cookies.get(CookieName.accessToken) !== undefined;
+  event.locals.hasRT = event.cookies.get(CookieName.refreshToken) !== undefined;
 
-  return res;
+  try {
+    const eventRes = await resolve(event);
+    requestLogger(event, eventRes, startTime);
+    return eventRes;
+  } catch (err) {
+    console.log(err);
+    redirect(303, '/');
+  }
 };

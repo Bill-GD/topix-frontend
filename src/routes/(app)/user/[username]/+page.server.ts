@@ -1,6 +1,7 @@
 import { AxiosHandler } from '@/lib/utils/axios-handler';
 import type { PageServerLoad } from './$types';
 import { CookieName, type User } from '@/lib/utils/types';
+import { error } from '@sveltejs/kit';
 
 export const load: PageServerLoad = async ({ parent, params, cookies }) => {
   const parentData = await parent();
@@ -9,9 +10,10 @@ export const load: PageServerLoad = async ({ parent, params, cookies }) => {
     return { user: parentData.self };
   }
 
-  const { data: user } = await AxiosHandler.get(
+  const res = await AxiosHandler.get(
     `/user/${params.username}`,
     cookies.get(CookieName.accessToken),
   );
-  return { user: user as User };
+  if (res.success) return { user: res.data as User };
+  error(404);
 };

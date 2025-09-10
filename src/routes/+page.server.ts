@@ -1,9 +1,7 @@
 import { redirect } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
-import { checkLogin } from '@/lib/utils/helpers';
 
-export const load: PageServerLoad = async ({ cookies }) => {
-  const res = await checkLogin(cookies);
-  if (res) redirect(303, '/home');
+export const load: PageServerLoad = async ({ locals }) => {
+  if (locals.hasAT) redirect(303, '/home');
   else redirect(303, '/login');
 };
