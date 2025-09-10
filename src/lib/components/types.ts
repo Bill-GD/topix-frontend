@@ -72,6 +72,7 @@ export interface DropdownMenuProps {
 export interface DropdownItemProps {
   children: Snippet;
   href?: string | undefined;
+  rel?: string | undefined;
   class?: ClassValue | undefined | null;
 }
 

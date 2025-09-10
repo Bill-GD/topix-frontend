@@ -80,7 +80,7 @@
         <DropdownMenu class={[(!hover || !showMenu) && 'hidden', 'dropdown-menu']}>
           <DropdownItem href="/user/{self.username}">Profile</DropdownItem>
           <DropdownItem href="/settings/account">Settings</DropdownItem>
-          <DropdownItem href="/logout">Log out</DropdownItem>
+          <DropdownItem href="/logout" rel="external">Log out</DropdownItem>
         </DropdownMenu>
       </div>
     </div>

@@ -7,6 +7,7 @@
   let { data, form }: PageProps = $props();
 
   const items = ['account', 'profile'];
+  let passwordValue = $state<string>('');
 </script>
 
 <svelte:head>
@@ -23,11 +24,8 @@
     Settings
   </div>
 
-  <form class="flex flex-col gap-6 p-4 md:p-20" method="post">
-    <div class="flex items-baseline gap-4 self-end">
-      {#if form}
-        <span class={form.success ? 'text-green-500' : 'text-red-500'}>{form.message}</span>
-      {/if}
+  <form class="p-4 md:p-20" method="post">
+    <div class="flex flex-row-reverse items-baseline gap-4">
       <Button
         class="mb-4 w-fit"
         formaction="?/update-{data.pathname.includes('account') ? 'account' : 'profile'}"
@@ -35,48 +33,67 @@
       >
         Save
       </Button>
+      {#if form}
+        <span class={form.success ? 'text-green-500' : 'text-red-500'}>{form.message}</span>
+      {/if}
     </div>
 
-    {#if data.pathname.includes('account')}
-      <div class="flex flex-col items-start gap-2">
-        <label class="text-xl" for="username">Username</label>
-        <Input class="w-min" id="username" name="username" value={data.self.username}></Input>
-      </div>
+    <div class="flex flex-col gap-6">
+      {#if data.pathname.includes('account')}
+        <div class="flex flex-col gap-2">
+          <label class="text-xl" for="username">Username</label>
+          <Input class="w-min" id="username" name="username" value={data.self.username}></Input>
+        </div>
 
-      {#if data.self?.role !== 'admin'}
+        {#if data.self?.role !== 'admin'}
+          <div class="flex flex-col gap-2">
+            <p class="text-xl">Delete account</p>
+            <div class="flex gap-4">
+              <Input
+                name="password"
+                type="password"
+                bind:value={passwordValue}
+                placeholder="Enter your password"
+              ></Input>
+              <Button
+                formaction="?/delete-account"
+                type="danger"
+                disabled={passwordValue.length <= 0}
+              >
+                Delete
+              </Button>
+            </div>
+          </div>
+        {/if}
+      {:else if data.pathname.includes('profile')}
         <div class="flex flex-col items-start gap-2">
-          <p class="text-xl">Delete account</p>
-          <Button class="mb-4 w-fit" formaction="?/delete-account" type="danger">Delete</Button>
+          <label class="text-xl" for="display-name">Display name</label>
+          <Input class="w-min" id="display-name" name="display-name" value={data.self.displayName}
+          ></Input>
+        </div>
+
+        <div class="flex flex-col items-start gap-2">
+          <label class="text-xl" for="description">Description</label>
+          <Input
+            class="w-min"
+            id="description"
+            name="description"
+            value={data.self.description ?? ''}
+            placeholder="No description"
+            textarea
+          ></Input>
+        </div>
+
+        <div class="flex items-center gap-4">
+          <img
+            class="h-24 w-24 rounded-full"
+            src={data.self.profilePicture ?? '/images/default-user-profile-icon.jpg'}
+            alt="user-profile"
+          />
+          <input type="file" name="profile-picture" id="profile-picture" />
         </div>
       {/if}
-    {:else if data.pathname.includes('profile')}
-      <div class="flex flex-col items-start gap-2">
-        <label class="text-xl" for="display-name">Display name</label>
-        <Input class="w-min" id="display-name" name="display-name" value={data.self.displayName}
-        ></Input>
-      </div>
-
-      <div class="flex flex-col items-start gap-2">
-        <label class="text-xl" for="description">Description</label>
-        <Input
-          class="w-min"
-          id="description"
-          name="description"
-          value={data.self.description ?? ''}
-          placeholder="No description"
-          textarea
-        ></Input>
-      </div>
-
-      <div class="flex items-center gap-4">
-        <img
-          class="h-24 w-24 rounded-full"
-          src={data.self.profilePicture ?? '/images/default-user-profile-icon.jpg'}
-          alt="user-profile"
-        />
-        <input type="file" name="profile-picture" id="profile-picture" />
-      </div>
-    {/if}
+    </div>
   </form>
 
   {#snippet right()}
