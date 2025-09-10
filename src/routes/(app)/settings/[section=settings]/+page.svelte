@@ -2,7 +2,7 @@
   import { HomeLayout } from '@/lib/layouts';
   import type { PageProps } from './$types';
   import { capitalize } from '@/lib/utils/helpers';
-  import { Button, Input } from '@/lib/components';
+  import { Button, Icon, IconButton, Input } from '@/lib/components';
 
   let { data, form }: PageProps = $props();
 
@@ -14,7 +14,16 @@
 </svelte:head>
 
 <HomeLayout self={data.self}>
-  <form class="flex flex-col gap-6 p-20" method="post">
+  <div class="sticky top-0 border-r border-b border-gray-700 py-4 text-center text-2xl">
+    <div class="relative">
+      <IconButton class="absolute left-4 hover:bg-gray-800" onclick={() => window.history.back()}>
+        <Icon type="back"></Icon>
+      </IconButton>
+    </div>
+    Settings
+  </div>
+
+  <form class="flex flex-col gap-6 p-4 md:p-20" method="post">
     <div class="flex items-baseline gap-4 self-end">
       {#if form}
         <span class={form.success ? 'text-green-500' : 'text-red-500'}>{form.message}</span>

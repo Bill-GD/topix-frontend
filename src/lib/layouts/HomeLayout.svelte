@@ -1,6 +1,7 @@
 <script lang="ts">
-  import { Icon, NavigationItem } from '@/lib/components';
+  import { DropdownItem, DropdownMenu, Icon, NavigationItem } from '@/lib/components';
   import { Icons, type HomeLayoutProps } from '@/lib/components/types';
+  import { onMount } from 'svelte';
 
   let { children, right, self }: HomeLayoutProps = $props();
 
@@ -17,6 +18,23 @@
 
   let showMenu = $state<boolean>(false);
   let hover = $state<boolean>(false);
+
+  onMount(() => {
+    const acc = document.getElementsByClassName('account-item')[0] as HTMLElement;
+    const menu = document.getElementsByClassName('dropdown-menu')[0] as HTMLElement;
+
+    function showMenu() {
+      const rect = acc.getBoundingClientRect();
+      menu.style.minWidth = `${rect.width}px`;
+      menu.classList.toggle('hidden');
+      menu.style.left = `${rect.left}px`;
+      menu.style.top = `${rect.top - menu.offsetHeight}px`;
+    }
+
+    acc.addEventListener('click', showMenu);
+
+    return () => acc.removeEventListener('click', showMenu);
+  });
 </script>
 
 <main>
@@ -39,29 +57,6 @@
         showMenu = false;
       }}
     >
-      <div
-        class={[
-          (!hover || !showMenu) && 'hidden',
-          'z-10 w-full divide-y divide-gray-400 rounded-lg bg-gray-800 transition-all duration-300',
-        ]}
-      >
-        <ul class="py-2 text-white">
-          <li>
-            <a href="/user/{self.username}" class="block px-4 py-2 hover:bg-gray-700">Profile</a>
-          </li>
-          <li>
-            <a href="/settings/account" class="block px-4 py-2 hover:bg-gray-700">Settings</a>
-          </li>
-          <li>
-            <a
-              data-sveltekit-preload-data="tap"
-              href="/logout"
-              class="block px-4 py-2 hover:bg-gray-700">Log out</a
-            >
-          </li>
-        </ul>
-      </div>
-
       <!-- svelte-ignore a11y_click_events_have_key_events -->
       <div
         class="account-item"
@@ -81,6 +76,12 @@
           src={self.profilePicture ?? '/images/default-user-profile-icon.jpg'}
           alt="profile"
         />
+
+        <DropdownMenu class={[(!hover || !showMenu) && 'hidden', 'dropdown-menu']}>
+          <DropdownItem href="/user/{self.username}">Profile</DropdownItem>
+          <DropdownItem href="/settings/account">Settings</DropdownItem>
+          <DropdownItem href="/logout">Log out</DropdownItem>
+        </DropdownMenu>
       </div>
     </div>
   </nav>
@@ -110,7 +111,7 @@
   }
 
   .account-item {
-    @apply flex w-fit cursor-pointer items-center justify-end rounded-full px-4 py-2 hover:bg-gray-900 active:bg-gray-900 md:w-full md:gap-4;
+    @apply flex w-fit cursor-pointer items-center justify-end rounded-full p-2 hover:bg-gray-900 active:bg-gray-900 md:w-full md:gap-4 md:px-4;
   }
 
   .main-content {

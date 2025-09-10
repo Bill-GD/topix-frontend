@@ -64,6 +64,17 @@ export interface ButtonProps {
   class?: ClassValue | undefined | null;
 }
 
+export interface DropdownMenuProps {
+  children: Snippet;
+  class?: ClassValue | undefined | null;
+}
+
+export interface DropdownItemProps {
+  children: Snippet;
+  href?: string | undefined;
+  class?: ClassValue | undefined | null;
+}
+
 export interface ErrorProps {
   children: Snippet;
   class?: ClassValue | undefined | null;
