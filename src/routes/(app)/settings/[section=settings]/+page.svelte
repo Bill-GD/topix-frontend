@@ -16,7 +16,9 @@
 <HomeLayout self={data.self}>
   <form class="flex flex-col gap-6 p-20" method="post">
     <div class="flex items-baseline gap-4 self-end">
-      {#if form?.success === true}<span class="text-green-500">Saved successfully!</span>{/if}
+      {#if form}
+        <span class={form.success ? 'text-green-500' : 'text-red-500'}>{form.message}</span>
+      {/if}
       <Button
         class="mb-4 w-fit"
         formaction="?/update-{data.pathname.includes('account') ? 'account' : 'profile'}"
@@ -32,10 +34,12 @@
         <Input class="w-min" id="username" name="username" value={data.self.username}></Input>
       </div>
 
-      <div class="flex flex-col items-start gap-2">
-        <p class="text-xl">Delete account</p>
-        <Button class="mb-4 w-fit" formaction="?/delete-account" type="danger">Delete</Button>
-      </div>
+      {#if data.self?.role !== 'admin'}
+        <div class="flex flex-col items-start gap-2">
+          <p class="text-xl">Delete account</p>
+          <Button class="mb-4 w-fit" formaction="?/delete-account" type="danger">Delete</Button>
+        </div>
+      {/if}
     {:else if data.pathname.includes('profile')}
       <div class="flex flex-col items-start gap-2">
         <label class="text-xl" for="display-name">Display name</label>

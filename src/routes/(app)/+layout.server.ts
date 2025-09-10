@@ -12,6 +12,6 @@ export const load: LayoutServerLoad = async ({ locals, cookies }) => {
 
   if (res.message.toLowerCase().includes('invalid signature')) {
     deleteTokens(cookies);
-    redirect(303, '/login');
   }
+  redirect(303, '/login');
 };
