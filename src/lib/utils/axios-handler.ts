@@ -13,18 +13,7 @@ export class AxiosHandler {
     let res: ApiResponse;
 
     try {
-      res = this.getResponse(
-        await axios.get(url, {
-          baseURL: this.API_URL,
-          headers: {
-            Accept: 'application/json',
-            Authorization: token ? `Bearer ${token}` : undefined,
-            'Content-Type': 'application/json',
-            ...headers,
-          },
-          withCredentials: true,
-        }),
-      );
+      res = this.getResponse(await this.request('get', url, null, token, headers));
     } catch (error) {
       res = this.handleError(error);
     }
@@ -41,23 +30,66 @@ export class AxiosHandler {
     let res: ApiResponse;
 
     try {
-      res = this.getResponse(
-        await axios.post(url, dto, {
-          baseURL: this.API_URL,
-          headers: {
-            Accept: 'application/json',
-            Authorization: token ? `Bearer ${token}` : undefined,
-            'Content-Type': 'application/json',
-            ...headers,
-          },
-          withCredentials: true,
-        }),
-      );
+      res = this.getResponse(await this.request('post', url, dto ?? null, token, headers));
     } catch (error) {
       res = this.handleError(error);
     }
 
     return res;
+  }
+
+  static async patch(
+    url: string,
+    dto: object,
+    token?: string,
+    headers?: RawAxiosRequestHeaders,
+  ): Promise<ApiResponse> {
+    let res: ApiResponse;
+
+    try {
+      res = this.getResponse(await this.request('patch', url, dto, token, headers));
+    } catch (error) {
+      res = this.handleError(error);
+    }
+
+    return res;
+  }
+
+  static async delete(
+    url: string,
+    token?: string,
+    headers?: RawAxiosRequestHeaders,
+  ): Promise<ApiResponse> {
+    let res: ApiResponse;
+
+    try {
+      res = this.getResponse(await this.request('delete', url, null, token, headers));
+    } catch (error) {
+      res = this.handleError(error);
+    }
+
+    return res;
+  }
+
+  private static request(
+    method: string,
+    url: string,
+    dto: object | null,
+    token?: string,
+    headers?: RawAxiosRequestHeaders,
+  ) {
+    return axios(url, {
+      method,
+      data: dto ?? undefined,
+      baseURL: this.API_URL,
+      headers: {
+        Accept: 'application/json',
+        Authorization: token ? `Bearer ${token}` : undefined,
+        'Content-Type': 'application/json',
+        ...headers,
+      },
+      withCredentials: true,
+    });
   }
 
   private static handleError(error: unknown): ApiResponse {
