@@ -1,5 +1,5 @@
 import { AxiosHandler } from '@/lib/utils/axios-handler';
-import { deleteTokens } from '@/lib/utils/helpers';
+import { dataUrlToFile, deleteTokens } from '@/lib/utils/helpers';
 import { CookieName } from '@/lib/utils/types';
 import { fail, redirect, type Actions } from '@sveltejs/kit';
 
@@ -20,16 +20,42 @@ export const actions: Actions = {
   },
   'update-profile': async (event) => {
     const formData = await event.request.formData();
-    const dto = {
+    let dto: {
+      displayName: FormDataEntryValue | null;
+      description: FormDataEntryValue | null;
+      profilePicture?: string;
+    } = {
       displayName: formData.get('display-name'),
       description: formData.get('description'),
     };
+
+    if (formData.get('profile-picture') !== '' && formData.get('profile-picture-name') !== '') {
+      const form = new FormData();
+      form.append(
+        'file',
+        dataUrlToFile(
+          `${formData.get('profile-picture')}`,
+          `${formData.get('profile-picture-name')}`,
+        ),
+      );
+
+      const res = await AxiosHandler.post(
+        '/file/cloud',
+        form,
+        event.cookies.get(CookieName.accessToken),
+        { 'Content-Type': 'multipart/form-data' },
+      );
+
+      if (!res.success) return fail(res.status, { success: false, message: res.message });
+      dto = { ...dto, profilePicture: res.data!['path'] as string };
+    }
 
     const res = await AxiosHandler.patch(
       `/user/me`,
       dto,
       event.cookies.get(CookieName.accessToken),
     );
+
     if (res.success) return { success: true, message: 'Saved successfully!' };
     return fail(res.status, { success: false, message: res.message });
   },

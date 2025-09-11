@@ -52,3 +52,14 @@ export function deleteTokens(cookies: Cookies): void {
   cookies.delete(CookieName.accessToken, { path: '/' });
   cookies.delete(CookieName.refreshToken, { path: '/' });
 }
+
+export function dataUrlToFile(dataUrl: string, filename: string): File {
+  const [header, base64] = dataUrl.split(',');
+  const mime = header.match(/:(.*?);/)[1];
+  const binary = atob(base64);
+  const array = new Uint8Array(binary.length);
+  for (let i = 0; i < binary.length; i++) {
+    array[i] = binary.charCodeAt(i);
+  }
+  return new File([array], filename, { type: mime });
+}

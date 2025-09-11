@@ -13,7 +13,7 @@ export const handle: Handle = async ({ event, resolve }) => {
     requestLogger(event, eventRes, startTime);
     return eventRes;
   } catch (err) {
-    console.log(err);
+    console.log('Error:', err);
     redirect(303, '/');
   }
 };
