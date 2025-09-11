@@ -66,13 +66,13 @@
           if (hover) showMenu = !showMenu;
         }}
       >
-        <div class="flex flex-col">
+        <div class="flex flex-col text-right">
           <span class="hidden text-xl text-white md:inline">{self.displayName}</span>
           <span class="hidden text-sm text-gray-500 md:inline">@{self.username}</span>
         </div>
 
         <img
-          class="h-10 w-10 rounded-full"
+          class="aspect-square h-10 w-10 rounded-full"
           src={self.profilePicture ?? '/images/default-user-profile-icon.jpg'}
           alt="profile"
         />

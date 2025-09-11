@@ -17,14 +17,14 @@
       class="absolute top-4 left-4 hover:bg-gray-800"
       onclick={() => window.history.back()}
     >
-      <Icon type="back"></Icon>
+      <Icon type="back" />
     </IconButton>
   </div>
 
   <div class="border-r-1 border-b-1 border-gray-700 px-8 pt-16 pb-4">
     <div class="flex items-start gap-8">
       <img
-        class="h-30 w-30 rounded-full"
+        class="aspect-square h-30 w-30 rounded-full"
         src={data.user.profilePicture ?? '/images/default-user-profile-icon.jpg'}
         alt="user-profile"
       />
@@ -46,7 +46,7 @@
 
       <IconButton class="ml-auto gap-4 hover:bg-gray-800">
         Message
-        <Icon type="message"></Icon>
+        <Icon type="message" />
       </IconButton>
     </div>
   </div>

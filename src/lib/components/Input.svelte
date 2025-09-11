@@ -53,7 +53,7 @@
     type="button"
     onclick={() => (value = '')}
   >
-    <Icon type="close" class="text-gray-600 hover:text-gray-400" size="sm"></Icon>
+    <Icon type="close" class="text-gray-600 hover:text-gray-400" size="sm" />
   </IconButton>
 {/if}
 
@@ -65,9 +65,9 @@
       onclick={() => (peeking = !peeking)}
     >
       {#if peeking}
-        <Icon type="eyeSlash" class="text-gray-600 hover:text-gray-400" size="sm"></Icon>
+        <Icon type="eyeSlash" class="text-gray-600 hover:text-gray-400" size="sm" />
       {:else}
-        <Icon type="eye" class="text-gray-600 hover:text-gray-400" size="sm"></Icon>
+        <Icon type="eye" class="text-gray-600 hover:text-gray-400" size="sm" />
       {/if}
     </IconButton>
   {/key}

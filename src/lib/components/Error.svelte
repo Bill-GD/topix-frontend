@@ -6,7 +6,7 @@
 </script>
 
 <div class={['boundary', className]}>
-  <Icon class="flex-1/6 text-red-500" type="error"></Icon>
+  <Icon class="flex-1/6 text-red-500" type="error" />
   <p class="text-content">
     {@render children()}
   </p>

@@ -81,6 +81,14 @@ export interface ErrorProps {
   class?: ClassValue | undefined | null;
 }
 
+export interface FileDropzoneProps {
+  contentInputName: string;
+  filenameInputName: string;
+  contentValue: string;
+  filenameValue: string;
+  allowedTypes: ('image' | 'video')[];
+}
+
 export interface FlairProps {
   title: string;
   color: string;

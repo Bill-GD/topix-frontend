@@ -2,12 +2,14 @@
   import { HomeLayout } from '@/lib/layouts';
   import type { PageProps } from './$types';
   import { capitalize } from '@/lib/utils/helpers';
-  import { Button, Icon, IconButton, Input } from '@/lib/components';
+  import { Button, FileDropzone, Icon, IconButton, Input } from '@/lib/components';
 
   let { data, form }: PageProps = $props();
 
   const items = ['account', 'profile'];
   let passwordValue = $state<string>('');
+  let profileValue = $state<string>('');
+  let profileFilenameValue = $state<string>('');
 </script>
 
 <svelte:head>
@@ -18,7 +20,7 @@
   <div class="sticky top-0 border-r border-b border-gray-700 py-4 text-center text-2xl">
     <div class="relative">
       <IconButton class="absolute left-4 hover:bg-gray-800" onclick={() => window.history.back()}>
-        <Icon type="back"></Icon>
+        <Icon type="back" />
       </IconButton>
     </div>
     Settings
@@ -54,7 +56,7 @@
                 type="password"
                 bind:value={passwordValue}
                 placeholder="Enter your password"
-              ></Input>
+              />
               <Button
                 formaction="?/delete-account"
                 type="danger"
@@ -68,8 +70,12 @@
       {:else if data.pathname.includes('profile')}
         <div class="flex flex-col items-start gap-2">
           <label class="text-xl" for="display-name">Display name</label>
-          <Input class="w-min" id="display-name" name="display-name" value={data.self.displayName}
-          ></Input>
+          <Input
+            class="w-min"
+            id="display-name"
+            name="display-name"
+            value={data.self.displayName}
+          />
         </div>
 
         <div class="flex flex-col items-start gap-2">
@@ -81,16 +87,25 @@
             value={data.self.description ?? ''}
             placeholder="No description"
             textarea
-          ></Input>
+          />
         </div>
 
-        <div class="flex items-center gap-4">
+        <div class="flex items-stretch gap-8">
           <img
-            class="h-24 w-24 rounded-full"
-            src={data.self.profilePicture ?? '/images/default-user-profile-icon.jpg'}
+            class="aspect-square h-30 w-30 rounded-full"
+            src={profileValue
+              ? profileValue
+              : (data.self.profilePicture ?? '/images/default-user-profile-icon.jpg')}
             alt="user-profile"
           />
-          <input type="file" name="profile-picture" id="profile-picture" />
+
+          <FileDropzone
+            contentInputName="profile-picture"
+            bind:contentValue={profileValue}
+            filenameInputName="profile-picture-name"
+            bind:filenameValue={profileFilenameValue}
+            allowedTypes={['image']}
+          />
         </div>
       {/if}
     </div>
