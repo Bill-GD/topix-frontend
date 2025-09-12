@@ -17,7 +17,7 @@
 </svelte:head>
 
 <HomeLayout self={data.self}>
-  <div class="sticky top-0 border-r border-b border-gray-700 py-4 text-center text-2xl">
+  <div class="sticky-header">
     <div class="relative">
       <IconButton class="absolute left-4 hover:bg-gray-800" onclick={() => window.history.back()}>
         <Icon type="back" />
@@ -27,7 +27,7 @@
   </div>
 
   <form class="p-4 md:p-20" method="post">
-    <div class="flex flex-row-reverse items-baseline gap-4">
+    <div class="form-button">
       <Button
         class="mb-4 w-fit"
         formaction="?/update-{data.pathname.includes('account') ? 'account' : 'profile'}"
@@ -68,7 +68,7 @@
           </div>
         {/if}
       {:else if data.pathname.includes('profile')}
-        <div class="flex flex-col items-start gap-2">
+        <div class="input-group">
           <label class="text-xl" for="display-name">Display name</label>
           <Input
             class="w-min"
@@ -78,7 +78,7 @@
           />
         </div>
 
-        <div class="flex flex-col items-start gap-2">
+        <div class="input-group">
           <label class="text-xl" for="description">Description</label>
           <Input
             class="w-min"
@@ -92,7 +92,7 @@
 
         <div class="flex items-stretch gap-8">
           <img
-            class="aspect-square h-30 w-30 rounded-full"
+            class="profile-picture-lg"
             src={profileValue
               ? profileValue
               : (data.self.profilePicture ?? '/images/default-user-profile-icon.jpg')}
@@ -112,14 +112,25 @@
   </form>
 
   {#snippet right()}
-    <div class="flex w-fit flex-col gap-2 py-20 text-xl">
+    <div class="right-sidebar">
       {#each items as item}
-        <a
-          class={[data.pathname.includes(item) && 'highlighted', 'pr-4 text-gray-500']}
-          href="/settings/{item}"
-        >
-          {capitalize(item)}
-        </a>
+        <div class="flex">
+          <div
+            class={[
+              data.pathname.includes(item) ? 'highlighted' : 'not-highlighted',
+              'mr-4 w-0 border-l-3',
+            ]}
+          ></div>
+          <a
+            class={[
+              'py-2',
+              data.pathname.includes(item) ? 'font-semibold text-gray-300' : 'text-gray-500',
+            ]}
+            href="/settings/{item}"
+          >
+            {capitalize(item)}
+          </a>
+        </div>
       {/each}
     </div>
   {/snippet}
@@ -128,7 +139,27 @@
 <style lang="postcss">
   @reference '@/app.css';
 
+  .sticky-header {
+    @apply sticky top-0 border-r border-b border-gray-700 bg-gray-950 py-4 text-center text-2xl;
+  }
+
+  .form-button {
+    @apply flex flex-row-reverse items-baseline gap-4;
+  }
+
+  .input-group {
+    @apply flex flex-col items-start gap-2;
+  }
+
   .highlighted {
-    @apply border-r-3 border-r-gray-300 font-semibold text-gray-300;
+    @apply border-l-gray-300;
+  }
+
+  .not-highlighted {
+    @apply border-l-transparent;
+  }
+
+  .right-sidebar {
+    @apply flex w-fit flex-col py-20 text-xl;
   }
 </style>

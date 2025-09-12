@@ -4,3 +4,7 @@
 .tippy-box {
   @apply rounded-md p-1;
 }
+
+.profile-picture-lg {
+  @apply aspect-square h-30 w-30 rounded-full;
+}

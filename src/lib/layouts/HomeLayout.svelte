@@ -115,7 +115,11 @@
   }
 
   .main-content {
-    @apply flex h-dvh flex-auto flex-col justify-start;
+    @apply flex h-full flex-auto flex-col justify-start overflow-y-auto;
+  }
+
+  .main-content::-webkit-scrollbar {
+    display: none;
   }
 
   aside {

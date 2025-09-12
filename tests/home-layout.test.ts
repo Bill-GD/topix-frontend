@@ -1,14 +1,12 @@
 import { page } from '@vitest/browser/context';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { render } from 'vitest-browser-svelte';
-import Layout from '@/lib/layouts/HomeLayout.svelte';
+import Layout from '$lib/layouts/HomeLayout.svelte';
 
 describe('home layout', () => {
   beforeEach(() => {
     render(Layout, {
       self: { username: 'test', displayName: 'test' },
-      children: () => {},
-      right: () => {},
     });
   });
 
