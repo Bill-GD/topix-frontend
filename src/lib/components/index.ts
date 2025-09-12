@@ -10,3 +10,4 @@ export { default as Error } from './Error.svelte';
 export { default as DropdownMenu } from './DropdownMenu.svelte';
 export { default as DropdownItem } from './DropdownItem.svelte';
 export { default as FileDropzone } from './FileDropzone.svelte';
+export { default as PostUpload } from './PostUpload.svelte';

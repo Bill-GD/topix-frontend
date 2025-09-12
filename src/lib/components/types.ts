@@ -10,6 +10,7 @@ import {
   faFaceLaugh,
   faHeart,
   faHouse,
+  faImage,
   faMagnifyingGlass,
   faMessage,
   faReply,
@@ -35,6 +36,7 @@ export const IconSize = {
 };
 
 export const Icons = {
+  image: faImage,
   back: faChevronLeft,
   eye: faEye,
   eyeSlash: faEyeSlash,
@@ -86,7 +88,7 @@ export interface FileDropzoneProps {
   filenameInputName: string;
   contentValue: string;
   filenameValue: string;
-  allowedTypes: ('image' | 'video')[];
+  class?: ClassValue | undefined | null;
 }
 
 export interface FlairProps {
@@ -151,4 +153,9 @@ export interface NavItemProps {
   title: string;
   href: string;
   children: Snippet;
+}
+
+export interface PostUploadProps {
+  userProfilePicture: string;
+  formaction?: string | undefined;
 }

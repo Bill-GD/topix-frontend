@@ -72,7 +72,7 @@
         </div>
 
         <img
-          class="aspect-square h-10 w-10 rounded-full"
+          class="profile-picture-sm"
           src={self.profilePicture ?? '/images/default-user-profile-icon.jpg'}
           alt="profile"
         />

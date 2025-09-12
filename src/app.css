@@ -8,3 +8,23 @@
 .profile-picture-lg {
   @apply aspect-square h-30 w-30 rounded-full;
 }
+
+.profile-picture-sm {
+  @apply aspect-square h-10 w-10 rounded-full;
+}
+
+.scrollbar::-webkit-scrollbar {
+  @apply h-3;
+}
+
+.scrollbar::-webkit-scrollbar-track {
+  @apply rounded-md bg-gray-800;
+}
+
+.scrollbar::-webkit-scrollbar-thumb {
+  @apply rounded-md bg-gray-500;
+}
+
+.scrollbar::-webkit-scrollbar-thumb:hover {
+  @apply bg-gray-300;
+}

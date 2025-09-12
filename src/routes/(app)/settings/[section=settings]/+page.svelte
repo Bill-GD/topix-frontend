@@ -104,7 +104,6 @@
             bind:contentValue={profileValue}
             filenameInputName="profile-picture-name"
             bind:filenameValue={profileFilenameValue}
-            allowedTypes={['image']}
           />
         </div>
       {/if}

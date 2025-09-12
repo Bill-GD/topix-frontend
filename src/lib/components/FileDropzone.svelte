@@ -7,7 +7,7 @@
     filenameValue = $bindable(''),
     contentInputName,
     contentValue = $bindable(''),
-    allowedTypes,
+    class: className,
   }: FileDropzoneProps = $props();
 
   let hasDroppedFile = $state<boolean>(false);
@@ -35,11 +35,9 @@
       if (!file) return;
 
       const mime = file.type;
-      for (const type of allowedTypes) {
-        if (!mime.includes(type)) {
-          errorText = 'File type not allowed';
-          return;
-        }
+      if (!mime.includes('image')) {
+        errorText = 'File type not allowed';
+        return;
       }
       errorText = '';
 
@@ -57,7 +55,7 @@
   });
 </script>
 
-<div class={[hasDroppedFile ? 'dropped' : 'empty']} id="file-drop">
+<div class={[hasDroppedFile ? 'dropped' : 'empty', className]} id="file-drop">
   <p class={[errorText !== '' && 'text-red-500']}>{errorText !== '' ? errorText : dropzoneText}</p>
   <input class="hidden" type="text" name={filenameInputName} bind:value={filenameValue} />
   <input class="hidden" type="text" name={contentInputName} bind:value={contentValue} />
