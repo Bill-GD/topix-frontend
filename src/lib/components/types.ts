@@ -17,6 +17,7 @@ import {
   faThumbsUp,
   faTriangleExclamation,
   faUserGroup,
+  faVideo,
   faXmark,
 } from '@fortawesome/free-solid-svg-icons';
 import type { Snippet } from 'svelte';
@@ -25,7 +26,7 @@ import type {
   HTMLAttributeAnchorTarget,
   HTMLInputTypeAttribute,
 } from 'svelte/elements';
-import type { User } from '../utils/types';
+import type { UnaryVoidFunction, User } from '../utils/types';
 
 export type ButtonType = 'primary' | 'danger' | 'dark' | 'success';
 
@@ -36,6 +37,7 @@ export const IconSize = {
 };
 
 export const Icons = {
+  video: faVideo,
   image: faImage,
   back: faChevronLeft,
   eye: faEye,
@@ -123,7 +125,7 @@ export interface IconProps {
 
 export interface IconButtonProps {
   children: Snippet;
-  onclick?: VoidFunction | undefined;
+  onclick?: VoidFunction | UnaryVoidFunction<Event> | undefined;
   disabled?: boolean | undefined | null;
   type?: 'submit' | 'reset' | 'button' | undefined | null;
   class?: ClassValue | undefined | null;

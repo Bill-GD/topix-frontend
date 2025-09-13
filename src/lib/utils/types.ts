@@ -23,3 +23,5 @@ export type User = {
   followingCount: number;
   role: 'user' | 'admin';
 };
+
+export type UnaryVoidFunction<T> = (arg: T) => void;
