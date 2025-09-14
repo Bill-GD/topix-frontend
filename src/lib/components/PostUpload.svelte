@@ -15,23 +15,66 @@
   }: PostUploadProps = $props();
 
   let inputContent = $state<string>('');
-  let images = $state<string[]>([]);
-  let video = $state<string>('');
+  let images = $state<{ file: File; url: string }[]>([]);
+  let video = $state<{ file: File; url: string } | null>(null);
+  let imageDisabled = $derived(video !== null);
+  let videoDisabled = $derived(images.length > 0);
+  let disablePost = $state<boolean>(false);
 
   onMount(() => {
     const editor = document.getElementById('editor')!;
 
     editor.addEventListener('input', (ev) => {
       const trimmed = editor.innerText.trim();
-
       inputContent = trimmed.length > 0 ? editor.innerText : trimmed;
-
       editor.classList.toggle('empty', inputContent.length === 0);
+    });
+
+    document.getElementById('image-input')?.addEventListener('change', (ev) => {
+      if (imageDisabled) return;
+      images = [];
+
+      const input = ev.target as HTMLInputElement;
+      if (!input.files) return;
+
+      const selectedFiles = input.files;
+      for (const file of selectedFiles) {
+        if (file.size > ImageSizeLimit) {
+          errorText = `Max image size is ${getReadableSize(ImageSizeLimit)}`;
+          return;
+        }
+        errorText = '';
+        images.push({ file, url: URL.createObjectURL(file) });
+      }
+    });
+
+    document.getElementById('video-input')?.addEventListener('change', (ev) => {
+      if (videoDisabled) return;
+
+      const input = ev.target as HTMLInputElement;
+      if (!input.files) return;
+
+      const selectedFiles = input.files;
+      const file = selectedFiles[0] as File;
+
+      if (file.size > VideoSizeLimit) {
+        errorText = `Max video size is ${getReadableSize(VideoSizeLimit)}`;
+        return;
+      }
+      errorText = '';
+      input.value = '';
+      if (video !== null) URL.revokeObjectURL(video.url);
+      video = { file, url: URL.createObjectURL(file) };
     });
   });
 </script>
 
-<form class="main" method="post">
+<form
+  class="main"
+  method="post"
+  enctype="multipart/form-data"
+  onsubmit={() => (disablePost = true)}
+>
   <img class="profile-picture-sm" src={userProfilePicture} alt="profile" />
   <input class="hidden" name="user-id" value={userId} type="number" />
 
@@ -57,37 +100,39 @@
               class="absolute top-0 right-0"
               onclick={(ev) => {
                 ev.preventDefault();
-                images.splice(index, 1);
+                URL.revokeObjectURL(images.splice(index, 1)[0].url);
               }}
             >
               <Icon class="text-gray-500 hover:cursor-pointer hover:text-gray-300" type="close" />
             </IconButton>
 
-            <img class="aspect-square h-30 w-30 rounded-md" src={file} alt="upload-image-{index}" />
-            <input class="hidden" name="images" value={file} />
+            <img
+              class="aspect-square h-30 w-30 rounded-md"
+              src={file.url}
+              alt="upload-image-{index}"
+            />
           </div>
         {/each}
       </div>
     {/if}
 
-    {#if video !== ''}
+    {#if video !== null}
       <div class="relative self-end">
         <!-- svelte-ignore a11y_media_has_caption -->
         <video class="w-full max-w-md rounded-md" controls>
-          <source src={video} type="video/mp4" />
+          <source src={video.url} type="video/mp4" />
         </video>
 
         <IconButton
           class="absolute top-0 right-0"
           onclick={(ev) => {
             ev.preventDefault();
-            video = '';
+            URL.revokeObjectURL(video!.url);
+            video = null;
           }}
         >
           <Icon class="text-gray-500 hover:cursor-pointer hover:text-gray-300" type="close" />
         </IconButton>
-
-        <input class="hidden" name="video" value={video} />
       </div>
     {/if}
 
@@ -98,74 +143,46 @@
 
       <div class="flex items-center">
         <label for="image-input">
-          <Icon type="image" class="text-gray-500 hover:cursor-pointer hover:text-gray-300" />
+          <Icon
+            class={[
+              'text-gray-500',
+              imageDisabled ? 'cursor-not-allowed' : 'cursor-pointer hover:text-gray-300',
+            ]}
+            type="image"
+          />
         </label>
         <input
           class="hidden"
           type="file"
           id="image-input"
+          name="images"
           accept="image/*"
-          disabled={video !== ''}
-          onchange={(event) => {
-            const input = event.target as HTMLInputElement;
-            const selectedFiles = input.files!;
-
-            if (selectedFiles.length > 0) {
-              const file = selectedFiles[0] as File;
-
-              if (file.size > ImageSizeLimit) {
-                errorText = `Max image size is ${getReadableSize(ImageSizeLimit)}`;
-                return;
-              }
-              errorText = '';
-
-              const fr = new FileReader();
-              fr.onload = () => images.push(fr.result as string);
-              fr.readAsDataURL(file);
-            } else {
-              console.log('No file selected.');
-            }
-          }}
+          multiple
+          disabled={imageDisabled}
         />
       </div>
 
-      <div class="flex items-center">
+      <div class="flex items-center" id="image-input-box">
         <label for="video-input">
-          <Icon type="video" class="text-gray-500 hover:cursor-pointer hover:text-gray-300" />
+          <Icon
+            class={[
+              'text-gray-500',
+              videoDisabled ? 'cursor-not-allowed' : 'cursor-pointer hover:text-gray-300',
+            ]}
+            type="video"
+          />
         </label>
         <input
           class="hidden"
           type="file"
           id="video-input"
+          name="video"
           accept="video/mp4"
-          disabled={images.length > 0}
-          onchange={(event) => {
-            const input = event.target as HTMLInputElement;
-            const selectedFiles = input.files!;
-
-            if (selectedFiles.length > 0) {
-              const file = selectedFiles[0] as File;
-
-              if (file.size > VideoSizeLimit) {
-                errorText = `Max video size is ${getReadableSize(VideoSizeLimit)}`;
-                return;
-              }
-              errorText = '';
-
-              const fr = new FileReader();
-              fr.onload = () => {
-                input.value = '';
-                video = fr.result as string;
-              };
-              fr.readAsDataURL(file);
-            } else {
-              console.log('No file selected.');
-            }
-          }}
+          disabled={videoDisabled}
         />
       </div>
 
-      <Button class="w-fit" type="success" {formaction}>Post</Button>
+      <Button class="w-fit" type="success" {formaction} disabled={disablePost}>Post</Button>
     </div>
   </div>
 </form>

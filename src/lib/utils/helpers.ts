@@ -43,6 +43,7 @@ export async function checkLogin(cookies: Cookies): Promise<boolean> {
   try {
     const res = await AxiosHandler.get('/auth/check', cookies.get(CookieName.accessToken));
     return res.success;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (err) {
     return false;
   }

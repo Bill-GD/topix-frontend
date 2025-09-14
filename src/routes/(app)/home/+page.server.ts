@@ -1,5 +1,4 @@
 import { AxiosHandler } from '@/lib/utils/axios-handler';
-import { dataUrlToFile } from '@/lib/utils/helpers';
 import { CookieName } from '@/lib/utils/types';
 import { fail, type Actions } from '@sveltejs/kit';
 
@@ -13,13 +12,9 @@ export const actions: Actions = {
 
     if (formData.has('video')) {
       type = 'video';
-      files.push(dataUrlToFile(`${formData.get('video')}`));
+      files.push(formData.get('video') as File);
     } else if (formData.has('images')) {
-      formData.forEach((value, key) => {
-        if (key === 'images' && typeof value === 'string') {
-          files.push(dataUrlToFile(value));
-        }
-      });
+      files.push(...(formData.getAll('images') as File[]));
     }
 
     if (files.length <= 0 && content.length <= 0) {
@@ -39,8 +34,12 @@ export const actions: Actions = {
         event.cookies.get(CookieName.accessToken),
         { 'Content-Type': 'multipart/form-data' },
       );
+      if (!fileRes.success) {
+        return fail(fileRes.status, { success: false, message: fileRes.message });
+      }
       urls = fileRes.data as string[];
     }
+
     const dto = {
       ownerId: formData.get('user-id'),
       type,
