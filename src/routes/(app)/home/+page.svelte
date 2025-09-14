@@ -1,7 +1,7 @@
 <script lang="ts">
   import { HomeLayout } from '@/lib/layouts';
-  import type { PageProps } from '../../$types';
   import { PostUpload } from '@/lib/components';
+  import type { PageProps } from './$types';
 
   let { data, form }: PageProps = $props();
 </script>

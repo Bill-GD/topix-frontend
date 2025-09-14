@@ -9,7 +9,7 @@ export const actions: Actions = {
     const files: File[] = [];
     let urls: string[] = [];
     let type = 'image';
-    let content = `${formData.get('content')}`;
+    const content = `${formData.get('content')}`;
 
     if (formData.has('video')) {
       type = 'video';

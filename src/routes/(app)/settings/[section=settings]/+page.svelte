@@ -4,7 +4,7 @@
   import { capitalize } from '@/lib/utils/helpers';
   import { Button, FileDropzone, Icon, IconButton, Input } from '@/lib/components';
 
-  let { data, form }: PageProps = $props();
+  let { data, form, params }: PageProps = $props();
 
   const items = ['account', 'profile'];
   let passwordValue = $state<string>('');
@@ -28,20 +28,14 @@
 
   <form class="p-4 md:p-20" method="post">
     <div class="form-button">
-      <Button
-        class="mb-4 w-fit"
-        formaction="?/update-{data.pathname.includes('account') ? 'account' : 'profile'}"
-        type="success"
-      >
-        Save
-      </Button>
+      <Button class="mb-4 w-fit" formaction="?/update-{params.section}" type="success">Save</Button>
       {#if form}
         <span class={form.success ? 'text-green-500' : 'text-red-500'}>{form.message}</span>
       {/if}
     </div>
 
     <div class="flex flex-col gap-6">
-      {#if data.pathname.includes('account')}
+      {#if params.section === 'account'}
         <div class="flex flex-col gap-2">
           <label class="text-xl" for="username">Username</label>
           <Input class="w-min" id="username" name="username" value={data.self.username}></Input>
@@ -67,7 +61,7 @@
             </div>
           </div>
         {/if}
-      {:else if data.pathname.includes('profile')}
+      {:else if params.section === 'profile'}
         <div class="input-group">
           <label class="text-xl" for="display-name">Display name</label>
           <Input
@@ -90,21 +84,24 @@
           />
         </div>
 
-        <div class="flex items-stretch gap-8">
-          <img
-            class="profile-picture-lg"
-            src={profileValue
-              ? profileValue
-              : (data.self.profilePicture ?? '/images/default-user-profile-icon.jpg')}
-            alt="user-profile"
-          />
+        <div class="input-group">
+          <label class="text-xl" for="description">Profile picture</label>
+          <div class="flex w-full items-stretch gap-8">
+            <img
+              class="profile-picture-lg"
+              src={profileValue
+                ? profileValue
+                : (data.self.profilePicture ?? '/images/default-user-profile-icon.jpg')}
+              alt="user-profile"
+            />
 
-          <FileDropzone
-            contentInputName="profile-picture"
-            bind:contentValue={profileValue}
-            filenameInputName="profile-picture-name"
-            bind:filenameValue={profileFilenameValue}
-          />
+            <FileDropzone
+              contentInputName="profile-picture"
+              bind:contentValue={profileValue}
+              filenameInputName="profile-picture-name"
+              bind:filenameValue={profileFilenameValue}
+            />
+          </div>
         </div>
       {/if}
     </div>
@@ -116,14 +113,14 @@
         <div class="flex">
           <div
             class={[
-              data.pathname.includes(item) ? 'highlighted' : 'not-highlighted',
+              params.section === item ? 'highlighted' : 'not-highlighted',
               'mr-4 w-0 border-l-3',
             ]}
           ></div>
           <a
             class={[
               'py-2',
-              data.pathname.includes(item) ? 'font-semibold text-gray-300' : 'text-gray-500',
+              params.section === item ? 'font-semibold text-gray-300' : 'text-gray-500',
             ]}
             href="/settings/{item}"
           >
