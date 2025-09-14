@@ -3,7 +3,7 @@
   import type { PageProps } from '../../$types';
   import { PostUpload } from '@/lib/components';
 
-  let { data }: PageProps = $props();
+  let { data, form }: PageProps = $props();
 </script>
 
 <svelte:head>
@@ -11,5 +11,9 @@
 </svelte:head>
 
 <HomeLayout self={data.self}>
-  <PostUpload userProfilePicture={data.self.profilePicture}></PostUpload>
+  <PostUpload
+    errorText={form?.success === false ? form?.message : ''}
+    userId={data.self.id}
+    userProfilePicture={data.self.profilePicture}
+  />
 </HomeLayout>

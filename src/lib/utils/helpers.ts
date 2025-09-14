@@ -53,15 +53,16 @@ export function deleteTokens(cookies: Cookies): void {
   cookies.delete(CookieName.refreshToken, { path: '/' });
 }
 
-export function dataUrlToFile(dataUrl: string, filename: string): File {
+export function dataUrlToFile(dataUrl: string): File {
   const [header, base64] = dataUrl.split(',');
   const mime = header.match(/:(.*?);/)[1];
+  const ext = mime.split('/')[1];
   const binary = atob(base64);
   const array = new Uint8Array(binary.length);
   for (let i = 0; i < binary.length; i++) {
     array[i] = binary.charCodeAt(i);
   }
-  return new File([array], filename, { type: mime });
+  return new File([array], `${Date.now()}.${ext}`, { type: mime });
 }
 
 export function getReadableSize(byte: number): string {

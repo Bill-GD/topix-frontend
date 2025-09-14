@@ -8,14 +8,15 @@
   import { getReadableSize } from '../utils/helpers';
 
   let {
+    userId,
     userProfilePicture = '/images/default-user-profile-icon.jpg',
     formaction,
+    errorText,
   }: PostUploadProps = $props();
 
   let inputContent = $state<string>('');
   let images = $state<string[]>([]);
   let video = $state<string>('');
-  let errorText = $state<string>('');
 
   onMount(() => {
     const editor = document.getElementById('editor')!;
@@ -32,6 +33,7 @@
 
 <form class="main" method="post">
   <img class="profile-picture-sm" src={userProfilePicture} alt="profile" />
+  <input class="hidden" name="user-id" value={userId} type="number" />
 
   <div class="flex w-full flex-col gap-4">
     <div
@@ -91,7 +93,7 @@
 
     <div class="flex justify-end gap-4">
       {#if errorText !== ''}
-        <p class="self-center text-red-500">{errorText}</p>
+        <p class="self-center text-right text-red-500">{errorText}</p>
       {/if}
 
       <div class="flex items-center">

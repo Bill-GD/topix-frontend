@@ -31,16 +31,10 @@ export const actions: Actions = {
 
     if (formData.get('profile-picture') !== '' && formData.get('profile-picture-name') !== '') {
       const form = new FormData();
-      form.append(
-        'file',
-        dataUrlToFile(
-          `${formData.get('profile-picture')}`,
-          `${formData.get('profile-picture-name')}`,
-        ),
-      );
+      form.append('files', dataUrlToFile(`${formData.get('profile-picture')}`));
 
       const res = await AxiosHandler.post(
-        '/file/cloud',
+        '/file/upload',
         form,
         event.cookies.get(CookieName.accessToken),
         { 'Content-Type': 'multipart/form-data' },

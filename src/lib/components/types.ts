@@ -158,6 +158,8 @@ export interface NavItemProps {
 }
 
 export interface PostUploadProps {
+  userId: number;
+  errorText?: string | undefined;
   userProfilePicture: string;
   formaction?: string | undefined;
 }
