@@ -15,8 +15,8 @@ describe('home layout', () => {
     render(Page, {
       data: {
         self: user as User,
-        pathname: '/settings/account',
       },
+      params: { section: 'account' },
     });
     expect.soft(page.getByText('Save', { exact: true })).toBeVisible();
   });
@@ -25,8 +25,8 @@ describe('home layout', () => {
     render(Page, {
       data: {
         self: user as User,
-        pathname: '/settings/account',
       },
+      params: { section: 'account' },
     });
     expect.soft(page.getByLabelText('Username')).toHaveDisplayValue('test');
   });
@@ -35,8 +35,8 @@ describe('home layout', () => {
     render(Page, {
       data: {
         self: user as User,
-        pathname: '/settings/profile',
       },
+      params: { section: 'profile' },
     });
     expect.soft(page.getByLabelText('Display name')).toHaveDisplayValue('Test');
     expect.soft(page.getByLabelText('Description')).toHaveDisplayValue('Description');

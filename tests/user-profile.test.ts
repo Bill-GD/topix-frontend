@@ -5,7 +5,6 @@ import Page from '@/routes/(app)/user/[username]/+page.svelte';
 import type { User } from '@/lib/utils/types';
 
 describe('home layout', () => {
-  let hostBody: HTMLElement;
   const user: Partial<User> = {
     username: 'test',
     displayName: 'Test',
@@ -21,7 +20,6 @@ describe('home layout', () => {
         user: { ...user, username: 'test-user', displayName: 'Test User' } as User,
       },
     });
-    hostBody = document.body;
   });
 
   it('should render action buttons', async () => {

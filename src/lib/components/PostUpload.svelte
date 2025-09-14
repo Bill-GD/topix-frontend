@@ -24,7 +24,7 @@
   onMount(() => {
     const editor = document.getElementById('editor')!;
 
-    editor.addEventListener('input', (ev) => {
+    editor.addEventListener('input', () => {
       const trimmed = editor.innerText.trim();
       inputContent = trimmed.length > 0 ? editor.innerText : trimmed;
       editor.classList.toggle('empty', inputContent.length === 0);
@@ -76,7 +76,7 @@
   onsubmit={() => (disablePost = true)}
 >
   <img class="profile-picture-sm" src={userProfilePicture} alt="profile" />
-  <input class="hidden" name="user-id" value={userId} type="number" />
+  <input class="hidden" name="user-id" readonly value={userId} type="number" />
 
   <div class="flex w-full flex-col gap-4">
     <div
