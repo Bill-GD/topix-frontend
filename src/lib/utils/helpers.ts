@@ -3,6 +3,7 @@ import type { Cookies } from '@sveltejs/kit';
 import { AxiosHandler } from './axios-handler';
 import { CookieName } from './types';
 
+const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 let num = Date.now();
 
 export function getContrastColor(hex: string): 'black' | 'white' {
@@ -75,4 +76,28 @@ export function getReadableSize(byte: number): string {
     postfixIndex++;
   }
   return `${size} ${postfix[postfixIndex]}`;
+}
+
+export function getTimeAgo(ms: number): string {
+  const diffInSec = Math.trunc((Date.now() - ms + 25200000) / 1000);
+
+  // 2 weeks
+  if (diffInSec > 1209600) {
+    const date = new Date(ms);
+    return `${date.getDate()} ${months[date.getMonth()]}`;
+  }
+
+  let interval = diffInSec / 604800;
+  if (interval > 1) return `${Math.trunc(interval)}w`;
+
+  interval = diffInSec / 86400;
+  if (interval > 1) return `${Math.trunc(interval)}d`;
+
+  interval = diffInSec / 3600;
+  if (interval > 1) return `${Math.trunc(interval)}h`;
+
+  interval = diffInSec / 60;
+  if (interval > 1) return `${Math.trunc(interval)}m`;
+
+  return `${diffInSec}`;
 }

@@ -2,6 +2,7 @@
   import { HomeLayout } from '@/lib/layouts';
   import type { PageProps } from './$types';
   import { Link, Icon, DropdownMenu, IconButton, DropdownItem } from '@/lib/components';
+  import { getTimeAgo } from '@/lib/utils/helpers';
 
   let { data, form }: PageProps = $props();
 
@@ -30,11 +31,15 @@
           alt="profile"
         />
 
-        <div class="flex items-center gap-4">
+        <div class="flex items-baseline gap-4">
           <Link class="flex items-baseline gap-2" href="/user/{data.self.username}">
             <span class="text-xl text-white">{data.self.displayName}</span>
-            <span class="text-sm text-gray-500">@{data.self.username}</span>
+            <span class="text-gray-500">@{data.self.username}</span>
           </Link>
+          <span class="text-gray-500">-</span>
+          <span class="text-gray-500">
+            {getTimeAgo(Date.parse(data.post.dateCreated))}
+          </span>
         </div>
 
         <DropdownMenu class="ml-auto" position="bottom" align="end" origin="tr">
@@ -57,20 +62,22 @@
       <div class="flex w-full flex-col gap-6">
         {data.post.content}
 
-        <div class="flex w-full gap-4">
-          {#if isImages}
-            {#each data.post.mediaPaths! as url, index (index)}
-              <img class="w-full rounded-lg" src={url} alt="post-image-{index}" />
-            {/each}
-          {/if}
+        {#if data.post.mediaPaths.length > 0}
+          <div class="flex w-full gap-4">
+            {#if isImages}
+              {#each data.post.mediaPaths as url, index (index)}
+                <img class="w-full rounded-lg" src={url} alt="post-image-{index}" />
+              {/each}
+            {/if}
 
-          {#if isVideo}
-            <!-- svelte-ignore a11y_media_has_caption -->
-            <video class="w-full rounded-lg" controls>
-              <source src={data.post.mediaPaths![0]} type="video/mp4" />
-            </video>
-          {/if}
-        </div>
+            {#if isVideo}
+              <!-- svelte-ignore a11y_media_has_caption -->
+              <video class="w-full rounded-lg" controls>
+                <source src={data.post.mediaPaths![0]} type="video/mp4" />
+              </video>
+            {/if}
+          </div>
+        {/if}
 
         <div class="flex gap-6">
           <div class="flex items-center gap-2">

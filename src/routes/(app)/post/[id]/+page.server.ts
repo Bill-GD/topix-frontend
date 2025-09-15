@@ -9,7 +9,6 @@ export const load: PageServerLoad = async ({ cookies, params }) => {
     cookies.get(CookieName.accessToken),
   );
 
-  console.log(postsRes);
   if (postsRes.success) {
     return { post: postsRes.data as unknown as Post };
   }

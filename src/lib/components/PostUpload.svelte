@@ -62,7 +62,6 @@
         return;
       }
       errorText = '';
-      input.value = '';
       if (video !== null) URL.revokeObjectURL(video.url);
       video = { file, url: URL.createObjectURL(file) };
     });

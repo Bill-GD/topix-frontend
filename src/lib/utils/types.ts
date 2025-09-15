@@ -37,7 +37,7 @@ export type Post = {
   reactionCount: number;
   replyCount: number;
   mediaPaths: string[];
-  dateCreated: Date;
+  dateCreated: string;
 };
 
 export type UnaryVoidFunction<T> = (arg: T) => void;

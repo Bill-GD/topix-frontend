@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { getTimeAgo } from '../utils/helpers';
   import DropdownItem from './DropdownItem.svelte';
   import DropdownMenu from './DropdownMenu.svelte';
   import Icon from './Icon.svelte';
@@ -23,9 +24,12 @@
     <div class="flex items-baseline gap-4">
       <Link class="flex items-baseline gap-2" href="/user/{owner.username}">
         <span class="text-xl text-white">{owner.displayName}</span>
-        <span class="text-sm text-gray-500">@{owner.username}</span>
+        <span class="text-gray-500">@{owner.username}</span>
       </Link>
-      <span class="text-sm text-gray-500">{post.dateCreated}</span>
+      <span class="text-gray-500">-</span>
+      <span class="text-gray-500">
+        {getTimeAgo(Date.parse(post.dateCreated))}
+      </span>
     </div>
 
     {@render content?.()}
