@@ -1,4 +1,4 @@
-import { redirect } from '@sveltejs/kit';
+import { error, redirect } from '@sveltejs/kit';
 import type { LayoutServerLoad } from './$types';
 import { AxiosHandler } from '@/lib/utils/axios-handler';
 import { CookieName, type User } from '@/lib/utils/types';
@@ -12,6 +12,7 @@ export const load: LayoutServerLoad = async ({ locals, cookies }) => {
 
   if (res.message.toLowerCase().includes('invalid signature')) {
     deleteTokens(cookies);
+    redirect(303, '/login');
   }
-  redirect(303, '/login');
+  error(503, { status: 500, message: 'Server is down.' });
 };
