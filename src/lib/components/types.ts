@@ -60,29 +60,33 @@ export const Icons = {
 export interface ButtonProps {
   type: ButtonType;
   outline?: boolean;
-  href?: string | undefined;
-  formaction?: string | undefined;
-  onclick?: VoidFunction | undefined;
+  href?: string;
+  formaction?: string;
+  onclick?: VoidFunction;
   disabled?: boolean;
   children?: Snippet;
-  class?: ClassValue | undefined | null;
+  class?: ClassValue | null;
 }
 
 export interface DropdownMenuProps {
   children: Snippet;
-  class?: ClassValue | undefined | null;
+  trigger: Snippet;
+  class?: ClassValue | null;
+  align: 'start' | 'end';
+  position: 'top' | 'bottom';
+  origin: 't' | 'tr' | 'r' | 'br' | 'b' | 'bl' | 'l' | 'tl';
 }
 
 export interface DropdownItemProps {
   children: Snippet;
-  href?: string | undefined;
-  rel?: string | undefined;
-  class?: ClassValue | undefined | null;
+  href?: string;
+  rel?: string;
+  class?: ClassValue | null;
 }
 
 export interface ErrorProps {
   children: Snippet;
-  class?: ClassValue | undefined | null;
+  class?: ClassValue | null;
 }
 
 export interface FileDropzoneProps {
@@ -90,7 +94,7 @@ export interface FileDropzoneProps {
   filenameInputName: string;
   contentValue: string;
   filenameValue: string;
-  class?: ClassValue | undefined | null;
+  class?: ClassValue | null;
 }
 
 export interface FlairProps {
@@ -103,10 +107,10 @@ export interface FloatingLabelInputProps {
   peekable?: boolean;
   children: Snippet;
   value?: string;
-  type?: HTMLInputTypeAttribute | undefined | null;
-  class?: ClassValue | undefined | null;
-  required?: boolean | undefined | null;
-  name?: string | undefined | null;
+  type?: HTMLInputTypeAttribute | null;
+  class?: ClassValue | null;
+  required?: boolean | null;
+  name?: string | null;
 }
 
 export interface HomeLayoutProps {
@@ -120,15 +124,15 @@ export interface IconProps {
   hover?: boolean;
   size?: keyof typeof IconSize;
   color?: string;
-  class?: ClassValue | undefined | null;
+  class?: ClassValue | null;
 }
 
 export interface IconButtonProps {
   children: Snippet;
-  onclick?: VoidFunction | UnaryVoidFunction<Event> | undefined;
-  disabled?: boolean | undefined | null;
-  type?: 'submit' | 'reset' | 'button' | undefined | null;
-  class?: ClassValue | undefined | null;
+  onclick?: VoidFunction | UnaryVoidFunction<Event>;
+  disabled?: boolean | null;
+  type?: 'submit' | 'reset' | 'button' | null;
+  class?: ClassValue | null;
 }
 
 export interface InputProps {
@@ -137,17 +141,17 @@ export interface InputProps {
   textarea?: boolean;
   id?: string | null;
   value?: string;
-  type?: HTMLInputTypeAttribute | undefined | null;
-  class?: ClassValue | undefined | null;
-  required?: boolean | undefined | null;
-  name?: string | undefined | null;
-  placeholder?: string | undefined | null;
+  type?: HTMLInputTypeAttribute | null;
+  class?: ClassValue | null;
+  required?: boolean | null;
+  name?: string | null;
+  placeholder?: string | null;
 }
 
 export interface LinkProps {
-  href?: string | undefined | null;
-  class?: ClassValue | undefined | null;
-  target?: HTMLAttributeAnchorTarget | undefined | null;
+  href?: string | null;
+  class?: ClassValue | null;
+  target?: HTMLAttributeAnchorTarget | null;
   children: Snippet;
 }
 
@@ -159,7 +163,7 @@ export interface NavItemProps {
 
 export interface PostUploadProps {
   userId: number;
-  errorText?: string | undefined;
-  userProfilePicture: string | null;
-  formaction?: string | undefined;
+  errorText?: string;
+  userPicture: string | null;
+  formaction?: string;
 }

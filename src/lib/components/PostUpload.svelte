@@ -9,7 +9,7 @@
 
   let {
     userId,
-    userProfilePicture = '/images/default-user-profile-icon.jpg',
+    userPicture = '/images/default-user-profile-icon.jpg',
     formaction,
     errorText,
   }: PostUploadProps = $props();
@@ -75,7 +75,7 @@
   enctype="multipart/form-data"
   onsubmit={() => (disablePost = true)}
 >
-  <img class="profile-picture-sm" src={userProfilePicture} alt="profile" />
+  <img class="profile-picture-sm" src={userPicture} alt="profile" />
   <input class="hidden" name="user-id" readonly value={userId} type="number" />
 
   <div class="flex w-full flex-col gap-4">

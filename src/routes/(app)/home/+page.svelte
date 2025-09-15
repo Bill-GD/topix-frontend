@@ -14,6 +14,6 @@
   <PostUpload
     errorText={form?.success === false ? form?.message : ''}
     userId={data.self.id}
-    userProfilePicture={data.self.profilePicture}
+    userPicture={data.self.profilePicture}
   />
 </HomeLayout>

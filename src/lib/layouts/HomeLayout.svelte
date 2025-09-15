@@ -1,7 +1,6 @@
 <script lang="ts">
   import { DropdownItem, DropdownMenu, Icon, NavigationItem } from '@/lib/components';
   import { Icons, type HomeLayoutProps } from '@/lib/components/types';
-  import { onMount } from 'svelte';
 
   let { children, right, self }: HomeLayoutProps = $props();
 
@@ -15,26 +14,6 @@
     { title: 'Chat', href: '/chat', icon: 'message' },
     { title: 'Groups', href: '/groups', icon: 'group' },
   ];
-
-  let showMenu = $state<boolean>(false);
-  let hover = $state<boolean>(false);
-
-  onMount(() => {
-    const acc = document.getElementsByClassName('account-item')[0] as HTMLElement;
-    const menu = document.getElementsByClassName('dropdown-menu')[0] as HTMLElement;
-
-    function showMenu() {
-      const rect = acc.getBoundingClientRect();
-      menu.style.minWidth = `${rect.width}px`;
-      menu.classList.toggle('hidden');
-      menu.style.left = `${rect.left}px`;
-      menu.style.top = `${rect.top - menu.offsetHeight}px`;
-    }
-
-    acc.addEventListener('click', showMenu);
-
-    return () => acc.removeEventListener('click', showMenu);
-  });
 </script>
 
 <main>
@@ -47,43 +26,26 @@
       </NavigationItem>
     {/each}
 
-    <div
-      class="mt-auto ml-auto"
-      role="button"
-      tabindex="0"
-      onmouseenter={() => (hover = true)}
-      onmouseleave={() => {
-        hover = false;
-        showMenu = false;
-      }}
-    >
-      <!-- svelte-ignore a11y_click_events_have_key_events -->
-      <div
-        class="account-item"
-        role="button"
-        tabindex="0"
-        onclick={() => {
-          if (hover) showMenu = !showMenu;
-        }}
-      >
-        <div class="flex flex-col text-right">
-          <span class="hidden text-xl text-white md:inline">{self.displayName}</span>
-          <span class="hidden text-sm text-gray-500 md:inline">@{self.username}</span>
+    <DropdownMenu class="mt-auto ml-auto" position="top" align="start" origin="b">
+      {#snippet trigger()}
+        <div class="account-item">
+          <div class="flex flex-col text-right">
+            <span class="hidden text-xl text-white md:inline">{self.displayName}</span>
+            <span class="hidden text-sm text-gray-500 md:inline">@{self.username}</span>
+          </div>
+
+          <img
+            class="profile-picture-sm"
+            src={self.profilePicture ?? '/images/default-user-profile-icon.jpg'}
+            alt="profile"
+          />
         </div>
+      {/snippet}
 
-        <img
-          class="profile-picture-sm"
-          src={self.profilePicture ?? '/images/default-user-profile-icon.jpg'}
-          alt="profile"
-        />
-
-        <DropdownMenu class={[(!hover || !showMenu) && 'hidden', 'dropdown-menu']}>
-          <DropdownItem href="/user/{self.username}">Profile</DropdownItem>
-          <DropdownItem href="/settings/account">Settings</DropdownItem>
-          <DropdownItem href="/logout" rel="external">Log out</DropdownItem>
-        </DropdownMenu>
-      </div>
-    </div>
+      <DropdownItem href="/user/{self.username}">Profile</DropdownItem>
+      <DropdownItem href="/settings/account">Settings</DropdownItem>
+      <DropdownItem href="/logout" rel="external">Log out</DropdownItem>
+    </DropdownMenu>
   </nav>
 
   <div class="main-content">
