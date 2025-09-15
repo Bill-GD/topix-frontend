@@ -8,6 +8,7 @@
 
   const isImages = data.post.mediaPaths.every((m) => m.includes('image'));
   const isVideo = data.post.mediaPaths.every((m) => m.includes('video'));
+  let imageIndex = $state<number>(0);
 </script>
 
 <svelte:head>
@@ -63,20 +64,52 @@
         {data.post.content}
 
         {#if data.post.mediaPaths.length > 0}
-          <div class="flex w-full gap-4">
-            {#if isImages}
-              {#each data.post.mediaPaths as url, index (index)}
-                <img class="w-full rounded-lg" src={url} alt="post-image-{index}" />
-              {/each}
-            {/if}
+          {#if isImages}
+            <div class="relative w-fit">
+              {#if imageIndex > 0}
+                <IconButton
+                  class="absolute top-1/2 left-0 h-full -translate-y-1/2 hover:bg-gray-900/20"
+                  onclick={() => (imageIndex = Math.max(0, imageIndex - 1))}
+                >
+                  <Icon type="back" size="sm" />
+                </IconButton>
+              {/if}
 
-            {#if isVideo}
-              <!-- svelte-ignore a11y_media_has_caption -->
-              <video class="w-full rounded-lg" controls>
-                <source src={data.post.mediaPaths![0]} type="video/mp4" />
-              </video>
-            {/if}
-          </div>
+              <img
+                class="w-full rounded-lg"
+                src={data.post.mediaPaths[imageIndex]}
+                alt="post-image-{imageIndex}"
+              />
+
+              <div class="absolute bottom-1 left-1/2 z-2 flex -translate-x-1/2 gap-1">
+                {#each data.post.mediaPaths as _, index}
+                  <span
+                    class={[
+                      'h-2 w-2 rounded-full border border-white',
+                      index === imageIndex && 'bg-white',
+                    ]}
+                  ></span>
+                {/each}
+              </div>
+
+              {#if imageIndex < data.post.mediaPaths.length - 1}
+                <IconButton
+                  class="absolute top-1/2 right-0 h-full -translate-y-1/2 hover:bg-gray-900/20"
+                  onclick={() =>
+                    (imageIndex = Math.min(data.post.mediaPaths.length - 1, imageIndex + 1))}
+                >
+                  <Icon type="next" size="sm" />
+                </IconButton>
+              {/if}
+            </div>
+          {/if}
+
+          {#if isVideo}
+            <!-- svelte-ignore a11y_media_has_caption -->
+            <video class="w-full rounded-lg" controls>
+              <source src={data.post.mediaPaths![0]} type="video/mp4" />
+            </video>
+          {/if}
         {/if}
 
         <div class="flex gap-6">

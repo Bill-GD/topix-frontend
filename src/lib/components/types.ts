@@ -2,6 +2,7 @@
 
 import {
   faChevronLeft,
+  faChevronRight,
   faEllipsisVertical,
   faEye,
   faEyeSlash,
@@ -40,6 +41,7 @@ export const Icons = {
   video: faVideo,
   image: faImage,
   back: faChevronLeft,
+  next: faChevronRight,
   eye: faEye,
   eyeSlash: faEyeSlash,
   error: faTriangleExclamation,
