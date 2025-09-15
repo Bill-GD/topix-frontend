@@ -24,4 +24,21 @@ export type User = {
   role: 'user' | 'admin';
 };
 
+export type Post = {
+  id: number;
+  ownerId: number;
+  // parentPostId: number;
+  // threadId: number;
+  // groupId: number;
+  tag: string;
+  content: string;
+  groupAccepted: boolean;
+  visibility: 'public' | 'private' | 'hidden';
+  reactionCount: number;
+  replyCount: number;
+  mediaPaths: string[];
+  dateCreated: Date;
+  dateUpdated: Date;
+};
+
 export type UnaryVoidFunction<T> = (arg: T) => void;

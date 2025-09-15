@@ -9,10 +9,8 @@
   let {
     username,
     owner,
-    postId,
     content,
-    reactionCount,
-    replyCount,
+    post,
     mediaPaths = [
       'https://res.cloudinary.com/djqtcdphf/image/upload/v1757847439/imbaepwbaqhcdjxepu5j.gif',
     ],
@@ -22,7 +20,7 @@
   const isVideo = mediaPaths[0].includes('video') && mediaPaths.length === 1;
 </script>
 
-<a class="main" href="/post/{postId}">
+<a class="main" href="/post/{post.id}">
   <img
     class="profile-picture-sm"
     src={owner.profilePicture ?? '/images/default-user-profile-icon.jpg'}
@@ -48,7 +46,7 @@
 
       {#if isVideo}
         <!-- svelte-ignore a11y_media_has_caption -->
-        <video class="w-full max-w-md rounded-lg" controls>
+        <video class="w-full min-w-1/2 rounded-lg" controls>
           <source src={mediaPaths[0]} type="video/mp4" />
         </video>
       {/if}
@@ -56,11 +54,11 @@
 
     <div class="flex gap-6">
       <div class="flex items-center gap-2">
-        {reactionCount}
+        {post.reactionCount}
         <Icon type="like" size="sm" />
       </div>
       <div class="flex items-center gap-2">
-        {replyCount}
+        {post.replyCount}
         <Icon type="reply" size="sm" />
       </div>
     </div>

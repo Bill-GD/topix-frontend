@@ -26,7 +26,7 @@ import type {
   HTMLAttributeAnchorTarget,
   HTMLInputTypeAttribute,
 } from 'svelte/elements';
-import type { UnaryVoidFunction, User } from '../utils/types';
+import type { Post, UnaryVoidFunction, User } from '../utils/types';
 
 export type ButtonType = 'primary' | 'danger' | 'dark' | 'success';
 
@@ -172,9 +172,7 @@ export interface PostUploadProps {
 export interface PostProps {
   username: string;
   owner: Partial<User>;
-  postId: number;
   content?: Snippet;
-  reactionCount: number;
-  replyCount: number;
+  post: Partial<Post>;
   mediaPaths?: string[];
 }
