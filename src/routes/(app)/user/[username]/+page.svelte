@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Button, IconButton } from '@/lib/components';
+  import { Button, IconButton, Post } from '@/lib/components';
   import type { PageProps } from './$types';
   import Icon from '@/lib/components/Icon.svelte';
   import { HomeLayout } from '@/lib/layouts';
@@ -19,7 +19,7 @@
 
     <div class="flex items-start gap-4">
       <img
-        class="profile-picture-lg"
+        class="profile-picture-md"
         src={data.user.profilePicture ?? '/images/default-user-profile-icon.jpg'}
         alt="user-profile"
       />
@@ -51,7 +51,7 @@
   @reference '@/app.css';
 
   .profile-overview {
-    @apply flex flex-col gap-2 rounded-br-md border-r-1 border-b-1 border-gray-700 p-4;
+    @apply flex flex-col gap-2 border-b border-gray-700 p-4;
   }
 
   .follow-stats {

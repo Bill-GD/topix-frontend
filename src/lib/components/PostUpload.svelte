@@ -191,7 +191,7 @@
   @reference '@/app.css';
 
   .main {
-    @apply flex gap-2 p-4;
+    @apply flex gap-2 border-b border-gray-700 p-4;
   }
 
   .editor {

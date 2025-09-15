@@ -1,8 +1,8 @@
 <script lang="ts">
-  import { HomeLayout } from '@/lib/layouts';
-  import type { PageProps } from './$types';
-  import { capitalize } from '@/lib/utils/helpers';
   import { Button, FileDropzone, Icon, IconButton, Input } from '@/lib/components';
+  import { HomeLayout } from '@/lib/layouts';
+  import { capitalize } from '@/lib/utils/helpers';
+  import type { PageProps } from './$types';
 
   let { data, form, params }: PageProps = $props();
 
@@ -26,7 +26,7 @@
     Settings
   </div>
 
-  <form class="p-4 md:p-20" method="post">
+  <form class="p-4 lg:p-20" method="post">
     <div class="form-button">
       <Button class="mb-4 w-fit" formaction="?/update-{params.section}" type="success">Save</Button>
       {#if form}

@@ -9,6 +9,10 @@
   @apply aspect-square h-30 w-30 rounded-full;
 }
 
+.profile-picture-md {
+  @apply aspect-square h-20 w-20 rounded-full;
+}
+
 .profile-picture-sm {
   @apply aspect-square h-10 w-10 rounded-full;
 }

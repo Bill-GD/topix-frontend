@@ -159,6 +159,7 @@ export interface NavItemProps {
   title: string;
   href: string;
   children: Snippet;
+  class?: ClassValue | null;
 }
 
 export interface PostUploadProps {
