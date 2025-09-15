@@ -1,8 +1,8 @@
 // component-related types
 
 import {
-  faBars,
   faChevronLeft,
+  faEllipsisVertical,
   faEye,
   faEyeSlash,
   faFaceAngry,
@@ -48,7 +48,7 @@ export const Icons = {
   group: faUserGroup,
   message: faMessage,
   reply: faReply,
-  menu: faBars,
+  menu: faEllipsisVertical,
   close: faXmark,
   like: faThumbsUp,
   heart: faHeart,
@@ -167,4 +167,14 @@ export interface PostUploadProps {
   errorText?: string;
   userPicture: string | null;
   formaction?: string;
+}
+
+export interface PostProps {
+  username: string;
+  owner: Partial<User>;
+  postId: number;
+  content?: Snippet;
+  reactionCount: number;
+  replyCount: number;
+  mediaPaths?: string[];
 }

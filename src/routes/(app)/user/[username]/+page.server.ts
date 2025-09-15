@@ -15,5 +15,5 @@ export const load: PageServerLoad = async ({ parent, params, cookies }) => {
     cookies.get(CookieName.accessToken),
   );
   if (res.success) return { user: res.data as User };
-  error(404);
+  error(404, { status: 404, message: 'User not found' });
 };
