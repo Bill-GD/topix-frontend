@@ -5,8 +5,8 @@
 
   let { data, form }: PageProps = $props();
 
-  const isImages = data.post.mediaPaths![0].includes('image');
-  const isVideo = data.post.mediaPaths![0].includes('video') && data.post.mediaPaths!.length === 1;
+  const isImages = data.post.mediaPaths.every((m) => m.includes('image'));
+  const isVideo = data.post.mediaPaths.every((m) => m.includes('video'));
 </script>
 
 <svelte:head>

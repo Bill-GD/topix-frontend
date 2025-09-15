@@ -1,16 +1,18 @@
-import type { Post } from '@/lib/utils/types';
+import { CookieName, type Post } from '@/lib/utils/types';
 import type { PageServerLoad } from './$types';
+import { AxiosHandler } from '@/lib/utils/axios-handler';
+import { error } from '@sveltejs/kit';
 
-export const load: PageServerLoad = async ({ cookies }) => {
-  return {
-    post: {
-      id: 3,
-      content: 'Example',
-      reactionCount: 10,
-      replyCount: 0,
-      mediaPaths: [
-        'https://res.cloudinary.com/djqtcdphf/image/upload/v1757847439/imbaepwbaqhcdjxepu5j.gif',
-      ],
-    } as Partial<Post>,
-  };
+export const load: PageServerLoad = async ({ cookies, params }) => {
+  const postsRes = await AxiosHandler.get(
+    `/post/${params.id}`,
+    cookies.get(CookieName.accessToken),
+  );
+
+  console.log(postsRes);
+  if (postsRes.success) {
+    return { post: postsRes.data as unknown as Post };
+  }
+
+  error(postsRes.status, { message: postsRes.message, status: postsRes.status });
 };

@@ -173,6 +173,5 @@ export interface PostProps {
   username: string;
   owner: Partial<User>;
   content?: Snippet;
-  post: Partial<Post>;
-  mediaPaths?: string[];
+  post: Post;
 }

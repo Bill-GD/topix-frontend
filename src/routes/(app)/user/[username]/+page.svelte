@@ -45,6 +45,15 @@
       <p>Follower: {data.user.followerCount}</p>
     </div>
   </div>
+
+  {#each data.posts as post (post.id)}
+    <Post username={data.self.username} owner={data.user} {post}>
+      {#snippet content()}
+        {post.content}
+      {/snippet}
+    </Post>
+    <hr class="text-gray-700" />
+  {/each}
 </HomeLayout>
 
 <style lang="postcss">

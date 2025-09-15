@@ -6,21 +6,13 @@
   import Link from './Link.svelte';
   import type { PostProps } from './types';
 
-  let {
-    username,
-    owner,
-    content,
-    post,
-    mediaPaths = [
-      'https://res.cloudinary.com/djqtcdphf/image/upload/v1757847439/imbaepwbaqhcdjxepu5j.gif',
-    ],
-  }: PostProps = $props();
+  let { username, owner, content, post }: PostProps = $props();
 
-  const isImages = mediaPaths[0].includes('image');
-  const isVideo = mediaPaths[0].includes('video') && mediaPaths.length === 1;
+  const isImages = post.mediaPaths.every((m) => m.includes('image'));
+  const isVideo = post.mediaPaths.every((m) => m.includes('video'));
 </script>
 
-<a class="main" href="/post/{post.id}">
+<a class="main" href="/post/{post.id}" data-sveltekit-preload-data="tap">
   <img
     class="profile-picture-sm"
     src={owner.profilePicture ?? '/images/default-user-profile-icon.jpg'}
@@ -28,29 +20,32 @@
   />
 
   <div class="flex w-full flex-col gap-6">
-    <div class="flex items-center gap-4">
+    <div class="flex items-baseline gap-4">
       <Link class="flex items-baseline gap-2" href="/user/{owner.username}">
         <span class="text-xl text-white">{owner.displayName}</span>
         <span class="text-sm text-gray-500">@{owner.username}</span>
       </Link>
+      <span class="text-sm text-gray-500">{post.dateCreated}</span>
     </div>
 
     {@render content?.()}
 
-    <div class="flex w-full gap-4">
-      {#if isImages}
-        {#each mediaPaths as url, index (index)}
-          <img class="min-w-1/2 rounded-lg" src={url} alt="post-image-{index}" />
-        {/each}
-      {/if}
+    {#if post.mediaPaths.length > 0}
+      <div class="flex w-full gap-4">
+        {#if isImages}
+          {#each post.mediaPaths as url, index (index)}
+            <img class="min-w-1/2 rounded-lg" src={url} alt="post-image-{index}" />
+          {/each}
+        {/if}
 
-      {#if isVideo}
-        <!-- svelte-ignore a11y_media_has_caption -->
-        <video class="w-full min-w-1/2 rounded-lg" controls>
-          <source src={mediaPaths[0]} type="video/mp4" />
-        </video>
-      {/if}
-    </div>
+        {#if isVideo}
+          <!-- svelte-ignore a11y_media_has_caption -->
+          <video class="w-full min-w-1/2 rounded-lg" controls>
+            <source src={post.mediaPaths[0]} type="video/mp4" />
+          </video>
+        {/if}
+      </div>
+    {/if}
 
     <div class="flex gap-6">
       <div class="flex items-center gap-2">

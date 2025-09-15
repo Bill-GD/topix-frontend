@@ -30,7 +30,7 @@ export type Post = {
   // parentPostId: number;
   // threadId: number;
   // groupId: number;
-  tag: string;
+  // tag: string;
   content: string;
   groupAccepted: boolean;
   visibility: 'public' | 'private' | 'hidden';
@@ -38,7 +38,6 @@ export type Post = {
   replyCount: number;
   mediaPaths: string[];
   dateCreated: Date;
-  dateUpdated: Date;
 };
 
 export type UnaryVoidFunction<T> = (arg: T) => void;
