@@ -6,7 +6,7 @@
   import Icon from './Icon.svelte';
   import IconButton from './IconButton.svelte';
   import Link from './Link.svelte';
-  import type { Icons, PostProps } from './types';
+  import type { PostProps } from './types';
   import { AxiosHandler } from '../utils/axios-handler';
 
   let { class: className, self, content, post, detail = false }: PostProps = $props();
@@ -21,7 +21,8 @@
     angry: 'text-red-500',
   };
 
-  let reaction = $state<keyof typeof reactions | 'noReaction'>('noReaction');
+  let reaction = $state((post.reaction ?? 'noReaction') as keyof typeof reactions | 'noReaction');
+  let reactionCount = $state(post.reactionCount);
   let imageIndex = $state<number>(0);
 
   let form: HTMLFormElement;
@@ -52,15 +53,17 @@
     reactInput = document.getElementById(`react-input-${post.id}`) as HTMLInputElement;
   });
 
-  function reactHandle(type: string) {
-    const typed = type as keyof typeof reactions;
-    if (typed === reaction) reaction = 'noReaction';
-    else reaction = typed;
+  function reactHandle(newReaction: keyof typeof reactions) {
+    if (newReaction === reaction) {
+      reaction = 'noReaction';
+      reactionCount--;
+    } else {
+      reaction = newReaction;
+      reactionCount++;
+    }
 
-    // await AxiosHandler.post()
-
-    // reactInput.value = reaction;
-    // form.submit();
+    reactInput.value = reaction;
+    form.submit();
   }
 </script>
 
@@ -146,7 +149,7 @@
       <DropdownMenu class="reaction-button" position="top" align="start" origin="b" horizontal>
         {#snippet trigger()}
           <div class="flex cursor-pointer items-center gap-2">
-            {post.reactionCount}
+            {reactionCount}
             <Icon
               type={reaction}
               class={[reaction !== 'noReaction' && (reactions[reaction] as string)]}
@@ -156,7 +159,7 @@
         {/snippet}
 
         {#each Object.entries(reactions) as [type, color]}
-          <DropdownItem href="" onclick={() => reactHandle(type)} noHover>
+          <DropdownItem href="" onclick={() => reactHandle(type as keyof typeof reactions)} noHover>
             <Icon type={type as keyof typeof reactions} class={color} size="sm" hover />
           </DropdownItem>
         {/each}
@@ -187,6 +190,7 @@
 
 <form action="?/react" method="post" id="react-form-{post.id}" hidden>
   <input type="text" name="reaction" id="react-input-{post.id}" hidden />
+  <input type="text" name="post-id" value={post.id} hidden />
 </form>
 
 <!--

@@ -1,7 +1,7 @@
 import { API_PORT, API_SERVER } from '$env/static/public';
-import type { Cookies } from '@sveltejs/kit';
+import { fail, type Cookies, type RequestEvent } from '@sveltejs/kit';
 import { AxiosHandler } from './axios-handler';
-import { CookieName } from './types';
+import { CookieName, type ApiResponse } from './types';
 
 const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 let num = Date.now();
@@ -100,4 +100,28 @@ export function getTimeAgo(ms: number): string {
   if (interval > 1) return `${Math.trunc(interval)}m`;
 
   return `now`;
+}
+
+export async function handleReaction(event: RequestEvent) {
+  const formData = await event.request.formData();
+  const reaction = formData.get('reaction');
+  const postId = Number(formData.get('post-id'));
+
+  let res: ApiResponse;
+
+  if (reaction === 'noReaction') {
+    res = await AxiosHandler.delete(
+      `/post/${postId}/react`,
+      event.cookies.get(CookieName.accessToken),
+    );
+  } else {
+    res = await AxiosHandler.patch(
+      `/post/${postId}/react`,
+      { reaction: `${reaction}` },
+      event.cookies.get(CookieName.accessToken),
+    );
+  }
+
+  if (!res.success) return fail(res.status, { success: false, message: res.message });
+  return { success: true };
 }

@@ -2,6 +2,7 @@ import { CookieName, type Post } from '@/lib/utils/types';
 import type { PageServerLoad } from './$types';
 import { AxiosHandler } from '@/lib/utils/axios-handler';
 import { error, type Actions } from '@sveltejs/kit';
+import { handleReaction } from '@/lib/utils/helpers';
 
 export const load: PageServerLoad = async ({ cookies, params }) => {
   const postsRes = await AxiosHandler.get(
@@ -17,8 +18,5 @@ export const load: PageServerLoad = async ({ cookies, params }) => {
 };
 
 export const actions: Actions = {
-  react: async (event) => {
-    const formData = await event.request.formData();
-    console.log(formData);
-  },
+  react: handleReaction,
 };

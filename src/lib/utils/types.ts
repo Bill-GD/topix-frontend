@@ -31,6 +31,7 @@ export type Post = {
   // threadId: number;
   // groupId: number;
   // tag: string;
+  reaction: string | null;
   content: string;
   groupAccepted: boolean;
   visibility: 'public' | 'private' | 'hidden';

@@ -3,6 +3,7 @@ import { fail, type Actions } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 import { CookieName, type Post, type User } from '@/lib/utils/types';
 import { error } from '@sveltejs/kit';
+import { handleReaction } from '@/lib/utils/helpers';
 
 export const load: PageServerLoad = async ({ parent, params, cookies }) => {
   const parentData = await parent();
@@ -81,8 +82,5 @@ export const actions: Actions = {
     if (res.success) return { success: true, message: 'Saved successfully!' };
     return fail(res.status, { success: false, message: res.message });
   },
-  react: async (event) => {
-    const formData = await event.request.formData();
-    console.log(formData);
-  },
+  react: handleReaction,
 };
