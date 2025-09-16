@@ -4,7 +4,7 @@
   let { children, href, target, class: className }: LinkProps = $props();
 </script>
 
-<a class={className} {target} {href}>
+<a class={className} {target} {href} data-sveltekit-preload-data="tap">
   {@render children()}
 </a>
 

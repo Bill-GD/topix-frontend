@@ -6,6 +6,7 @@
     class: className,
     children,
     trigger,
+    horizontal = false,
     align,
     position,
     origin,
@@ -77,7 +78,7 @@
     ]}
     id="dropdown-menu-{id}"
   >
-    <ul class="py-2 text-white">
+    <ul class={['py-2 text-white', horizontal && 'flex']}>
       {@render children()}
     </ul>
   </div>

@@ -33,7 +33,7 @@ export const load: PageServerLoad = async ({ parent, params, cookies }) => {
 };
 
 export const actions: Actions = {
-  default: async (event) => {
+  'post-upload': async (event) => {
     const formData = await event.request.formData();
     const files: File[] = [];
     let urls: string[] = [];
@@ -80,5 +80,9 @@ export const actions: Actions = {
     const res = await AxiosHandler.post('/post', dto, event.cookies.get(CookieName.accessToken));
     if (res.success) return { success: true, message: 'Saved successfully!' };
     return fail(res.status, { success: false, message: res.message });
+  },
+  react: async (event) => {
+    const formData = await event.request.formData();
+    console.log(formData);
   },
 };

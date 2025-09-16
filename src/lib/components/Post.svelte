@@ -6,13 +6,26 @@
   import Icon from './Icon.svelte';
   import IconButton from './IconButton.svelte';
   import Link from './Link.svelte';
-  import type { PostProps } from './types';
+  import type { Icons, PostProps } from './types';
+  import { AxiosHandler } from '../utils/axios-handler';
 
   let { class: className, self, content, post, detail = false }: PostProps = $props();
 
   const isImages = post.mediaPaths.every((m) => m.includes('image'));
   const isVideo = post.mediaPaths.every((m) => m.includes('video'));
+  const reactions = {
+    like: 'text-sky-500',
+    heart: 'text-red-500',
+    laugh: 'text-yellow-500',
+    sad: 'text-yellow-500',
+    angry: 'text-red-500',
+  };
+
+  let reaction = $state<keyof typeof reactions | 'noReaction'>('noReaction');
   let imageIndex = $state<number>(0);
+
+  let form: HTMLFormElement;
+  let reactInput: HTMLInputElement;
 
   onMount(() => {
     const main = document.getElementById(`post-${post.id}`) as HTMLElement;
@@ -34,7 +47,21 @@
         window.location.href = `/post/${post.id}`;
       });
     }
+
+    form = document.getElementById(`react-form-${post.id}`) as HTMLFormElement;
+    reactInput = document.getElementById(`react-input-${post.id}`) as HTMLInputElement;
   });
+
+  function reactHandle(type: string) {
+    const typed = type as keyof typeof reactions;
+    if (typed === reaction) reaction = 'noReaction';
+    else reaction = typed;
+
+    // await AxiosHandler.post()
+
+    // reactInput.value = reaction;
+    // form.submit();
+  }
 </script>
 
 <div
@@ -65,7 +92,7 @@
 
     {#if post.mediaPaths.length > 0}
       {#if isImages}
-        <div class="relative w-fit min-w-1/2">
+        <div class="relative min-w-1/2">
           {#if imageIndex > 0}
             <IconButton
               class="absolute top-1/2 left-0 h-full -translate-y-1/2 hover:bg-gray-900/20"
@@ -115,11 +142,26 @@
       {/if}
     {/if}
 
-    <div class="flex gap-6">
-      <div class="flex items-center gap-2">
-        {post.reactionCount}
-        <Icon type="like" size="sm" />
-      </div>
+    <div class="flex w-fit gap-6">
+      <DropdownMenu class="reaction-button" position="top" align="start" origin="b" horizontal>
+        {#snippet trigger()}
+          <div class="flex cursor-pointer items-center gap-2">
+            {post.reactionCount}
+            <Icon
+              type={reaction}
+              class={[reaction !== 'noReaction' && (reactions[reaction] as string)]}
+              size="sm"
+            />
+          </div>
+        {/snippet}
+
+        {#each Object.entries(reactions) as [type, color]}
+          <DropdownItem href="" onclick={() => reactHandle(type)} noHover>
+            <Icon type={type as keyof typeof reactions} class={color} size="sm" hover />
+          </DropdownItem>
+        {/each}
+      </DropdownMenu>
+
       <div class="flex items-center gap-2">
         {post.replyCount}
         <Icon type="reply" size="sm" />
@@ -143,6 +185,17 @@
   </DropdownMenu>
 </div>
 
+<form action="?/react" method="post" id="react-form-{post.id}" hidden>
+  <input type="text" name="reaction" id="react-input-{post.id}" hidden />
+</form>
+
+<!--
+@component
+Post component: shows OP, content, interaction counts...  
+Reaction requires `?/react` formaction
+
+-->
+
 <style lang="postcss">
   @reference '@/app.css';
 
@@ -153,7 +206,7 @@
   .main {
     img,
     video {
-      cursor: default;
+      cursor: initial;
     }
   }
 </style>

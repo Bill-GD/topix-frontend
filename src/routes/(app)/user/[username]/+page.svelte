@@ -51,6 +51,7 @@
       errorText={form?.success === false ? form?.message : ''}
       userId={data.self.id}
       userPicture={data.self.profilePicture}
+      formaction="?/post-upload"
     />
   {/if}
 

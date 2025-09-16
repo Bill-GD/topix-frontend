@@ -3,7 +3,7 @@
 
   let { type, hover = false, size = 'md', class: className }: IconProps = $props();
 
-  const icon = Icons[type].icon;
+  const icon = $derived(Icons[type].icon);
 </script>
 
 {#if icon[4]}

@@ -21,6 +21,7 @@ import {
   faVideo,
   faXmark,
 } from '@fortawesome/free-solid-svg-icons';
+import { faThumbsUp as faClassicThumbsUp } from '@fortawesome/free-regular-svg-icons';
 import type { Snippet } from 'svelte';
 import type {
   ClassValue,
@@ -52,6 +53,7 @@ export const Icons = {
   reply: faReply,
   menu: faEllipsisVertical,
   close: faXmark,
+  noReaction: faClassicThumbsUp,
   like: faThumbsUp,
   heart: faHeart,
   laugh: faFaceLaugh,
@@ -74,6 +76,7 @@ export interface DropdownMenuProps {
   children: Snippet;
   trigger: Snippet;
   class?: ClassValue | null;
+  horizontal?: boolean;
   align: 'start' | 'end';
   position: 'top' | 'bottom';
   origin: 't' | 'tr' | 'r' | 'br' | 'b' | 'bl' | 'l' | 'tl';
@@ -84,6 +87,8 @@ export interface DropdownItemProps {
   href?: string;
   rel?: string;
   class?: ClassValue | null;
+  noHover?: boolean;
+  onclick?: VoidFunction;
 }
 
 export interface ErrorProps {
