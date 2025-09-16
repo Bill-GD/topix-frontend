@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { onMount } from 'svelte';
   import { getTimeAgo } from '../utils/helpers';
   import DropdownItem from './DropdownItem.svelte';
   import DropdownMenu from './DropdownMenu.svelte';
@@ -12,14 +13,33 @@
   const isImages = post.mediaPaths.every((m) => m.includes('image'));
   const isVideo = post.mediaPaths.every((m) => m.includes('video'));
   let imageIndex = $state<number>(0);
-  const wrapper = detail ? 'div' : 'a';
+
+  onMount(() => {
+    const main = document.getElementById(`post-${post.id}`) as HTMLElement;
+    if (!detail) {
+      main.addEventListener('click', (ev) => {
+        const target = ev.target as HTMLElement;
+        if (
+          target.closest('video') ||
+          target.closest('img') ||
+          target.closest('svg') ||
+          target.closest('button') ||
+          target.closest('.dropdown-menu') ||
+          target.closest('.reaction-button')
+        ) {
+          return;
+        }
+
+        ev.preventDefault();
+        window.location.href = `/post/${post.id}`;
+      });
+    }
+  });
 </script>
 
-<svelte:element
-  this={wrapper}
-  class={['main', wrapper === 'a' && 'hover:bg-gray-900/40', className]}
-  href={wrapper === 'a' ? `/post/${post.id}` : ''}
-  data-sveltekit-preload-data="tap"
+<div
+  class={['main', !detail && 'cursor-pointer hover:bg-gray-900/40', className]}
+  id="post-{post.id}"
 >
   <img
     class="profile-picture-sm"
@@ -27,10 +47,12 @@
     alt="profile"
   />
 
-  <div class="flex w-full flex-col gap-6">
+  <div class="flex flex-col gap-6">
     <div class="flex items-baseline gap-4">
       <Link class="flex items-baseline gap-2" href="/user/{post.owner.username}">
-        <span class="text-xl text-white">{post.owner.displayName}</span>
+        <span class="text-xl text-white decoration-white hover:underline">
+          {post.owner.displayName}
+        </span>
         <span class="text-gray-500">@{post.owner.username}</span>
       </Link>
       <span class="text-gray-500">-</span>
@@ -43,15 +65,12 @@
 
     {#if post.mediaPaths.length > 0}
       {#if isImages}
-        <div class="relative w-fit">
+        <div class="relative w-fit min-w-1/2">
           {#if imageIndex > 0}
             <IconButton
               class="absolute top-1/2 left-0 h-full -translate-y-1/2 hover:bg-gray-900/20"
               round={false}
-              onclick={(ev) => {
-                ev.preventDefault();
-                imageIndex = Math.max(0, imageIndex - 1);
-              }}
+              onclick={() => (imageIndex = Math.max(0, imageIndex - 1))}
             >
               <Icon type="back" size="sm" />
             </IconButton>
@@ -80,10 +99,7 @@
             <IconButton
               class="absolute top-1/2 right-0 h-full -translate-y-1/2 hover:bg-gray-900/20"
               round={false}
-              onclick={(ev) => {
-                ev.preventDefault();
-                imageIndex = Math.min(post.mediaPaths.length - 1, imageIndex + 1);
-              }}
+              onclick={() => (imageIndex = Math.min(post.mediaPaths.length - 1, imageIndex + 1))}
             >
               <Icon type="next" size="sm" />
             </IconButton>
@@ -93,7 +109,7 @@
 
       {#if isVideo}
         <!-- svelte-ignore a11y_media_has_caption -->
-        <video class={['w-full rounded-lg', wrapper === 'a' && 'min-w-1/2']} controls>
+        <video class={['w-full min-w-1/2 rounded-lg']} controls>
           <source src={post.mediaPaths[0]} type="video/mp4" />
         </video>
       {/if}
@@ -111,12 +127,9 @@
     </div>
   </div>
 
-  <DropdownMenu class="ml-auto" position="bottom" align="end" origin="tr">
+  <DropdownMenu class="ml-auto h-fit" position="bottom" align="end" origin="tr">
     {#snippet trigger()}
-      <IconButton
-        class="cursor-pointer p-2 hover:bg-gray-800"
-        onclick={(ev) => ev.preventDefault()}
-      >
+      <IconButton class="p-2 hover:bg-gray-800">
         <Icon type="menu" size="sm" />
       </IconButton>
     {/snippet}
@@ -128,12 +141,19 @@
       <DropdownItem href="#">Delete</DropdownItem>
     {/if}
   </DropdownMenu>
-</svelte:element>
+</div>
 
 <style lang="postcss">
   @reference '@/app.css';
 
   .main {
     @apply flex gap-4 p-4;
+  }
+
+  .main {
+    img,
+    video {
+      cursor: default;
+    }
   }
 </style>

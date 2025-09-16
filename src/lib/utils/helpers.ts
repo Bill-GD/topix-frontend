@@ -99,5 +99,5 @@ export function getTimeAgo(ms: number): string {
   interval = diffInSec / 60;
   if (interval > 1) return `${Math.trunc(interval)}m`;
 
-  return `${diffInSec}`;
+  return `now`;
 }

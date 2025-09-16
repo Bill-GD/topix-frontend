@@ -17,8 +17,8 @@
 </script>
 
 <main>
-  <nav>
-    <span class="nav-title">topix</span>
+  <header>
+    <span class="header-title">topix</span>
 
     {#each navItems as item}
       <NavigationItem class="ml-auto" title={item.title} href={item.href}>
@@ -46,11 +46,11 @@
       <DropdownItem href="/settings/account">Settings</DropdownItem>
       <DropdownItem href="/logout" rel="external">Log out</DropdownItem>
     </DropdownMenu>
-  </nav>
+  </header>
 
-  <div class="main-content">
+  <section class="main-content">
     {@render children?.()}
-  </div>
+  </section>
 
   <aside>
     {@render right?.()}
@@ -64,11 +64,11 @@
     @apply flex h-dvh items-center justify-between bg-gray-950 text-white;
   }
 
-  nav {
-    @apply flex h-dvh min-w-fit flex-col items-center gap-4 border-r border-r-gray-700 px-1 py-3 lg:w-1/4 lg:px-3;
+  header {
+    @apply flex h-dvh min-w-fit flex-col items-center gap-4 border-r border-r-gray-700 px-1 py-3 lg:w-full lg:px-3;
   }
 
-  .nav-title {
+  .header-title {
     @apply hidden w-full p-2 text-end text-2xl lg:inline;
   }
 
@@ -77,7 +77,7 @@
   }
 
   .main-content {
-    @apply flex h-full flex-auto flex-col justify-start overflow-y-auto md:w-1/2 lg:w-1/3;
+    @apply flex h-full flex-auto flex-col justify-start overflow-y-auto md:max-w-xl md:min-w-xl lg:max-w-2xl lg:min-w-2xl;
   }
 
   .main-content::-webkit-scrollbar {
@@ -85,6 +85,6 @@
   }
 
   aside {
-    @apply hidden h-dvh border-l border-gray-700 p-3 md:block md:w-5/12;
+    @apply hidden h-dvh border-l border-gray-700 p-3 md:block md:w-full;
   }
 </style>

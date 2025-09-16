@@ -14,7 +14,11 @@
 
 <button
   class={['main-button', round && 'rounded-full', className]}
-  {onclick}
+  onclick={(ev) => {
+    ev.stopPropagation();
+    ev.preventDefault();
+    onclick?.(ev);
+  }}
   onmouseenter={() => (hover = true)}
   onmouseleave={() => (hover = false)}
   {type}

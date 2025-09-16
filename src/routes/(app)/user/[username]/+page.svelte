@@ -1,10 +1,10 @@
 <script lang="ts">
-  import { Button, IconButton, Post } from '@/lib/components';
+  import { Button, IconButton, Post, PostUpload } from '@/lib/components';
   import type { PageProps } from './$types';
   import Icon from '@/lib/components/Icon.svelte';
   import { HomeLayout } from '@/lib/layouts';
 
-  let { data }: PageProps = $props();
+  let { data, form }: PageProps = $props();
 </script>
 
 <svelte:head>
@@ -45,6 +45,14 @@
       <p>Follower: {data.user.followerCount}</p>
     </div>
   </div>
+
+  {#if data.self.id === data.user.id}
+    <PostUpload
+      errorText={form?.success === false ? form?.message : ''}
+      userId={data.self.id}
+      userPicture={data.self.profilePicture}
+    />
+  {/if}
 
   {#each data.posts as post (post.id)}
     <Post self={data.self} {post}>

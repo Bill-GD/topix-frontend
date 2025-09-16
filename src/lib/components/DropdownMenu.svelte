@@ -70,6 +70,7 @@
 
   <div
     class={[
+      'dropdown-menu',
       'fixed z-10 rounded-lg bg-gray-800 transition-all',
       originClasses[origin],
       showMenu ? 'scale-100 opacity-100 duration-150' : 'scale-0 opacity-0 duration-250',
