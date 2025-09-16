@@ -47,7 +47,7 @@
   </div>
 
   {#each data.posts as post (post.id)}
-    <Post username={data.self.username} owner={data.user} {post}>
+    <Post self={data.self} {post}>
       {#snippet content()}
         {post.content}
       {/snippet}

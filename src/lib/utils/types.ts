@@ -26,7 +26,7 @@ export type User = {
 
 export type Post = {
   id: number;
-  ownerId: number;
+  owner: User;
   // parentPostId: number;
   // threadId: number;
   // groupId: number;

@@ -135,6 +135,7 @@ export interface IconButtonProps {
   disabled?: boolean | null;
   type?: 'submit' | 'reset' | 'button' | null;
   class?: ClassValue | null;
+  round?: boolean;
 }
 
 export interface InputProps {
@@ -172,8 +173,9 @@ export interface PostUploadProps {
 }
 
 export interface PostProps {
-  username: string;
-  owner: Partial<User>;
+  class?: ClassValue | null;
+  self: User;
   content?: Snippet;
   post: Post;
+  detail?: boolean;
 }

@@ -7,25 +7,31 @@
   import Link from './Link.svelte';
   import type { PostProps } from './types';
 
-  let { username, owner, content, post }: PostProps = $props();
+  let { class: className, self, content, post, detail = false }: PostProps = $props();
 
   const isImages = post.mediaPaths.every((m) => m.includes('image'));
   const isVideo = post.mediaPaths.every((m) => m.includes('video'));
   let imageIndex = $state<number>(0);
+  const wrapper = detail ? 'div' : 'a';
 </script>
 
-<a class="main" href="/post/{post.id}" data-sveltekit-preload-data="tap">
+<svelte:element
+  this={wrapper}
+  class={['main', wrapper === 'a' && 'hover:bg-gray-900/40', className]}
+  href={wrapper === 'a' ? `/post/${post.id}` : ''}
+  data-sveltekit-preload-data="tap"
+>
   <img
     class="profile-picture-sm"
-    src={owner.profilePicture ?? '/images/default-user-profile-icon.jpg'}
+    src={post.owner.profilePicture ?? '/images/default-user-profile-icon.jpg'}
     alt="profile"
   />
 
   <div class="flex w-full flex-col gap-6">
     <div class="flex items-baseline gap-4">
-      <Link class="flex items-baseline gap-2" href="/user/{owner.username}">
-        <span class="text-xl text-white">{owner.displayName}</span>
-        <span class="text-gray-500">@{owner.username}</span>
+      <Link class="flex items-baseline gap-2" href="/user/{post.owner.username}">
+        <span class="text-xl text-white">{post.owner.displayName}</span>
+        <span class="text-gray-500">@{post.owner.username}</span>
       </Link>
       <span class="text-gray-500">-</span>
       <span class="text-gray-500">
@@ -41,6 +47,7 @@
           {#if imageIndex > 0}
             <IconButton
               class="absolute top-1/2 left-0 h-full -translate-y-1/2 hover:bg-gray-900/20"
+              round={false}
               onclick={(ev) => {
                 ev.preventDefault();
                 imageIndex = Math.max(0, imageIndex - 1);
@@ -56,20 +63,23 @@
             alt="post-image-{imageIndex}"
           />
 
-          <div class="absolute bottom-1 left-1/2 z-2 flex -translate-x-1/2 gap-1">
-            {#each post.mediaPaths as _, index}
-              <span
-                class={[
-                  'h-2 w-2 rounded-full border border-white',
-                  index === imageIndex && 'bg-white',
-                ]}
-              ></span>
-            {/each}
-          </div>
+          {#if post.mediaPaths.length > 1}
+            <div class="absolute bottom-1 left-1/2 z-2 flex -translate-x-1/2 gap-1">
+              {#each post.mediaPaths as _, index}
+                <span
+                  class={[
+                    'h-2 w-2 rounded-full border border-white',
+                    index === imageIndex && 'bg-white',
+                  ]}
+                ></span>
+              {/each}
+            </div>
+          {/if}
 
           {#if imageIndex < post.mediaPaths.length - 1}
             <IconButton
               class="absolute top-1/2 right-0 h-full -translate-y-1/2 hover:bg-gray-900/20"
+              round={false}
               onclick={(ev) => {
                 ev.preventDefault();
                 imageIndex = Math.min(post.mediaPaths.length - 1, imageIndex + 1);
@@ -83,7 +93,7 @@
 
       {#if isVideo}
         <!-- svelte-ignore a11y_media_has_caption -->
-        <video class="w-full min-w-1/2 rounded-lg" controls>
+        <video class={['w-full rounded-lg', wrapper === 'a' && 'min-w-1/2']} controls>
           <source src={post.mediaPaths[0]} type="video/mp4" />
         </video>
       {/if}
@@ -111,17 +121,19 @@
       </IconButton>
     {/snippet}
 
-    <DropdownItem href="#">Edit</DropdownItem>
-    {#if username === owner.username}
+    {#if self.username === post.owner.username}
+      <DropdownItem href="#">Edit</DropdownItem>
+    {/if}
+    {#if self.role === 'admin' || self.username === post.owner.username}
       <DropdownItem href="#">Delete</DropdownItem>
     {/if}
   </DropdownMenu>
-</a>
+</svelte:element>
 
 <style lang="postcss">
   @reference '@/app.css';
 
   .main {
-    @apply flex gap-4 border-gray-700 p-4 hover:bg-gray-900/40;
+    @apply flex gap-4 p-4;
   }
 </style>
