@@ -1,22 +1,84 @@
 import { CookieName, type Post } from '@/lib/utils/types';
 import type { PageServerLoad } from './$types';
 import { AxiosHandler } from '@/lib/utils/axios-handler';
-import { error, type Actions } from '@sveltejs/kit';
+import { error, fail, type Actions } from '@sveltejs/kit';
 import { handleReaction } from '@/lib/utils/helpers';
 
 export const load: PageServerLoad = async ({ cookies, params }) => {
-  const postsRes = await AxiosHandler.get(
-    `/post/${params.id}`,
+  const data: { post: Post; replies: Post[] } = { post: {} as Post, replies: [] };
+
+  const postRes = await AxiosHandler.get(`/post/${params.id}`, cookies.get(CookieName.accessToken));
+  if (!postRes.success) {
+    error(postRes.status, { message: postRes.message, status: postRes.status });
+  }
+  data.post = postRes.data as unknown as Post;
+
+  const repliesRes = await AxiosHandler.get(
+    `/post/${params.id}/replies`,
     cookies.get(CookieName.accessToken),
   );
-
-  if (postsRes.success) {
-    return { post: postsRes.data as unknown as Post };
+  if (!repliesRes.success) {
+    error(repliesRes.status, { message: repliesRes.message, status: repliesRes.status });
   }
+  data.replies = repliesRes.data as unknown as Post[];
 
-  error(postsRes.status, { message: postsRes.message, status: postsRes.status });
+  return data;
 };
 
 export const actions: Actions = {
   react: handleReaction,
+  reply: async (event) => {
+    const formData = await event.request.formData();
+    const files: File[] = [];
+    let urls: string[] = [];
+    let type = 'image';
+    const content = `${formData.get('content')}`;
+
+    if (formData.has('video')) {
+      const vid = formData.get('video') as File;
+      if (vid.size > 0) {
+        type = 'video';
+        files.push(vid);
+      }
+    } else if (formData.has('images')) {
+      files.push(...(formData.getAll('images') as File[]).filter((f) => f.size > 0));
+    }
+
+    if (files.length <= 0 && content.length <= 0) {
+      return fail(400, {
+        success: false,
+        message: 'Content must not be empty if no image or video uploaded.',
+      });
+    }
+
+    if (files.length > 0) {
+      const form = new FormData();
+      files.forEach((f) => form.append('files', f));
+
+      const fileRes = await AxiosHandler.post(
+        '/file/upload',
+        form,
+        event.cookies.get(CookieName.accessToken),
+        { 'Content-Type': 'multipart/form-data' },
+      );
+      if (!fileRes.success) {
+        return fail(fileRes.status, { success: false, message: fileRes.message });
+      }
+      urls = fileRes.data as string[];
+    }
+
+    const dto = {
+      type,
+      content,
+      mediaPaths: urls,
+    };
+
+    const res = await AxiosHandler.post(
+      `/post/${event.params.id}/reply`,
+      dto,
+      event.cookies.get(CookieName.accessToken),
+    );
+    if (res.success) return { success: true, message: 'Saved successfully!' };
+    return fail(res.status, { success: false, message: res.message });
+  },
 };

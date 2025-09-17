@@ -6,23 +6,20 @@ import Component from '$lib/components/PostUpload.svelte';
 describe('post upload component', () => {
   it('should render all default elements', async () => {
     render(Component, {
-      userId: 1,
-      userProfilePicture: '',
+      userPicture: '',
     });
     expect.soft(page.getByRole('button')).toBeVisible();
     expect.soft(page.getByAltText('profile')).toBeVisible();
     const editor = document.getElementById('editor');
     expect.soft(editor).toBeVisible();
     expect.soft(editor).toHaveAttribute('contenteditable');
-    expect.soft(document.querySelector('input[name=user-id]')).toHaveAttribute('readonly');
     expect.soft(document.querySelector('input[name=images]')).toBeInTheDocument();
     expect.soft(document.querySelector('input[name=video]')).toBeInTheDocument();
   });
 
   it('should render error text', async () => {
     render(Component, {
-      userId: 1,
-      userProfilePicture: '',
+      userPicture: '',
       errorText: 'Error',
     });
     expect.soft(page.getByText('Error', { exact: true })).toBeInTheDocument();

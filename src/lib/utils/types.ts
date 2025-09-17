@@ -27,14 +27,11 @@ export type User = {
 export type Post = {
   id: number;
   owner: User;
-  // parentPostId: number;
-  // threadId: number;
-  // groupId: number;
-  // tag: string;
-  reaction: string | null;
+  parentPost?: Post;
   content: string;
-  groupAccepted: boolean;
-  visibility: 'public' | 'private' | 'hidden';
+  // groupAccepted: boolean;
+  // visibility: 'public' | 'private' | 'hidden';
+  reaction: string | null;
   reactionCount: number;
   replyCount: number;
   mediaPaths: string[];

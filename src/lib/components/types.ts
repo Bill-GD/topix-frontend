@@ -171,16 +171,18 @@ export interface NavItemProps {
 }
 
 export interface PostUploadProps {
-  userId: number;
   errorText?: string;
   userPicture: string | null;
   formaction?: string;
+  placeholder?: string;
 }
 
 export interface PostProps {
   class?: ClassValue | null;
   self: User;
-  content?: Snippet;
   post: Post;
+  content?: Snippet;
   detail?: boolean;
+  compact?: boolean;
+  parent?: boolean;
 }

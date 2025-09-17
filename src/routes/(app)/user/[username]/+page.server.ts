@@ -42,10 +42,13 @@ export const actions: Actions = {
     const content = `${formData.get('content')}`;
 
     if (formData.has('video')) {
-      type = 'video';
-      files.push(formData.get('video') as File);
+      const vid = formData.get('video') as File;
+      if (vid.size > 0) {
+        type = 'video';
+        files.push(vid);
+      }
     } else if (formData.has('images')) {
-      files.push(...(formData.getAll('images') as File[]));
+      files.push(...(formData.getAll('images') as File[]).filter((f) => f.size > 0));
     }
 
     if (files.length <= 0 && content.length <= 0) {
@@ -72,7 +75,6 @@ export const actions: Actions = {
     }
 
     const dto = {
-      ownerId: formData.get('user-id'),
       type,
       content,
       mediaPaths: urls,

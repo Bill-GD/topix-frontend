@@ -49,18 +49,13 @@
   {#if data.self.id === data.user.id}
     <PostUpload
       errorText={form?.success === false ? form?.message : ''}
-      userId={data.self.id}
       userPicture={data.self.profilePicture}
       formaction="?/post-upload"
     />
   {/if}
 
   {#each data.posts as post (post.id)}
-    <Post self={data.self} {post}>
-      {#snippet content()}
-        {post.content}
-      {/snippet}
-    </Post>
+    <Post self={data.self} {post} />
     <hr class="text-gray-700" />
   {/each}
 </HomeLayout>

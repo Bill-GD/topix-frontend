@@ -1,9 +1,10 @@
 <script lang="ts">
   import { HomeLayout } from '@/lib/layouts';
   import type { PageProps } from './$types';
-  import { Icon, IconButton, Post } from '@/lib/components';
+  import { Icon, IconButton, Post, PostUpload } from '@/lib/components';
 
   let { data, form }: PageProps = $props();
+  const isReply = data.post.parentPost !== undefined;
 </script>
 
 <svelte:head>
@@ -16,15 +17,38 @@
       <IconButton class="hover:bg-gray-800" onclick={() => window.history.back()}>
         <Icon type="back" size="sm" />
       </IconButton>
-      <span class="text-lg font-semibold">Post</span>
+      <span class="text-lg font-semibold">{isReply ? 'Reply' : 'Post'}</span>
     </div>
 
-    <Post self={data.self} post={data.post} detail>
+    {#if isReply}
+      <Post self={data.self} post={data.post.parentPost!} compact parent />
+    {/if}
+
+    {#if isReply}
+      <div class="flex gap-2">
+        <div class="px-4"></div>
+        <Post class="w-full" self={data.self} post={data.post} detail />
+      </div>
+    {:else}
+      <Post self={data.self} post={data.post} detail />
+    {/if}
+  </div>
+
+  <PostUpload
+    errorText={form?.success === false ? form?.message : ''}
+    userPicture={data.self.profilePicture}
+    formaction="?/reply"
+    placeholder="Enter your reply"
+  />
+
+  {#each data.replies as reply}
+    <Post self={data.self} post={reply} compact>
       {#snippet content()}
-        {data.post.content}
+        {reply.content}
       {/snippet}
     </Post>
-  </div>
+    <hr class="text-gray-700" />
+  {/each}
 </HomeLayout>
 
 <style lang="postcss">

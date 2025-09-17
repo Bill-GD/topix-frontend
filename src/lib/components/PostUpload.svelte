@@ -8,10 +8,10 @@
   import { getReadableSize } from '../utils/helpers';
 
   let {
-    userId,
     userPicture = '/images/default-user-profile-icon.jpg',
     formaction,
     errorText,
+    placeholder = `What's happening?`,
   }: PostUploadProps = $props();
 
   let inputContent = $state<string>('');
@@ -75,7 +75,6 @@
   onsubmit={() => (disablePost = true)}
 >
   <img class="profile-picture-sm" src={userPicture} alt="profile" />
-  <input class="hidden" name="user-id" readonly value={userId} type="number" />
 
   <div class="flex w-full flex-col gap-4">
     <div
@@ -85,7 +84,7 @@
       role="textbox"
       aria-multiline="true"
       spellcheck="true"
-      data-placeholder="What's happening?"
+      data-placeholder={placeholder}
       bind:innerText={inputContent}
     >
       <input class="hidden" name="content" value={inputContent} />
