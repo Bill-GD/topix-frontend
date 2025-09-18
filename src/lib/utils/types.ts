@@ -26,7 +26,7 @@ export type User = {
 
 export type Post = {
   id: number;
-  owner: User;
+  owner: Partial<User>;
   parentPost?: Post;
   content: string;
   // groupAccepted: boolean;

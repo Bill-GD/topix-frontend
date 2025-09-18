@@ -1,7 +1,6 @@
 import { API_PORT, API_SERVER } from '$env/static/public';
-import { fail, type Cookies, type RequestEvent } from '@sveltejs/kit';
-import { AxiosHandler } from './axios-handler';
-import { CookieName, type ApiResponse } from './types';
+import { type Cookies } from '@sveltejs/kit';
+import { CookieName } from './types';
 
 const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 let num = Date.now();
@@ -40,16 +39,6 @@ export function capitalize(str: string): string {
   return `${str.charAt(0).toUpperCase()}${str.slice(1)}`;
 }
 
-export async function checkLogin(cookies: Cookies): Promise<boolean> {
-  try {
-    const res = await AxiosHandler.get('/auth/check', cookies.get(CookieName.accessToken));
-    return res.success;
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  } catch (err) {
-    return false;
-  }
-}
-
 export function deleteTokens(cookies: Cookies): void {
   cookies.delete(CookieName.accessToken, { path: '/' });
   cookies.delete(CookieName.refreshToken, { path: '/' });
@@ -57,7 +46,7 @@ export function deleteTokens(cookies: Cookies): void {
 
 export function dataUrlToFile(dataUrl: string): File {
   const [header, base64] = dataUrl.split(',');
-  const mime = header.match(/:(.*?);/)[1];
+  const mime = header.match(/:(.*?);/)![1];
   const ext = mime.split('/')[1];
   const binary = atob(base64);
   const array = new Uint8Array(binary.length);
@@ -100,28 +89,4 @@ export function getTimeAgo(ms: number): string {
   if (interval > 1) return `${Math.trunc(interval)}m`;
 
   return `now`;
-}
-
-export async function handleReaction(event: RequestEvent) {
-  const formData = await event.request.formData();
-  const reaction = formData.get('reaction');
-  const postId = Number(formData.get('post-id'));
-
-  let res: ApiResponse;
-
-  if (reaction === 'noReaction') {
-    res = await AxiosHandler.delete(
-      `/post/${postId}/react`,
-      event.cookies.get(CookieName.accessToken),
-    );
-  } else {
-    res = await AxiosHandler.patch(
-      `/post/${postId}/react`,
-      { reaction: `${reaction}` },
-      event.cookies.get(CookieName.accessToken),
-    );
-  }
-
-  if (!res.success) return fail(res.status, { success: false, message: res.message });
-  return { success: true };
 }

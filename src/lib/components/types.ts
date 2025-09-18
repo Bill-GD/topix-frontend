@@ -181,7 +181,6 @@ export interface PostProps {
   class?: ClassValue | null;
   self: User;
   post: Post;
-  content?: Snippet;
   detail?: boolean;
   compact?: boolean;
   parent?: boolean;

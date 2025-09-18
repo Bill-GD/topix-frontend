@@ -1,9 +1,8 @@
-import { AxiosHandler } from '@/lib/utils/axios-handler';
+import { AxiosHandler, handleReaction } from '@/lib/utils/axios-handler';
 import { fail, type Actions } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 import { CookieName, type Post, type User } from '@/lib/utils/types';
 import { error } from '@sveltejs/kit';
-import { handleReaction } from '@/lib/utils/helpers';
 
 export const load: PageServerLoad = async ({ parent, params, cookies }) => {
   const parentData = await parent();

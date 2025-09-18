@@ -42,11 +42,7 @@
   />
 
   {#each data.replies as reply}
-    <Post self={data.self} post={reply} compact>
-      {#snippet content()}
-        {reply.content}
-      {/snippet}
-    </Post>
+    <Post self={data.self} post={reply} compact />
     <hr class="text-gray-700" />
   {/each}
 </HomeLayout>

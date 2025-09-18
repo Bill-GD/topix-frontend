@@ -118,7 +118,7 @@
         {post.content}
       </p>
     {:else}
-      {post.content}
+      <span>{post.content}</span>
     {/if}
 
     {#if post.mediaPaths.length > 0}

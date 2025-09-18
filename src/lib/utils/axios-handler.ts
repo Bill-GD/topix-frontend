@@ -1,6 +1,7 @@
 import axios, { AxiosError, type AxiosResponse, type RawAxiosRequestHeaders } from 'axios';
 import { getApiUrl } from './helpers';
-import { type ApiResponse } from './types';
+import { CookieName, type ApiResponse } from './types';
+import { fail, type RequestEvent } from '@sveltejs/kit';
 
 export class AxiosHandler {
   private static API_URL = getApiUrl();
@@ -111,4 +112,28 @@ export class AxiosHandler {
   private static getResponse(res: AxiosResponse): ApiResponse {
     return res.data as ApiResponse;
   }
+}
+
+export async function handleReaction(event: RequestEvent) {
+  const formData = await event.request.formData();
+  const reaction = formData.get('reaction');
+  const postId = Number(formData.get('post-id'));
+
+  let res: ApiResponse;
+
+  if (reaction === 'noReaction') {
+    res = await AxiosHandler.delete(
+      `/post/${postId}/react`,
+      event.cookies.get(CookieName.accessToken),
+    );
+  } else {
+    res = await AxiosHandler.patch(
+      `/post/${postId}/react`,
+      { reaction: `${reaction}` },
+      event.cookies.get(CookieName.accessToken),
+    );
+  }
+
+  if (!res.success) return fail(res.status, { success: false, message: res.message });
+  return { success: true };
 }
