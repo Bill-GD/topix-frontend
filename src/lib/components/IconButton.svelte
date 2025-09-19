@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { IconButtonProps } from '@/lib/components/types';
+  import type { IconButtonProps } from '$lib/components/types';
 
   let {
     children,

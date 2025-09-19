@@ -1,7 +1,7 @@
 <script lang="ts">
-  import { Button, FloatingLabelInput, Error } from '@/lib/components';
+  import { Button, Error, FloatingLabelInput } from '$lib/components';
+  import { AuthLayout } from '$lib/layouts';
   import type { PageProps } from './$types';
-  import { AuthLayout } from '@/lib/layouts';
 
   let { form }: PageProps = $props();
   let message = $state<string>('We sent the code to the email you specified.');

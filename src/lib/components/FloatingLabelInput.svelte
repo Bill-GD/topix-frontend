@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { FloatingLabelInputProps } from '@/lib/components/types';
+  import type { FloatingLabelInputProps } from '$lib/components/types';
   import Input from './Input.svelte';
 
   let {

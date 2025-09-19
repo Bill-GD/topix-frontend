@@ -1,7 +1,7 @@
 <script lang="ts">
-  import { HomeLayout } from '@/lib/layouts';
+  import { Icon, IconButton, Post, PostUpload } from '$lib/components';
+  import { HomeLayout } from '$lib/layouts';
   import type { PageProps } from './$types';
-  import { Icon, IconButton, Post, PostUpload } from '@/lib/components';
 
   let { data, form }: PageProps = $props();
   const isReply = data.post.parentPost !== undefined;

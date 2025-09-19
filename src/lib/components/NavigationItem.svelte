@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { NavItemProps } from '@/lib/components/types';
+  import type { NavItemProps } from '$lib/components/types';
 
   let props: NavItemProps = $props();
 </script>

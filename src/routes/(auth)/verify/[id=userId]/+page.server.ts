@@ -1,7 +1,7 @@
+import { AxiosHandler } from '$lib/utils/axios-handler';
+import { capitalize } from '$lib/utils/helpers';
 import { fail, redirect } from '@sveltejs/kit';
 import type { Actions } from './$types';
-import { AxiosHandler } from '@/lib/utils/axios-handler';
-import { capitalize } from '@/lib/utils/helpers';
 
 export const actions: Actions = {
   otp: async (event) => {

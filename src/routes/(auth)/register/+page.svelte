@@ -1,7 +1,7 @@
 <script lang="ts">
-  import { Button, Error, FloatingLabelInput, Link } from '@/lib/components';
+  import { Button, Error, FloatingLabelInput, Link } from '$lib/components';
+  import { AuthLayout } from '$lib/layouts';
   import type { PageProps } from './$types';
-  import { AuthLayout } from '@/lib/layouts';
 
   let { form }: PageProps = $props();
 </script>

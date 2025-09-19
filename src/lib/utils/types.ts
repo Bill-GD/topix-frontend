@@ -13,6 +13,14 @@ export const CookieName = {
   refreshToken: '_rt',
 } as const;
 
+export type CurrentUser = {
+  id: number;
+  username: string;
+  displayName: string;
+  profilePicture: string | null;
+  role: 'user' | 'admin';
+};
+
 export type User = {
   id: number;
   username: string;

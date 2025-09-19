@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { HomeLayout } from '@/lib/layouts';
+  import { HomeLayout } from '$lib/layouts';
   import type { PageProps } from './$types';
 
   let { data, form }: PageProps = $props();

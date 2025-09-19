@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { DropdownItem, DropdownMenu, Icon, NavigationItem } from '@/lib/components';
-  import { Icons, type HomeLayoutProps } from '@/lib/components/types';
+  import { DropdownItem, DropdownMenu, Icon, NavigationItem } from '$lib/components';
+  import { Icons, type HomeLayoutProps } from '$lib/components/types';
 
   let { children, right, self }: HomeLayoutProps = $props();
 

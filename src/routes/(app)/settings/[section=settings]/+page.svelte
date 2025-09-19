@@ -1,7 +1,7 @@
 <script lang="ts">
-  import { Button, FileDropzone, Icon, IconButton, Input } from '@/lib/components';
-  import { HomeLayout } from '@/lib/layouts';
-  import { capitalize } from '@/lib/utils/helpers';
+  import { Button, FileDropzone, Icon, IconButton, Input } from '$lib/components';
+  import { HomeLayout } from '$lib/layouts';
+  import { capitalize } from '$lib/utils/helpers';
   import type { PageProps } from './$types';
 
   let { data, form, params }: PageProps = $props();

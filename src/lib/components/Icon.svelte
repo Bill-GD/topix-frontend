@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Icons, IconSize, type IconProps } from '@/lib/components/types';
+  import { Icons, IconSize, type IconProps } from '$lib/components/types';
 
   let { type, hover = false, size = 'md', class: className }: IconProps = $props();
 

@@ -1,6 +1,6 @@
-import { AxiosHandler } from '@/lib/utils/axios-handler';
-import { dataUrlToFile, deleteTokens } from '@/lib/utils/helpers';
-import { CookieName } from '@/lib/utils/types';
+import { AxiosHandler } from '$lib/utils/axios-handler';
+import { dataUrlToFile, deleteTokens } from '$lib/utils/helpers';
+import { CookieName } from '$lib/utils/types';
 import { fail, redirect, type Actions } from '@sveltejs/kit';
 
 export const actions: Actions = {

@@ -1,7 +1,7 @@
 <script lang="ts">
-  import { Button, Error, FloatingLabelInput, Link } from '@/lib/components';
+  import { Button, Error, FloatingLabelInput, Link } from '$lib/components';
+  import AuthLayout from '$lib/layouts/AuthLayout.svelte';
   import type { PageProps } from './$types';
-  import AuthLayout from '@/lib/layouts/AuthLayout.svelte';
 
   let { form }: PageProps = $props();
 </script>

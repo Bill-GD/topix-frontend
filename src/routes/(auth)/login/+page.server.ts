@@ -1,6 +1,6 @@
-import { CookieName } from '@/lib/utils/types';
-import { AxiosHandler } from '@/lib/utils/axios-handler';
-import { capitalize } from '@/lib/utils/helpers';
+import { AxiosHandler } from '$lib/utils/axios-handler';
+import { capitalize } from '$lib/utils/helpers';
+import { CookieName } from '$lib/utils/types';
 import { fail, redirect } from '@sveltejs/kit';
 import type { Actions } from './$types';
 

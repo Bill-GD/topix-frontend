@@ -1,6 +1,6 @@
-import type { PageServerLoad } from './$types';
+import { deleteTokens } from '$lib/utils/helpers';
 import { redirect } from '@sveltejs/kit';
-import { deleteTokens } from '@/lib/utils/helpers';
+import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ cookies }) => {
   deleteTokens(cookies);

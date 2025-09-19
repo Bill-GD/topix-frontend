@@ -1,4 +1,6 @@
 import { CookieName, type Post } from '@/lib/utils/types';
+import { CookieName, type Post } from '$lib/utils/types';
+import { error, fail, redirect, type Actions } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 import { AxiosHandler, handleReaction } from '@/lib/utils/axios-handler';
 import { error, fail, type Actions } from '@sveltejs/kit';
