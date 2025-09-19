@@ -9,5 +9,4 @@
   <title>Home - topix</title>
 </svelte:head>
 
-<HomeLayout self={data.self}>
-</HomeLayout>
+<HomeLayout self={data.self}></HomeLayout>

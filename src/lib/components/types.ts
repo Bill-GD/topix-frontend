@@ -28,7 +28,7 @@ import type {
   HTMLAttributeAnchorTarget,
   HTMLInputTypeAttribute,
 } from 'svelte/elements';
-import type { Post, UnaryVoidFunction, User } from '../utils/types';
+import type { CurrentUser, Post, UnaryVoidFunction } from '../utils/types';
 
 export type ButtonType = 'primary' | 'danger' | 'dark' | 'success';
 
@@ -123,7 +123,7 @@ export interface FloatingLabelInputProps {
 export interface HomeLayoutProps {
   children?: Snippet;
   right?: Snippet;
-  self: Partial<User>;
+  self: CurrentUser;
 }
 
 export interface IconProps {
@@ -179,7 +179,7 @@ export interface PostUploadProps {
 
 export interface PostProps {
   class?: ClassValue | null;
-  self: User;
+  self: CurrentUser;
   post: Post;
   detail?: boolean;
   compact?: boolean;

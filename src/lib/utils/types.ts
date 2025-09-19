@@ -11,6 +11,7 @@ export type ApiResponse = {
 export const CookieName = {
   accessToken: '_at',
   refreshToken: '_rt',
+  currentUser: '_self',
 } as const;
 
 export type CurrentUser = {

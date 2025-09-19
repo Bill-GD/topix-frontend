@@ -1,5 +1,5 @@
 import { AxiosHandler } from '$lib/utils/axios-handler';
-import { dataUrlToFile, deleteTokens } from '$lib/utils/helpers';
+import { dataUrlToFile, deleteCookies } from '$lib/utils/helpers';
 import { CookieName } from '$lib/utils/types';
 import { fail, redirect, type Actions } from '@sveltejs/kit';
 
@@ -15,8 +15,11 @@ export const actions: Actions = {
       dto,
       event.cookies.get(CookieName.accessToken),
     );
-    if (res.success) return { success: true, message: 'Saved successfully!' };
-    return fail(res.status, { success: false, message: res.message });
+
+    if (!res.success) return fail(res.status, { success: false, message: res.message });
+
+    event.cookies.delete(CookieName.currentUser, { path: '/' });
+    return { success: true, message: 'Saved successfully!' };
   },
   'update-profile': async (event) => {
     const formData = await event.request.formData();
@@ -41,7 +44,7 @@ export const actions: Actions = {
       );
 
       if (!res.success) return fail(res.status, { success: false, message: res.message });
-      dto = { ...dto, profilePicture: res.data!['path'] as string };
+      dto = { ...dto, profilePicture: (res.data as string[])[0] };
     }
 
     const res = await AxiosHandler.patch(
@@ -50,8 +53,10 @@ export const actions: Actions = {
       event.cookies.get(CookieName.accessToken),
     );
 
-    if (res.success) return { success: true, message: 'Saved successfully!' };
-    return fail(res.status, { success: false, message: res.message });
+    if (!res.success) return fail(res.status, { success: false, message: res.message });
+
+    event.cookies.delete(CookieName.currentUser, { path: '/' });
+    return { success: true, message: 'Saved successfully!' };
   },
   'delete-account': async (event) => {
     const formData = await event.request.formData();
@@ -74,8 +79,7 @@ export const actions: Actions = {
     );
 
     if (!res.success) fail(res.status, { success: false, message: res.message });
-    // return { success: true, message: 'Saved successfully!' };
-    deleteTokens(event.cookies);
-    return redirect(303, '/');
+    deleteCookies(event.cookies);
+    redirect(303, '/');
   },
 };

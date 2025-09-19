@@ -39,9 +39,10 @@ export function capitalize(str: string): string {
   return `${str.charAt(0).toUpperCase()}${str.slice(1)}`;
 }
 
-export function deleteTokens(cookies: Cookies): void {
+export function deleteCookies(cookies: Cookies): void {
   cookies.delete(CookieName.accessToken, { path: '/' });
   cookies.delete(CookieName.refreshToken, { path: '/' });
+  cookies.delete(CookieName.currentUser, { path: '/' });
 }
 
 export function dataUrlToFile(dataUrl: string): File {
