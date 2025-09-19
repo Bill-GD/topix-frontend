@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import type { FileDropzoneProps } from './types';
+  import type { FileDropzoneProps } from '$lib/components/types';
 
   let {
     filenameInputName,

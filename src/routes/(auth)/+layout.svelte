@@ -1,7 +1,7 @@
 <script lang="ts">
-  import type { Snippet } from 'svelte';
+  import type { LayoutProps } from './$types';
 
-  let { children }: { children: Snippet } = $props();
+  let { children }: LayoutProps = $props();
 </script>
 
 <main class="flex h-dvh items-center justify-center bg-gray-950 text-white">

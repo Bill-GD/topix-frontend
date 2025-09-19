@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { DropdownItemProps } from './types';
+  import type { DropdownItemProps } from '$lib/components/types';
 
   let {
     href,

@@ -1,8 +1,10 @@
 <script lang="ts">
-  import { DropdownItem, DropdownMenu, Icon, NavigationItem } from '$lib/components';
   import { Icons, type HomeLayoutProps } from '$lib/components/types';
+  import { DropdownItem, DropdownMenu } from '$lib/components/dropdown';
+  import { NavigationItem } from '$lib/components/link';
+  import { Icon } from '$lib/components/misc';
 
-  let { children, right, self }: HomeLayoutProps = $props();
+  let { self, children, right }: HomeLayoutProps = $props();
 
   const navItems: {
     title: string;
@@ -44,7 +46,7 @@
 
       <DropdownItem href="/user/{self.username}">Profile</DropdownItem>
       <DropdownItem href="/settings/account">Settings</DropdownItem>
-      <DropdownItem href="/logout" rel="external">Log out</DropdownItem>
+      <DropdownItem class="text-red-500" href="/logout" rel="external">Log out</DropdownItem>
     </DropdownMenu>
   </header>
 

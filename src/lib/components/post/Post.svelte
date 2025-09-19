@@ -1,12 +1,12 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import { getTimeAgo } from '../utils/helpers';
-  import DropdownItem from './DropdownItem.svelte';
-  import DropdownMenu from './DropdownMenu.svelte';
-  import Icon from './Icon.svelte';
-  import IconButton from './IconButton.svelte';
-  import Link from './Link.svelte';
-  import type { PostProps } from './types';
+  import { getTimeAgo } from '$lib/utils/helpers';
+  import type { PostProps } from '$lib/components/types';
+  import Link from '../link/Link.svelte';
+  import IconButton from '../button/IconButton.svelte';
+  import Icon from '../misc/Icon.svelte';
+  import DropdownMenu from '../dropdown/DropdownMenu.svelte';
+  import DropdownItem from '../dropdown/DropdownItem.svelte';
 
   let {
     class: className,
@@ -118,9 +118,7 @@
     </div>
 
     {#if compact}
-      <p class="line-clamp-2 overflow-ellipsis">
-        {post.content}
-      </p>
+      <p class="line-clamp-2">{post.content}</p>
     {:else}
       <span>{post.content}</span>
     {/if}

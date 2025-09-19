@@ -1,7 +1,9 @@
 <script lang="ts">
-  import { Button, IconButton, Post, PostUpload } from '$lib/components';
-  import Icon from '$lib/components/Icon.svelte';
-  import { HomeLayout } from '$lib/layouts';
+  import { IconButton, Button } from '$lib/components/button';
+  import { Icon } from '$lib/components/misc';
+  import { Post } from '$lib/components/post';
+  import { PostUpload } from '$lib/components/upload';
+  import { HomeLayout } from '$lib/components/layout';
   import type { PageProps } from './$types';
 
   let { data, form }: PageProps = $props();

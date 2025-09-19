@@ -9,7 +9,6 @@
     type,
     round = true,
   }: IconButtonProps = $props();
-  let hover = $state<boolean>(false);
 </script>
 
 <button
@@ -19,8 +18,6 @@
     ev.preventDefault();
     onclick?.(ev);
   }}
-  onmouseenter={() => (hover = true)}
-  onmouseleave={() => (hover = false)}
   {type}
   {disabled}
 >

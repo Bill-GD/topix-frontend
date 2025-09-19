@@ -1,11 +1,11 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import type { PostUploadProps } from './types';
-  import Button from './Button.svelte';
-  import Icon from './Icon.svelte';
-  import IconButton from './IconButton.svelte';
-  import { ImageSizeLimit, VideoSizeLimit } from '../utils/constants';
-  import { getReadableSize } from '../utils/helpers';
+  import { ImageSizeLimit, VideoSizeLimit } from '$lib/utils/constants';
+  import { getReadableSize } from '$lib/utils/helpers';
+  import type { PostUploadProps } from '$lib/components/types';
+  import Button from '../button/Button.svelte';
+  import IconButton from '../button/IconButton.svelte';
+  import Icon from '../misc/Icon.svelte';
 
   let {
     userPicture = '/images/default-user-profile-icon.jpg',

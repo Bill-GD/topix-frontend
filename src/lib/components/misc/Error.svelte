@@ -1,6 +1,6 @@
 <script lang="ts">
-  import Icon from './Icon.svelte';
-  import type { ErrorProps } from './types';
+  import Icon from '../misc/Icon.svelte';
+  import type { ErrorProps } from '$lib/components/types';
 
   let { children, class: className }: ErrorProps = $props();
 </script>

@@ -1,7 +1,10 @@
 <script lang="ts">
-  import { Button, FileDropzone, Icon, IconButton, Input } from '$lib/components';
-  import { HomeLayout } from '$lib/layouts';
   import { capitalize } from '$lib/utils/helpers';
+  import { IconButton, Button } from '$lib/components/button';
+  import { Input } from '$lib/components/input';
+  import { Icon } from '$lib/components/misc';
+  import { FileDropzone } from '$lib/components/upload';
+  import { HomeLayout } from '$lib/components/layout';
   import type { PageProps } from './$types';
 
   let { data, form, params }: PageProps = $props();
@@ -16,120 +19,115 @@
   <title>Settings - topix</title>
 </svelte:head>
 
+<div class="sticky-header">
+  <div class="relative">
+    <IconButton class="absolute left-4 hover:bg-gray-800" onclick={() => window.history.back()}>
+      <Icon type="back" />
+    </IconButton>
+  </div>
+  Settings
+</div>
+
+<form class="p-4 lg:p-20" method="post">
+  <div class="form-button">
+    <Button class="mb-4 w-fit" formaction="?/update-{params.section}" type="success">Save</Button>
+    {#if form}
+      <span class={form.success ? 'text-green-500' : 'text-red-500'}>{form.message}</span>
+    {/if}
 <HomeLayout self={data.self}>
-  <div class="sticky-header">
-    <div class="relative">
-      <IconButton class="absolute left-4 hover:bg-gray-800" onclick={() => window.history.back()}>
-        <Icon type="back" />
-      </IconButton>
-    </div>
-    Settings
   </div>
 
-  <form class="p-4 lg:p-20" method="post">
-    <div class="form-button">
-      <Button class="mb-4 w-fit" formaction="?/update-{params.section}" type="success">Save</Button>
-      {#if form}
-        <span class={form.success ? 'text-green-500' : 'text-red-500'}>{form.message}</span>
-      {/if}
-    </div>
+  <div class="flex flex-col gap-6">
+    {#if params.section === 'account'}
+      <div class="flex flex-col gap-2">
+        <label class="text-xl" for="username">Username</label>
+        <Input class="w-min" id="username" name="username" value={data.self.username}></Input>
+      </div>
 
-    <div class="flex flex-col gap-6">
-      {#if params.section === 'account'}
+      {#if data.self?.role !== 'admin'}
         <div class="flex flex-col gap-2">
-          <label class="text-xl" for="username">Username</label>
-          <Input class="w-min" id="username" name="username" value={data.self.username}></Input>
-        </div>
-
-        {#if data.self?.role !== 'admin'}
-          <div class="flex flex-col gap-2">
-            <p class="text-xl">Delete account</p>
-            <div class="flex gap-4">
-              <Input
-                name="password"
-                type="password"
-                bind:value={passwordValue}
-                placeholder="Enter your password"
-              />
-              <Button
-                formaction="?/delete-account"
-                type="danger"
-                disabled={passwordValue.length <= 0}
-              >
-                Delete
-              </Button>
-            </div>
-          </div>
-        {/if}
-      {:else if params.section === 'profile'}
-        <div class="input-group">
-          <label class="text-xl" for="display-name">Display name</label>
-          <Input
-            class="w-min"
-            id="display-name"
-            name="display-name"
-            value={data.self.displayName}
-          />
-        </div>
-
-        <div class="input-group">
-          <label class="text-xl" for="description">Description</label>
-          <Input
-            class="w-min"
-            id="description"
-            name="description"
-            value={data.self.description ?? ''}
-            placeholder="No description"
-            textarea
-          />
-        </div>
-
-        <div class="input-group">
-          <label class="text-xl" for="description">Profile picture</label>
-          <div class="flex w-full items-stretch gap-8">
-            <img
-              class="profile-picture-lg"
-              src={profileValue
-                ? profileValue
-                : (data.self.profilePicture ?? '/images/default-user-profile-icon.jpg')}
-              alt="user-profile"
+          <p class="text-xl">Delete account</p>
+          <div class="flex gap-4">
+            <Input
+              name="password"
+              type="password"
+              bind:value={passwordValue}
+              placeholder="Enter your password"
             />
-
-            <FileDropzone
-              contentInputName="profile-picture"
-              bind:contentValue={profileValue}
-              filenameInputName="profile-picture-name"
-              bind:filenameValue={profileFilenameValue}
-            />
+            <Button
+              formaction="?/delete-account"
+              type="danger"
+              disabled={passwordValue.length <= 0}
+            >
+              Delete
+            </Button>
           </div>
         </div>
       {/if}
-    </div>
-  </form>
+    {:else if params.section === 'profile'}
+      <div class="input-group">
+        <label class="text-xl" for="display-name">Display name</label>
+        <Input class="w-min" id="display-name" name="display-name" value={data.self.displayName} />
+      </div>
 
-  {#snippet right()}
-    <div class="right-sidebar">
-      {#each items as item}
-        <div class="flex">
-          <div
-            class={[
-              params.section === item ? 'highlighted' : 'not-highlighted',
-              'mr-4 w-0 border-l-3',
-            ]}
-          ></div>
-          <a
-            class={[
-              'py-2',
-              params.section === item ? 'font-semibold text-gray-300' : 'text-gray-500',
-            ]}
-            href="/settings/{item}"
-          >
-            {capitalize(item)}
-          </a>
+      <div class="input-group">
+        <label class="text-xl" for="description">Description</label>
+        <Input
+          class="w-min"
+          id="description"
+          name="description"
+          value={data.self.description ?? ''}
+          placeholder="No description"
+          textarea
+        />
+      </div>
+
+      <div class="input-group">
+        <label class="text-xl" for="description">Profile picture</label>
+        <div class="flex w-full items-stretch gap-8">
+          <img
+            class="profile-picture-lg"
+            src={profileValue
+              ? profileValue
+              : (data.self.profilePicture ?? '/images/default-user-profile-icon.jpg')}
+            alt="user-profile"
+          />
+
+          <FileDropzone
+            contentInputName="profile-picture"
+            bind:contentValue={profileValue}
+            filenameInputName="profile-picture-name"
+            bind:filenameValue={profileFilenameValue}
+          />
         </div>
-      {/each}
-    </div>
-  {/snippet}
+      </div>
+    {/if}
+  </div>
+</form>
+
+{#snippet right()}
+  <div class="right-sidebar">
+    {#each items as item}
+      <div class="flex">
+        <div
+          class={[
+            params.section === item ? 'highlighted' : 'not-highlighted',
+            'mr-4 w-0 border-l-3',
+          ]}
+        ></div>
+        <a
+          class={[
+            'py-2',
+            params.section === item ? 'font-semibold text-gray-300' : 'text-gray-500',
+          ]}
+          href="/settings/{item}"
+        >
+          {capitalize(item)}
+        </a>
+      </div>
+    {/each}
+  </div>
+{/snippet}
 </HomeLayout>
 
 <style lang="postcss">

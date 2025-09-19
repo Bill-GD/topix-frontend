@@ -1,6 +1,7 @@
 <script lang="ts">
-  import { Button, Error, FloatingLabelInput } from '$lib/components';
-  import { AuthLayout } from '$lib/layouts';
+  import { Button } from '$lib/components/button';
+  import { FloatingLabelInput } from '$lib/components/input';
+  import { Error } from '$lib/components/misc';
   import type { PageProps } from './$types';
 
   let { form }: PageProps = $props();
@@ -15,23 +16,21 @@
   <title>Confirm email - topix</title>
 </svelte:head>
 
-<AuthLayout>
-  <p class="title">Verify your email</p>
+<p class="title">Verify your email</p>
 
-  {#if !form || form?.success === true}
-    <p class="mt-8 {message.startsWith('The') ? 'text-green-700' : ''}">{message}</p>
-  {/if}
+{#if !form || form?.success === true}
+  <p class="mt-8 {message.startsWith('The') ? 'text-green-700' : ''}">{message}</p>
+{/if}
 
-  <form method="post">
-    {#if form?.missing}<Error>You must enter the code.</Error>{/if}
-    {#if form?.success === false}<Error>{form?.message}</Error>{/if}
+<form method="post">
+  {#if form?.missing}<Error>You must enter the code.</Error>{/if}
+  {#if form?.success === false}<Error>{form?.message}</Error>{/if}
 
-    <FloatingLabelInput class="w-full" name="otp" type="text">Code</FloatingLabelInput>
+  <FloatingLabelInput class="w-full" name="otp" type="text">Code</FloatingLabelInput>
 
-    <Button formaction="?/otp" type="success">Send</Button>
-    <Button formaction="?/resend" type="dark">Send again</Button>
-  </form>
-</AuthLayout>
+  <Button formaction="?/otp" type="success">Send</Button>
+  <Button formaction="?/resend" type="dark">Send again</Button>
+</form>
 
 <style lang="postcss">
   @reference "@/app.css";

@@ -1,6 +1,8 @@
 <script lang="ts">
-  import { Button, Error, FloatingLabelInput, Link } from '$lib/components';
-  import { AuthLayout } from '$lib/layouts';
+  import { Button } from '$lib/components/button';
+  import { FloatingLabelInput } from '$lib/components/input';
+  import { Link } from '$lib/components/link';
+  import { Error } from '$lib/components/misc';
   import type { PageProps } from './$types';
 
   let { form }: PageProps = $props();
@@ -10,51 +12,43 @@
   <title>Register - topix</title>
 </svelte:head>
 
-<AuthLayout>
-  <p>Sign up for topix</p>
+<p>Sign up for topix</p>
 
-  <form method="post">
-    {#if form?.missing}<Error>All fields must not be empty.</Error>{/if}
-    {#if form?.invalid}<Error>Email format is invalid.</Error>{/if}
-    {#if form?.success === false}<Error>{form?.message}</Error>{/if}
+<form method="post">
+  {#if form?.missing}<Error>All fields must not be empty.</Error>{/if}
+  {#if form?.invalid}<Error>Email format is invalid.</Error>{/if}
+  {#if form?.success === false}<Error>{form?.message}</Error>{/if}
 
-    <div>
-      <FloatingLabelInput
-        class="w-full"
-        name="email"
-        type="email"
-        required
-        value={form?.email ?? ''}
-      >
-        Email
-      </FloatingLabelInput>
+  <div>
+    <FloatingLabelInput class="w-full" name="email" type="email" required value={form?.email ?? ''}>
+      Email
+    </FloatingLabelInput>
 
-      <FloatingLabelInput
-        class="w-full"
-        name="username"
-        type="text"
-        required
-        value={form?.username ?? ''}
-      >
-        Username
-      </FloatingLabelInput>
+    <FloatingLabelInput
+      class="w-full"
+      name="username"
+      type="text"
+      required
+      value={form?.username ?? ''}
+    >
+      Username
+    </FloatingLabelInput>
 
-      <FloatingLabelInput class="w-full" name="password" type="password" peekable required>
-        Password
-      </FloatingLabelInput>
+    <FloatingLabelInput class="w-full" name="password" type="password" peekable required>
+      Password
+    </FloatingLabelInput>
 
-      <FloatingLabelInput class="w-full" name="confirm-password" type="password" peekable required>
-        Confirm password
-      </FloatingLabelInput>
+    <FloatingLabelInput class="w-full" name="confirm-password" type="password" peekable required>
+      Confirm password
+    </FloatingLabelInput>
 
-      <Button type="success">Register</Button>
-    </div>
+    <Button type="success">Register</Button>
+  </div>
 
-    <hr class="text-gray-700" />
+  <hr class="text-gray-700" />
 
-    <Link href="/login">Already have an account?</Link>
-  </form>
-</AuthLayout>
+  <Link href="/login">Already have an account?</Link>
+</form>
 
 <style lang="postcss">
   @reference "@/app.css";

@@ -62,6 +62,7 @@ export const Icons = {
 } as const;
 
 export interface ButtonProps {
+  id?: string;
   type: ButtonType;
   outline?: boolean;
   href?: string;
@@ -69,13 +70,13 @@ export interface ButtonProps {
   onclick?: VoidFunction;
   disabled?: boolean;
   children?: Snippet;
-  class?: ClassValue | null;
+  class?: ClassValue;
 }
 
 export interface DropdownMenuProps {
   children: Snippet;
   trigger: Snippet;
-  class?: ClassValue | null;
+  class?: ClassValue;
   horizontal?: boolean;
   align: 'start' | 'end';
   position: 'top' | 'bottom';
@@ -86,14 +87,14 @@ export interface DropdownItemProps {
   children: Snippet;
   href?: string;
   rel?: string;
-  class?: ClassValue | null;
+  class?: ClassValue;
   noHover?: boolean;
   onclick?: VoidFunction;
 }
 
 export interface ErrorProps {
   children: Snippet;
-  class?: ClassValue | null;
+  class?: ClassValue;
 }
 
 export interface FileDropzoneProps {
@@ -101,7 +102,7 @@ export interface FileDropzoneProps {
   filenameInputName: string;
   contentValue: string;
   filenameValue: string;
-  class?: ClassValue | null;
+  class?: ClassValue;
 }
 
 export interface FlairProps {
@@ -115,15 +116,9 @@ export interface FloatingLabelInputProps {
   children: Snippet;
   value?: string;
   type?: HTMLInputTypeAttribute | null;
-  class?: ClassValue | null;
+  class?: ClassValue;
   required?: boolean | null;
   name?: string | null;
-}
-
-export interface HomeLayoutProps {
-  children?: Snippet;
-  right?: Snippet;
-  self: CurrentUser;
 }
 
 export interface IconProps {
@@ -131,7 +126,7 @@ export interface IconProps {
   hover?: boolean;
   size?: keyof typeof IconSize;
   color?: string;
-  class?: ClassValue | null;
+  class?: ClassValue;
 }
 
 export interface IconButtonProps {
@@ -139,7 +134,7 @@ export interface IconButtonProps {
   onclick?: VoidFunction | UnaryVoidFunction<Event>;
   disabled?: boolean | null;
   type?: 'submit' | 'reset' | 'button' | null;
-  class?: ClassValue | null;
+  class?: ClassValue;
   round?: boolean;
 }
 
@@ -150,7 +145,7 @@ export interface InputProps {
   id?: string | null;
   value?: string;
   type?: HTMLInputTypeAttribute | null;
-  class?: ClassValue | null;
+  class?: ClassValue;
   required?: boolean | null;
   name?: string | null;
   placeholder?: string | null;
@@ -158,16 +153,33 @@ export interface InputProps {
 
 export interface LinkProps {
   href?: string | null;
-  class?: ClassValue | null;
+  class?: ClassValue;
   target?: HTMLAttributeAnchorTarget | null;
   children: Snippet;
+}
+
+export interface ModalProps {
+  class?: ClassValue;
+  id: string | null;
+  children: Snippet;
+  icon?: Snippet;
+  show: boolean;
 }
 
 export interface NavItemProps {
   title: string;
   href: string;
   children: Snippet;
-  class?: ClassValue | null;
+  class?: ClassValue;
+}
+
+export interface PostProps {
+  class?: ClassValue;
+  self: CurrentUser;
+  post: Post;
+  detail?: boolean;
+  compact?: boolean;
+  parent?: boolean;
 }
 
 export interface PostUploadProps {
@@ -177,11 +189,8 @@ export interface PostUploadProps {
   placeholder?: string;
 }
 
-export interface PostProps {
-  class?: ClassValue | null;
+export interface HomeLayoutProps {
+  children?: Snippet;
+  right?: Snippet;
   self: CurrentUser;
-  post: Post;
-  detail?: boolean;
-  compact?: boolean;
-  parent?: boolean;
 }

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { LinkProps } from './types';
+  import type { LinkProps } from '$lib/components/types';
 
   let { children, href, target, class: className }: LinkProps = $props();
 </script>

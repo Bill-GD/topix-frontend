@@ -1,7 +1,7 @@
 import { page } from '@vitest/browser/context';
 import { describe, expect, it } from 'vitest';
 import { render } from 'vitest-browser-svelte';
-import Component from '$lib/components/PostUpload.svelte';
+import Component from '$lib/components/upload/PostUpload.svelte';
 
 describe('post upload component', () => {
   it('should render all default elements', async () => {
