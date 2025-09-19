@@ -164,6 +164,7 @@ export interface ModalProps {
   children: Snippet;
   icon?: Snippet;
   show: boolean;
+  center?: boolean;
 }
 
 export interface NavItemProps {
