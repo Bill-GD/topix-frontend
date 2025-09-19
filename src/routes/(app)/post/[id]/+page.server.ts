@@ -1,9 +1,7 @@
-import { CookieName, type Post } from '@/lib/utils/types';
+import { AxiosHandler, handlePostDeletion, handleReaction } from '$lib/utils/axios-handler';
 import { CookieName, type Post } from '$lib/utils/types';
 import { error, fail, redirect, type Actions } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
-import { AxiosHandler, handleReaction } from '@/lib/utils/axios-handler';
-import { error, fail, type Actions } from '@sveltejs/kit';
 
 export const load: PageServerLoad = async ({ cookies, params }) => {
   const data: { post: Post; replies: Post[] } = { post: {} as Post, replies: [] };
@@ -28,6 +26,12 @@ export const load: PageServerLoad = async ({ cookies, params }) => {
 
 export const actions: Actions = {
   react: handleReaction,
+  'delete-post': async (event) => {
+    const res = await handlePostDeletion(event);
+    if (!res.success) return fail(res.status, { success: false, message: res.message });
+    // return { success: true, message: 'Post deleted successfully' };
+    redirect(303, '/home');
+  },
   reply: async (event) => {
     const formData = await event.request.formData();
     const files: File[] = [];

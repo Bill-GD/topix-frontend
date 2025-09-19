@@ -73,6 +73,10 @@
     reactInput.value = reaction;
     form.submit();
   }
+
+  function deleteHandle() {
+    (document.getElementById(`delete-form-${post.id}`) as HTMLFormElement).submit();
+  }
 </script>
 
 <div
@@ -214,11 +218,17 @@
         </IconButton>
       {/snippet}
 
+      <DropdownItem href="">Dummy</DropdownItem>
       {#if self.username === post.owner.username}
-        <DropdownItem href="#">Edit</DropdownItem>
+        <DropdownItem href="">Edit</DropdownItem>
       {/if}
       {#if self.role === 'admin' || self.username === post.owner.username}
-        <DropdownItem href="#">Delete</DropdownItem>
+        <DropdownItem class="text-red-500" href="" onclick={deleteHandle}>
+          Delete
+          <form method="post" id="delete-form-{post.id}" action="?/delete-post" hidden>
+            <input type="text" name="post-id" value={post.id} hidden />
+          </form>
+        </DropdownItem>
       {/if}
     </DropdownMenu>
   {/if}
