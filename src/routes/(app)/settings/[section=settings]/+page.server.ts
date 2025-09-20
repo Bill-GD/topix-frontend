@@ -7,8 +7,9 @@ import type { PageServerLoad } from './$types';
 export const load: PageServerLoad = async ({ parent, cookies }) => {
   let currentUsername: string;
 
-  if (cookies.get(CookieName.currentUser) !== undefined) {
-    currentUsername = (JSON.parse(cookies.get(CookieName.currentUser)!) as CurrentUser).username;
+  const currentUserCookie = cookies.get(CookieName.currentUser);
+  if (currentUserCookie && currentUserCookie.trim() !== '') {
+    currentUsername = (JSON.parse(currentUserCookie) as CurrentUser).username;
   } else {
     currentUsername = (await parent()).self.username;
   }
@@ -25,13 +26,15 @@ export const load: PageServerLoad = async ({ parent, cookies }) => {
 export const actions: Actions = {
   'update-account': async (event) => {
     const formData = await event.request.formData();
-    const dto = {
-      username: formData.get('username'),
-    };
+    const newUsername = formData.get('username')?.toString();
+
+    if (!newUsername || newUsername.length <= 0) {
+      return fail(400, { success: false, message: 'New username is not valid.' });
+    }
 
     const res = await AxiosHandler.patch(
       `/user/me`,
-      dto,
+      { username: newUsername },
       event.cookies.get(CookieName.accessToken),
     );
 
@@ -82,9 +85,7 @@ export const actions: Actions = {
 
     const passwordCheckRes = await AxiosHandler.post(
       '/auth/password-check',
-      {
-        password: formData.get('password'),
-      },
+      { password: formData.get('password') },
       event.cookies.get(CookieName.accessToken),
     );
 
@@ -93,11 +94,11 @@ export const actions: Actions = {
     }
 
     const res = await AxiosHandler.delete(
-      `/user/${formData.get('username')}`,
+      `/user/${(JSON.parse(event.cookies.get(CookieName.currentUser)!) as CurrentUser).username}`,
       event.cookies.get(CookieName.accessToken),
     );
 
-    if (!res.success) fail(res.status, { success: false, message: res.message });
+    if (!res.success) return fail(res.status, { success: false, message: res.message });
     deleteCookies(event.cookies);
     redirect(303, '/');
   },

@@ -7,8 +7,9 @@ import type { LayoutServerLoad } from './$types';
 export const load: LayoutServerLoad = async ({ locals, cookies }) => {
   if (!locals.hasAT) redirect(303, '/login');
 
-  if (cookies.get(CookieName.currentUser) !== undefined) {
-    return { self: JSON.parse(cookies.get(CookieName.currentUser)!) as CurrentUser };
+  const currentUserCookie = cookies.get(CookieName.currentUser);
+  if (currentUserCookie && currentUserCookie.trim() !== '') {
+    return { self: JSON.parse(currentUserCookie) as CurrentUser };
   }
 
   const res = await AxiosHandler.get('/user/me', cookies.get(CookieName.accessToken));
