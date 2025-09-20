@@ -1,7 +1,26 @@
 import { AxiosHandler } from '$lib/utils/axios-handler';
 import { dataUrlToFile, deleteCookies } from '$lib/utils/helpers';
-import { CookieName } from '$lib/utils/types';
-import { fail, redirect, type Actions } from '@sveltejs/kit';
+import { CookieName, type CurrentUser, type User } from '$lib/utils/types';
+import { error, fail, redirect, type Actions } from '@sveltejs/kit';
+import type { PageServerLoad } from './$types';
+
+export const load: PageServerLoad = async ({ parent, cookies }) => {
+  let currentUsername: string;
+
+  if (cookies.get(CookieName.currentUser) !== undefined) {
+    currentUsername = (JSON.parse(cookies.get(CookieName.currentUser)!) as CurrentUser).username;
+  } else {
+    currentUsername = (await parent()).self.username;
+  }
+
+  const res = await AxiosHandler.get(
+    `/user/${currentUsername}`,
+    cookies.get(CookieName.accessToken),
+  );
+
+  if (res.success) return { self: res.data as User };
+  error(res.status, { status: res.status, message: res.message });
+};
 
 export const actions: Actions = {
   'update-account': async (event) => {

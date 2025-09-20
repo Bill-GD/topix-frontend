@@ -67,7 +67,7 @@ export interface ButtonProps {
   outline?: boolean;
   href?: string;
   formaction?: string;
-  onclick?: VoidFunction;
+  onclick?: VoidFunction | UnaryVoidFunction<Event>;
   disabled?: boolean;
   children?: Snippet;
   class?: ClassValue;
