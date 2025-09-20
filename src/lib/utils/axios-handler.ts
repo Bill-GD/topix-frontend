@@ -138,12 +138,6 @@ export async function handleReaction(event: RequestEvent) {
   return { success: true };
 }
 
-export async function handlePostDeletion(event: RequestEvent) {
-  const formData = await event.request.formData();
-  const postId = Number(formData.get('post-id'));
-
-  return await AxiosHandler.delete(
-    `/post/${postId}`,
-    event.cookies.get(CookieName.accessToken),
-  );
+export async function handlePostDeletion(postId: string, token?: string) {
+  return await AxiosHandler.delete(`/post/${postId}`, token);
 }

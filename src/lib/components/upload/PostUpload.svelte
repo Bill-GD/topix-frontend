@@ -85,10 +85,8 @@
       aria-multiline="true"
       spellcheck="true"
       data-placeholder={placeholder}
-      bind:innerText={inputContent}
-    >
-      <input class="hidden" name="content" value={inputContent} />
-    </div>
+    ></div>
+    <textarea class="hidden" name="content" value={inputContent}></textarea>
 
     {#if images.length > 0}
       <div class="media-viewer scrollbar">
@@ -196,7 +194,7 @@
     @apply min-h-24 w-full rounded-md border border-gray-700 p-4 focus:border-gray-300;
   }
 
-  .editor.empty::before {
+  .editor.empty::after {
     content: attr(data-placeholder);
     @apply text-gray-500;
   }

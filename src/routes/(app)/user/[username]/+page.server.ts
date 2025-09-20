@@ -28,7 +28,7 @@ export const actions: Actions = {
     const files: File[] = [];
     let urls: string[] = [];
     let type = 'image';
-    const content = `${formData.get('content')}`;
+    const content = `${formData.get('content')}`.replaceAll('\r\n\r\n', '\n');
 
     if (formData.has('video')) {
       const vid = formData.get('video') as File;
@@ -75,7 +75,11 @@ export const actions: Actions = {
   },
   react: handleReaction,
   'delete-post': async (event) => {
-    const res = await handlePostDeletion(event);
+    const formData = await event.request.formData();
+    const postId = formData.get('post-id');
+
+    const res = await handlePostDeletion(`${postId}`, event.cookies.get(CookieName.accessToken));
+
     if (!res.success) return fail(res.status, { success: false, message: res.message });
     return { success: true, message: 'Post deleted successfully' };
   },

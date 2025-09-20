@@ -124,9 +124,9 @@
     </div>
 
     {#if compact}
-      <p class="line-clamp-2">{post.content}</p>
+      <p class="line-clamp-2 whitespace-pre-line">{post.content}</p>
     {:else}
-      <span>{post.content}</span>
+      <span class="whitespace-pre-line">{post.content}</span>
     {/if}
 
     {#if post.mediaPaths.length > 0}
