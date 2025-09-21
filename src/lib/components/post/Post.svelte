@@ -117,9 +117,11 @@
         </Link>
 
         <span>-</span>
-        <span>
-          {getTimeAgo(Date.parse(post.dateCreated))}
-        </span>
+        <span>{getTimeAgo(Date.parse(post.dateCreated))}</span>
+        {#if post.dateUpdated}
+          <span>-</span>
+          <span>edited {getTimeAgo(Date.parse(post.dateUpdated))}</span>
+        {/if}
       </div>
     </div>
 
@@ -222,8 +224,7 @@
         </IconButton>
       {/snippet}
 
-      <DropdownItem href="">Dummy</DropdownItem>
-      {#if self.username === post.owner.username}
+      {#if detail && self.username === post.owner.username}
         <DropdownItem href="">Edit</DropdownItem>
       {/if}
       {#if self.role === 'admin' || self.username === post.owner.username}
