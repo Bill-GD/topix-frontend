@@ -18,7 +18,7 @@
 </script>
 
 <svelte:head>
-  <title>Home - topix</title>
+  <title>{data.thread.title} - topix</title>
 </svelte:head>
 
 <HomeLayout self={data.self}>

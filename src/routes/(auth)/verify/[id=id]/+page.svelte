@@ -1,7 +1,6 @@
 <script lang="ts">
   import { Button } from '$lib/components/button';
   import { FloatingLabelInput } from '$lib/components/input';
-  import { Error } from '$lib/components/misc';
   import type { PageProps } from './$types';
 
   let { form }: PageProps = $props();
@@ -23,8 +22,8 @@
 {/if}
 
 <form method="post">
-  {#if form?.missing}<Error>You must enter the code.</Error>{/if}
-  {#if form?.success === false}<Error>{form?.message}</Error>{/if}
+  {#if form?.missing}<span class="text-red-500">You must enter the code.</span>{/if}
+  {#if form?.success === false}<span class="text-red-500">{form?.message}</span>{/if}
 
   <FloatingLabelInput class="w-full" name="otp" type="text">Code</FloatingLabelInput>
 

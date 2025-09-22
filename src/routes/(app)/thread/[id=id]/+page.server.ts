@@ -105,8 +105,9 @@ export const actions: Actions = {
       dto,
       event.cookies.get(CookieName.accessToken),
     );
-    if (res.success) return { success: true, message: 'Saved successfully!' };
-    return fail(res.status, { success: false, message: res.message });
+
+    if (!res.success) return fail(res.status, { success: false, message: res.message });
+    return { success: true, message: 'Post added successfully!' };
   },
   'delete-post': async (event) => {
     const formData = await event.request.formData();
@@ -118,7 +119,6 @@ export const actions: Actions = {
     );
 
     if (!res.success) return fail(res.status, { success: false, message: res.message });
-    // return { success: true, message: 'Post deleted successfully' };
-    if (postId === event.params.id) redirect(303, '/home');
+    return { success: true, message: 'Post deleted successfully' };
   },
 };

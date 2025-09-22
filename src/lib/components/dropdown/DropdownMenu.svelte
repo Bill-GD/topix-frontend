@@ -31,28 +31,28 @@
     function toggleMenu() {
       if (showMenu) return;
       showMenu = true;
-      const rect = trigger.getBoundingClientRect();
-
-      menu.style.minWidth = `${rect.width}px`;
-      switch (position) {
-        case 'top':
-          menu.style.top = `${rect.top - menu.offsetHeight}px`;
-          break;
-        case 'bottom':
-          menu.style.top = `${rect.bottom}px`;
-          break;
-      }
-      switch (align) {
-        case 'start':
-          menu.style.left = `${rect.left}px`;
-          break;
-        case 'end':
-          menu.style.left = `${rect.left - (menu.offsetWidth - rect.width)}px`;
-          break;
-      }
     }
 
     trigger.addEventListener('click', toggleMenu);
+
+    const rect = trigger.getBoundingClientRect();
+    menu.style.minWidth = `${rect.width}px`;
+    switch (position) {
+      case 'top':
+        menu.style.top = `${rect.top - menu.offsetHeight}px`;
+        break;
+      case 'bottom':
+        menu.style.top = `${rect.bottom}px`;
+        break;
+    }
+    switch (align) {
+      case 'start':
+        menu.style.left = `${rect.left}px`;
+        break;
+      case 'end':
+        menu.style.left = `${rect.left - (menu.offsetWidth - rect.width)}px`;
+        break;
+    }
 
     return () => trigger.removeEventListener('click', toggleMenu);
   });
