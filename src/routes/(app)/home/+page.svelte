@@ -2,7 +2,7 @@
   import { HomeLayout } from '$lib/components/layout';
   import type { PageProps } from './$types';
 
-  let { data, form }: PageProps = $props();
+  let { data }: PageProps = $props();
 </script>
 
 <svelte:head>

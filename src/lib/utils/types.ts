@@ -1,5 +1,11 @@
 // general types
 
+export type ToastMessage = {
+  id: number;
+  message: string;
+  type: 'success' | 'info' | 'error';
+};
+
 export type ApiResponse = {
   readonly success: boolean;
   readonly message: string;
