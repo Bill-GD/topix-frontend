@@ -34,7 +34,7 @@
           {#if data.thread.dateUpdated}
             <span>-</span>
             <span>
-              edited {getTimeAgo(Date.parse(data.thread.dateUpdated), true)}
+              Updated {getTimeAgo(Date.parse(data.thread.dateUpdated), true)}
             </span>
           {/if}
         </div>
@@ -89,8 +89,8 @@
   </Modal>
 
   <Modal id="modal-delete-thread-{data.thread.id}" bind:show={showDeleteThreadModal} center>
-    <ModalHeader>Delete post</ModalHeader>
-    <ModalBody>Are you sure you want to delete this post? This is irreversible.</ModalBody>
+    <ModalHeader>Delete thread</ModalHeader>
+    <ModalBody>Are you sure you want to delete this thread? This is irreversible.</ModalBody>
     <ModalFooter>
       <Button
         class="w-full"
