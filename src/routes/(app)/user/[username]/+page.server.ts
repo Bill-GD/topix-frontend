@@ -12,7 +12,7 @@ export const load: PageServerLoad = async ({ params, cookies }) => {
   const user = userRes.data as User;
 
   const postsRes = await AxiosHandler.get(
-    `/post/user/${user.username}`,
+    `/post?username=${user.username}`,
     cookies.get(CookieName.accessToken),
   );
 

@@ -13,7 +13,7 @@ export const load: PageServerLoad = async ({ cookies, params }) => {
   data.post = postRes.data as unknown as Post;
 
   const repliesRes = await AxiosHandler.get(
-    `/post/${params.id}/replies`,
+    `/post?parentId=${params.id}`,
     cookies.get(CookieName.accessToken),
   );
   if (!repliesRes.success) {
