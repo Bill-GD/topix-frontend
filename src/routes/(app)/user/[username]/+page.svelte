@@ -37,8 +37,12 @@
       </div>
 
       <div class="flex flex-col gap-4">
-        <Button type="dark" class="w-full">Follow</Button>
-        <Button type="dark" class="w-full">Message</Button>
+        <IconButton variant="dark" class="w-full">
+          <Icon type="follow" size="sm" />
+        </IconButton>
+        <IconButton variant="dark" class="w-full">
+          <Icon type="message" size="sm" />
+        </IconButton>
       </div>
     </div>
 

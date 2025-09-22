@@ -8,9 +8,10 @@
     peekable = false,
     type,
     class: className,
+    labelClass = 'bg-gray-950',
     name: inputName,
     required = false,
-    value = '',
+    value = $bindable(''),
   }: FloatingLabelInputProps = $props();
 
   const id = $props.id();
@@ -28,7 +29,7 @@
     placeholder=" "
     {required}
   />
-  <label class={['default', value.length > 0 ? 'input-not-focus' : '']} for={id}>
+  <label class={['default', labelClass, value.length > 0 ? 'input-not-focus' : '']} for={id}>
     {@render children()}
   </label>
 </div>
@@ -37,7 +38,7 @@
   @reference '@/app.css';
 
   .default {
-    @apply absolute left-3 z-2 truncate bg-gray-950 text-left text-gray-500 duration-200 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-focus:top-2 peer-focus:left-1 peer-focus:-translate-y-5 peer-focus:scale-90 peer-focus:px-2;
+    @apply absolute left-3 z-2 truncate text-left text-gray-500 duration-200 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-focus:top-2 peer-focus:left-1 peer-focus:-translate-y-5 peer-focus:scale-90 peer-focus:px-2;
   }
 
   .input-not-focus {

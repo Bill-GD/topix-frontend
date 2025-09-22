@@ -7,12 +7,16 @@
     disabled = false,
     class: className,
     type,
+    variant,
+    outline = false,
     round = true,
   }: IconButtonProps = $props();
+
+  const buttonClass = `btn-${variant}${variant && outline ? '-outline' : ''}`;
 </script>
 
 <button
-  class={['main-button', round && 'rounded-full', className]}
+  class={['main-button', buttonClass, round && 'rounded-full', className]}
   onclick={(ev) => {
     ev.stopPropagation();
     ev.preventDefault();
