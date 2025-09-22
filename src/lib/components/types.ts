@@ -1,6 +1,7 @@
 // component-related types
 
 import {
+  faCheck,
   faChevronLeft,
   faChevronRight,
   faEllipsisVertical,
@@ -14,10 +15,13 @@ import {
   faImage,
   faMagnifyingGlass,
   faMessage,
+  faPlus,
   faReply,
   faThumbsUp,
   faTriangleExclamation,
   faUserGroup,
+  faUserMinus,
+  faUserPlus,
   faVideo,
   faXmark,
 } from '@fortawesome/free-solid-svg-icons';
@@ -33,12 +37,17 @@ import type { CurrentUser, Post, UnaryVoidFunction } from '../utils/types';
 export type ButtonType = 'primary' | 'danger' | 'dark' | 'success';
 
 export const IconSize = {
+  xs: ['h-3', 'w-3'],
   sm: ['h-5', 'w-5'],
   md: ['h-6', 'w-6'],
   lg: ['h-8', 'w-8'],
 };
 
 export const Icons = {
+  check: faCheck,
+  unfollow: faUserMinus,
+  follow: faUserPlus,
+  add: faPlus,
   video: faVideo,
   image: faImage,
   back: faChevronLeft,
@@ -117,6 +126,7 @@ export interface FloatingLabelInputProps {
   value?: string;
   type?: HTMLInputTypeAttribute | null;
   class?: ClassValue;
+  labelClass?: ClassValue;
   required?: boolean | null;
   name?: string | null;
 }
@@ -134,6 +144,8 @@ export interface IconButtonProps {
   onclick?: VoidFunction | UnaryVoidFunction<Event>;
   disabled?: boolean | null;
   type?: 'submit' | 'reset' | 'button' | null;
+  variant?: ButtonType;
+  outline?: boolean;
   class?: ClassValue;
   round?: boolean;
 }

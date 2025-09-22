@@ -53,16 +53,16 @@
       {/if}
     </div>
 
-    <div class="flex flex-col gap-6">
+    <div>
       {#if params.section === 'account'}
-        <form action="?/update-account" id="account-form" method="post">
-          <div class="flex flex-col gap-2">
+        <form class="flex flex-col gap-6" action="?/update-account" id="account-form" method="post">
+          <div class="input-group">
             <label class="text-xl" for="username">Username</label>
             <Input class="w-min" id="username" name="username" value={data.self.username}></Input>
           </div>
         </form>
       {:else if params.section === 'profile'}
-        <form action="?/update-profile" id="profile-form" method="post">
+        <form class="flex flex-col gap-6" action="?/update-profile" id="profile-form" method="post">
           <div class="input-group">
             <label class="text-xl" for="display-name">Display name</label>
             <Input
@@ -106,7 +106,7 @@
           </div>
         </form>
       {:else if params.section === 'danger'}
-        <form action="?/delete-account" id="delete-form" method="post">
+        <form class="flex flex-col gap-6" action="?/delete-account" id="delete-form" method="post">
           <!-- {#if data.self.role !== 'admin'} -->
           <div class="flex flex-col gap-2">
             <p class="text-xl">Delete account</p>

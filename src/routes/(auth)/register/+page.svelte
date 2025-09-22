@@ -2,7 +2,6 @@
   import { Button } from '$lib/components/button';
   import { FloatingLabelInput } from '$lib/components/input';
   import { Link } from '$lib/components/link';
-  import { Error } from '$lib/components/misc';
   import type { PageProps } from './$types';
 
   let { form }: PageProps = $props();
@@ -15,9 +14,9 @@
 <p>Sign up for topix</p>
 
 <form method="post">
-  {#if form?.missing}<Error>All fields must not be empty.</Error>{/if}
-  {#if form?.invalid}<Error>Email format is invalid.</Error>{/if}
-  {#if form?.success === false}<Error>{form?.message}</Error>{/if}
+  {#if form?.missing}<span class="text-red-500">All fields must not be empty.</span>{/if}
+  {#if form?.invalid}<span class="text-red-500">Email format is invalid.</span>{/if}
+  {#if form?.success === false}<span class="text-red-500">{form?.message}</span>{/if}
 
   <div>
     <FloatingLabelInput class="w-full" name="email" type="email" required value={form?.email ?? ''}>

@@ -137,7 +137,3 @@ export async function handleReaction(event: RequestEvent) {
   if (!res.success) return fail(res.status, { success: false, message: res.message });
   return { success: true };
 }
-
-export async function handlePostDeletion(postId: string, token?: string) {
-  return await AxiosHandler.delete(`/post/${postId}`, token);
-}

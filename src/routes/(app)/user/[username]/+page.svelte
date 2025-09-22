@@ -4,9 +4,14 @@
   import { Post } from '$lib/components/post';
   import { PostUpload } from '$lib/components/upload';
   import { HomeLayout } from '$lib/components/layout';
+  import { Modal, ModalHeader, ModalBody, ModalFooter } from '$lib/components/modal';
+  import { FloatingLabelInput } from '$lib/components/input';
+  import { ThreadOverview } from '$lib/components/thread';
   import type { PageProps } from './$types';
 
   let { data, form }: PageProps = $props();
+  let showModal = $state<boolean>(false);
+  let threadTitle = $state<string>('');
 </script>
 
 <svelte:head>
@@ -37,8 +42,12 @@
       </div>
 
       <div class="flex flex-col gap-4">
-        <Button type="dark" class="w-full">Follow</Button>
-        <Button type="dark" class="w-full">Message</Button>
+        <IconButton variant="dark" class="w-full">
+          <Icon type="follow" size="sm" />
+        </IconButton>
+        <IconButton variant="dark" class="w-full">
+          <Icon type="message" size="sm" />
+        </IconButton>
       </div>
     </div>
 
@@ -57,9 +66,61 @@
   {/if}
 
   {#each data.posts as post (post.id)}
-    <Post self={data.self} {post} />
     <hr class="text-gray-700" />
+    <Post self={data.self} {post} />
   {/each}
+
+  {#snippet right()}
+    <div class="rounded-md border border-gray-700 xl:max-w-1/2">
+      <div class="flex items-baseline p-4">
+        <p class="text-xl font-semibold">Threads</p>
+        {#if data.self.id === data.user.id}
+          <IconButton
+            variant="success"
+            class="ml-auto flex hover:bg-gray-800"
+            onclick={() => (showModal = true)}
+          >
+            <Icon type="add" size="xs" />
+          </IconButton>
+        {/if}
+      </div>
+
+      {#if data.threads.length <= 0}
+        <span>This user has no thread.</span>
+      {:else}
+        {#each data.threads as thread}
+          <hr class="text-gray-700" />
+          <ThreadOverview {thread} />
+        {/each}
+      {/if}
+
+      <form action="?/create-thread" method="post" id="create-thread-form" hidden>
+        <input hidden type="text" name="thread-title" readonly value={threadTitle} />
+      </form>
+    </div>
+  {/snippet}
+
+  <Modal id="modal-create-thread" bind:show={showModal} center>
+    <ModalHeader>Create thread</ModalHeader>
+    <ModalBody>
+      <FloatingLabelInput labelClass="bg-gray-900" bind:value={threadTitle}>
+        Title
+      </FloatingLabelInput>
+    </ModalBody>
+    <ModalFooter>
+      <Button
+        class="w-full"
+        type="success"
+        onclick={() => {
+          showModal = false;
+          (document.querySelector('form#create-thread-form') as HTMLFormElement | null)?.submit();
+        }}
+      >
+        Create
+      </Button>
+      <Button class="w-full" type="dark" onclick={() => (showModal = false)}>Cancel</Button>
+    </ModalFooter>
+  </Modal>
 </HomeLayout>
 
 <style lang="postcss">
