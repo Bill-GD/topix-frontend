@@ -1,4 +1,4 @@
-import { AxiosHandler, handlePostDeletion, handleReaction } from '$lib/utils/axios-handler';
+import { AxiosHandler, handleReaction } from '$lib/utils/axios-handler';
 import { CookieName, type Post, type Thread, type User } from '$lib/utils/types';
 import { error, fail, type Actions } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
@@ -84,7 +84,10 @@ export const actions: Actions = {
     const formData = await event.request.formData();
     const postId = formData.get('post-id');
 
-    const res = await handlePostDeletion(`${postId}`, event.cookies.get(CookieName.accessToken));
+    const res = await AxiosHandler.delete(
+      `/post/${postId}`,
+      event.cookies.get(CookieName.accessToken),
+    );
 
     if (!res.success) return fail(res.status, { success: false, message: res.message });
     return { success: true, message: 'Post deleted successfully' };

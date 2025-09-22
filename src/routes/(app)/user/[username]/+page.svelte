@@ -6,7 +6,7 @@
   import { HomeLayout } from '$lib/components/layout';
   import { Modal, ModalHeader, ModalBody, ModalFooter } from '$lib/components/modal';
   import { FloatingLabelInput } from '$lib/components/input';
-  import { Thread } from '$lib/components/thread';
+  import { ThreadOverview } from '$lib/components/thread';
   import type { PageProps } from './$types';
 
   let { data, form }: PageProps = $props();
@@ -66,8 +66,8 @@
   {/if}
 
   {#each data.posts as post (post.id)}
-    <Post self={data.self} {post} />
     <hr class="text-gray-700" />
+    <Post self={data.self} {post} />
   {/each}
 
   {#snippet right()}
@@ -90,7 +90,7 @@
       {:else}
         {#each data.threads as thread}
           <hr class="text-gray-700" />
-          <Thread {thread} />
+          <ThreadOverview {thread} />
         {/each}
       {/if}
 

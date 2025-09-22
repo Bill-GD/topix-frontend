@@ -68,7 +68,7 @@ export function getReadableSize(byte: number): string {
   return `${size} ${postfix[postfixIndex]}`;
 }
 
-export function getTimeAgo(ms: number): string {
+export function getTimeAgo(ms: number, hasAgo: boolean = false): string {
   const diffInSec = Math.trunc((Date.now() - ms + 25200000) / 1000);
 
   // 2 weeks
@@ -78,16 +78,16 @@ export function getTimeAgo(ms: number): string {
   }
 
   let interval = diffInSec / 604800;
-  if (interval > 1) return `${Math.trunc(interval)}w`;
+  if (interval > 1) return `${Math.trunc(interval)}w${hasAgo ? ' ago' : ''}`;
 
   interval = diffInSec / 86400;
-  if (interval > 1) return `${Math.trunc(interval)}d`;
+  if (interval > 1) return `${Math.trunc(interval)}d${hasAgo ? ' ago' : ''}`;
 
   interval = diffInSec / 3600;
-  if (interval > 1) return `${Math.trunc(interval)}h`;
+  if (interval > 1) return `${Math.trunc(interval)}h${hasAgo ? ' ago' : ''}`;
 
   interval = diffInSec / 60;
-  if (interval > 1) return `${Math.trunc(interval)}m`;
+  if (interval > 1) return `${Math.trunc(interval)}m${hasAgo ? ' ago' : ''}`;
 
   return `now`;
 }
