@@ -41,6 +41,19 @@ export const actions: Actions = {
     if (!res.success) return fail(res.status, { success: false, message: res.message });
     redirect(303, `/home`);
   },
+  'update-title': async (event) => {
+    const formData = await event.request.formData();
+    const newTitle = formData.get('new-title');
+
+    const res = await AxiosHandler.patch(
+      `/thread/${event.params.id}`,
+      { title: newTitle },
+      event.cookies.get(CookieName.accessToken),
+    );
+
+    if (!res.success) return fail(res.status, { success: false, message: res.message });
+    return { success: true, message: 'Title updated successfully' };
+  },
   'add-post': async (event) => {
     const formData = await event.request.formData();
     const files: File[] = [];

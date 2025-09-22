@@ -6,12 +6,15 @@
   import { HomeLayout } from '$lib/components/layout';
   import { Modal, ModalHeader, ModalBody, ModalFooter } from '$lib/components/modal';
   import { DropdownMenu, DropdownItem } from '$lib/components/dropdown';
+  import { Input } from '$lib/components/input';
   import { getTimeAgo } from '$lib/utils/helpers';
   import type { PageProps } from './$types';
 
   let { data, form }: PageProps = $props();
   let showPostModal = $state<boolean>(false);
   let showDeleteThreadModal = $state<boolean>(false);
+  let editingTitle = $state<boolean>(false);
+  let title = $state<string>(data.thread.title);
 </script>
 
 <svelte:head>
@@ -26,7 +29,38 @@
 
     <div class="flex">
       <div class="flex flex-col gap-2 text-gray-500">
-        <p class="text-4xl font-semibold text-white">{data.thread.title}</p>
+        {#if editingTitle}
+          <form
+            class="flex items-center gap-2"
+            action="?/update-title"
+            id="update-thread-{data.thread.id}"
+            method="post"
+          >
+            <Input
+              type="text"
+              class="text-white"
+              placeholder="Title"
+              name="new-title"
+              value={title}
+            />
+            <IconButton
+              class="h-fit"
+              variant="success"
+              onclick={() => {
+                (
+                  document.querySelector(`form#update-thread-${data.thread.id}`) as HTMLFormElement
+                ).submit();
+              }}
+            >
+              <Icon type="check" size="sm" />
+            </IconButton>
+            <IconButton class="h-fit" variant="danger" onclick={() => (editingTitle = false)}>
+              <Icon type="close" size="sm" />
+            </IconButton>
+          </form>
+        {:else}
+          <p class="text-4xl font-semibold text-white">{data.thread.title}</p>
+        {/if}
         <div>
           <span>
             Created {getTimeAgo(Date.parse(data.thread.dateCreated), true)}
@@ -52,7 +86,7 @@
 
         <DropdownItem href="">Follow</DropdownItem>
         {#if data.self.username === data.thread.owner.username}
-          <DropdownItem href="">Edit</DropdownItem>
+          <DropdownItem href="" onclick={() => (editingTitle = true)}>Edit</DropdownItem>
           <DropdownItem class="text-red-500" href="" onclick={() => (showDeleteThreadModal = true)}>
             Delete
             <form method="post" id="delete-form-{data.thread.id}" action="?/delete-thread" hidden>
@@ -100,11 +134,13 @@
           (
             document.querySelector(`form#delete-form-${data.thread.id}`) as HTMLFormElement | null
           )?.submit();
-        }}>Delete</Button
+        }}
       >
-      <Button class="w-full" type="dark" onclick={() => (showDeleteThreadModal = false)}
-        >Cancel</Button
-      >
+        Delete
+      </Button>
+      <Button class="w-full" type="dark" onclick={() => (showDeleteThreadModal = false)}>
+        Cancel
+      </Button>
     </ModalFooter>
   </Modal>
 </HomeLayout>

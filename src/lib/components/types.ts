@@ -1,6 +1,7 @@
 // component-related types
 
 import {
+  faCheck,
   faChevronLeft,
   faChevronRight,
   faEllipsisVertical,
@@ -43,6 +44,7 @@ export const IconSize = {
 };
 
 export const Icons = {
+  check: faCheck,
   unfollow: faUserMinus,
   follow: faUserPlus,
   add: faPlus,
