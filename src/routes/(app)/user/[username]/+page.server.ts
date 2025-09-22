@@ -1,5 +1,5 @@
 import { AxiosHandler, handlePostDeletion, handleReaction } from '$lib/utils/axios-handler';
-import { CookieName, type Post, type User } from '$lib/utils/types';
+import { CookieName, type Post, type Thread, type User } from '$lib/utils/types';
 import { error, fail, type Actions } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
@@ -16,9 +16,15 @@ export const load: PageServerLoad = async ({ params, cookies }) => {
     cookies.get(CookieName.accessToken),
   );
 
+  const threadsRes = await AxiosHandler.get(
+    `/thread?username=${user.username}&size=5`,
+    cookies.get(CookieName.accessToken),
+  );
+
   return {
     user,
     posts: postsRes.data as unknown as Post[],
+    threads: threadsRes.data as unknown as Thread[],
   };
 };
 
@@ -79,6 +85,23 @@ export const actions: Actions = {
     const postId = formData.get('post-id');
 
     const res = await handlePostDeletion(`${postId}`, event.cookies.get(CookieName.accessToken));
+
+    if (!res.success) return fail(res.status, { success: false, message: res.message });
+    return { success: true, message: 'Post deleted successfully' };
+  },
+  'create-thread': async (event) => {
+    const formData = await event.request.formData();
+    const title = `${formData.get('thread-title')}`;
+
+    if (title === null || title.length <= 0) {
+      return fail(400, { success: false, message: 'Title can not be empty' });
+    }
+
+    const res = await AxiosHandler.post(
+      '/thread',
+      { title },
+      event.cookies.get(CookieName.accessToken),
+    );
 
     if (!res.success) return fail(res.status, { success: false, message: res.message });
     return { success: true, message: 'Post deleted successfully' };

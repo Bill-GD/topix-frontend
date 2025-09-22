@@ -33,17 +33,36 @@ export type User = {
   role: 'user' | 'admin';
 };
 
+export type Tag = {
+  name: string;
+  color: string;
+};
+
 export type Post = {
   id: number;
   owner: Partial<User>;
-  parentPost?: Post;
   content: string;
-  // groupAccepted: boolean;
-  // visibility: 'public' | 'private' | 'hidden';
   reaction: string | null;
   reactionCount: number;
   replyCount: number;
   mediaPaths: string[];
+  parentPost?: Post;
+  threadId: number | null;
+  groupId: number | null;
+  tag: Tag | null;
+  // groupAccepted: boolean;
+  visibility: 'public' | 'private' | 'hidden';
+  dateCreated: string;
+  dateUpdated: string | null;
+};
+
+export type Thread = {
+  id: number;
+  title: string;
+  owner: Partial<User>;
+  postCount: number;
+  groupId: number | null;
+  tag: Tag | null;
   dateCreated: string;
   dateUpdated: string | null;
 };
