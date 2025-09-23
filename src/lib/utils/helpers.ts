@@ -1,5 +1,6 @@
 import { API_PORT, API_SERVER } from '$env/static/public';
-import { type Cookies } from '@sveltejs/kit';
+import { type ActionResult, type Cookies } from '@sveltejs/kit';
+import { Toaster } from '$lib/components/toast';
 import { CookieName } from './types';
 
 const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -90,4 +91,31 @@ export function getTimeAgo(ms: number, hasAgo: boolean = false): string {
   if (interval > 1) return `${Math.trunc(interval)}m${hasAgo ? ' ago' : ''}`;
 
   return `now`;
+}
+
+export async function formResultToast(
+  result: ActionResult,
+  toaster: Toaster,
+  redirectedMessage?: string,
+) {
+  switch (result.type) {
+    case 'success': {
+      const formResult = result.data as { message: string; success: boolean };
+      toaster.addToast(formResult!.message, 'success');
+      break;
+    }
+    case 'failure': {
+      const formResult = result.data as { message: string; success: boolean };
+      toaster.addToast(formResult!.message, 'error');
+      break;
+    }
+    case 'error': {
+      toaster.addToast(result.error, 'error');
+      break;
+    }
+    case 'redirect': {
+      toaster.addToast(redirectedMessage ?? 'Success', 'success');
+      break;
+    }
+  }
 }

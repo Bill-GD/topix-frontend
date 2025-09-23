@@ -4,7 +4,7 @@
   import { FloatingLabelInput } from '$lib/components/input';
   import { Link } from '$lib/components/link';
   import { getToaster } from '$lib/components/toast';
-  import type { ActionData } from './$types';
+  import { formResultToast } from '$lib/utils/helpers';
 
   const toaster = getToaster();
 </script>
@@ -19,22 +19,8 @@
   method="post"
   use:enhance={() => {
     return async ({ result, update }) => {
-      switch (result.type) {
-        case 'failure': {
-          const formResult = result.data as ActionData;
-          toaster.addToast(formResult!.message, 'error');
-          break;
-        }
-        case 'error': {
-          toaster.addToast(result.error, 'error');
-          break;
-        }
-        case 'redirect': {
-          toaster.addToast('Signin successfully', 'success');
-          await update();
-          break;
-        }
-      }
+      await formResultToast(result, toaster, 'Signin successfully');
+      await update();
     };
   }}
 >
