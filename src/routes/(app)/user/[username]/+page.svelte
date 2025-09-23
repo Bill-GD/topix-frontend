@@ -7,9 +7,14 @@
   import { Modal, ModalHeader, ModalBody, ModalFooter } from '$lib/components/modal';
   import { FloatingLabelInput } from '$lib/components/input';
   import { ThreadOverview } from '$lib/components/thread';
+  import { getToaster } from '$lib/components/toast';
+  import { formResultToast } from '$lib/utils/helpers';
   import type { PageProps } from './$types';
+  import { enhance } from '$app/forms';
 
-  let { data, form }: PageProps = $props();
+  let { data }: PageProps = $props();
+
+  const toaster = getToaster();
   let showModal = $state<boolean>(false);
   let threadTitle = $state<string>('');
 </script>
@@ -58,11 +63,7 @@
   </div>
 
   {#if data.self.id === data.user.id}
-    <PostUpload
-      errorText={form?.success === false ? form?.message : ''}
-      userPicture={data.self.profilePicture}
-      formaction="?/post-upload"
-    />
+    <PostUpload userPicture={data.self.profilePicture} formaction="?/post-upload" />
   {/if}
 
   {#each data.posts as post (post.id)}
@@ -93,10 +94,6 @@
           <ThreadOverview {thread} />
         {/each}
       {/if}
-
-      <form action="?/create-thread" method="post" id="create-thread-form" hidden>
-        <input hidden type="text" name="thread-title" readonly value={threadTitle} />
-      </form>
     </div>
   {/snippet}
 
@@ -108,16 +105,30 @@
       </FloatingLabelInput>
     </ModalBody>
     <ModalFooter>
-      <Button
+      <form
+        action="?/create-thread"
+        method="post"
+        id="create-thread-form"
         class="w-full"
-        type="success"
-        onclick={() => {
-          showModal = false;
-          (document.querySelector('form#create-thread-form') as HTMLFormElement | null)?.submit();
+        use:enhance={() => {
+          return async ({ result, update }) => {
+            await formResultToast(result, toaster);
+            await update();
+          };
         }}
       >
-        Create
-      </Button>
+        <Button
+          class="w-full"
+          type="success"
+          onclick={() => {
+            showModal = false;
+            // (document.querySelector('form#create-thread-form') as HTMLFormElement | null)?.submit();
+          }}
+        >
+          Create
+        </Button>
+        <input hidden type="text" name="thread-title" readonly value={threadTitle} />
+      </form>
       <Button class="w-full" type="dark" onclick={() => (showModal = false)}>Cancel</Button>
     </ModalFooter>
   </Modal>

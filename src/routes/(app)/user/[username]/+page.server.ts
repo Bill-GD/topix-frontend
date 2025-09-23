@@ -76,8 +76,8 @@ export const actions: Actions = {
     };
 
     const res = await AxiosHandler.post('/post', dto, event.cookies.get(CookieName.accessToken));
-    if (res.success) return { success: true, message: 'Saved successfully!' };
-    return fail(res.status, { success: false, message: res.message });
+    if (!res.success) return fail(res.status, { success: false, message: res.message });
+    return { success: true, message: res.message };
   },
   react: handleReaction,
   'delete-post': async (event) => {
@@ -90,7 +90,7 @@ export const actions: Actions = {
     );
 
     if (!res.success) return fail(res.status, { success: false, message: res.message });
-    return { success: true, message: 'Post deleted successfully' };
+    return { success: true, message: res.message };
   },
   'create-thread': async (event) => {
     const formData = await event.request.formData();
@@ -107,6 +107,6 @@ export const actions: Actions = {
     );
 
     if (!res.success) return fail(res.status, { success: false, message: res.message });
-    return { success: true, message: 'Post deleted successfully' };
+    return { success: true, message: res.message };
   },
 };

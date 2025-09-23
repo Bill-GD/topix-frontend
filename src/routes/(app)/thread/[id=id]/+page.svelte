@@ -79,15 +79,15 @@
 
       <DropdownMenu class="ml-auto h-fit" position="bottom" align="right">
         {#snippet trigger()}
-          <IconButton class="p-2 hover:bg-gray-800">
+          <div class="cursor-pointer rounded-full p-2 hover:bg-gray-800">
             <Icon type="menu" size="sm" />
-          </IconButton>
+          </div>
         {/snippet}
 
-        <DropdownItem href="">Follow</DropdownItem>
+        <DropdownItem>Follow</DropdownItem>
         {#if data.self.username === data.thread.owner.username}
-          <DropdownItem href="" onclick={() => (editingTitle = true)}>Edit</DropdownItem>
-          <DropdownItem class="text-red-500" href="" onclick={() => (showDeleteThreadModal = true)}>
+          <DropdownItem onclick={() => (editingTitle = true)}>Edit</DropdownItem>
+          <DropdownItem class="text-red-500" onclick={() => (showDeleteThreadModal = true)}>
             Delete
             <form method="post" id="delete-form-{data.thread.id}" action="?/delete-thread" hidden>
               <input type="text" name="thread-id" value={data.thread.id} hidden readonly />

@@ -1,11 +1,13 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { ImageSizeLimit, VideoSizeLimit } from '$lib/utils/constants';
-  import { getReadableSize } from '$lib/utils/helpers';
+  import { formResultToast, getReadableSize } from '$lib/utils/helpers';
   import type { PostUploadProps } from '$lib/components/types';
+  import { getToaster } from '$lib/components/toast';
   import Button from '../button/Button.svelte';
   import IconButton from '../button/IconButton.svelte';
   import Icon from '../misc/Icon.svelte';
+  import { enhance } from '$app/forms';
 
   let {
     userPicture = '/images/default-user-profile-icon.jpg',
@@ -13,6 +15,8 @@
     errorText,
     placeholder = `What's happening?`,
   }: PostUploadProps = $props();
+
+  const toaster = getToaster();
 
   let inputContent = $state<string>('');
   let images = $state<{ file: File; url: string }[]>([]);
@@ -73,6 +77,21 @@
   method="post"
   enctype="multipart/form-data"
   onsubmit={() => (disablePost = true)}
+  use:enhance={() => {
+    return async ({ result, update }) => {
+      await formResultToast(result, toaster);
+      await update();
+
+      inputContent = '';
+      images = [];
+      video = null;
+      disablePost = false;
+      (document.querySelector('#editor') as HTMLInputElement).innerHTML = '';
+      (document.querySelector('#editor') as HTMLInputElement).classList.add('empty');
+      (document.querySelector('#image-input') as HTMLInputElement).value = '';
+      (document.querySelector('#video-input') as HTMLInputElement).value = '';
+    };
+  }}
 >
   <img class="profile-picture-sm" src={userPicture} alt="profile" />
 

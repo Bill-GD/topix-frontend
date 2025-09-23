@@ -1,6 +1,8 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import { getTimeAgo } from '$lib/utils/helpers';
+  import { enhance } from '$app/forms';
+  import { getToaster } from '$lib/components/toast';
+  import { formResultToast, getTimeAgo } from '$lib/utils/helpers';
   import type { PostProps } from '$lib/components/types';
   import Link from '../link/Link.svelte';
   import IconButton from '../button/IconButton.svelte';
@@ -22,6 +24,7 @@
     parent = false,
   }: PostProps = $props();
 
+  const toaster = getToaster();
   const isImages = post.mediaPaths.every((m) => m.includes('image'));
   const isVideo = post.mediaPaths.every((m) => m.includes('video'));
   const isReply = post.parentPost !== undefined;
@@ -38,7 +41,6 @@
   let imageIndex = $state<number>(0);
   let showModal = $state<boolean>(false);
 
-  let form: HTMLFormElement;
   let reactInput: HTMLInputElement;
 
   onMount(() => {
@@ -53,6 +55,7 @@
           target.closest('a') ||
           target.closest('button') ||
           target.closest('.dropdown-menu') ||
+          target.closest('.react-button') ||
           target.closest('.reaction-button')
         ) {
           return;
@@ -63,7 +66,6 @@
       });
     }
 
-    form = document.getElementById(`react-form-${post.id}`) as HTMLFormElement;
     reactInput = document.getElementById(`react-input-${post.id}`) as HTMLInputElement;
   });
 
@@ -72,12 +74,11 @@
       reaction = 'noReaction';
       reactionCount--;
     } else {
+      if (reaction === 'noReaction') reactionCount++;
       reaction = newReaction;
-      reactionCount++;
     }
 
     reactInput.value = reaction;
-    form.submit();
   }
 </script>
 
@@ -179,30 +180,46 @@
       {/if}
     {/if}
 
+    <!-- reactions -->
     {#if !parent}
       <div class="flex w-fit gap-6">
-        <DropdownMenu class="reaction-button" position="top" align="left" horizontal>
-          {#snippet trigger()}
-            <div class="flex cursor-pointer items-center gap-2">
-              {reactionCount}
-              <Icon
-                type={reaction}
-                class={[reaction !== 'noReaction' && (reactions[reaction] as string)]}
-                size="sm"
-              />
-            </div>
-          {/snippet}
+        <form
+          action="?/react"
+          method="post"
+          id="react-form-{post.id}"
+          use:enhance={() => {
+            return async ({ result, update }) => {
+              await formResultToast(result, toaster);
+              await update();
+            };
+          }}
+        >
+          <input type="text" name="reaction" id="react-input-{post.id}" hidden readonly />
+          <input type="text" name="post-id" value={post.id} hidden readonly />
 
-          {#each Object.entries(reactions) as [type, color]}
-            <DropdownItem
-              href=""
-              onclick={() => reactHandle(type as keyof typeof reactions)}
-              noHover
-            >
-              <Icon type={type as keyof typeof reactions} class={color} size="sm" hover />
-            </DropdownItem>
-          {/each}
-        </DropdownMenu>
+          <DropdownMenu position="top" align="left" horizontal>
+            {#snippet trigger()}
+              <div class="react-button flex cursor-pointer items-center gap-2">
+                {reactionCount}
+                <Icon
+                  type={reaction}
+                  class={[reaction !== 'noReaction' && (reactions[reaction] as string)]}
+                  size="sm"
+                />
+              </div>
+            {/snippet}
+
+            {#each Object.entries(reactions) as [type, color]}
+              <DropdownItem
+                class="reaction-button"
+                noHover
+                onclick={() => reactHandle(type as keyof typeof reactions)}
+              >
+                <Icon type={type as keyof typeof reactions} class={color} size="sm" hover />
+              </DropdownItem>
+            {/each}
+          </DropdownMenu>
+        </form>
 
         <div class="flex items-center gap-2">
           {post.replyCount}
@@ -212,48 +229,44 @@
     {/if}
   </div>
 
+  <!-- option menu -->
   {#if !parent}
     <DropdownMenu class="ml-auto h-fit" position="bottom" align="right">
       {#snippet trigger()}
-        <div class="rounded-full p-2 hover:bg-gray-800">
+        <div class="cursor-pointer rounded-full p-2 hover:bg-gray-800">
           <Icon type="menu" size="sm" />
         </div>
       {/snippet}
 
       {#if detail && self.username === post.owner.username}
-        <DropdownItem href="">Edit</DropdownItem>
+        <DropdownItem>Edit</DropdownItem>
       {/if}
       {#if self.role === 'admin' || self.username === post.owner.username}
-        <DropdownItem class="text-red-500" href="" onclick={() => (showModal = true)}>
-          Delete
-          <form method="post" id="delete-form-{post.id}" action="?/delete-post" hidden>
-            <input type="text" name="post-id" value={post.id} hidden />
-          </form>
-        </DropdownItem>
+        <DropdownItem class="text-red-500" onclick={() => (showModal = true)}>Delete</DropdownItem>
       {/if}
     </DropdownMenu>
   {/if}
 </div>
 
-{#if !parent}
-  <form action="?/react" method="post" id="react-form-{post.id}" hidden>
-    <input type="text" name="reaction" id="react-input-{post.id}" hidden />
-    <input type="text" name="post-id" value={post.id} hidden />
-  </form>
-{/if}
-
-<Modal id="delete-modal-post-{post.id}" bind:show={showModal} center>
+<Modal class="absolute" id="delete-modal-post-{post.id}" bind:show={showModal} center>
   <ModalHeader>Delete post</ModalHeader>
   <ModalBody>Are you sure you want to delete this post? This is irreversible.</ModalBody>
   <ModalFooter>
-    <Button
+    <form
       class="w-full"
-      type="danger"
-      onclick={() => {
-        showModal = false;
-        submitDeletion();
-      }}>Delete</Button
+      method="post"
+      id="delete-form-{post.id}"
+      action="?/delete-post"
+      use:enhance={() => {
+        return async ({ result, update }) => {
+          await formResultToast(result, toaster);
+          await update();
+        };
+      }}
     >
+      <Button class="w-full" type="danger" onclick={() => (showModal = false)}>Delete</Button>
+      <input type="text" name="post-id" value={post.id} hidden />
+    </form>
     <Button class="w-full" type="dark" onclick={() => (showModal = false)}>Cancel</Button>
   </ModalFooter>
 </Modal>

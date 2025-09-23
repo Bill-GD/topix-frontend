@@ -135,5 +135,5 @@ export async function handleReaction(event: RequestEvent) {
   }
 
   if (!res.success) return fail(res.status, { success: false, message: res.message });
-  return { success: true };
+  // return { success: true, message: res.message };
 }
