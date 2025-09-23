@@ -265,7 +265,7 @@
       }}
     >
       <Button class="w-full" type="danger" onclick={() => (showModal = false)}>Delete</Button>
-      <input type="text" name="post-id" value={post.id} hidden />
+      <input type="text" name="post-id" value={post.id} hidden readonly />
     </form>
     <Button class="w-full" type="dark" onclick={() => (showModal = false)}>Cancel</Button>
   </ModalFooter>

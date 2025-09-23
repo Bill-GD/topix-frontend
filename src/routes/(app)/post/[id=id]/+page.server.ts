@@ -90,7 +90,7 @@ export const actions: Actions = {
       dto,
       event.cookies.get(CookieName.accessToken),
     );
-    if (res.success) return { success: true, message: 'Saved successfully!' };
-    return fail(res.status, { success: false, message: res.message });
+    if (!res.success) return fail(res.status, { success: false, message: res.message });
+    return { success: true, message: res.message };
   },
 };

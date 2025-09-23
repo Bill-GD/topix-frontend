@@ -52,7 +52,7 @@ export const actions: Actions = {
     );
 
     if (!res.success) return fail(res.status, { success: false, message: res.message });
-    return { success: true, message: 'Title updated successfully' };
+    return { success: true, message: res.message };
   },
   'add-post': async (event) => {
     const formData = await event.request.formData();
@@ -107,7 +107,7 @@ export const actions: Actions = {
     );
 
     if (!res.success) return fail(res.status, { success: false, message: res.message });
-    return { success: true, message: 'Post added successfully!' };
+    return { success: true, message: res.message };
   },
   'delete-post': async (event) => {
     const formData = await event.request.formData();
@@ -119,6 +119,6 @@ export const actions: Actions = {
     );
 
     if (!res.success) return fail(res.status, { success: false, message: res.message });
-    return { success: true, message: 'Post deleted successfully' };
+    return { success: true, message: res.message };
   },
 };

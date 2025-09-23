@@ -199,10 +199,10 @@ export interface PostProps {
 }
 
 export interface PostUploadProps {
-  errorText?: string;
   userPicture: string | null;
   formaction?: string;
   placeholder?: string;
+  postCallback?: VoidFunction;
 }
 
 export interface HomeLayoutProps {

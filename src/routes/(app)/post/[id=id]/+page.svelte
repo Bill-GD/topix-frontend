@@ -6,7 +6,7 @@
   import { HomeLayout } from '$lib/components/layout';
   import type { PageProps } from './$types';
 
-  let { data, form }: PageProps = $props();
+  let { data }: PageProps = $props();
   const isReply = data.post.parentPost !== undefined;
 </script>
 
@@ -38,12 +38,12 @@
   </div>
 
   <PostUpload
-    errorText={form?.success === false ? form?.message : ''}
     userPicture={data.self.profilePicture}
     formaction="?/reply"
     placeholder="Enter your reply"
   />
 
+  <hr class="text-gray-700" />
   {#each data.replies as reply}
     <Post self={data.self} post={reply} compact />
     <hr class="text-gray-700" />

@@ -12,8 +12,8 @@
   let {
     userPicture = '/images/default-user-profile-icon.jpg',
     formaction,
-    errorText,
     placeholder = `What's happening?`,
+    postCallback,
   }: PostUploadProps = $props();
 
   const toaster = getToaster();
@@ -44,10 +44,9 @@
       const selectedFiles = input.files;
       for (const file of selectedFiles) {
         if (file.size > ImageSizeLimit) {
-          errorText = `Max image size is ${getReadableSize(ImageSizeLimit)}`;
+          toaster.addToast(`Max image size is ${getReadableSize(ImageSizeLimit)}`, 'error');
           return;
         }
-        errorText = '';
         images.push({ file, url: URL.createObjectURL(file) });
       }
     });
@@ -62,10 +61,9 @@
       const file = selectedFiles[0] as File;
 
       if (file.size > VideoSizeLimit) {
-        errorText = `Max video size is ${getReadableSize(VideoSizeLimit)}`;
+        toaster.addToast(`Max video size is ${getReadableSize(VideoSizeLimit)}`, 'error');
         return;
       }
-      errorText = '';
       if (video !== null) URL.revokeObjectURL(video.url);
       video = { file, url: URL.createObjectURL(file) };
     });
@@ -152,10 +150,6 @@
     {/if}
 
     <div class="flex justify-end gap-4">
-      {#if errorText !== ''}
-        <p class="self-center text-right text-red-500">{errorText}</p>
-      {/if}
-
       <div class="flex items-center">
         <label for="image-input">
           <Icon
@@ -197,7 +191,15 @@
         />
       </div>
 
-      <Button class="w-fit" type="success" {formaction} disabled={disablePost}>Post</Button>
+      <Button
+        class="w-fit"
+        type="success"
+        {formaction}
+        disabled={disablePost}
+        onclick={() => postCallback?.()}
+      >
+        Post
+      </Button>
     </div>
   </div>
 </form>
