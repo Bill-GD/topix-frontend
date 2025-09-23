@@ -1,10 +1,12 @@
 <script lang="ts">
+  import { enhance } from '$app/forms';
   import { Button } from '$lib/components/button';
   import { FloatingLabelInput } from '$lib/components/input';
   import { Link } from '$lib/components/link';
-  import type { PageProps } from './$types';
+  import { getToaster } from '$lib/components/toast';
+  import type { ActionData } from './$types';
 
-  let { form }: PageProps = $props();
+  const toaster = getToaster();
 </script>
 
 <svelte:head>
@@ -13,23 +15,33 @@
 
 <p>Sign up for topix</p>
 
-<form method="post">
-  {#if form?.missing}<span class="text-red-500">All fields must not be empty.</span>{/if}
-  {#if form?.invalid}<span class="text-red-500">Email format is invalid.</span>{/if}
-  {#if form?.success === false}<span class="text-red-500">{form?.message}</span>{/if}
-
+<form
+  method="post"
+  use:enhance={() => {
+    return async ({ result, update }) => {
+      switch (result.type) {
+        case 'failure': {
+          const formResult = result.data as ActionData;
+          toaster.addToast(formResult!.message, 'error');
+          break;
+        }
+        case 'error': {
+          toaster.addToast(result.error, 'error');
+          break;
+        }
+        case 'redirect': {
+          toaster.addToast('Registered successfully', 'success');
+          await update();
+          break;
+        }
+      }
+    };
+  }}
+>
   <div>
-    <FloatingLabelInput class="w-full" name="email" type="email" required value={form?.email ?? ''}>
-      Email
-    </FloatingLabelInput>
+    <FloatingLabelInput class="w-full" name="email" type="email" required>Email</FloatingLabelInput>
 
-    <FloatingLabelInput
-      class="w-full"
-      name="username"
-      type="text"
-      required
-      value={form?.username ?? ''}
-    >
+    <FloatingLabelInput class="w-full" name="username" type="text" required>
       Username
     </FloatingLabelInput>
 

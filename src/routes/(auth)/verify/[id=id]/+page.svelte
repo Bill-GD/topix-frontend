@@ -1,14 +1,11 @@
 <script lang="ts">
+  import { enhance } from '$app/forms';
   import { Button } from '$lib/components/button';
   import { FloatingLabelInput } from '$lib/components/input';
-  import type { PageProps } from './$types';
+  import { getToaster } from '$lib/components/toast';
+  import type { ActionData } from './$types';
 
-  let { form }: PageProps = $props();
-  let message = $state<string>('We sent the code to the email you specified.');
-
-  if (form?.success === true) {
-    message = 'The code has been resent. Please check your email.';
-  }
+  const toaster = getToaster();
 </script>
 
 <svelte:head>
@@ -17,14 +14,36 @@
 
 <p class="title">Verify your email</p>
 
-{#if !form || form?.success === true}
-  <p class="mt-8 {message.startsWith('The') ? 'text-green-700' : ''}">{message}</p>
-{/if}
+<p class="mt-8">We sent the code to the email you specified.</p>
 
-<form method="post">
-  {#if form?.missing}<span class="text-red-500">You must enter the code.</span>{/if}
-  {#if form?.success === false}<span class="text-red-500">{form?.message}</span>{/if}
-
+<form
+  method="post"
+  use:enhance={() => {
+    return async ({ result, update }) => {
+      switch (result.type) {
+        case 'success': {
+          const formResult = result.data as ActionData;
+          toaster.addToast(formResult!.message, 'success');
+          break;
+        }
+        case 'failure': {
+          const formResult = result.data as ActionData;
+          toaster.addToast(formResult!.message, 'error');
+          break;
+        }
+        case 'error': {
+          toaster.addToast(result.error, 'error');
+          break;
+        }
+        case 'redirect': {
+          toaster.addToast('Account verified', 'success');
+          await update();
+          break;
+        }
+      }
+    };
+  }}
+>
   <FloatingLabelInput class="w-full" name="otp" type="text">Code</FloatingLabelInput>
 
   <Button formaction="?/otp" type="success">Send</Button>

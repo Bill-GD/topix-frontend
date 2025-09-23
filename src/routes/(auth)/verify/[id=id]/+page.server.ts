@@ -11,7 +11,9 @@ export const actions: Actions = {
       otp: `${formData.get('otp')}`,
     };
 
-    if (dto.otp.length <= 0) return fail(400, { missing: true });
+    if (dto.otp.length <= 0) {
+      return fail(400, { success: false, message: 'You must enter the code.' });
+    }
 
     const res = await AxiosHandler.post(`/auth/confirm/${event.params.id}`, dto);
 
@@ -21,7 +23,7 @@ export const actions: Actions = {
         if (res.error instanceof Array) message = capitalize(res.error[0]);
         if (typeof res.error === 'string') message = res.error;
       }
-      return fail(res.status, { ...res, message });
+      return fail(res.status, { success: false, message });
     }
 
     return redirect(303, '/login');
@@ -35,9 +37,9 @@ export const actions: Actions = {
         if (res.error instanceof Array) message = capitalize(res.error[0]);
         if (typeof res.error === 'string') message = res.error;
       }
-      return fail(res.status, { ...res, message });
+      return fail(res.status, { success: false, message });
     }
 
-    return { success: true };
+    return { success: true, message: 'The code has been resent. Please check your email.' };
   },
 };
