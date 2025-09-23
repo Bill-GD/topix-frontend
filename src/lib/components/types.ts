@@ -91,9 +91,8 @@ export interface DropdownMenuProps {
   trigger: Snippet;
   class?: ClassValue;
   horizontal?: boolean;
-  align: 'start' | 'end';
+  align: 'left' | 'right';
   position: 'top' | 'bottom';
-  origin: 't' | 'tr' | 'r' | 'br' | 'b' | 'bl' | 'l' | 'tl';
 }
 
 export interface DropdownItemProps {

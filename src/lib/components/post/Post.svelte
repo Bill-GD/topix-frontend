@@ -79,10 +79,6 @@
     reactInput.value = reaction;
     form.submit();
   }
-
-  function submitDeletion() {
-    (document.getElementById(`delete-form-${post.id}`) as HTMLFormElement).submit();
-  }
 </script>
 
 <div
@@ -185,7 +181,7 @@
 
     {#if !parent}
       <div class="flex w-fit gap-6">
-        <DropdownMenu class="reaction-button" position="top" align="start" origin="bl" horizontal>
+        <DropdownMenu class="reaction-button" position="top" align="left" horizontal>
           {#snippet trigger()}
             <div class="flex cursor-pointer items-center gap-2">
               {reactionCount}
@@ -217,11 +213,11 @@
   </div>
 
   {#if !parent}
-    <DropdownMenu class="ml-auto h-fit" position="bottom" align="end" origin="tr">
+    <DropdownMenu class="ml-auto h-fit" position="bottom" align="right">
       {#snippet trigger()}
-        <IconButton class="p-2 hover:bg-gray-800">
+        <div class="rounded-full p-2 hover:bg-gray-800">
           <Icon type="menu" size="sm" />
-        </IconButton>
+        </div>
       {/snippet}
 
       {#if detail && self.username === post.owner.username}

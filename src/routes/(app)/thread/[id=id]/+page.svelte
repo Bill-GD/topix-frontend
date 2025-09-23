@@ -77,7 +77,7 @@
         </p>
       </div>
 
-      <DropdownMenu class="ml-auto h-fit" position="bottom" align="end" origin="tr">
+      <DropdownMenu class="ml-auto h-fit" position="bottom" align="right">
         {#snippet trigger()}
           <IconButton class="p-2 hover:bg-gray-800">
             <Icon type="menu" size="sm" />

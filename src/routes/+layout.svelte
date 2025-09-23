@@ -11,8 +11,10 @@
 
 {@render children()}
 
-<div class="fixed bottom-4 left-4 z-50 flex flex-col gap-2">
-  {#each toaster.toasts as toast (toast.id)}
-    <Toast {toast} />
-  {/each}
-</div>
+{#if toaster.toasts.length > 0}
+  <div class="fixed bottom-4 left-4 z-50 flex flex-col gap-2">
+    {#each toaster.toasts as toast (toast.id)}
+      <Toast {toast} />
+    {/each}
+  </div>
+{/if}
