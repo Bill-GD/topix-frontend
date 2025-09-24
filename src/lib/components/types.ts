@@ -22,6 +22,7 @@ import {
   faReply,
   faThumbsUp,
   faTriangleExclamation,
+  faUser,
   faUserGroup,
   faUserMinus,
   faUserPlus,
@@ -46,6 +47,7 @@ export const IconSize = {
 };
 
 export const Icons = {
+  user: faUser,
   info: faCircleInfo,
   success: faCircleCheck,
   check: faCheck,

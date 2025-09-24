@@ -28,6 +28,12 @@
       </NavigationItem>
     {/each}
 
+    {#if self.role === 'admin'}
+      <NavigationItem class="ml-auto" title="Users" href="/users">
+        <Icon type="user" />
+      </NavigationItem>
+    {/if}
+
     <DropdownMenu class="mt-auto ml-auto" position="top" align="left">
       {#snippet trigger()}
         <div class="account-item">

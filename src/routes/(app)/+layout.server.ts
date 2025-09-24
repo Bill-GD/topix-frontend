@@ -1,5 +1,6 @@
 import { AxiosHandler } from '$lib/utils/axios-handler';
 import { CookieName, type CurrentUser } from '$lib/utils/types';
+import { error } from '@sveltejs/kit';
 import type { LayoutServerLoad } from './$types';
 
 export const load: LayoutServerLoad = async ({ cookies }) => {
@@ -16,4 +17,6 @@ export const load: LayoutServerLoad = async ({ cookies }) => {
     });
     return { self: res.data as CurrentUser };
   }
+
+  error(res.status, { status: res.status, message: res.message });
 };
