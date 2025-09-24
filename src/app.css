@@ -33,6 +33,10 @@
   @apply bg-gray-300;
 }
 
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
 @utility btn {
   @apply cursor-pointer rounded-md px-4 py-2 text-base text-white transition-all duration-100 ease-in-out disabled:cursor-not-allowed disabled:opacity-50;
 }

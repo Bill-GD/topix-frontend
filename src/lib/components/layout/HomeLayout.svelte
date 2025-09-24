@@ -50,7 +50,7 @@
     </DropdownMenu>
   </header>
 
-  <section class="main-content">
+  <section class="main-content no-scrollbar">
     {@render children?.()}
   </section>
 
@@ -80,10 +80,6 @@
 
   .main-content {
     @apply flex h-screen flex-auto flex-col justify-start overflow-y-auto md:max-w-xl md:min-w-xl lg:max-w-2xl lg:min-w-2xl;
-  }
-
-  .main-content::-webkit-scrollbar {
-    display: none;
   }
 
   aside {
