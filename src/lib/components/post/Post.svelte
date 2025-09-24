@@ -25,8 +25,8 @@
   }: PostProps = $props();
 
   const toaster = getToaster();
-  const isImages = post.mediaPaths.every((m) => m.includes('image'));
-  const isVideo = post.mediaPaths.every((m) => m.includes('video'));
+  const isImages = $derived(post.mediaPaths.every((m) => m.includes('image')));
+  const isVideo = $derived(post.mediaPaths.every((m) => m.includes('video')));
   const isReply = post.parentPost !== undefined;
   const reactions = {
     like: 'text-sky-500',
