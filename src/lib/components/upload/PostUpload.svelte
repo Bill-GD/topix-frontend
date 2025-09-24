@@ -1,18 +1,22 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { ImageSizeLimit, VideoSizeLimit } from '$lib/utils/constants';
-  import { getReadableSize } from '$lib/utils/helpers';
+  import { formResultToast, getReadableSize } from '$lib/utils/helpers';
   import type { PostUploadProps } from '$lib/components/types';
+  import { getToaster } from '$lib/components/toast';
   import Button from '../button/Button.svelte';
   import IconButton from '../button/IconButton.svelte';
   import Icon from '../misc/Icon.svelte';
+  import { enhance } from '$app/forms';
 
   let {
     userPicture = '/images/default-user-profile-icon.jpg',
     formaction,
-    errorText,
     placeholder = `What's happening?`,
+    postCallback,
   }: PostUploadProps = $props();
+
+  const toaster = getToaster();
 
   let inputContent = $state<string>('');
   let images = $state<{ file: File; url: string }[]>([]);
@@ -40,10 +44,9 @@
       const selectedFiles = input.files;
       for (const file of selectedFiles) {
         if (file.size > ImageSizeLimit) {
-          errorText = `Max image size is ${getReadableSize(ImageSizeLimit)}`;
+          toaster.addToast(`Max image size is ${getReadableSize(ImageSizeLimit)}`, 'error');
           return;
         }
-        errorText = '';
         images.push({ file, url: URL.createObjectURL(file) });
       }
     });
@@ -58,10 +61,9 @@
       const file = selectedFiles[0] as File;
 
       if (file.size > VideoSizeLimit) {
-        errorText = `Max video size is ${getReadableSize(VideoSizeLimit)}`;
+        toaster.addToast(`Max video size is ${getReadableSize(VideoSizeLimit)}`, 'error');
         return;
       }
-      errorText = '';
       if (video !== null) URL.revokeObjectURL(video.url);
       video = { file, url: URL.createObjectURL(file) };
     });
@@ -73,6 +75,21 @@
   method="post"
   enctype="multipart/form-data"
   onsubmit={() => (disablePost = true)}
+  use:enhance={() => {
+    return async ({ result, update }) => {
+      await formResultToast(result, toaster);
+      await update();
+
+      inputContent = '';
+      images = [];
+      video = null;
+      disablePost = false;
+      (document.querySelector('#editor') as HTMLInputElement).innerHTML = '';
+      (document.querySelector('#editor') as HTMLInputElement).classList.add('empty');
+      (document.querySelector('#image-input') as HTMLInputElement).value = '';
+      (document.querySelector('#video-input') as HTMLInputElement).value = '';
+    };
+  }}
 >
   <img class="profile-picture-sm" src={userPicture} alt="profile" />
 
@@ -133,10 +150,6 @@
     {/if}
 
     <div class="flex justify-end gap-4">
-      {#if errorText !== ''}
-        <p class="self-center text-right text-red-500">{errorText}</p>
-      {/if}
-
       <div class="flex items-center">
         <label for="image-input">
           <Icon
@@ -178,7 +191,15 @@
         />
       </div>
 
-      <Button class="w-fit" type="success" {formaction} disabled={disablePost}>Post</Button>
+      <Button
+        class="w-fit"
+        type="success"
+        {formaction}
+        disabled={disablePost}
+        onclick={() => postCallback?.()}
+      >
+        Post
+      </Button>
     </div>
   </div>
 </form>

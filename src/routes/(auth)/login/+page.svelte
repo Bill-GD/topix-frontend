@@ -1,10 +1,12 @@
 <script lang="ts">
+  import { enhance } from '$app/forms';
   import { Button } from '$lib/components/button';
   import { FloatingLabelInput } from '$lib/components/input';
   import { Link } from '$lib/components/link';
-  import type { PageProps } from './$types';
+  import { getToaster } from '$lib/components/toast';
+  import { formResultToast } from '$lib/utils/helpers';
 
-  let { form }: PageProps = $props();
+  const toaster = getToaster();
 </script>
 
 <svelte:head>
@@ -13,18 +15,17 @@
 
 <p>Sign in to your account</p>
 
-<form method="post">
-  {#if form?.missing}<span class="text-red-500">All fields must not be empty.</span>{/if}
-  {#if form?.success === false}<span class="text-red-500">{form?.message}</span>{/if}
-
+<form
+  method="post"
+  use:enhance={() => {
+    return async ({ result, update }) => {
+      await formResultToast(result, toaster, 'Signin successfully');
+      await update();
+    };
+  }}
+>
   <div>
-    <FloatingLabelInput
-      class="w-full"
-      name="username"
-      type="text"
-      required
-      value={form?.username ?? ''}
-    >
+    <FloatingLabelInput class="w-full" name="username" type="text" required>
       Username
     </FloatingLabelInput>
 

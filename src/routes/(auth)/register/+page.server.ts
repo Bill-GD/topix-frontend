@@ -14,11 +14,12 @@ export const actions: Actions = {
       confirmPassword: `${formData.get('confirm-password')}`,
     };
 
-    const { email, username } = dto;
-
     for (const v of Object.values(dto)) {
       if (v.length <= 0) {
-        return fail(400, { email, username, missing: true });
+        return fail(400, {
+          success: false,
+          message: 'All fields must not be empty.',
+        });
       }
     }
 
@@ -26,7 +27,7 @@ export const actions: Actions = {
       /^[a-zA-Z0-9]+([._-][0-9a-zA-Z]+)*@[a-zA-Z0-9]+([.-][0-9a-zA-Z]+)*\.[a-zA-Z]{2,}$/;
 
     if (!RegExp(emailRegex).test(dto.email)) {
-      return fail(400, { email, username, invalid: true });
+      return fail(400, { success: false, message: 'Email format is invalid.' });
     }
 
     const res = await AxiosHandler.post('/auth/register', dto);
@@ -36,9 +37,9 @@ export const actions: Actions = {
         if (res.error instanceof Array) message = capitalize(res.error[0]);
         if (typeof res.error === 'string') message = res.error;
       }
-      return fail(res.status, { email, username, ...res, message });
+      return fail(res.status, { success: false, message });
     }
 
-    return redirect(303, `/verify/${res.data!['id']}`);
+    return redirect(303, `/verify/${(res.data as Record<string, string>)['id']}`);
   },
 };

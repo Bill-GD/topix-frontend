@@ -13,34 +13,36 @@ export const actions: Actions = {
       password: `${formData.get('password')}`,
     };
 
-    const { username } = dto;
-
     for (const v of Object.values(dto)) {
       if (v.length <= 0) {
-        return fail(400, { username, missing: true });
+        return fail(400, { success: false, message: 'All fields must not be empty.' });
       }
     }
 
     const res = await AxiosHandler.post('/auth/login', dto);
     if (!res.success) {
       let message = res.message;
-      if (res.message.toLowerCase().includes('exception')) {
+      if (message.toLowerCase().includes('exception')) {
         if (res.error instanceof Array) message = capitalize(res.error[0]);
         if (typeof res.error === 'string') message = res.error;
       }
-      return fail(res.status, { username, ...res, message });
+      return fail(res.status, { success: false, message });
     }
 
-    cookies.set(CookieName.accessToken, `${res.data!['accessToken']}`, {
+    cookies.set(CookieName.accessToken, `${(res.data as Record<string, string>)['accessToken']}`, {
       path: '/',
       httpOnly: false,
       maxAge: 86400,
     });
-    cookies.set(CookieName.refreshToken, `${res.data!['refreshToken']}`, {
-      path: '/',
-      httpOnly: false,
-      maxAge: 86400 * 14,
-    });
+    cookies.set(
+      CookieName.refreshToken,
+      `${(res.data as Record<string, string>)['refreshToken']}`,
+      {
+        path: '/',
+        httpOnly: false,
+        maxAge: 86400 * 14,
+      },
+    );
 
     redirect(303, '/home');
   },

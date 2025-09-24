@@ -7,10 +7,14 @@
   import { Modal, ModalHeader, ModalBody, ModalFooter } from '$lib/components/modal';
   import { DropdownMenu, DropdownItem } from '$lib/components/dropdown';
   import { Input } from '$lib/components/input';
-  import { getTimeAgo } from '$lib/utils/helpers';
+  import { getToaster } from '$lib/components/toast';
+  import { formResultToast, getTimeAgo } from '$lib/utils/helpers';
   import type { PageProps } from './$types';
+  import { enhance } from '$app/forms';
 
-  let { data, form }: PageProps = $props();
+  let { data }: PageProps = $props();
+
+  const toaster = getToaster();
   let showPostModal = $state<boolean>(false);
   let showDeleteThreadModal = $state<boolean>(false);
   let editingTitle = $state<boolean>(false);
@@ -35,6 +39,13 @@
             action="?/update-title"
             id="update-thread-{data.thread.id}"
             method="post"
+            use:enhance={() => {
+              return async ({ result, update }) => {
+                await formResultToast(result, toaster, 'Thread deleted successfully.');
+                await update();
+                editingTitle = false;
+              };
+            }}
           >
             <Input
               type="text"
@@ -43,17 +54,9 @@
               name="new-title"
               value={title}
             />
-            <IconButton
-              class="h-fit"
-              variant="success"
-              onclick={() => {
-                (
-                  document.querySelector(`form#update-thread-${data.thread.id}`) as HTMLFormElement
-                ).submit();
-              }}
-            >
+            <Button class="h-fit px-2" type="success">
               <Icon type="check" size="sm" />
-            </IconButton>
+            </Button>
             <IconButton class="h-fit" variant="danger" onclick={() => (editingTitle = false)}>
               <Icon type="close" size="sm" />
             </IconButton>
@@ -77,21 +80,18 @@
         </p>
       </div>
 
-      <DropdownMenu class="ml-auto h-fit" position="bottom" align="end" origin="tr">
+      <DropdownMenu class="ml-auto h-fit" position="bottom" align="right">
         {#snippet trigger()}
-          <IconButton class="p-2 hover:bg-gray-800">
+          <div class="cursor-pointer rounded-full p-2 hover:bg-gray-800">
             <Icon type="menu" size="sm" />
-          </IconButton>
+          </div>
         {/snippet}
 
-        <DropdownItem href="">Follow</DropdownItem>
+        <DropdownItem>Follow</DropdownItem>
         {#if data.self.username === data.thread.owner.username}
-          <DropdownItem href="" onclick={() => (editingTitle = true)}>Edit</DropdownItem>
-          <DropdownItem class="text-red-500" href="" onclick={() => (showDeleteThreadModal = true)}>
+          <DropdownItem onclick={() => (editingTitle = true)}>Edit</DropdownItem>
+          <DropdownItem class="text-red-500" onclick={() => (showDeleteThreadModal = true)}>
             Delete
-            <form method="post" id="delete-form-{data.thread.id}" action="?/delete-thread" hidden>
-              <input type="text" name="thread-id" value={data.thread.id} hidden readonly />
-            </form>
           </DropdownItem>
         {/if}
       </DropdownMenu>
@@ -114,10 +114,10 @@
     <ModalHeader>Add new post</ModalHeader>
     <ModalBody>
       <PostUpload
-        errorText={form?.success === false ? form?.message : ''}
         userPicture={data.self.profilePicture}
         formaction="?/add-post"
         placeholder="Add new post"
+        postCallback={() => (showPostModal = false)}
       />
     </ModalBody>
   </Modal>
@@ -126,18 +126,24 @@
     <ModalHeader>Delete thread</ModalHeader>
     <ModalBody>Are you sure you want to delete this thread? This is irreversible.</ModalBody>
     <ModalFooter>
-      <Button
+      <form
         class="w-full"
-        type="danger"
-        onclick={() => {
-          showDeleteThreadModal = false;
-          (
-            document.querySelector(`form#delete-form-${data.thread.id}`) as HTMLFormElement | null
-          )?.submit();
+        method="post"
+        id="delete-form-{data.thread.id}"
+        action="?/delete-thread"
+        use:enhance={() => {
+          return async ({ result, update }) => {
+            await formResultToast(result, toaster, 'Thread deleted successfully.');
+            await update();
+          };
         }}
       >
-        Delete
-      </Button>
+        <input type="text" name="thread-id" value={data.thread.id} hidden readonly />
+        <Button class="w-full" type="danger" onclick={() => (showDeleteThreadModal = false)}>
+          Delete
+        </Button>
+      </form>
+
       <Button class="w-full" type="dark" onclick={() => (showDeleteThreadModal = false)}>
         Cancel
       </Button>

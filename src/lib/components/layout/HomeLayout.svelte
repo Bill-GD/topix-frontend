@@ -28,7 +28,7 @@
       </NavigationItem>
     {/each}
 
-    <DropdownMenu class="mt-auto ml-auto" position="top" align="start" origin="b">
+    <DropdownMenu class="mt-auto ml-auto" position="top" align="left">
       {#snippet trigger()}
         <div class="account-item">
           <div class="flex flex-col text-right">
@@ -50,7 +50,7 @@
     </DropdownMenu>
   </header>
 
-  <section class="main-content">
+  <section class="main-content no-scrollbar">
     {@render children?.()}
   </section>
 
@@ -63,7 +63,7 @@
   @reference "@/app.css";
 
   main {
-    @apply flex h-dvh items-center justify-between bg-gray-950 text-white;
+    @apply flex h-screen items-center justify-between bg-gray-950 text-white;
   }
 
   header {
@@ -79,11 +79,7 @@
   }
 
   .main-content {
-    @apply flex h-full flex-auto flex-col justify-start overflow-y-auto md:max-w-xl md:min-w-xl lg:max-w-2xl lg:min-w-2xl;
-  }
-
-  .main-content::-webkit-scrollbar {
-    display: none;
+    @apply flex h-screen flex-auto flex-col justify-start overflow-y-auto md:max-w-xl md:min-w-xl lg:max-w-2xl lg:min-w-2xl;
   }
 
   aside {

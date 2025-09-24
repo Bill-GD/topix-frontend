@@ -1,9 +1,12 @@
 // component-related types
 
+import { faThumbsUp as faClassicThumbsUp } from '@fortawesome/free-regular-svg-icons';
 import {
   faCheck,
   faChevronLeft,
   faChevronRight,
+  faCircleCheck,
+  faCircleInfo,
   faEllipsisVertical,
   faEye,
   faEyeSlash,
@@ -25,14 +28,13 @@ import {
   faVideo,
   faXmark,
 } from '@fortawesome/free-solid-svg-icons';
-import { faThumbsUp as faClassicThumbsUp } from '@fortawesome/free-regular-svg-icons';
 import type { Snippet } from 'svelte';
 import type {
   ClassValue,
   HTMLAttributeAnchorTarget,
   HTMLInputTypeAttribute,
 } from 'svelte/elements';
-import type { CurrentUser, Post, UnaryVoidFunction } from '../utils/types';
+import type { CurrentUser, Post, ToastMessage, UnaryVoidFunction } from '../utils/types';
 
 export type ButtonType = 'primary' | 'danger' | 'dark' | 'success';
 
@@ -44,6 +46,8 @@ export const IconSize = {
 };
 
 export const Icons = {
+  info: faCircleInfo,
+  success: faCircleCheck,
   check: faCheck,
   unfollow: faUserMinus,
   follow: faUserPlus,
@@ -87,9 +91,8 @@ export interface DropdownMenuProps {
   trigger: Snippet;
   class?: ClassValue;
   horizontal?: boolean;
-  align: 'start' | 'end';
+  align: 'left' | 'right';
   position: 'top' | 'bottom';
-  origin: 't' | 'tr' | 'r' | 'br' | 'b' | 'bl' | 'l' | 'tl';
 }
 
 export interface DropdownItemProps {
@@ -101,9 +104,9 @@ export interface DropdownItemProps {
   onclick?: VoidFunction;
 }
 
-export interface ErrorProps {
-  children: Snippet;
+export interface ToastProps {
   class?: ClassValue;
+  toast: ToastMessage;
 }
 
 export interface FileDropzoneProps {
@@ -196,10 +199,10 @@ export interface PostProps {
 }
 
 export interface PostUploadProps {
-  errorText?: string;
   userPicture: string | null;
   formaction?: string;
   placeholder?: string;
+  postCallback?: VoidFunction;
 }
 
 export interface HomeLayoutProps {
