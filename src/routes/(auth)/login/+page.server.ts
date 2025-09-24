@@ -29,20 +29,18 @@ export const actions: Actions = {
       return fail(res.status, { success: false, message });
     }
 
-    cookies.set(CookieName.accessToken, `${(res.data as Record<string, string>)['accessToken']}`, {
+    const resObject = res.data as Record<string, string>;
+
+    cookies.set(CookieName.accessToken, `${resObject['accessToken']}`, {
       path: '/',
       httpOnly: false,
-      maxAge: 86400,
+      maxAge: Number(resObject['atTime']),
     });
-    cookies.set(
-      CookieName.refreshToken,
-      `${(res.data as Record<string, string>)['refreshToken']}`,
-      {
-        path: '/',
-        httpOnly: false,
-        maxAge: 86400 * 14,
-      },
-    );
+    cookies.set(CookieName.refreshToken, `${resObject['refreshToken']}`, {
+      path: '/',
+      httpOnly: false,
+      maxAge: Number(resObject['rtTime']),
+    });
 
     redirect(303, '/home');
   },

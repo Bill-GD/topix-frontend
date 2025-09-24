@@ -72,7 +72,7 @@
   {/each}
 
   {#snippet right()}
-    <div class="rounded-md border border-gray-700 xl:max-w-1/2">
+    <div class="rounded-md border border-gray-700 2xl:max-w-1/2">
       <div class="flex items-baseline p-4">
         <p class="text-xl font-semibold">Threads</p>
         {#if data.self.id === data.user.id}
