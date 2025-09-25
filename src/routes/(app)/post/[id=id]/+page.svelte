@@ -45,7 +45,7 @@
 
   <hr class="text-gray-700" />
   {#each data.replies as reply}
-    <Post self={data.self} post={reply} compact />
+    <Post self={data.self} post={reply} compact hideReplyMark />
     <hr class="text-gray-700" />
   {/each}
 </HomeLayout>
