@@ -91,7 +91,11 @@
     };
   }}
 >
-  <img class="profile-picture-sm" src={userPicture} alt="profile" />
+  <img
+    class="profile-picture-sm"
+    src={userPicture ?? '/images/default-user-profile-icon.jpg'}
+    alt="profile"
+  />
 
   <div class="flex w-full flex-col gap-4">
     <div

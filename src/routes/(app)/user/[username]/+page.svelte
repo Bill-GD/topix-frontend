@@ -46,7 +46,7 @@
         </p>
       </div>
 
-      <div class="flex flex-col gap-4">
+      <div class="ml-auto flex flex-col gap-4">
         <IconButton variant="dark" class="w-full">
           <Icon type="follow" size="sm" />
         </IconButton>
@@ -87,7 +87,7 @@
       </div>
 
       {#if data.threads.length <= 0}
-        <span>This user has no thread.</span>
+        <p class="w-full px-4 py-2">This user has no thread.</p>
       {:else}
         {#each data.threads as thread}
           <hr class="text-gray-700" />

@@ -15,7 +15,11 @@
         href="/user/{user.username}"
         data-sveltekit-preload-data="tap"
       >
-        <img class="profile-picture-md" src={user.profilePicture} alt="profile" />
+        <img
+          class="profile-picture-md"
+          src={user.profilePicture ?? '/images/default-user-profile-icon.jpg'}
+          alt="profile"
+        />
         <div class="flex flex-col gap-2">
           <p class="text-gray-700">#{user.id}</p>
           <div class="flex items-baseline gap-2">
