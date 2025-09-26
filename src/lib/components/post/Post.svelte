@@ -22,11 +22,12 @@
     detail = false,
     compact = false,
     parent = false,
+    hideReplyMark = false,
   }: PostProps = $props();
 
   const toaster = getToaster();
-  const isImages = post.mediaPaths.every((m) => m.includes('image'));
-  const isVideo = post.mediaPaths.every((m) => m.includes('video'));
+  const isImages = $derived(post.mediaPaths.every((m) => m.includes('image')));
+  const isVideo = $derived(post.mediaPaths.every((m) => m.includes('video')));
   const isReply = post.parentPost !== undefined;
   const reactions = {
     like: 'text-sky-500',
@@ -36,8 +37,8 @@
     angry: 'text-red-500',
   };
 
-  let reaction = $state((post.reaction ?? 'noReaction') as keyof typeof reactions | 'noReaction');
-  let reactionCount = $state(post.reactionCount);
+  let reaction = $derived((post.reaction ?? 'noReaction') as keyof typeof reactions | 'noReaction');
+  let reactionCount = $derived(post.reactionCount);
   let imageIndex = $state<number>(0);
   let showModal = $state<boolean>(false);
 
@@ -99,7 +100,7 @@
 
   <div class={['flex flex-col', compact ? 'gap-3' : 'gap-6']}>
     <div class="flex flex-col">
-      {#if !detail && isReply}
+      {#if !detail && !hideReplyMark && isReply}
         <span class="text-xs text-gray-500">
           replied to {post.parentPost?.owner.displayName}
         </span>

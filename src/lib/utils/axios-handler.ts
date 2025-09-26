@@ -93,19 +93,33 @@ export class AxiosHandler {
     });
   }
 
-  private static handleError(error: unknown): ApiResponse {
+  private static handleError(err: unknown): ApiResponse {
+    const error = err as Error;
+
     if (error instanceof AxiosError && error.response) {
       return this.getResponse(error.response!);
     }
 
-    const typed = error as Error;
-    console.error(typed.cause);
+    if (error.name === 'AggregateError') {
+      const typed = error as AggregateError;
+      if (typed.code.includes('ECONNREFUSED')) {
+        return {
+          success: false,
+          status: 503,
+          data: null,
+          error: typed.code,
+          message: 'Server is down.',
+        };
+      }
+    }
+
+    console.log(error.cause);
     return {
       success: false,
       status: 500,
       data: null,
-      error: typed.name,
-      message: typed.message,
+      error: error.name,
+      message: error.message,
     };
   }
 

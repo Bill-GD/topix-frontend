@@ -1,12 +1,9 @@
 import { AxiosHandler } from '$lib/utils/axios-handler';
-import { deleteCookies } from '$lib/utils/helpers';
 import { CookieName, type CurrentUser } from '$lib/utils/types';
-import { error, redirect } from '@sveltejs/kit';
+import { error } from '@sveltejs/kit';
 import type { LayoutServerLoad } from './$types';
 
-export const load: LayoutServerLoad = async ({ locals, cookies }) => {
-  if (!locals.hasAT) redirect(303, '/login');
-
+export const load: LayoutServerLoad = async ({ cookies }) => {
   const currentUserCookie = cookies.get(CookieName.currentUser);
   if (currentUserCookie && currentUserCookie.trim() !== '') {
     return { self: JSON.parse(currentUserCookie) as CurrentUser };
@@ -21,9 +18,5 @@ export const load: LayoutServerLoad = async ({ locals, cookies }) => {
     return { self: res.data as CurrentUser };
   }
 
-  if (res.message.toLowerCase().includes('invalid signature')) {
-    deleteCookies(cookies);
-    redirect(303, '/login');
-  }
-  error(503, { status: 500, message: 'Server is down.' });
+  error(res.status, { status: res.status, message: res.message });
 };

@@ -21,7 +21,9 @@ import {
   faPlus,
   faReply,
   faThumbsUp,
+  faTrashCan,
   faTriangleExclamation,
+  faUser,
   faUserGroup,
   faUserMinus,
   faUserPlus,
@@ -46,6 +48,8 @@ export const IconSize = {
 };
 
 export const Icons = {
+  delete: faTrashCan,
+  user: faUser,
   info: faCircleInfo,
   success: faCircleCheck,
   check: faCheck,
@@ -196,6 +200,7 @@ export interface PostProps {
   detail?: boolean;
   compact?: boolean;
   parent?: boolean;
+  hideReplyMark?: boolean;
 }
 
 export interface PostUploadProps {
