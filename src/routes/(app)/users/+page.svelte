@@ -42,8 +42,7 @@
         {#if user.role !== 'admin'}
           <IconButton
             class="ml-auto hover:bg-gray-800"
-            onclick={(ev) => {
-              ev.stopPropagation();
+            onclick={() => {
               showModal = true;
               username = user.username;
             }}

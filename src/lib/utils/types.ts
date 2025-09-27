@@ -73,4 +73,17 @@ export type Thread = {
   dateUpdated: string | null;
 };
 
+export type Group = {
+  id: number;
+  name: string;
+  owner: Partial<User>;
+  bannerPicture: string | null;
+  memberCount: number;
+  visibility: 'public' | 'private' | 'hidden';
+  joined: boolean;
+  dateJoined: string | null;
+  dateCreated: string;
+  dateUpdated: string;
+};
+
 export type UnaryVoidFunction<T> = (arg: T) => void;

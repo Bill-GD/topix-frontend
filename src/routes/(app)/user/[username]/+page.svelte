@@ -117,16 +117,7 @@
           };
         }}
       >
-        <Button
-          class="w-full"
-          type="success"
-          onclick={() => {
-            showModal = false;
-            // (document.querySelector('form#create-thread-form') as HTMLFormElement | null)?.submit();
-          }}
-        >
-          Create
-        </Button>
+        <Button class="w-full" type="success" onclick={() => (showModal = false)}>Create</Button>
         <input hidden type="text" name="thread-title" readonly value={threadTitle} />
       </form>
       <Button class="w-full" type="dark" onclick={() => (showModal = false)}>Cancel</Button>
