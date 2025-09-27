@@ -39,10 +39,7 @@
           data-sveltekit-preload-data="tap"
         >
           <div class="w-30 overflow-hidden rounded-md">
-            <img
-              src={group.bannerPicture ?? '/images/default-user-profile-icon.jpg'}
-              alt="profile"
-            />
+            <img src={group.bannerPicture ?? '/images/no-image.jpg'} alt="group-banner" />
           </div>
 
           <div class="flex flex-col gap-2">
@@ -60,12 +57,6 @@
             <Button class="hover:bg-gray-800" type="primary" disabled={group.joined}>
               {group.joined ? 'Joined' : 'Join'}
             </Button>
-
-            {#if data.self.username === group.owner.username}
-              <IconButton class="hover:bg-gray-800">
-                <Icon type="delete" class="text-red-500" />
-              </IconButton>
-            {/if}
           </div>
         </a>
         <hr class="text-gray-700" />

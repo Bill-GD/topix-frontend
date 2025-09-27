@@ -179,7 +179,7 @@ export interface LinkProps {
 
 export interface ModalProps {
   class?: ClassValue;
-  id: string | null;
+  id?: string;
   children: Snippet;
   icon?: Snippet;
   show: boolean;
