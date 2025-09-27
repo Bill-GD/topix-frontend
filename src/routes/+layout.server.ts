@@ -20,7 +20,7 @@ export const load: LayoutServerLoad = async ({ locals, cookies, route }) => {
         maxAge: Number(resObject['time']),
       });
       locals.hasAT = true;
-      return;
+      redirect(303, '/home');
     }
 
     if (res.message.toLowerCase().includes('invalid signature')) {

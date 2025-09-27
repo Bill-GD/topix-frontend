@@ -82,9 +82,9 @@
 
       <DropdownMenu class="ml-auto h-fit" position="bottom" align="right">
         {#snippet trigger()}
-          <div class="cursor-pointer rounded-full p-2 hover:bg-gray-800">
+          <IconButton class="hover:bg-gray-800" round>
             <Icon type="menu" size="sm" />
-          </div>
+          </IconButton>
         {/snippet}
 
         <DropdownItem>Follow</DropdownItem>
