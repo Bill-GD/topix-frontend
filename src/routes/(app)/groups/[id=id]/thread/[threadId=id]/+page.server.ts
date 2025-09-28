@@ -4,29 +4,56 @@ import { error, fail, redirect, type Actions } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ cookies, params }) => {
-  const postsRes = await AxiosHandler.get(
-    `/post?groupId=${params.id}`,
+  const data: { thread: Thread; posts: Post[] } = { thread: {} as Thread, posts: [] };
+
+  const threadRes = await AxiosHandler.get(
+    `/thread/${params.threadId}`,
     cookies.get(CookieName.accessToken),
   );
-  if (!postsRes.success) {
-    error(postsRes.status, { status: postsRes.status, message: postsRes.message });
+  if (!threadRes.success) {
+    error(threadRes.status, { message: threadRes.message, status: threadRes.status });
   }
+  data.thread = threadRes.data as unknown as Thread;
 
-  const threadsRes = await AxiosHandler.get(
-    `/thread?groupId=${params.id}&size=5`,
+  const postRes = await AxiosHandler.get(
+    `/post?threadId=${params.threadId}`,
     cookies.get(CookieName.accessToken),
   );
-  if (!threadsRes.success) {
-    error(threadsRes.status, { status: threadsRes.status, message: threadsRes.message });
+  if (!postRes.success) {
+    error(postRes.status, { message: postRes.message, status: postRes.status });
   }
+  data.posts = postRes.data as unknown as Post[];
 
-  return {
-    posts: postsRes.data as unknown as Post[],
-    threads: threadsRes.data as unknown as Thread[],
-  };
+  return data;
 };
 
 export const actions: Actions = {
+  react: handleReaction,
+  'delete-thread': async (event) => {
+    const formData = await event.request.formData();
+    const threadId = formData.get('thread-id');
+
+    const res = await AxiosHandler.delete(
+      `/thread/${threadId}`,
+      event.cookies.get(CookieName.accessToken),
+    );
+
+    if (!res.success) return fail(res.status, { success: false, message: res.message });
+    redirect(303, `/home`);
+  },
+  'update-title': async (event) => {
+    const formData = await event.request.formData();
+    const newTitle = formData.get('new-title');
+
+    const res = await AxiosHandler.patch(
+      `/thread/${event.params.id}`,
+      { title: newTitle },
+      event.cookies.get(CookieName.accessToken),
+    );
+
+    if (!res.success) return fail(res.status, { success: false, message: res.message });
+    return { success: true, message: res.message };
+  },
   'add-post': async (event) => {
     const formData = await event.request.formData();
     const files: File[] = [];
@@ -74,7 +101,7 @@ export const actions: Actions = {
     };
 
     const res = await AxiosHandler.post(
-      `/group/${event.params.id}/post`,
+      `/thread/${event.params.id}/post`,
       dto,
       event.cookies.get(CookieName.accessToken),
     );
@@ -82,46 +109,12 @@ export const actions: Actions = {
     if (!res.success) return fail(res.status, { success: false, message: res.message });
     return { success: true, message: res.message };
   },
-  react: handleReaction,
-  'join-group': async (event) => {
-    const res = await AxiosHandler.post(
-      `/group/${event.params.id}/join`,
-      undefined,
-      event.cookies.get(CookieName.accessToken),
-    );
-
-    if (!res.success) return fail(res.status, { success: false, message: res.message });
-    return { success: true, message: res.message };
-  },
-  'leave-group': async (event) => {
-    const res = await AxiosHandler.delete(
-      `/group/${event.params.id}/member`,
-      event.cookies.get(CookieName.accessToken),
-    );
-
-    if (!res.success) return fail(res.status, { success: false, message: res.message });
-    return { success: true, message: res.message };
-  },
-  'delete-group': async (event) => {
-    const res = await AxiosHandler.delete(
-      `/group/${event.params.id}`,
-      event.cookies.get(CookieName.accessToken),
-    );
-
-    if (!res.success) return fail(res.status, { success: false, message: res.message });
-    redirect(303, '/groups');
-  },
-  'create-thread': async (event) => {
+  'delete-post': async (event) => {
     const formData = await event.request.formData();
-    const title = `${formData.get('thread-title')}`;
+    const postId = formData.get('post-id');
 
-    if (title === null || title.length <= 0) {
-      return fail(400, { success: false, message: 'Title can not be empty' });
-    }
-
-    const res = await AxiosHandler.post(
-      `/group/${event.params.id}/thread`,
-      { title },
+    const res = await AxiosHandler.delete(
+      `/post/${postId}`,
       event.cookies.get(CookieName.accessToken),
     );
 

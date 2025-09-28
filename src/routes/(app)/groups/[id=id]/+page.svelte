@@ -27,16 +27,16 @@
 </svelte:head>
 
 <HomeLayout self={data.self}>
-  <div class="flex items-center gap-4 border-b border-gray-700 p-2">
+  <div class="flex items-center gap-4 p-2">
     <IconButton class="hover:bg-gray-800" onclick={() => window.history.back()}>
       <Icon type="back" size="sm" />
     </IconButton>
     <span class="text-lg font-semibold">Group</span>
   </div>
 
-  <div class="w-full overflow-hidden px-1">
+  <div class="w-full overflow-hidden">
     <img
-      class="object-fit rounded-b-md"
+      class="object-fit rounded-md"
       src={data.group.bannerPicture ?? '/images/no-image.jpg'}
       alt="group-banner"
     />
@@ -81,7 +81,7 @@
         {/snippet}
 
         {#if data.self.username === data.group.owner.username}
-          <DropdownItem>Edit</DropdownItem>
+          <DropdownItem>Settings</DropdownItem>
           <DropdownItem class="text-red-500" onclick={() => (showDeleteGroupModal = true)}>
             Delete
           </DropdownItem>

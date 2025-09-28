@@ -8,7 +8,7 @@
     const main = document.getElementById(`thread-overview-${thread.id}`) as HTMLElement;
     main.addEventListener('click', (ev) => {
       ev.preventDefault();
-      window.location.href = `/thread/${thread.id}`;
+      window.location.href = `${thread.groupId !== null ? `/groups/${thread.groupId}` : ''}/thread/${thread.id}`;
     });
   });
 </script>
