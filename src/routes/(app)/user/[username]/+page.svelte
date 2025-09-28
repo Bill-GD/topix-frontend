@@ -87,6 +87,7 @@
       </div>
 
       {#if data.threads.length <= 0}
+        <hr class="text-gray-700" />
         <p class="w-full px-4 py-2">This user has no thread.</p>
       {:else}
         {#each data.threads as thread}

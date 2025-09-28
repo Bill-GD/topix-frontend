@@ -65,6 +65,7 @@
           <p class="text-4xl font-semibold text-white">{data.thread.title}</p>
         {/if}
         <div>
+          <p>Created by @{data.thread.owner.username}</p>
           <span>
             Created {getTimeAgo(Date.parse(data.thread.dateCreated), true)}
           </span>

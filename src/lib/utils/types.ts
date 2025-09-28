@@ -80,7 +80,7 @@ export type Group = {
   bannerPicture: string | null;
   memberCount: number;
   visibility: 'public' | 'private' | 'hidden';
-  joined: boolean;
+  status: 'none' | 'pending' | 'joined';
   dateJoined: string | null;
   dateCreated: string;
   dateUpdated: string;

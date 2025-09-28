@@ -54,8 +54,8 @@
           </div>
 
           <div class="ml-auto flex items-center justify-end gap-2">
-            <Button class="hover:bg-gray-800" type="primary" disabled={group.joined}>
-              {group.joined ? 'Joined' : 'Join'}
+            <Button class="hover:bg-gray-800" type="primary" disabled={group.status !== 'none'}>
+              {capitalize(group.status)}
             </Button>
           </div>
         </a>
