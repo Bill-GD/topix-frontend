@@ -39,14 +39,14 @@ export const actions: Actions = {
     );
 
     if (!res.success) return fail(res.status, { success: false, message: res.message });
-    redirect(303, `/home`);
+    redirect(303, `/groups/${event.params.id}`);
   },
   'update-title': async (event) => {
     const formData = await event.request.formData();
     const newTitle = formData.get('new-title');
 
     const res = await AxiosHandler.patch(
-      `/thread/${event.params.id}`,
+      `/thread/${event.params.threadId}`,
       { title: newTitle },
       event.cookies.get(CookieName.accessToken),
     );
@@ -101,7 +101,7 @@ export const actions: Actions = {
     };
 
     const res = await AxiosHandler.post(
-      `/thread/${event.params.id}/post`,
+      `/thread/${event.params.threadId}/post`,
       dto,
       event.cookies.get(CookieName.accessToken),
     );

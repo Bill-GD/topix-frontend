@@ -123,6 +123,7 @@ export interface FileDropzoneProps {
 
 export interface FlairProps {
   tag: Tag;
+  class?: ClassValue;
 }
 
 export interface FloatingLabelInputProps {
@@ -207,6 +208,7 @@ export interface PostUploadProps {
   formaction?: string;
   placeholder?: string;
   postCallback?: VoidFunction;
+  tags?: Tag[];
 }
 
 export interface HomeLayoutProps {

@@ -34,4 +34,30 @@ export const actions: Actions = {
     if (!res.success) return fail(res.status, { success: false, message: res.message });
     return { success: true, message: 'Saved successfully!' };
   },
+  'add-tag': async ({ request, params, cookies }) => {
+    const formData = await request.formData();
+
+    const res = await AxiosHandler.post(
+      `/group/${params.id}/tag`,
+      {
+        name: `${formData.get('name')}`,
+        color: `${formData.get('tag-color')}`.substring(1),
+      },
+      cookies.get(CookieName.accessToken),
+    );
+
+    if (!res.success) return fail(res.status, { success: false, message: res.message });
+    return { success: true, message: res.message };
+  },
+  'delete-tag': async ({ request, params, cookies }) => {
+    const formData = await request.formData();
+
+    const res = await AxiosHandler.delete(
+      `/group/${params.id}/tag/${formData.get('tag-id')}`,
+      cookies.get(CookieName.accessToken),
+    );
+
+    if (!res.success) return fail(res.status, { success: false, message: res.message });
+    return { success: true, message: res.message };
+  },
 };

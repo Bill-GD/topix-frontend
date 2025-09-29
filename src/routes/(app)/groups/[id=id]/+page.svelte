@@ -4,7 +4,7 @@
   import { Post } from '$lib/components/post';
   import { HomeLayout } from '$lib/components/layout';
   import { getToaster } from '$lib/components/toast';
-  import { capitalize, formResultToast, getTimeAgo } from '$lib/utils/helpers';
+  import { capitalize, formResultToast } from '$lib/utils/helpers';
   import { DropdownMenu, DropdownItem } from '$lib/components/dropdown';
   import { Modal, ModalHeader, ModalBody, ModalFooter } from '$lib/components/modal';
   import { PostUpload } from '$lib/components/upload';
@@ -83,7 +83,7 @@
           {/snippet}
 
           {#if data.self.username === data.group.owner.username}
-            <DropdownItem href="/groups/{data.group.id}/settings">Settings</DropdownItem>
+            <DropdownItem href="/groups/{data.group.id}/settings/general">Settings</DropdownItem>
             <DropdownItem class="text-red-500" onclick={() => (showDeleteGroupModal = true)}>
               Delete
             </DropdownItem>
@@ -103,6 +103,7 @@
       userPicture={data.self.profilePicture}
       formaction="?/add-post"
       placeholder="Add new post"
+      tags={data.tags}
     />
   {/if}
 
@@ -206,6 +207,17 @@
         <FloatingLabelInput name="thread-title" labelClass="bg-gray-900" bind:value={threadTitle}>
           Title
         </FloatingLabelInput>
+
+        <select
+          class="rounded-md border-gray-700 bg-gray-900 text-white"
+          name="tag-id"
+          id="post-tag-select"
+        >
+          {#each data.tags as tag}
+            <option disabled selected value hidden> -- choose tag -- </option>
+            <option value={tag.id}>{tag.name}</option>
+          {/each}
+        </select>
 
         <div class="flex w-full flex-col gap-2 md:flex-row">
           <Button class="w-full" type="success" onclick={() => (showThreadModal = false)}>

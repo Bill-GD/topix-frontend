@@ -67,15 +67,16 @@ export const actions: Actions = {
       urls = fileRes.data as string[];
     }
 
-    const dto = {
-      type,
-      content,
-      mediaPaths: urls,
-    };
+    const tagId = Number(formData.get('tag-id'));
 
     const res = await AxiosHandler.post(
       `/group/${event.params.id}/post`,
-      dto,
+      {
+        type,
+        content,
+        mediaPaths: urls,
+        tagId: tagId > 0 ? tagId : undefined,
+      },
       event.cookies.get(CookieName.accessToken),
     );
 
@@ -114,6 +115,7 @@ export const actions: Actions = {
   'create-thread': async (event) => {
     const formData = await event.request.formData();
     const title = `${formData.get('thread-title')}`;
+    const tagId = Number(formData.get('tag-id'));
 
     if (title === null || title.length <= 0) {
       return fail(400, { success: false, message: 'Title can not be empty' });
@@ -121,7 +123,19 @@ export const actions: Actions = {
 
     const res = await AxiosHandler.post(
       `/group/${event.params.id}/thread`,
-      { title },
+      { title, tagId: tagId > 0 ? tagId : undefined },
+      event.cookies.get(CookieName.accessToken),
+    );
+
+    if (!res.success) return fail(res.status, { success: false, message: res.message });
+    return { success: true, message: res.message };
+  },
+  'delete-post': async (event) => {
+    const formData = await event.request.formData();
+    const postId = formData.get('post-id');
+
+    const res = await AxiosHandler.delete(
+      `/post/${postId}`,
       event.cookies.get(CookieName.accessToken),
     );
 

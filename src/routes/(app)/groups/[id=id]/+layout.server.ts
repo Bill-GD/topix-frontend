@@ -1,5 +1,5 @@
 import { AxiosHandler } from '$lib/utils/axios-handler';
-import { CookieName, type Group } from '$lib/utils/types';
+import { CookieName, type Group, type Tag } from '$lib/utils/types';
 import { error } from '@sveltejs/kit';
 import type { LayoutServerLoad } from './$types';
 
@@ -12,7 +12,16 @@ export const load: LayoutServerLoad = async ({ cookies, params }) => {
     error(groupRes.status, { status: groupRes.status, message: groupRes.message });
   }
 
+  const tagsRes = await AxiosHandler.get(
+    `/group/${params.id}/tags`,
+    cookies.get(CookieName.accessToken),
+  );
+  if (!tagsRes.success) {
+    error(tagsRes.status, { status: tagsRes.status, message: tagsRes.message });
+  }
+
   return {
     group: groupRes.data as unknown as Group,
+    tags: tagsRes.data as unknown as Tag[],
   };
 };

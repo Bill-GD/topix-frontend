@@ -10,6 +10,7 @@
   import { enhance } from '$app/forms';
 
   let {
+    tags,
     userPicture = '/images/default-user-profile-icon.jpg',
     formaction,
     placeholder = `What's happening?`,
@@ -153,8 +154,21 @@
       </div>
     {/if}
 
-    <div class="flex justify-end gap-4">
-      <div class="flex items-center">
+    <div class="flex gap-4">
+      {#if tags}
+        <select
+          class="rounded-md border-gray-700 bg-gray-950 text-white"
+          name="tag-id"
+          id="post-tag-select"
+        >
+          {#each tags as tag}
+            <option disabled selected value hidden> -- choose tag -- </option>
+            <option value={tag.id}>{tag.name}</option>
+          {/each}
+        </select>
+      {/if}
+
+      <div class="ml-auto flex items-center">
         <label for="image-input">
           <Icon
             class={[

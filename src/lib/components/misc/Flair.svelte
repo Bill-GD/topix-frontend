@@ -2,12 +2,12 @@
   import type { FlairProps } from '$lib/components/types';
   import { getContrastColor } from '$lib/utils/helpers';
 
-  let { tag }: FlairProps = $props();
+  let { tag, class: className }: FlairProps = $props();
   let textColor = $derived(getContrastColor(tag.color));
 </script>
 
 <span
-  class="rounded-md px-2 py-1 text-base font-semibold"
+  class={['w-fit rounded-md px-2 text-base font-semibold', className]}
   style:background-color="#{tag.color}"
   style:color={textColor}
 >
