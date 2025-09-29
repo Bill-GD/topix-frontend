@@ -39,6 +39,24 @@
     Settings
   </div>
 
+  <div
+    class="no-scrollbar flex justify-around overflow-x-scroll border-b border-gray-700 md:hidden"
+  >
+    {#each items as item}
+      <a
+        class={[
+          'w-full py-2 text-center',
+          params.section === item
+            ? `bg-gray-800/40 font-semibold ${item.includes('danger') ? 'text-red-600' : 'text-gray-300'}`
+            : `${item.includes('danger') ? 'text-red-800' : 'text-gray-500'}`,
+        ]}
+        href={item}
+      >
+        {capitalize(item)}
+      </a>
+    {/each}
+  </div>
+
   <div class="w-full p-4 lg:p-12">
     {#if params.section === 'general'}
       <form
@@ -221,5 +239,9 @@
 
   .sticky-header {
     @apply sticky top-0 border-r border-b border-gray-700 bg-gray-950 py-4 text-center text-2xl;
+  }
+
+  .input-group {
+    @apply flex flex-col items-start gap-2;
   }
 </style>
