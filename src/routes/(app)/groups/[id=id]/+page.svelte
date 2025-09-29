@@ -34,84 +34,84 @@
     <span class="text-lg font-semibold">Group</span>
   </div>
 
-  <div class="w-full overflow-hidden">
-    <img
-      class="object-fit rounded-md"
-      src={data.group.bannerPicture ?? '/images/no-image.jpg'}
-      alt="group-banner"
-    />
-  </div>
+  <img
+    class="object-fit rounded-md"
+    src={data.group.bannerPicture ?? '/images/no-image.jpg'}
+    alt="group-banner"
+  />
 
-  <div class="flex items-center p-4">
-    <div class="flex flex-col gap-2">
-      <p class="text-4xl font-bold">{data.group.name}</p>
+  <div class="flex flex-col gap-2 p-4">
+    <p class="text-4xl font-bold">{data.group.name}</p>
+
+    {#if data.group.description}
+      <p>{data.group.description}</p>
+    {/if}
+
+    <div class="flex items-center">
       <div class="text-gray-500">
         <span>{capitalize(data.group.visibility)}</span>
         <span>-</span>
         <span>{data.group.memberCount} member{data.group.memberCount > 1 ? 's' : ''}</span>
       </div>
-    </div>
 
-    <div class="ml-auto flex items-center gap-2">
-      {#if data.group.status !== 'none'}
-        <Button class="hover:bg-gray-800" type="primary" disabled>
-          {capitalize(data.group.status)}
-        </Button>
-      {:else}
-        <form
-          class="w-full"
-          method="post"
-          action="?/join-group"
-          use:enhance={() => {
-            return async ({ result, update }) => {
-              await formResultToast(result, toaster);
-              await update();
-            };
-          }}
-        >
-          <Button class="hover:bg-gray-800" type="primary">Join</Button>
-        </form>
-      {/if}
-
-      <DropdownMenu class="ml-auto h-fit" position="bottom" align="right">
-        {#snippet trigger()}
-          <IconButton class="hover:bg-gray-800" round>
-            <Icon type="menu" size="sm" />
-          </IconButton>
-        {/snippet}
-
-        {#if data.self.username === data.group.owner.username}
-          <DropdownItem>Settings</DropdownItem>
-          <DropdownItem class="text-red-500" onclick={() => (showDeleteGroupModal = true)}>
-            Delete
-          </DropdownItem>
-        {:else if data.group.status !== 'none'}
-          <DropdownItem class="text-red-500" onclick={() => (showLeaveModal = true)}>
-            Leave
-          </DropdownItem>
+      <div class="ml-auto flex items-center gap-2">
+        {#if data.group.status !== 'none'}
+          <Button class="hover:bg-gray-800" type="primary" disabled>
+            {capitalize(data.group.status)}
+          </Button>
+        {:else}
+          <form
+            class="w-full"
+            method="post"
+            action="?/join-group"
+            use:enhance={() => {
+              return async ({ result, update }) => {
+                await formResultToast(result, toaster);
+                await update();
+              };
+            }}
+          >
+            <Button class="hover:bg-gray-800" type="primary">Join</Button>
+          </form>
         {/if}
-      </DropdownMenu>
+
+        <DropdownMenu class="ml-auto h-fit" position="bottom" align="right">
+          {#snippet trigger()}
+            <IconButton class="hover:bg-gray-800" round>
+              <Icon type="menu" size="sm" />
+            </IconButton>
+          {/snippet}
+
+          {#if data.self.username === data.group.owner.username}
+            <DropdownItem href="/groups/{data.group.id}/settings">Settings</DropdownItem>
+            <DropdownItem class="text-red-500" onclick={() => (showDeleteGroupModal = true)}>
+              Delete
+            </DropdownItem>
+          {:else if data.group.status !== 'none'}
+            <DropdownItem class="text-red-500" onclick={() => (showLeaveModal = true)}>
+              Leave
+            </DropdownItem>
+          {/if}
+        </DropdownMenu>
+      </div>
     </div>
   </div>
 
   {#if data.group.status === 'joined'}
-    <div class="border-y border-gray-700">
-      <PostUpload
-        userPicture={data.self.profilePicture}
-        formaction="?/add-post"
-        placeholder="Add new post"
-      />
-    </div>
-  {:else}
     <hr class="text-gray-700" />
+    <PostUpload
+      userPicture={data.self.profilePicture}
+      formaction="?/add-post"
+      placeholder="Add new post"
+    />
   {/if}
 
   {#if data.posts.length <= 0}
     <p class="w-full p-4 text-center text-2xl font-semibold">This group has no post.</p>
   {/if}
   {#each data.posts as post}
-    <Post self={data.self} {post} compact />
     <hr class="text-gray-700" />
+    <Post self={data.self} {post} compact />
   {/each}
 
   {#snippet right()}

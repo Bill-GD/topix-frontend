@@ -14,6 +14,7 @@
   import ModalBody from '../modal/ModalBody.svelte';
   import ModalFooter from '../modal/ModalFooter.svelte';
   import Button from '../button/Button.svelte';
+  import Flair from '../misc/Flair.svelte';
 
   let {
     class: className,
@@ -122,6 +123,10 @@
         {/if}
       </div>
     </div>
+
+    {#if post.tag}
+      <Flair tag={post.tag} />
+    {/if}
 
     {#if compact}
       <p class="line-clamp-2 whitespace-pre-line">{post.content}</p>

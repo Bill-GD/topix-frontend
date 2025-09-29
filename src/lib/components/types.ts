@@ -36,7 +36,7 @@ import type {
   HTMLAttributeAnchorTarget,
   HTMLInputTypeAttribute,
 } from 'svelte/elements';
-import type { CurrentUser, Post, ToastMessage, UnaryVoidFunction } from '../utils/types';
+import type { CurrentUser, Post, Tag, ToastMessage, UnaryVoidFunction } from '../utils/types';
 
 export type ButtonType = 'primary' | 'danger' | 'dark' | 'success';
 
@@ -122,8 +122,7 @@ export interface FileDropzoneProps {
 }
 
 export interface FlairProps {
-  title: string;
-  color: string;
+  tag: Tag;
 }
 
 export interface FloatingLabelInputProps {

@@ -79,6 +79,7 @@ export type Group = {
   owner: Partial<User>;
   bannerPicture: string | null;
   memberCount: number;
+  description: string | null;
   visibility: 'public' | 'private' | 'hidden';
   status: 'none' | 'pending' | 'joined';
   dateJoined: string | null;
