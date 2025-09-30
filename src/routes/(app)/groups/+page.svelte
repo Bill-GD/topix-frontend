@@ -53,11 +53,16 @@
             <p>Owner: {group.owner.displayName}</p>
           </div>
 
-          <div class="ml-auto flex items-center justify-end gap-2">
-            <Button class="hover:bg-gray-800" type="primary" disabled={group.status !== 'none'}>
+          {#if group.status !== 'none'}
+            <div
+              class={[
+                'ml-auto font-semibold',
+                group.status === 'joined' ? 'text-green-700' : 'text-sky-500',
+              ]}
+            >
               {capitalize(group.status)}
-            </Button>
-          </div>
+            </div>
+          {/if}
         </a>
         <hr class="text-gray-700" />
       {/each}

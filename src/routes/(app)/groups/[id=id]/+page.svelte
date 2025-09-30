@@ -82,6 +82,7 @@
             </IconButton>
           {/snippet}
 
+          <DropdownItem href="/groups/{data.group.id}/members/all">Members</DropdownItem>
           {#if data.self.username === data.group.owner.username}
             <DropdownItem href="/groups/{data.group.id}/settings/general">Settings</DropdownItem>
             <DropdownItem class="text-red-500" onclick={() => (showDeleteGroupModal = true)}>
