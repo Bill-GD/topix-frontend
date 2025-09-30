@@ -1,17 +1,17 @@
 <script lang="ts">
-  import { Button, IconButton } from '$lib/components/button';
-  import { Icon } from '$lib/components/misc';
-  import { Post } from '$lib/components/post';
-  import { HomeLayout } from '$lib/components/layout';
-  import { getToaster } from '$lib/components/toast';
-  import { capitalize, formResultToast } from '$lib/utils/helpers';
-  import { DropdownMenu, DropdownItem } from '$lib/components/dropdown';
-  import { Modal, ModalHeader, ModalBody, ModalFooter } from '$lib/components/modal';
-  import { PostUpload } from '$lib/components/upload';
-  import { FloatingLabelInput } from '$lib/components/input';
-  import { ThreadOverview } from '$lib/components/thread';
-  import type { PageProps } from './$types';
   import { enhance } from '$app/forms';
+  import { Button, IconButton } from '$lib/components/button';
+  import { DropdownItem, DropdownMenu } from '$lib/components/dropdown';
+  import { FloatingLabelInput } from '$lib/components/input';
+  import { HomeLayout } from '$lib/components/layout';
+  import { Icon } from '$lib/components/misc';
+  import { Modal, ModalBody, ModalFooter, ModalHeader } from '$lib/components/modal';
+  import { Post } from '$lib/components/post';
+  import { ThreadOverview } from '$lib/components/thread';
+  import { getToaster } from '$lib/components/toast';
+  import { PostUpload } from '$lib/components/upload';
+  import { capitalize, formResultToast } from '$lib/utils/helpers';
+  import type { PageProps } from './$types';
 
   let { data }: PageProps = $props();
 
@@ -105,6 +105,7 @@
       formaction="?/add-post"
       placeholder="Add new post"
       tags={data.tags}
+      groupAccepted={data.self.username === data.group.owner.username}
     />
   {/if}
 

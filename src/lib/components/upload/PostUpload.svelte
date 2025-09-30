@@ -1,13 +1,13 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
+  import { enhance } from '$app/forms';
+  import { getToaster } from '$lib/components/toast';
+  import type { PostUploadProps } from '$lib/components/types';
   import { ImageSizeLimit, VideoSizeLimit } from '$lib/utils/constants';
   import { formResultToast, getReadableSize } from '$lib/utils/helpers';
-  import type { PostUploadProps } from '$lib/components/types';
-  import { getToaster } from '$lib/components/toast';
+  import { onMount } from 'svelte';
   import Button from '../button/Button.svelte';
   import IconButton from '../button/IconButton.svelte';
   import Icon from '../misc/Icon.svelte';
-  import { enhance } from '$app/forms';
 
   let {
     tags,
@@ -15,6 +15,7 @@
     userPicture = '/images/default-user-profile-icon.jpg',
     formaction,
     placeholder = `What's happening?`,
+    groupAccepted = false,
     postCallback,
   }: PostUploadProps = $props();
 
@@ -223,6 +224,7 @@
     {#if groupId !== undefined}
       <input type="number" name="group-id" value={groupId} hidden readonly />
     {/if}
+    <input type="checkbox" name="accept-post" checked={groupAccepted} hidden readonly />
   </div>
 </form>
 

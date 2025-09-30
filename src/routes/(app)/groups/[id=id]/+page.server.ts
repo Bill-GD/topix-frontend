@@ -5,7 +5,7 @@ import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ cookies, params }) => {
   const postsRes = await AxiosHandler.get(
-    `/post?groupId=${params.id}`,
+    `/post?groupId=${params.id}&accepted=true`,
     cookies.get(CookieName.accessToken),
   );
   if (!postsRes.success) {
@@ -85,6 +85,7 @@ export const actions: Actions = {
         content,
         mediaPaths: urls,
         tagId: tagId > 0 ? tagId : undefined,
+        accepted: formData.has('accept-post'),
       },
       event.cookies.get(CookieName.accessToken),
     );

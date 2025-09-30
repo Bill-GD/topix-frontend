@@ -208,6 +208,7 @@ export interface PostUploadProps {
   formaction?: string;
   placeholder?: string;
   tags?: Tag[];
+  groupAccepted?: boolean;
   groupId?: number;
   postCallback?: VoidFunction;
 }
