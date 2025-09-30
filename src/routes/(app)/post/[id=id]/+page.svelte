@@ -41,6 +41,7 @@
     userPicture={data.self.profilePicture}
     formaction="?/reply"
     placeholder="Enter your reply"
+    groupId={data.post.groupId ?? undefined}
   />
 
   <hr class="text-gray-700" />

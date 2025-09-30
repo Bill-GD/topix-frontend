@@ -1,7 +1,21 @@
 import { AxiosHandler } from '$lib/utils/axios-handler';
 import { dataUrlToFile } from '$lib/utils/helpers';
-import { CookieName } from '$lib/utils/types';
-import { fail, type Actions } from '@sveltejs/kit';
+import { CookieName, type Tag } from '$lib/utils/types';
+import { error, fail, type Actions } from '@sveltejs/kit';
+import type { PageServerLoad } from './$types';
+
+export const load: PageServerLoad = async ({ cookies, params }) => {
+  const tagsRes = await AxiosHandler.get(
+    `/group/${params.id}/tags`,
+    cookies.get(CookieName.accessToken),
+  );
+  if (!tagsRes.success) {
+    error(tagsRes.status, { status: tagsRes.status, message: tagsRes.message });
+  }
+  return {
+    tags: tagsRes.data as unknown as Tag[],
+  };
+};
 
 export const actions: Actions = {
   'update-group': async ({ request, params, cookies }) => {

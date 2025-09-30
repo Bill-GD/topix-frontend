@@ -11,6 +11,7 @@
 
   let {
     tags,
+    groupId,
     userPicture = '/images/default-user-profile-icon.jpg',
     formaction,
     placeholder = `What's happening?`,
@@ -108,7 +109,7 @@
       spellcheck="true"
       data-placeholder={placeholder}
     ></div>
-    <textarea class="hidden" name="content" value={inputContent}></textarea>
+    <textarea name="content" value={inputContent} hidden></textarea>
 
     {#if images.length > 0}
       <div class="media-viewer scrollbar">
@@ -155,7 +156,7 @@
     {/if}
 
     <div class="flex gap-4">
-      {#if tags}
+      {#if tags && tags.length > 0}
         <select
           class="rounded-md border-gray-700 bg-gray-950 text-white"
           name="tag-id"
@@ -219,6 +220,9 @@
         Post
       </Button>
     </div>
+    {#if groupId !== undefined}
+      <input type="number" name="group-id" value={groupId} hidden readonly />
+    {/if}
   </div>
 </form>
 

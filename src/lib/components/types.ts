@@ -207,8 +207,9 @@ export interface PostUploadProps {
   userPicture: string | null;
   formaction?: string;
   placeholder?: string;
-  postCallback?: VoidFunction;
   tags?: Tag[];
+  groupId?: number;
+  postCallback?: VoidFunction;
 }
 
 export interface HomeLayoutProps {

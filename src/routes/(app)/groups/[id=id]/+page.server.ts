@@ -1,5 +1,5 @@
 import { AxiosHandler, handleReaction } from '$lib/utils/axios-handler';
-import { CookieName, type Post, type Thread } from '$lib/utils/types';
+import { CookieName, type Post, type Tag, type Thread } from '$lib/utils/types';
 import { error, fail, redirect, type Actions } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
@@ -20,9 +20,18 @@ export const load: PageServerLoad = async ({ cookies, params }) => {
     error(threadsRes.status, { status: threadsRes.status, message: threadsRes.message });
   }
 
+  const tagsRes = await AxiosHandler.get(
+    `/group/${params.id}/tags`,
+    cookies.get(CookieName.accessToken),
+  );
+  if (!tagsRes.success) {
+    error(tagsRes.status, { status: tagsRes.status, message: tagsRes.message });
+  }
+
   return {
     posts: postsRes.data as unknown as Post[],
     threads: threadsRes.data as unknown as Thread[],
+    tags: tagsRes.data as unknown as Tag[],
   };
 };
 
