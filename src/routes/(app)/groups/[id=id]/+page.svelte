@@ -75,7 +75,7 @@
           </form>
         {/if}
 
-        <DropdownMenu class="ml-auto h-fit" position="bottom" align="right">
+        <DropdownMenu class="ml-auto" position="bottom" align="right">
           {#snippet trigger()}
             <IconButton class="hover:bg-gray-800" round>
               <Icon type="menu" size="sm" />
@@ -84,6 +84,7 @@
 
           <DropdownItem href="/groups/{data.group.id}/members/all">Members</DropdownItem>
           {#if data.self.username === data.group.owner.username}
+            <DropdownItem href="/groups/{data.group.id}/pending">Pending posts</DropdownItem>
             <DropdownItem href="/groups/{data.group.id}/settings/general">Settings</DropdownItem>
             <DropdownItem class="text-red-500" onclick={() => (showDeleteGroupModal = true)}>
               Delete

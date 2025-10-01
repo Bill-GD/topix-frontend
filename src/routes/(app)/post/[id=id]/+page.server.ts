@@ -84,6 +84,7 @@ export const actions: Actions = {
       content,
       mediaPaths: urls,
       groupId: formData.has('group-id') ? formData.get('group-id') : undefined,
+      accepted: formData.has('accept-post'),
     };
 
     const res = await AxiosHandler.post(

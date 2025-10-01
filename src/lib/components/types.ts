@@ -193,6 +193,11 @@ export interface NavItemProps {
   class?: ClassValue;
 }
 
+export interface PendingPostProps {
+  class?: ClassValue;
+  post: Post;
+}
+
 export interface PostProps {
   class?: ClassValue;
   self: CurrentUser;
