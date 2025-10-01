@@ -32,9 +32,8 @@ export const actions: Actions = {
   'post-upload': async (event) => {
     const formData = await event.request.formData();
     const files: File[] = [];
-    let urls: string[] = [];
-    let type = 'image';
     const content = `${formData.get('content')}`.replaceAll('\r\n\r\n', '\n');
+    let type = 'image';
 
     if (formData.has('video')) {
       const vid = formData.get('video') as File;
@@ -53,29 +52,15 @@ export const actions: Actions = {
       });
     }
 
-    if (files.length > 0) {
-      const form = new FormData();
-      files.forEach((f) => form.append('files', f));
+    const form = new FormData();
+    form.append('type', type);
+    form.append('content', content);
+    form.append('accepted', `${formData.has('accept-post')}`);
+    if (files.length > 0) files.forEach((f) => form.append('files', f));
 
-      const fileRes = await AxiosHandler.post(
-        '/file/upload',
-        form,
-        event.cookies.get(CookieName.accessToken),
-        { 'Content-Type': 'multipart/form-data' },
-      );
-      if (!fileRes.success) {
-        return fail(fileRes.status, { success: false, message: fileRes.message });
-      }
-      urls = fileRes.data as string[];
-    }
-
-    const dto = {
-      type,
-      content,
-      mediaPaths: urls,
-    };
-
-    const res = await AxiosHandler.post('/post', dto, event.cookies.get(CookieName.accessToken));
+    const res = await AxiosHandler.post('/post', form, event.cookies.get(CookieName.accessToken), {
+      'Content-Type': 'multipart/form-data',
+    });
     if (!res.success) return fail(res.status, { success: false, message: res.message });
     return { success: true, message: res.message };
   },

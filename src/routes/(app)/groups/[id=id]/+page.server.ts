@@ -36,12 +36,12 @@ export const load: PageServerLoad = async ({ cookies, params }) => {
 };
 
 export const actions: Actions = {
-  'add-post': async (event) => {
-    const formData = await event.request.formData();
+  'add-post': async ({ request, params, cookies }) => {
+    const formData = await request.formData();
     const files: File[] = [];
-    let urls: string[] = [];
-    let type = 'image';
     const content = `${formData.get('content')}`.replaceAll('\r\n\r\n', '\n');
+    const tagId = Number(formData.get('tag-id'));
+    let type = 'image';
 
     if (formData.has('video')) {
       const vid = formData.get('video') as File;
@@ -60,34 +60,19 @@ export const actions: Actions = {
       });
     }
 
-    if (files.length > 0) {
-      const form = new FormData();
-      files.forEach((f) => form.append('files', f));
+    const form = new FormData();
+    form.append('type', type);
+    form.append('content', content);
 
-      const fileRes = await AxiosHandler.post(
-        '/file/upload',
-        form,
-        event.cookies.get(CookieName.accessToken),
-        { 'Content-Type': 'multipart/form-data' },
-      );
-      if (!fileRes.success) {
-        return fail(fileRes.status, { success: false, message: fileRes.message });
-      }
-      urls = fileRes.data as string[];
-    }
-
-    const tagId = Number(formData.get('tag-id'));
+    if (tagId > 0) form.append('tagId', `${tagId}`);
+    if (files.length > 0) files.forEach((f) => form.append('files', f));
+    form.append('accepted', `${formData.has('accept-post')}`);
 
     const res = await AxiosHandler.post(
-      `/group/${event.params.id}/post`,
-      {
-        type,
-        content,
-        mediaPaths: urls,
-        tagId: tagId > 0 ? tagId : undefined,
-        accepted: formData.has('accept-post'),
-      },
-      event.cookies.get(CookieName.accessToken),
+      `/group/${params.id}/post`,
+      form,
+      cookies.get(CookieName.accessToken),
+      { 'Content-Type': 'multipart/form-data' },
     );
 
     if (!res.success) return fail(res.status, { success: false, message: res.message });

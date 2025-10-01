@@ -43,41 +43,23 @@ export const actions: Actions = {
     event.cookies.delete(CookieName.currentUser, { path: '/' });
     return { success: true, message: 'Saved successfully!' };
   },
-  'update-profile': async (event) => {
-    const formData = await event.request.formData();
-    let dto: {
-      displayName: FormDataEntryValue | null;
-      description: FormDataEntryValue | null;
-      profilePicture?: string;
-    } = {
-      displayName: formData.get('display-name'),
-      description: formData.get('description'),
-    };
+  'update-profile': async ({ request, cookies }) => {
+    const formData = await request.formData();
+    const form = new FormData();
+    if (formData.has('display-name')) form.append('displayName', `${formData.get('display-name')}`);
+    if (formData.has('description')) form.append('description', `${formData.get('description')}`);
 
     if (formData.get('profile-picture') !== '' && formData.get('profile-picture-name') !== '') {
-      const form = new FormData();
-      form.append('files', dataUrlToFile(`${formData.get('profile-picture')}`));
-
-      const res = await AxiosHandler.post(
-        '/file/upload',
-        form,
-        event.cookies.get(CookieName.accessToken),
-        { 'Content-Type': 'multipart/form-data' },
-      );
-
-      if (!res.success) return fail(res.status, { success: false, message: res.message });
-      dto = { ...dto, profilePicture: (res.data as string[])[0] };
+      form.append('profilePicture', dataUrlToFile(`${formData.get('profile-picture')}`));
     }
 
-    const res = await AxiosHandler.patch(
-      `/user/me`,
-      dto,
-      event.cookies.get(CookieName.accessToken),
-    );
+    const res = await AxiosHandler.patch(`/user/me`, form, cookies.get(CookieName.accessToken), {
+      'Content-Type': 'multipart/form-data',
+    });
 
     if (!res.success) return fail(res.status, { success: false, message: res.message });
 
-    event.cookies.delete(CookieName.currentUser, { path: '/' });
+    cookies.delete(CookieName.currentUser, { path: '/' });
     return { success: true, message: 'Saved successfully!' };
   },
   'delete-account': async (event) => {
