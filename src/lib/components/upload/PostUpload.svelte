@@ -10,12 +10,12 @@
   import Icon from '../misc/Icon.svelte';
 
   let {
-    tags,
-    groupId,
     userPicture = '/images/default-user-profile-icon.jpg',
     formaction,
     placeholder = `What's happening?`,
-    groupAccepted = false,
+    tags,
+    groupId,
+    groupApproved = false,
     postCallback,
   }: PostUploadProps = $props();
 
@@ -224,7 +224,7 @@
     {#if groupId !== undefined}
       <input type="number" name="group-id" value={groupId} hidden readonly />
     {/if}
-    <input type="checkbox" name="accept-post" checked={groupAccepted} hidden readonly />
+    <input type="checkbox" name="group-approved" checked={groupApproved} hidden readonly />
   </div>
 </form>
 

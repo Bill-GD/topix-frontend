@@ -1,9 +1,9 @@
 <script lang="ts">
   import { IconButton } from '$lib/components/button';
+  import { HomeLayout } from '$lib/components/layout';
   import { Icon } from '$lib/components/misc';
   import { Post } from '$lib/components/post';
   import { PostUpload } from '$lib/components/upload';
-  import { HomeLayout } from '$lib/components/layout';
   import type { PageProps } from './$types';
 
   let { data }: PageProps = $props();
@@ -42,7 +42,7 @@
     formaction="?/reply"
     placeholder="Enter your reply"
     groupId={data.post.groupId ?? undefined}
-    groupAccepted
+    groupApproved
   />
 
   <hr class="text-gray-700" />

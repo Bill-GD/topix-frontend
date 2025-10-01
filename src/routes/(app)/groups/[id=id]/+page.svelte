@@ -106,7 +106,7 @@
       formaction="?/add-post"
       placeholder="Add new post"
       tags={data.tags}
-      groupAccepted={data.self.username === data.group.owner.username}
+      groupApproved={data.self.username === data.group.owner.username}
     />
   {/if}
 

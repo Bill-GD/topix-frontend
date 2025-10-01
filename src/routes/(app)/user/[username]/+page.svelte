@@ -1,16 +1,16 @@
 <script lang="ts">
-  import { IconButton, Button } from '$lib/components/button';
-  import { Icon } from '$lib/components/misc';
-  import { Post } from '$lib/components/post';
-  import { PostUpload } from '$lib/components/upload';
-  import { HomeLayout } from '$lib/components/layout';
-  import { Modal, ModalHeader, ModalBody, ModalFooter } from '$lib/components/modal';
+  import { enhance } from '$app/forms';
+  import { Button, IconButton } from '$lib/components/button';
   import { FloatingLabelInput } from '$lib/components/input';
+  import { HomeLayout } from '$lib/components/layout';
+  import { Icon } from '$lib/components/misc';
+  import { Modal, ModalBody, ModalFooter, ModalHeader } from '$lib/components/modal';
+  import { Post } from '$lib/components/post';
   import { ThreadOverview } from '$lib/components/thread';
   import { getToaster } from '$lib/components/toast';
+  import { PostUpload } from '$lib/components/upload';
   import { formResultToast } from '$lib/utils/helpers';
   import type { PageProps } from './$types';
-  import { enhance } from '$app/forms';
 
   let { data }: PageProps = $props();
 

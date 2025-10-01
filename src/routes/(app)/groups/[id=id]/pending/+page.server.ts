@@ -18,7 +18,7 @@ export const load: PageServerLoad = async ({ params, cookies }) => {
 };
 
 export const actions: Actions = {
-  'accept-post': async ({ request, params, cookies }) => {
+  'approve-post': async ({ request, params, cookies }) => {
     const formData = await request.formData();
 
     const res = await AxiosHandler.post(

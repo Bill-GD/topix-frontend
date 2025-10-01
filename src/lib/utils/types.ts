@@ -57,7 +57,7 @@ export type Post = {
   threadId: number | null;
   groupId: number | null;
   tag: Tag | null;
-  // groupAccepted: boolean;
+  groupApproved: boolean;
   visibility: 'public' | 'private' | 'hidden';
   dateCreated: string;
   dateUpdated: string | null;

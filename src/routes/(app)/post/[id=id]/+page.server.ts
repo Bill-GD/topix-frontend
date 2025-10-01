@@ -1,6 +1,6 @@
 import { AxiosHandler, handleReaction } from '$lib/utils/axios-handler';
 import { CookieName, type Post } from '$lib/utils/types';
-import { error, fail, redirect, type Actions } from '@sveltejs/kit';
+import { type Actions, error, fail, redirect } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ cookies, params }) => {
@@ -65,10 +65,9 @@ export const actions: Actions = {
     const form = new FormData();
     form.append('type', type);
     form.append('content', content);
+    form.append('approved', `${formData.has('group-approved')}`);
     if (formData.has('group-id')) form.append('groupId', `${formData.get('group-id')}`);
-
     if (files.length > 0) files.forEach((f) => form.append('files', f));
-    form.append('accepted', `${formData.has('accept-post')}`);
 
     const res = await AxiosHandler.post(
       `/post/${params.id}/reply`,

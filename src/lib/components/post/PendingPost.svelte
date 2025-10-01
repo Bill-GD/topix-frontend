@@ -1,17 +1,17 @@
 <script lang="ts">
   import { enhance } from '$app/forms';
   import { getToaster } from '$lib/components/toast';
-  import { formResultToast, getTimeAgo } from '$lib/utils/helpers';
   import type { PendingPostProps } from '$lib/components/types';
-  import Link from '../link/Link.svelte';
+  import { formResultToast, getTimeAgo } from '$lib/utils/helpers';
+  import Button from '../button/Button.svelte';
   import IconButton from '../button/IconButton.svelte';
+  import Link from '../link/Link.svelte';
+  import Flair from '../misc/Flair.svelte';
   import Icon from '../misc/Icon.svelte';
   import Modal from '../modal/Modal.svelte';
-  import ModalHeader from '../modal/ModalHeader.svelte';
   import ModalBody from '../modal/ModalBody.svelte';
   import ModalFooter from '../modal/ModalFooter.svelte';
-  import Button from '../button/Button.svelte';
-  import Flair from '../misc/Flair.svelte';
+  import ModalHeader from '../modal/ModalHeader.svelte';
 
   let { class: className, post }: PendingPostProps = $props();
 
@@ -122,7 +122,7 @@
     <form
       class="w-full"
       method="post"
-      action="?/accept-post"
+      action="?/approve-post"
       use:enhance={() => {
         return async ({ result, update }) => {
           await formResultToast(result, toaster);
