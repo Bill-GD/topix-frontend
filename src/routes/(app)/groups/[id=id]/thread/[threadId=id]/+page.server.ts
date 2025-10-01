@@ -1,45 +1,60 @@
 import { AxiosHandler, handleReaction } from '$lib/utils/axios-handler';
-import { CookieName, type Post } from '$lib/utils/types';
+import { CookieName, type Post, type Thread } from '$lib/utils/types';
 import { error, fail, redirect, type Actions } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ cookies, params }) => {
-  const data: { post: Post; replies: Post[] } = { post: {} as Post, replies: [] };
+  const data: { thread: Thread; posts: Post[] } = { thread: {} as Thread, posts: [] };
 
-  const postRes = await AxiosHandler.get(`/post/${params.id}`, cookies.get(CookieName.accessToken));
+  const threadRes = await AxiosHandler.get(
+    `/thread/${params.threadId}`,
+    cookies.get(CookieName.accessToken),
+  );
+  if (!threadRes.success) {
+    error(threadRes.status, { message: threadRes.message, status: threadRes.status });
+  }
+  data.thread = threadRes.data as unknown as Thread;
+
+  const postRes = await AxiosHandler.get(
+    `/post?threadId=${params.threadId}`,
+    cookies.get(CookieName.accessToken),
+  );
   if (!postRes.success) {
     error(postRes.status, { message: postRes.message, status: postRes.status });
   }
-  data.post = postRes.data as unknown as Post;
-
-  const repliesRes = await AxiosHandler.get(
-    `/post?parentId=${params.id}`,
-    cookies.get(CookieName.accessToken),
-  );
-  if (!repliesRes.success) {
-    error(repliesRes.status, { message: repliesRes.message, status: repliesRes.status });
-  }
-  data.replies = repliesRes.data as unknown as Post[];
+  data.posts = postRes.data as unknown as Post[];
 
   return data;
 };
 
 export const actions: Actions = {
   react: handleReaction,
-  'delete-post': async (event) => {
+  'delete-thread': async (event) => {
     const formData = await event.request.formData();
-    const postId = formData.get('post-id');
+    const threadId = formData.get('thread-id');
 
     const res = await AxiosHandler.delete(
-      `/post/${postId}`,
+      `/thread/${threadId}`,
       event.cookies.get(CookieName.accessToken),
     );
 
     if (!res.success) return fail(res.status, { success: false, message: res.message });
-    // return { success: true, message: 'Post deleted successfully' };
-    if (postId === event.params.id) redirect(303, '/home');
+    redirect(303, `/groups/${event.params.id}`);
   },
-  reply: async (event) => {
+  'update-title': async (event) => {
+    const formData = await event.request.formData();
+    const newTitle = formData.get('new-title');
+
+    const res = await AxiosHandler.patch(
+      `/thread/${event.params.threadId}`,
+      { title: newTitle },
+      event.cookies.get(CookieName.accessToken),
+    );
+
+    if (!res.success) return fail(res.status, { success: false, message: res.message });
+    return { success: true, message: res.message };
+  },
+  'add-post': async (event) => {
     const formData = await event.request.formData();
     const files: File[] = [];
     let urls: string[] = [];
@@ -83,15 +98,26 @@ export const actions: Actions = {
       type,
       content,
       mediaPaths: urls,
-      groupId: formData.has('group-id') ? formData.get('group-id') : undefined,
-      accepted: formData.has('accept-post'),
     };
 
     const res = await AxiosHandler.post(
-      `/post/${event.params.id}/reply`,
+      `/thread/${event.params.threadId}/post`,
       dto,
       event.cookies.get(CookieName.accessToken),
     );
+
+    if (!res.success) return fail(res.status, { success: false, message: res.message });
+    return { success: true, message: res.message };
+  },
+  'delete-post': async (event) => {
+    const formData = await event.request.formData();
+    const postId = formData.get('post-id');
+
+    const res = await AxiosHandler.delete(
+      `/post/${postId}`,
+      event.cookies.get(CookieName.accessToken),
+    );
+
     if (!res.success) return fail(res.status, { success: false, message: res.message });
     return { success: true, message: res.message };
   },

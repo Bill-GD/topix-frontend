@@ -14,6 +14,7 @@
   import ModalBody from '../modal/ModalBody.svelte';
   import ModalFooter from '../modal/ModalFooter.svelte';
   import Button from '../button/Button.svelte';
+  import Flair from '../misc/Flair.svelte';
 
   let {
     class: className,
@@ -123,6 +124,10 @@
       </div>
     </div>
 
+    {#if post.tag}
+      <Flair tag={post.tag} />
+    {/if}
+
     {#if compact}
       <p class="line-clamp-2 whitespace-pre-line">{post.content}</p>
     {:else}
@@ -200,14 +205,14 @@
 
           <DropdownMenu position="top" align="left" horizontal>
             {#snippet trigger()}
-              <div class="react-button flex cursor-pointer items-center gap-2">
-                {reactionCount}
+              <IconButton class="react-button flex gap-2" round>
                 <Icon
                   type={reaction}
                   class={[reaction !== 'noReaction' && (reactions[reaction] as string)]}
                   size="sm"
                 />
-              </div>
+                {reactionCount}
+              </IconButton>
             {/snippet}
 
             {#each Object.entries(reactions) as [type, color]}
@@ -223,8 +228,8 @@
         </form>
 
         <div class="flex items-center gap-2">
-          {post.replyCount}
           <Icon type="reply" size="sm" />
+          {post.replyCount}
         </div>
       </div>
     {/if}
@@ -234,9 +239,9 @@
   {#if !parent}
     <DropdownMenu class="ml-auto h-fit" position="bottom" align="right">
       {#snippet trigger()}
-        <div class="cursor-pointer rounded-full p-2 hover:bg-gray-800">
+        <IconButton class="hover:bg-gray-800" round>
           <Icon type="menu" size="sm" />
-        </div>
+        </IconButton>
       {/snippet}
 
       {#if detail && self.username === post.owner.username}

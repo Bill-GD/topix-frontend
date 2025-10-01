@@ -15,18 +15,24 @@
   const buttonClass = `btn-${variant}${variant && outline ? '-outline' : ''}`;
 </script>
 
-<button
-  class={['main-button', buttonClass, round && 'rounded-full', className]}
-  onclick={(ev) => {
-    ev.stopPropagation();
-    ev.preventDefault();
-    onclick?.(ev);
-  }}
-  {type}
-  {disabled}
->
-  {@render children()}
-</button>
+{#if onclick}
+  <button
+    class={['main-button', buttonClass, round && 'rounded-full', className]}
+    onclick={(ev) => {
+      ev.stopPropagation();
+      ev.preventDefault();
+      onclick?.(ev);
+    }}
+    {type}
+    {disabled}
+  >
+    {@render children()}
+  </button>
+{:else}
+  <div class={['main-button', buttonClass, round && 'rounded-full', className]}>
+    {@render children()}
+  </div>
+{/if}
 
 <style lang="postcss">
   @reference '@/app.css';

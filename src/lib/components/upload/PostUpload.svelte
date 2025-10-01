@@ -1,18 +1,21 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
+  import { enhance } from '$app/forms';
+  import { getToaster } from '$lib/components/toast';
+  import type { PostUploadProps } from '$lib/components/types';
   import { ImageSizeLimit, VideoSizeLimit } from '$lib/utils/constants';
   import { formResultToast, getReadableSize } from '$lib/utils/helpers';
-  import type { PostUploadProps } from '$lib/components/types';
-  import { getToaster } from '$lib/components/toast';
+  import { onMount } from 'svelte';
   import Button from '../button/Button.svelte';
   import IconButton from '../button/IconButton.svelte';
   import Icon from '../misc/Icon.svelte';
-  import { enhance } from '$app/forms';
 
   let {
+    tags,
+    groupId,
     userPicture = '/images/default-user-profile-icon.jpg',
     formaction,
     placeholder = `What's happening?`,
+    groupAccepted = false,
     postCallback,
   }: PostUploadProps = $props();
 
@@ -107,7 +110,7 @@
       spellcheck="true"
       data-placeholder={placeholder}
     ></div>
-    <textarea class="hidden" name="content" value={inputContent}></textarea>
+    <textarea name="content" value={inputContent} hidden></textarea>
 
     {#if images.length > 0}
       <div class="media-viewer scrollbar">
@@ -153,8 +156,21 @@
       </div>
     {/if}
 
-    <div class="flex justify-end gap-4">
-      <div class="flex items-center">
+    <div class="flex gap-4">
+      {#if tags && tags.length > 0}
+        <select
+          class="rounded-md border-gray-700 bg-gray-950 text-white"
+          name="tag-id"
+          id="post-tag-select"
+        >
+          {#each tags as tag}
+            <option disabled selected value hidden> -- choose tag -- </option>
+            <option value={tag.id}>{tag.name}</option>
+          {/each}
+        </select>
+      {/if}
+
+      <div class="ml-auto flex items-center">
         <label for="image-input">
           <Icon
             class={[
@@ -205,6 +221,10 @@
         Post
       </Button>
     </div>
+    {#if groupId !== undefined}
+      <input type="number" name="group-id" value={groupId} hidden readonly />
+    {/if}
+    <input type="checkbox" name="accept-post" checked={groupAccepted} hidden readonly />
   </div>
 </form>
 

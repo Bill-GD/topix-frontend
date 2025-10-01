@@ -40,6 +40,7 @@ export type User = {
 };
 
 export type Tag = {
+  id: number;
   name: string;
   color: string;
 };
@@ -71,6 +72,20 @@ export type Thread = {
   tag: Tag | null;
   dateCreated: string;
   dateUpdated: string | null;
+};
+
+export type Group = {
+  id: number;
+  name: string;
+  owner: Partial<User>;
+  bannerPicture: string | null;
+  memberCount: number;
+  description: string | null;
+  visibility: 'public' | 'private' | 'hidden';
+  status: 'none' | 'pending' | 'joined';
+  dateJoined: string | null;
+  dateCreated: string;
+  dateUpdated: string;
 };
 
 export type UnaryVoidFunction<T> = (arg: T) => void;

@@ -1,0 +1,64 @@
+import { AxiosHandler } from '$lib/utils/axios-handler';
+import { CookieName } from '$lib/utils/types';
+import { error, fail, type Actions } from '@sveltejs/kit';
+import type { PageServerLoad } from './$types';
+
+export const load: PageServerLoad = async ({ params, cookies }) => {
+  const accepted = params.section === 'all';
+  const res = await AxiosHandler.get(
+    `/group/${params.id}/members?accepted=${accepted}`,
+    cookies.get(CookieName.accessToken),
+  );
+  if (!res.success) {
+    error(res.status, { status: res.status, message: res.message });
+  }
+
+  return {
+    members: res.data as unknown as {
+      id: number;
+      username: string;
+      displayName: string;
+      profilePicture: string | null;
+      dateRequested: string;
+      dateJoined: string | null;
+    }[],
+  };
+};
+
+export const actions: Actions = {
+  'change-owner': async ({ request, params, cookies }) => {
+    const formData = await request.formData();
+
+    const res = await AxiosHandler.post(
+      `/group/${params.id}/change-owner`,
+      { newOwnerId: Number(formData.get('member-id')) },
+      cookies.get(CookieName.accessToken),
+    );
+
+    if (!res.success) return fail(res.status, { success: false, message: res.message });
+    return { success: true, message: res.message };
+  },
+  'accept-member': async ({ request, params, cookies }) => {
+    const formData = await request.formData();
+
+    const res = await AxiosHandler.post(
+      `/group/${params.id}/member/${formData.get('member-id')}`,
+      undefined,
+      cookies.get(CookieName.accessToken),
+    );
+
+    if (!res.success) return fail(res.status, { success: false, message: res.message });
+    return { success: true, message: res.message };
+  },
+  'remove-member': async ({ request, params, cookies }) => {
+    const formData = await request.formData();
+
+    const res = await AxiosHandler.delete(
+      `/group/${params.id}/member/${formData.get('member-id')}`,
+      cookies.get(CookieName.accessToken),
+    );
+
+    if (!res.success) return fail(res.status, { success: false, message: res.message });
+    return { success: true, message: res.message };
+  },
+};

@@ -11,7 +11,11 @@ export const load: LayoutServerLoad = async ({ locals, cookies, route }) => {
       redirect(303, '/login');
     }
 
-    const res = await AxiosHandler.post('/auth/refresh', {}, cookies.get(CookieName.refreshToken));
+    const res = await AxiosHandler.post(
+      '/auth/refresh',
+      undefined,
+      cookies.get(CookieName.refreshToken),
+    );
     if (res.success) {
       const resObject = res.data as Record<string, string>;
       cookies.set(CookieName.accessToken, `${resObject['token']}`, {
@@ -20,7 +24,7 @@ export const load: LayoutServerLoad = async ({ locals, cookies, route }) => {
         maxAge: Number(resObject['time']),
       });
       locals.hasAT = true;
-      return;
+      redirect(303, '/home');
     }
 
     if (res.message.toLowerCase().includes('invalid signature')) {

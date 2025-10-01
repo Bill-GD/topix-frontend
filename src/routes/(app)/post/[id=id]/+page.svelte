@@ -11,7 +11,7 @@
 </script>
 
 <svelte:head>
-  <title>Home - topix</title>
+  <title>Post by {data.post.owner.displayName} - topix</title>
 </svelte:head>
 
 <HomeLayout self={data.self}>
@@ -41,6 +41,8 @@
     userPicture={data.self.profilePicture}
     formaction="?/reply"
     placeholder="Enter your reply"
+    groupId={data.post.groupId ?? undefined}
+    groupAccepted
   />
 
   <hr class="text-gray-700" />

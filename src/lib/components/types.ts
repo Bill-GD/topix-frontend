@@ -36,7 +36,7 @@ import type {
   HTMLAttributeAnchorTarget,
   HTMLInputTypeAttribute,
 } from 'svelte/elements';
-import type { CurrentUser, Post, ToastMessage, UnaryVoidFunction } from '../utils/types';
+import type { CurrentUser, Post, Tag, ToastMessage, UnaryVoidFunction } from '../utils/types';
 
 export type ButtonType = 'primary' | 'danger' | 'dark' | 'success';
 
@@ -122,8 +122,8 @@ export interface FileDropzoneProps {
 }
 
 export interface FlairProps {
-  title: string;
-  color: string;
+  tag: Tag;
+  class?: ClassValue;
 }
 
 export interface FloatingLabelInputProps {
@@ -179,7 +179,7 @@ export interface LinkProps {
 
 export interface ModalProps {
   class?: ClassValue;
-  id: string | null;
+  id?: string;
   children: Snippet;
   icon?: Snippet;
   show: boolean;
@@ -191,6 +191,11 @@ export interface NavItemProps {
   href: string;
   children: Snippet;
   class?: ClassValue;
+}
+
+export interface PendingPostProps {
+  class?: ClassValue;
+  post: Post;
 }
 
 export interface PostProps {
@@ -207,6 +212,9 @@ export interface PostUploadProps {
   userPicture: string | null;
   formaction?: string;
   placeholder?: string;
+  tags?: Tag[];
+  groupAccepted?: boolean;
+  groupId?: number;
   postCallback?: VoidFunction;
 }
 

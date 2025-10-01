@@ -1,13 +1,12 @@
 <script lang="ts">
   import type { Snippet } from 'svelte';
+  import type { ClassValue } from 'svelte/elements';
 
-  let { children }: { children: Snippet } = $props();
+  let { children, class: className }: { children: Snippet; class?: ClassValue } = $props();
 </script>
 
-<div class="modal-content">
-  <p class="align-middle">
-    {@render children()}
-  </p>
+<div class={['modal-content', className]}>
+  {@render children()}
 </div>
 
 <style lang="postcss">

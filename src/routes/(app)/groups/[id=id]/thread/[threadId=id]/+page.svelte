@@ -1,6 +1,6 @@
 <script lang="ts">
   import { Button, IconButton } from '$lib/components/button';
-  import { Icon } from '$lib/components/misc';
+  import { Flair, Icon } from '$lib/components/misc';
   import { Post } from '$lib/components/post';
   import { PostUpload } from '$lib/components/upload';
   import { HomeLayout } from '$lib/components/layout';
@@ -64,6 +64,11 @@
         {:else}
           <p class="text-4xl font-semibold text-white">{data.thread.title}</p>
         {/if}
+
+        {#if data.thread.tag}
+          <Flair tag={data.thread.tag} />
+        {/if}
+
         <div>
           <p>Created by @{data.thread.owner.username}</p>
           <span>
@@ -98,7 +103,7 @@
       </DropdownMenu>
     </div>
 
-    {#if data.self.username === data.thread.owner.username}
+    {#if data.self.username === data.thread.owner.username && data.group.status === 'joined'}
       <Button type="success" onclick={() => (showPostModal = true)}>Add post</Button>
     {/if}
   </div>
