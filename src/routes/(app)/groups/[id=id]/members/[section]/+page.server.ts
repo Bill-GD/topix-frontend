@@ -26,6 +26,18 @@ export const load: PageServerLoad = async ({ params, cookies }) => {
 };
 
 export const actions: Actions = {
+  'change-owner': async ({ request, params, cookies }) => {
+    const formData = await request.formData();
+
+    const res = await AxiosHandler.post(
+      `/group/${params.id}/change-owner`,
+      { newOwnerId: Number(formData.get('member-id')) },
+      cookies.get(CookieName.accessToken),
+    );
+
+    if (!res.success) return fail(res.status, { success: false, message: res.message });
+    return { success: true, message: res.message };
+  },
   'accept-member': async ({ request, params, cookies }) => {
     const formData = await request.formData();
 

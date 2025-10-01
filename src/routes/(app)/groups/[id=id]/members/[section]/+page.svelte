@@ -13,6 +13,7 @@
   const toaster = getToaster();
   const items = ['all', 'pending'];
   let showRemoveModal = $state<boolean>(false);
+  let showOwnerModal = $state<boolean>(false);
   let selectedMemberId = $state<number>(0);
 </script>
 
@@ -71,6 +72,16 @@
           {#if data.self.username === data.group.owner.username && user.username !== data.group.owner.username}
             <Button
               class="ml-auto w-fit"
+              type="primary"
+              onclick={() => {
+                selectedMemberId = user.id;
+                showOwnerModal = true;
+              }}
+            >
+              Change owner
+            </Button>
+            <Button
+              class="w-fit"
               type="danger"
               onclick={() => {
                 selectedMemberId = user.id;
@@ -172,6 +183,33 @@
       {/each}
     </div>
   {/snippet}
+
+  <Modal bind:show={showOwnerModal} center>
+    <ModalHeader>Change ownership</ModalHeader>
+    <ModalBody>
+      Are you sure you want to appoint this member as the owner? You will nullify all your rights as
+      an owner.
+    </ModalBody>
+    <ModalFooter>
+      <form
+        class="w-full"
+        method="post"
+        action="?/change-owner"
+        use:enhance={() => {
+          return async ({ result, update }) => {
+            await formResultToast(result, toaster);
+            await update();
+          };
+        }}
+      >
+        <input type="number" name="member-id" value={selectedMemberId} hidden readonly />
+        <Button class="w-full" type="primary" onclick={() => (showOwnerModal = false)}>
+          Change
+        </Button>
+      </form>
+      <Button class="w-full" type="dark" onclick={() => (showOwnerModal = false)}>Cancel</Button>
+    </ModalFooter>
+  </Modal>
 
   <Modal bind:show={showRemoveModal} center>
     <ModalHeader>Remove member</ModalHeader>
