@@ -1,6 +1,6 @@
 import { API_PORT, API_SERVER } from '$env/static/public';
-import { type ActionResult, type Cookies } from '@sveltejs/kit';
 import { Toaster } from '$lib/components/toast';
+import { type ActionResult, type Cookies, fail } from '@sveltejs/kit';
 import { CookieName } from './types';
 
 const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -118,4 +118,39 @@ export async function formResultToast(
       break;
     }
   }
+}
+
+export async function getPostUploadForm(request: Request) {
+  const formData = await request.formData();
+  const files: File[] = [];
+  const content = `${formData.get('content')}`.replaceAll('\r\n\r\n', '\n');
+  const tagId = Number(formData.get('tag-id'));
+  let type = 'image';
+
+  if (formData.has('video')) {
+    const vid = formData.get('video') as File;
+    if (vid.size > 0) {
+      type = 'video';
+      files.push(vid);
+    }
+  } else if (formData.has('images')) {
+    files.push(...(formData.getAll('images') as File[]).filter((f) => f.size > 0));
+  }
+
+  if (files.length <= 0 && content.length <= 0) {
+    return fail(400, {
+      success: false,
+      message: 'Content must not be empty if no image or video uploaded.',
+    });
+  }
+
+  const form = new FormData();
+  form.append('type', type);
+  form.append('content', content);
+  form.append('approved', `${formData.has('group-approved')}`);
+  if (formData.has('group-id')) form.append('groupId', `${formData.get('group-id')}`);
+  if (!isNaN(tagId) && tagId > 0) form.append('tagId', `${tagId}`);
+  if (files.length > 0) files.forEach((f) => form.append('files', f));
+
+  return form;
 }

@@ -1,42 +1,23 @@
 // component-related types
 
-import { faThumbsUp as faClassicThumbsUp } from '@fortawesome/free-regular-svg-icons';
-import {
-  faCheck,
-  faChevronLeft,
-  faChevronRight,
-  faCircleCheck,
-  faCircleInfo,
-  faEllipsisVertical,
-  faEye,
-  faEyeSlash,
-  faFaceAngry,
-  faFaceFrownOpen,
-  faFaceLaugh,
-  faHeart,
-  faHouse,
-  faImage,
-  faMagnifyingGlass,
-  faMessage,
-  faPlus,
-  faReply,
-  faThumbsUp,
-  faTrashCan,
-  faTriangleExclamation,
-  faUser,
-  faUserGroup,
-  faUserMinus,
-  faUserPlus,
-  faVideo,
-  faXmark,
-} from '@fortawesome/free-solid-svg-icons';
 import type { Snippet } from 'svelte';
 import type {
-  ClassValue,
-  HTMLAttributeAnchorTarget,
-  HTMLInputTypeAttribute,
+  ClassValue, HTMLAttributeAnchorTarget, HTMLInputTypeAttribute,
 } from 'svelte/elements';
-import type { CurrentUser, Post, Tag, ToastMessage, UnaryVoidFunction } from '../utils/types';
+import { faThumbsUp as faClassicThumbsUp } from '@fortawesome/free-regular-svg-icons';
+import {
+  faCheck, faChevronLeft, faChevronRight, faCircleCheck,
+  faCircleInfo, faEllipsisVertical, faEye, faEyeSlash,
+  faFaceAngry, faFaceFrownOpen, faFaceLaugh, faHeart,
+  faHouse, faImage, faMagnifyingGlass, faMessage,
+  faPlus, faReply, faThumbsUp, faTrashCan,
+  faTriangleExclamation, faUser, faUserGroup, faUserMinus,
+  faUserPlus, faVideo, faXmark,
+} from '@fortawesome/free-solid-svg-icons';
+import type {
+  CurrentUser, Post, Tag, ToastMessage,
+  UnaryVoidFunction,
+} from '../utils/types';
 
 export type ButtonType = 'primary' | 'danger' | 'dark' | 'success';
 

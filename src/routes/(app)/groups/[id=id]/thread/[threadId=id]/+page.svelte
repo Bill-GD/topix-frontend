@@ -124,6 +124,8 @@
         formaction="?/add-post"
         placeholder="Add new post"
         postCallback={() => (showPostModal = false)}
+        groupId={data.group.id}
+        groupApproved
       />
     </ModalBody>
   </Modal>

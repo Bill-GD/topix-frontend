@@ -1,6 +1,7 @@
 import { AxiosHandler, handleReaction } from '$lib/utils/axios-handler';
+import { getPostUploadForm } from '$lib/utils/helpers';
 import { CookieName, type Post, type Thread, type User } from '$lib/utils/types';
-import { type Actions, error, fail } from '@sveltejs/kit';
+import { type Actions, error, fail, isActionFailure } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ params, cookies }) => {
@@ -29,35 +30,11 @@ export const load: PageServerLoad = async ({ params, cookies }) => {
 };
 
 export const actions: Actions = {
-  'post-upload': async (event) => {
-    const formData = await event.request.formData();
-    const files: File[] = [];
-    const content = `${formData.get('content')}`.replaceAll('\r\n\r\n', '\n');
-    let type = 'image';
+  'post-upload': async ({ request, cookies }) => {
+    const form = await getPostUploadForm(request);
+    if (isActionFailure(form)) return form;
 
-    if (formData.has('video')) {
-      const vid = formData.get('video') as File;
-      if (vid.size > 0) {
-        type = 'video';
-        files.push(vid);
-      }
-    } else if (formData.has('images')) {
-      files.push(...(formData.getAll('images') as File[]).filter((f) => f.size > 0));
-    }
-
-    if (files.length <= 0 && content.length <= 0) {
-      return fail(400, {
-        success: false,
-        message: 'Content must not be empty if no image or video uploaded.',
-      });
-    }
-
-    const form = new FormData();
-    form.append('type', type);
-    form.append('content', content);
-    if (files.length > 0) files.forEach((f) => form.append('files', f));
-
-    const res = await AxiosHandler.post('/post', form, event.cookies.get(CookieName.accessToken), {
+    const res = await AxiosHandler.post('/post', form, cookies.get(CookieName.accessToken), {
       'Content-Type': 'multipart/form-data',
     });
     if (!res.success) return fail(res.status, { success: false, message: res.message });
