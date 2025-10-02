@@ -16,13 +16,16 @@
   const toaster = getToaster();
   const items = ['general', 'tags'];
   let saving = $state<boolean>(false);
-  let showModal = $state<boolean>(false);
-  let showTagModal = $state<boolean>(false);
+  let showModal = $state<'add' | 'delete' | null>(null);
   let bannerValue = $derived<string>('');
   let filenameValue = $state<string>('');
   let tagName = $state<string>('example');
   let colorValue = $state<string>('#000000');
   let selectedTag = $state<Tag | null>(null);
+
+  function hideModal() {
+    showModal = null;
+  }
 </script>
 
 <svelte:head>
@@ -105,7 +108,7 @@
       </form>
     {:else if params.section === 'tags'}
       <div class="flex flex-col gap-4">
-        <Button class="ml-auto" type="success" onclick={() => (showModal = true)}>Add tag</Button>
+        <Button class="ml-auto" type="success" onclick={() => (showModal = 'add')}>Add tag</Button>
 
         <p class="text-lg font-semibold">Current tags</p>
         <div class="flex flex-wrap gap-4">
@@ -115,7 +118,7 @@
               <IconButton
                 class="hover:bg-gray-800"
                 onclick={() => {
-                  showTagModal = true;
+                  showModal = 'delete';
                   selectedTag = tag;
                 }}
               >
@@ -156,7 +159,7 @@
     </div>
   {/snippet}
 
-  <Modal bind:show={showModal} center>
+  <Modal show={showModal === 'add'} backdropCallback={hideModal} center>
     <ModalHeader>Add new tag</ModalHeader>
     <ModalBody>
       <form
@@ -168,7 +171,7 @@
           return async ({ result, update }) => {
             await formResultToast(result, toaster);
             await update();
-            showModal = false;
+            hideModal();
             tagName = 'example';
             colorValue = '#000000';
           };
@@ -198,7 +201,7 @@
           class="ml-auto w-full"
           type="success"
           disabled={tagName.length <= 0}
-          onclick={() => (showModal = true)}
+          onclick={hideModal}
         >
           Add tag
         </Button>
@@ -206,7 +209,7 @@
     </ModalBody>
   </Modal>
 
-  <Modal bind:show={showTagModal} center>
+  <Modal show={showModal === 'delete'} backdropCallback={hideModal} center>
     <ModalHeader>Delete tag</ModalHeader>
     <ModalBody>Are you sure you want to delete tag <Flair tag={selectedTag!} />?</ModalBody>
     <ModalFooter>
@@ -222,9 +225,9 @@
         }}
       >
         <input type="text" name="tag-id" value={selectedTag?.id} hidden readonly />
-        <Button class="w-full" type="danger" onclick={() => (showTagModal = false)}>Delete</Button>
+        <Button class="w-full" type="danger" onclick={hideModal}>Delete</Button>
       </form>
-      <Button class="w-full" type="dark" onclick={() => (showTagModal = false)}>Cancel</Button>
+      <Button class="w-full" type="dark" onclick={hideModal}>Cancel</Button>
     </ModalFooter>
   </Modal>
 </HomeLayout>

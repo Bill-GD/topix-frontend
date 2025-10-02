@@ -15,10 +15,13 @@
   let { data }: PageProps = $props();
 
   const toaster = getToaster();
-  let showPostModal = $state<boolean>(false);
-  let showDeleteThreadModal = $state<boolean>(false);
+  let showModal = $state<'post' | 'thread' | null>(null);
   let editingTitle = $state<boolean>(false);
   let title = $state<string>(data.thread.title);
+
+  function hideModal() {
+    showModal = null;
+  }
 </script>
 
 <svelte:head>
@@ -91,7 +94,7 @@
         <DropdownItem>Follow</DropdownItem>
         {#if data.self.username === data.thread.owner.username}
           <DropdownItem onclick={() => (editingTitle = true)}>Edit</DropdownItem>
-          <DropdownItem class="text-red-500" onclick={() => (showDeleteThreadModal = true)}>
+          <DropdownItem class="text-red-500" onclick={() => (showModal = 'thread')}>
             Delete
           </DropdownItem>
         {/if}
@@ -99,7 +102,7 @@
     </div>
 
     {#if data.self.username === data.thread.owner.username}
-      <Button type="success" onclick={() => (showPostModal = true)}>Add post</Button>
+      <Button type="success" onclick={() => (showModal = 'post')}>Add post</Button>
     {/if}
   </div>
 
@@ -111,19 +114,19 @@
     <hr class="text-gray-700" />
   {/each}
 
-  <Modal class="min-w-1/2" id="modal-add-post" bind:show={showPostModal}>
+  <Modal class="min-w-1/2" show={showModal === 'post'} backdropCallback={hideModal}>
     <ModalHeader>Add new post</ModalHeader>
     <ModalBody>
       <PostUpload
         userPicture={data.self.profilePicture}
         formaction="?/add-post"
         placeholder="Add new post"
-        postCallback={() => (showPostModal = false)}
+        postCallback={hideModal}
       />
     </ModalBody>
   </Modal>
 
-  <Modal id="modal-delete-thread-{data.thread.id}" bind:show={showDeleteThreadModal} center>
+  <Modal show={showModal === 'thread'} backdropCallback={hideModal} center>
     <ModalHeader>Delete thread</ModalHeader>
     <ModalBody>Are you sure you want to delete this thread? This is irreversible.</ModalBody>
     <ModalFooter>
@@ -139,14 +142,10 @@
           };
         }}
       >
-        <Button class="w-full" type="danger" onclick={() => (showDeleteThreadModal = false)}>
-          Delete
-        </Button>
+        <Button class="w-full" type="danger" onclick={hideModal}>Delete</Button>
       </form>
 
-      <Button class="w-full" type="dark" onclick={() => (showDeleteThreadModal = false)}>
-        Cancel
-      </Button>
+      <Button class="w-full" type="dark" onclick={hideModal}>Cancel</Button>
     </ModalFooter>
   </Modal>
 </HomeLayout>

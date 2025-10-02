@@ -16,10 +16,12 @@
   let { data }: PageProps = $props();
 
   const toaster = getToaster();
-  let showDeleteGroupModal = $state<boolean>(false);
-  let showLeaveModal = $state<boolean>(false);
-  let showThreadModal = $state<boolean>(false);
+  let showModal = $state<'thread' | 'leave' | 'delete' | null>(null);
   let threadTitle = $state<string>('');
+
+  function hideModal() {
+    showModal = null;
+  }
 </script>
 
 <svelte:head>
@@ -86,11 +88,11 @@
           {#if data.self.username === data.group.owner.username}
             <DropdownItem href="/groups/{data.group.id}/pending">Pending posts</DropdownItem>
             <DropdownItem href="/groups/{data.group.id}/settings/general">Settings</DropdownItem>
-            <DropdownItem class="text-red-500" onclick={() => (showDeleteGroupModal = true)}>
+            <DropdownItem class="text-red-500" onclick={() => (showModal = 'delete')}>
               Delete
             </DropdownItem>
           {:else if data.group.status !== 'none'}
-            <DropdownItem class="text-red-500" onclick={() => (showLeaveModal = true)}>
+            <DropdownItem class="text-red-500" onclick={() => (showModal = 'leave')}>
               Leave
             </DropdownItem>
           {/if}
@@ -126,7 +128,7 @@
           <IconButton
             variant="success"
             class="ml-auto flex hover:bg-gray-800"
-            onclick={() => (showThreadModal = true)}
+            onclick={() => (showModal = 'thread')}
           >
             <Icon type="add" size="xs" />
           </IconButton>
@@ -145,7 +147,7 @@
     </div>
   {/snippet}
 
-  <Modal bind:show={showDeleteGroupModal} center>
+  <Modal show={showModal === 'delete'} backdropCallback={hideModal} center>
     <ModalHeader>Delete group</ModalHeader>
     <ModalBody>Are you sure you want to delete this group? This is irreversible.</ModalBody>
     <ModalFooter>
@@ -160,18 +162,14 @@
           };
         }}
       >
-        <Button class="w-full" type="danger" onclick={() => (showDeleteGroupModal = false)}>
-          Delete
-        </Button>
+        <Button class="w-full" type="danger" onclick={hideModal}>Delete</Button>
       </form>
 
-      <Button class="w-full" type="dark" onclick={() => (showDeleteGroupModal = false)}>
-        Cancel
-      </Button>
+      <Button class="w-full" type="dark" onclick={hideModal}>Cancel</Button>
     </ModalFooter>
   </Modal>
 
-  <Modal bind:show={showLeaveModal} center>
+  <Modal show={showModal === 'leave'} backdropCallback={hideModal} center>
     <ModalHeader>Leave group</ModalHeader>
     <ModalBody>Are you sure you want to leave this group?</ModalBody>
     <ModalFooter>
@@ -186,14 +184,14 @@
           };
         }}
       >
-        <Button class="w-full" type="danger" onclick={() => (showLeaveModal = false)}>Leave</Button>
+        <Button class="w-full" type="danger" onclick={hideModal}>Leave</Button>
       </form>
 
-      <Button class="w-full" type="dark" onclick={() => (showLeaveModal = false)}>Cancel</Button>
+      <Button class="w-full" type="dark" onclick={hideModal}>Cancel</Button>
     </ModalFooter>
   </Modal>
 
-  <Modal bind:show={showThreadModal} center>
+  <Modal show={showModal === 'thread'} backdropCallback={hideModal} center>
     <ModalHeader>Create thread</ModalHeader>
     <ModalBody>
       <form
@@ -223,10 +221,15 @@
         </select>
 
         <div class="flex w-full flex-col gap-2 md:flex-row">
-          <Button class="w-full" type="success" onclick={() => (showThreadModal = false)}>
-            Create
-          </Button>
-          <Button class="w-full" type="dark" onclick={() => (showThreadModal = false)}>
+          <Button class="w-full" type="success" onclick={hideModal}>Create</Button>
+          <Button
+            class="w-full"
+            type="dark"
+            onclick={(ev) => {
+              ev.preventDefault();
+              hideModal();
+            }}
+          >
             Cancel
           </Button>
         </div>

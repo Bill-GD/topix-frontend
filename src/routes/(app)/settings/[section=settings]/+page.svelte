@@ -16,8 +16,11 @@
   const items = ['account', 'profile', 'danger'];
   let passwordValue = $state<string>('');
   let profileValue = $state<string>('');
-  let profileFilenameValue = $state<string>('');
-  let showModal = $state<boolean>(false);
+  let showModal = $state<'delete' | null>(null);
+
+  function hideModal() {
+    showModal = null;
+  }
 </script>
 
 <svelte:head>
@@ -122,14 +125,14 @@
         </div>
       </form>
     {:else if params.section === 'danger'}
-      <!-- {#if data.self.role !== 'admin'} -->
-      <div class="flex flex-col gap-2">
-        <p class="text-xl">Delete account</p>
-        <div class="flex gap-4">
-          <Button type="danger" onclick={() => (showModal = true)}>Delete</Button>
+      {#if data.self.role !== 'admin'}
+        <div class="flex flex-col gap-2">
+          <p class="text-xl">Delete account</p>
+          <div class="flex gap-4">
+            <Button type="danger" onclick={() => (showModal = 'delete')}>Delete</Button>
+          </div>
         </div>
-      </div>
-      <!-- {/if} -->
+      {/if}
     {/if}
   </div>
 
@@ -161,7 +164,7 @@
     </div>
   {/snippet}
 
-  <Modal id="delete-modal-account-{data.self.id}" bind:show={showModal} center>
+  <Modal show={showModal === 'delete'} backdropCallback={hideModal} center>
     <ModalHeader>Delete account</ModalHeader>
     <ModalBody>
       <form
@@ -172,7 +175,7 @@
           return async ({ result, update }) => {
             await formResultToast(result, toaster, 'Account deleted successfully.');
             await update();
-            showModal = false;
+            hideModal();
             passwordValue = '';
           };
         }}

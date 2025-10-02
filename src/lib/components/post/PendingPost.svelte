@@ -20,8 +20,11 @@
   const isVideo = $derived(post.mediaPaths.every((m) => m.includes('video')));
 
   let imageIndex = $state<number>(0);
-  let showApproveModal = $state<boolean>(false);
-  let showRemoveModal = $state<boolean>(false);
+  let showModal = $state<'approve' | 'remove' | null>(null);
+
+  function hideModal() {
+    showModal = null;
+  }
 </script>
 
 <div class={['flex items-center gap-2 p-4', className]}>
@@ -106,16 +109,16 @@
   </div>
 
   <div class="ml-auto flex gap-2">
-    <IconButton variant="success" onclick={() => (showApproveModal = true)}>
+    <IconButton variant="success" onclick={() => (showModal = 'approve')}>
       <Icon type="check" size="sm" />
     </IconButton>
-    <IconButton variant="danger" onclick={() => (showRemoveModal = true)}>
+    <IconButton variant="danger" onclick={() => (showModal = 'remove')}>
       <Icon type="close" size="sm" />
     </IconButton>
   </div>
 </div>
 
-<Modal bind:show={showApproveModal} center>
+<Modal show={showModal === 'approve'} backdropCallback={hideModal} center>
   <ModalHeader>Approve post</ModalHeader>
   <ModalBody>Are you sure you want to approve this post?</ModalBody>
   <ModalFooter>
@@ -131,15 +134,13 @@
       }}
     >
       <input type="number" name="post-id" value={post.id} hidden readonly />
-      <Button class="w-full" type="success" onclick={() => (showApproveModal = false)}
-        >Approve</Button
-      >
+      <Button class="w-full" type="success" onclick={hideModal}>Approve</Button>
     </form>
-    <Button class="w-full" type="dark" onclick={() => (showApproveModal = false)}>Cancel</Button>
+    <Button class="w-full" type="dark" onclick={hideModal}>Cancel</Button>
   </ModalFooter>
 </Modal>
 
-<Modal bind:show={showRemoveModal} center>
+<Modal show={showModal === 'remove'} backdropCallback={hideModal} center>
   <ModalHeader>Remove post</ModalHeader>
   <ModalBody>Are you sure you want to remove this post?</ModalBody>
   <ModalFooter>
@@ -155,8 +156,8 @@
       }}
     >
       <input type="number" name="post-id" value={post.id} hidden readonly />
-      <Button class="w-full" type="danger" onclick={() => (showRemoveModal = false)}>Remove</Button>
+      <Button class="w-full" type="danger" onclick={hideModal}>Remove</Button>
     </form>
-    <Button class="w-full" type="dark" onclick={() => (showRemoveModal = false)}>Cancel</Button>
+    <Button class="w-full" type="dark" onclick={hideModal}>Cancel</Button>
   </ModalFooter>
 </Modal>

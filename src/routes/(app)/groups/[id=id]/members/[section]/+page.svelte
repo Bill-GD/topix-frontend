@@ -1,20 +1,23 @@
 <script lang="ts">
-  import { capitalize, formResultToast } from '$lib/utils/helpers';
-  import { IconButton, Button } from '$lib/components/button';
-  import { Icon } from '$lib/components/misc';
-  import { HomeLayout } from '$lib/components/layout';
-  import { getToaster } from '$lib/components/toast';
-  import { Modal, ModalHeader, ModalBody, ModalFooter } from '$lib/components/modal';
-  import type { PageProps } from './$types';
   import { enhance } from '$app/forms';
+  import { Button, IconButton } from '$lib/components/button';
+  import { HomeLayout } from '$lib/components/layout';
+  import { Icon } from '$lib/components/misc';
+  import { Modal, ModalBody, ModalFooter, ModalHeader } from '$lib/components/modal';
+  import { getToaster } from '$lib/components/toast';
+  import { capitalize, formResultToast } from '$lib/utils/helpers';
+  import type { PageProps } from './$types';
 
   let { data, params }: PageProps = $props();
 
   const toaster = getToaster();
   const items = ['all', 'pending'];
-  let showRemoveModal = $state<boolean>(false);
-  let showOwnerModal = $state<boolean>(false);
+  let showModal = $state<'remove' | 'owner' | null>(null);
   let selectedMemberId = $state<number>(0);
+
+  function hideModal() {
+    showModal = null;
+  }
 </script>
 
 <svelte:head>
@@ -75,7 +78,7 @@
               type="primary"
               onclick={() => {
                 selectedMemberId = user.id;
-                showOwnerModal = true;
+                showModal = 'owner';
               }}
             >
               Change owner
@@ -85,7 +88,7 @@
               type="danger"
               onclick={() => {
                 selectedMemberId = user.id;
-                showRemoveModal = true;
+                showModal = 'remove';
               }}
             >
               Remove
@@ -143,7 +146,7 @@
                 onclick={(ev) => {
                   ev.preventDefault();
                   selectedMemberId = user.id;
-                  showRemoveModal = true;
+                  showModal = 'remove';
                 }}
               >
                 Remove
@@ -184,7 +187,7 @@
     </div>
   {/snippet}
 
-  <Modal bind:show={showOwnerModal} center>
+  <Modal show={showModal === 'owner'} backdropCallback={hideModal} center>
     <ModalHeader>Change ownership</ModalHeader>
     <ModalBody>
       Are you sure you want to appoint this member as the owner? You will nullify all your rights as
@@ -203,15 +206,13 @@
         }}
       >
         <input type="number" name="member-id" value={selectedMemberId} hidden readonly />
-        <Button class="w-full" type="primary" onclick={() => (showOwnerModal = false)}>
-          Change
-        </Button>
+        <Button class="w-full" type="primary" onclick={hideModal}>Change</Button>
       </form>
-      <Button class="w-full" type="dark" onclick={() => (showOwnerModal = false)}>Cancel</Button>
+      <Button class="w-full" type="dark" onclick={hideModal}>Cancel</Button>
     </ModalFooter>
   </Modal>
 
-  <Modal bind:show={showRemoveModal} center>
+  <Modal show={showModal === 'remove'} backdropCallback={hideModal} center>
     <ModalHeader>Remove member</ModalHeader>
     <ModalBody>Are you sure you want to remove this member?</ModalBody>
     <ModalFooter>
@@ -227,11 +228,9 @@
         }}
       >
         <input type="number" name="member-id" value={selectedMemberId} hidden readonly />
-        <Button class="w-full" type="danger" onclick={() => (showRemoveModal = false)}>
-          Remove
-        </Button>
+        <Button class="w-full" type="danger" onclick={hideModal}>Remove</Button>
       </form>
-      <Button class="w-full" type="dark" onclick={() => (showRemoveModal = false)}>Cancel</Button>
+      <Button class="w-full" type="dark" onclick={hideModal}>Cancel</Button>
     </ModalFooter>
   </Modal>
 </HomeLayout>

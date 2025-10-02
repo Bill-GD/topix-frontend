@@ -15,8 +15,12 @@
   let { data }: PageProps = $props();
 
   const toaster = getToaster();
-  let showModal = $state<boolean>(false);
+  let showModal = $state<'thread' | null>(null);
   let threadTitle = $state<string>('');
+
+  function hideModal() {
+    showModal = null;
+  }
 </script>
 
 <svelte:head>
@@ -79,7 +83,7 @@
           <IconButton
             variant="success"
             class="ml-auto flex hover:bg-gray-800"
-            onclick={() => (showModal = true)}
+            onclick={() => (showModal = 'thread')}
           >
             <Icon type="add" size="xs" />
           </IconButton>
@@ -98,7 +102,7 @@
     </div>
   {/snippet}
 
-  <Modal id="modal-create-thread" bind:show={showModal} center>
+  <Modal show={showModal === 'thread'} backdropCallback={hideModal} center>
     <ModalHeader>Create thread</ModalHeader>
     <ModalBody>
       <FloatingLabelInput labelClass="bg-gray-900" bind:value={threadTitle}>
@@ -118,10 +122,10 @@
           };
         }}
       >
-        <Button class="w-full" type="success" onclick={() => (showModal = false)}>Create</Button>
+        <Button class="w-full" type="success" onclick={hideModal}>Create</Button>
         <input hidden type="text" name="thread-title" readonly value={threadTitle} />
       </form>
-      <Button class="w-full" type="dark" onclick={() => (showModal = false)}>Cancel</Button>
+      <Button class="w-full" type="dark" onclick={hideModal}>Cancel</Button>
     </ModalFooter>
   </Modal>
 </HomeLayout>

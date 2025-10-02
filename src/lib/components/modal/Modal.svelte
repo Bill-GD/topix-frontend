@@ -6,15 +6,16 @@
     class: className,
     id,
     children,
-    show = $bindable(false),
+    show = false,
     center = false,
+    backdropCallback,
   }: ModalProps = $props();
 </script>
 
 {#if show}
   <!-- svelte-ignore a11y_no_static_element_interactions -->
   <!-- svelte-ignore a11y_click_events_have_key_events -->
-  <div class="modal-backdrop" onclick={() => (show = false)}></div>
+  <div class="modal-backdrop" onclick={backdropCallback}></div>
   <div in:fade={{ duration: 200 }} out:fade={{ duration: 300 }}>
     <div
       class={['modal', center && 'text-center', className]}

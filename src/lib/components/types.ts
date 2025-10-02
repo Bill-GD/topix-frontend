@@ -1,5 +1,11 @@
 // component-related types
 
+import type { Snippet } from 'svelte';
+import type {
+  ClassValue,
+  HTMLAttributeAnchorTarget,
+  HTMLInputTypeAttribute,
+} from 'svelte/elements';
 import { faThumbsUp as faClassicThumbsUp } from '@fortawesome/free-regular-svg-icons';
 import {
   faCheck,
@@ -30,12 +36,6 @@ import {
   faVideo,
   faXmark,
 } from '@fortawesome/free-solid-svg-icons';
-import type { Snippet } from 'svelte';
-import type {
-  ClassValue,
-  HTMLAttributeAnchorTarget,
-  HTMLInputTypeAttribute,
-} from 'svelte/elements';
 import type { CurrentUser, Post, Tag, ToastMessage, UnaryVoidFunction } from '../utils/types';
 
 export type ButtonType = 'primary' | 'danger' | 'dark' | 'success';
@@ -182,6 +182,7 @@ export interface ModalProps {
   icon?: Snippet;
   show: boolean;
   center?: boolean;
+  backdropCallback: VoidFunction;
 }
 
 export interface NavItemProps {

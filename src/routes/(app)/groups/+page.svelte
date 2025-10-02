@@ -13,9 +13,13 @@
   let { data }: PageProps = $props();
 
   const toaster = getToaster();
-  let showModal = $state<boolean>(false);
+  let showModal = $state<'create' | null>(null);
   let groupName = $state<string>('');
   let bannerValue = $state<string>('');
+
+  function hideModal() {
+    showModal = null;
+  }
 </script>
 
 <svelte:head>
@@ -72,14 +76,19 @@
     <IconButton
       class="flex gap-2 hover:bg-gray-800"
       variant="success"
-      onclick={() => (showModal = true)}
+      onclick={() => (showModal = 'create')}
     >
       <span class="font-semibold">Create group</span>
       <Icon type="add" size="sm" />
     </IconButton>
   {/snippet}
 
-  <Modal class="mx-4 w-full md:m-0 md:w-1/2" id="modal-create-group" bind:show={showModal} center>
+  <Modal
+    class="mx-4 w-full md:m-0 md:w-1/3"
+    show={showModal === 'create'}
+    backdropCallback={hideModal}
+    center
+  >
     <ModalHeader>Create new group</ModalHeader>
     <ModalBody>
       <form
@@ -110,13 +119,10 @@
         <FileDropzone contentInputName="group-banner" bind:contentValue={bannerValue} />
 
         <div class="flex w-full flex-col gap-2 md:flex-row">
-          <Button
-            class="w-full"
-            type="success"
-            onclick={() => (showModal = false)}
-            disabled={groupName === ''}>Create</Button
+          <Button class="w-full" type="success" onclick={hideModal} disabled={groupName === ''}
+            >Create</Button
           >
-          <Button class="w-full" type="dark" onclick={() => (showModal = false)}>Cancel</Button>
+          <Button class="w-full" type="dark" onclick={hideModal}>Cancel</Button>
         </div>
       </form>
     </ModalBody>
