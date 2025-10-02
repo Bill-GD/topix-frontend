@@ -1,14 +1,14 @@
 <script lang="ts">
-  import { capitalize, formResultToast } from '$lib/utils/helpers';
-  import { IconButton, Button } from '$lib/components/button';
+  import { enhance } from '$app/forms';
+  import { Button, IconButton } from '$lib/components/button';
   import { Input } from '$lib/components/input';
-  import { Icon } from '$lib/components/misc';
-  import { FileDropzone } from '$lib/components/upload';
   import { HomeLayout } from '$lib/components/layout';
+  import { Icon } from '$lib/components/misc';
   import { Modal, ModalBody, ModalHeader } from '$lib/components/modal';
   import { getToaster } from '$lib/components/toast';
+  import { FileDropzone } from '$lib/components/upload';
+  import { capitalize, formResultToast } from '$lib/utils/helpers';
   import type { PageProps } from './$types';
-  import { enhance } from '$app/forms';
 
   let { data, params }: PageProps = $props();
 
@@ -117,12 +117,7 @@
               alt="user-profile"
             />
 
-            <FileDropzone
-              contentInputName="profile-picture"
-              bind:contentValue={profileValue}
-              filenameInputName="profile-picture-name"
-              bind:filenameValue={profileFilenameValue}
-            />
+            <FileDropzone contentInputName="profile-picture" bind:contentValue={profileValue} />
           </div>
         </div>
       </form>

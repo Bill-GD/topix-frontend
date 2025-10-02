@@ -1,10 +1,8 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
   import type { FileDropzoneProps } from '$lib/components/types';
+  import { onMount } from 'svelte';
 
   let {
-    filenameInputName,
-    filenameValue = $bindable(''),
     contentInputName,
     contentValue = $bindable(''),
     class: className,
@@ -42,14 +40,10 @@
       errorText = '';
 
       dropzoneText = file.name;
-      filenameValue = file.name;
       hasDroppedFile = true;
 
       const fr = new FileReader();
-      fr.onload = () => {
-        contentValue = fr.result as string;
-        // (document.querySelector('img[alt="user-profile"]')! as HTMLImageElement).src = contentValue;
-      };
+      fr.onload = () => (contentValue = fr.result as string);
       fr.readAsDataURL(file);
     });
   });
@@ -57,7 +51,6 @@
 
 <div class={[hasDroppedFile ? 'dropped' : 'empty', className]} id="file-drop">
   <p class={[errorText !== '' && 'text-red-500']}>{errorText !== '' ? errorText : dropzoneText}</p>
-  <input class="hidden" type="text" name={filenameInputName} bind:value={filenameValue} />
   <input class="hidden" type="text" name={contentInputName} bind:value={contentValue} />
 </div>
 

@@ -1,23 +1,42 @@
 // component-related types
 
-import type { Snippet } from 'svelte';
-import type {
-  ClassValue, HTMLAttributeAnchorTarget, HTMLInputTypeAttribute,
-} from 'svelte/elements';
 import { faThumbsUp as faClassicThumbsUp } from '@fortawesome/free-regular-svg-icons';
 import {
-  faCheck, faChevronLeft, faChevronRight, faCircleCheck,
-  faCircleInfo, faEllipsisVertical, faEye, faEyeSlash,
-  faFaceAngry, faFaceFrownOpen, faFaceLaugh, faHeart,
-  faHouse, faImage, faMagnifyingGlass, faMessage,
-  faPlus, faReply, faThumbsUp, faTrashCan,
-  faTriangleExclamation, faUser, faUserGroup, faUserMinus,
-  faUserPlus, faVideo, faXmark,
+  faCheck,
+  faChevronLeft,
+  faChevronRight,
+  faCircleCheck,
+  faCircleInfo,
+  faEllipsisVertical,
+  faEye,
+  faEyeSlash,
+  faFaceAngry,
+  faFaceFrownOpen,
+  faFaceLaugh,
+  faHeart,
+  faHouse,
+  faImage,
+  faMagnifyingGlass,
+  faMessage,
+  faPlus,
+  faReply,
+  faThumbsUp,
+  faTrashCan,
+  faTriangleExclamation,
+  faUser,
+  faUserGroup,
+  faUserMinus,
+  faUserPlus,
+  faVideo,
+  faXmark,
 } from '@fortawesome/free-solid-svg-icons';
+import type { Snippet } from 'svelte';
 import type {
-  CurrentUser, Post, Tag, ToastMessage,
-  UnaryVoidFunction,
-} from '../utils/types';
+  ClassValue,
+  HTMLAttributeAnchorTarget,
+  HTMLInputTypeAttribute,
+} from 'svelte/elements';
+import type { CurrentUser, Post, Tag, ToastMessage, UnaryVoidFunction } from '../utils/types';
 
 export type ButtonType = 'primary' | 'danger' | 'dark' | 'success';
 
@@ -96,9 +115,7 @@ export interface ToastProps {
 
 export interface FileDropzoneProps {
   contentInputName: string;
-  filenameInputName: string;
   contentValue: string;
-  filenameValue: string;
   class?: ClassValue;
 }
 

@@ -1,7 +1,7 @@
 import { AxiosHandler } from '$lib/utils/axios-handler';
 import { dataUrlToFile, deleteCookies } from '$lib/utils/helpers';
 import { CookieName, type CurrentUser, type User } from '$lib/utils/types';
-import { error, fail, redirect, type Actions } from '@sveltejs/kit';
+import { type Actions, error, fail, redirect } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ parent, cookies }) => {
@@ -49,7 +49,7 @@ export const actions: Actions = {
     if (formData.has('display-name')) form.append('displayName', `${formData.get('display-name')}`);
     if (formData.has('description')) form.append('description', `${formData.get('description')}`);
 
-    if (formData.get('profile-picture') !== '' && formData.get('profile-picture-name') !== '') {
+    if (formData.get('profile-picture') !== '') {
       form.append('profilePicture', dataUrlToFile(`${formData.get('profile-picture')}`));
     }
 

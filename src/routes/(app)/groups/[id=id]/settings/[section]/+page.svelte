@@ -1,15 +1,15 @@
 <script lang="ts">
-  import { capitalize, formResultToast } from '$lib/utils/helpers';
-  import { IconButton, Button } from '$lib/components/button';
+  import { enhance } from '$app/forms';
+  import { Button, IconButton } from '$lib/components/button';
   import { FloatingLabelInput, Input } from '$lib/components/input';
-  import { Flair, Icon } from '$lib/components/misc';
-  import { FileDropzone } from '$lib/components/upload';
   import { HomeLayout } from '$lib/components/layout';
+  import { Flair, Icon } from '$lib/components/misc';
+  import { Modal, ModalBody, ModalFooter, ModalHeader } from '$lib/components/modal';
   import { getToaster } from '$lib/components/toast';
-  import { Modal, ModalHeader, ModalBody, ModalFooter } from '$lib/components/modal';
+  import { FileDropzone } from '$lib/components/upload';
+  import { capitalize, formResultToast } from '$lib/utils/helpers';
   import type { Tag } from '$lib/utils/types';
   import type { PageProps } from './$types';
-  import { enhance } from '$app/forms';
 
   let { data, params }: PageProps = $props();
 
@@ -100,12 +100,7 @@
             alt="user-profile"
           />
 
-          <FileDropzone
-            contentInputName="group-banner"
-            bind:contentValue={bannerValue}
-            filenameInputName="group-banner-name"
-            bind:filenameValue
-          />
+          <FileDropzone contentInputName="group-banner" bind:contentValue={bannerValue} />
         </div>
       </form>
     {:else if params.section === 'tags'}
@@ -188,9 +183,9 @@
         />
 
         <div class="flex items-center gap-4">
-          <FloatingLabelInput name="name" labelClass="bg-gray-900" bind:value={tagName} clearable>
-            Tag name
-          </FloatingLabelInput>
+          <FloatingLabelInput name="name" labelClass="bg-gray-900" bind:value={tagName} clearable
+            >Tag name</FloatingLabelInput
+          >
           <input
             class="aspect-square h-full cursor-pointer rounded-md border border-gray-700"
             type="color"

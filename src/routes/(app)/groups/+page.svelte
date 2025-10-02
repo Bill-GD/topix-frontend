@@ -1,14 +1,14 @@
 <script lang="ts">
-  import { HomeLayout } from '$lib/components/layout';
-  import { Button, IconButton } from '$lib/components/button';
-  import { Icon } from '$lib/components/misc';
-  import { getToaster } from '$lib/components/toast';
-  import { capitalize, formResultToast } from '$lib/utils/helpers';
-  import { Modal, ModalHeader, ModalBody } from '$lib/components/modal';
-  import { FloatingLabelInput } from '$lib/components/input';
-  import { FileDropzone } from '$lib/components/upload';
-  import type { PageProps } from './$types';
   import { enhance } from '$app/forms';
+  import { Button, IconButton } from '$lib/components/button';
+  import { FloatingLabelInput } from '$lib/components/input';
+  import { HomeLayout } from '$lib/components/layout';
+  import { Icon } from '$lib/components/misc';
+  import { Modal, ModalBody, ModalHeader } from '$lib/components/modal';
+  import { getToaster } from '$lib/components/toast';
+  import { FileDropzone } from '$lib/components/upload';
+  import { capitalize, formResultToast } from '$lib/utils/helpers';
+  import type { PageProps } from './$types';
 
   let { data }: PageProps = $props();
 
@@ -16,7 +16,6 @@
   let showModal = $state<boolean>(false);
   let groupName = $state<string>('');
   let bannerValue = $state<string>('');
-  let filenameValue = $state<string>('');
 </script>
 
 <svelte:head>
@@ -108,12 +107,7 @@
           <img class="rounded-md" src={bannerValue} alt="user-profile" />
         {/if}
 
-        <FileDropzone
-          contentInputName="group-banner"
-          bind:contentValue={bannerValue}
-          filenameInputName="group-banner-name"
-          bind:filenameValue
-        />
+        <FileDropzone contentInputName="group-banner" bind:contentValue={bannerValue} />
 
         <div class="flex w-full flex-col gap-2 md:flex-row">
           <Button
