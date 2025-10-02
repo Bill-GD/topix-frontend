@@ -146,7 +146,6 @@
           };
         }}
       >
-        <input type="text" name="thread-id" value={data.thread.id} hidden readonly />
         <Button class="w-full" type="danger" onclick={() => (showDeleteThreadModal = false)}>
           Delete
         </Button>

@@ -1,10 +1,7 @@
 import { AxiosHandler, handleReaction } from '$lib/utils/axios-handler';
 import { getPostUploadForm } from '$lib/utils/helpers';
 import { CookieName, type Post } from '$lib/utils/types';
-import {
-  type Actions, error, fail, isActionFailure,
-  redirect,
-} from '@sveltejs/kit';
+import { type Actions, error, fail, isActionFailure, redirect } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ cookies, params }) => {
@@ -40,7 +37,6 @@ export const actions: Actions = {
     );
 
     if (!res.success) return fail(res.status, { success: false, message: res.message });
-    // return { success: true, message: 'Post deleted successfully' };
     if (postId === event.params.id) redirect(303, '/home');
   },
   reply: async ({ request, cookies, params }) => {
