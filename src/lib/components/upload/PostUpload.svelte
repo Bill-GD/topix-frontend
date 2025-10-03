@@ -95,7 +95,7 @@
   }}
 >
   <img
-    class="profile-picture-sm"
+    class="profile-picture-sm hidden md:block"
     src={userPicture ?? '/images/default-user-profile-icon.jpg'}
     alt="profile"
   />
@@ -113,7 +113,7 @@
     <textarea name="content" value={inputContent} hidden></textarea>
 
     {#if images.length > 0}
-      <div class="media-viewer scrollbar">
+      <div class="flex flex-wrap gap-4 pb-2">
         {#each images as file, index (index)}
           <div class="relative">
             <IconButton
@@ -164,7 +164,7 @@
           id="post-tag-select"
         >
           {#each tags as tag}
-            <option disabled selected value hidden> -- choose tag -- </option>
+            <option disabled selected value hidden>-- choose tag --</option>
             <option value={tag.id}>{tag.name}</option>
           {/each}
         </select>
@@ -242,9 +242,5 @@
   .editor.empty::after {
     content: attr(data-placeholder);
     @apply text-gray-500;
-  }
-
-  .media-viewer {
-    @apply flex gap-4 overflow-x-scroll pb-2;
   }
 </style>

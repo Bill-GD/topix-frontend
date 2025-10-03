@@ -1,18 +1,12 @@
 // component-related types
 
-import type { Snippet } from 'svelte';
-import type {
-  ClassValue,
-  HTMLAttributeAnchorTarget,
-  HTMLInputTypeAttribute,
-} from 'svelte/elements';
 import { faThumbsUp as faClassicThumbsUp } from '@fortawesome/free-regular-svg-icons';
 import {
+  faBars,
   faCheck,
   faChevronLeft,
   faChevronRight,
   faCircleCheck,
-  faCircleInfo,
   faEllipsisVertical,
   faEye,
   faEyeSlash,
@@ -36,6 +30,12 @@ import {
   faVideo,
   faXmark,
 } from '@fortawesome/free-solid-svg-icons';
+import type { Snippet } from 'svelte';
+import type {
+  ClassValue,
+  HTMLAttributeAnchorTarget,
+  HTMLInputTypeAttribute,
+} from 'svelte/elements';
 import type { CurrentUser, Post, Tag, ToastMessage, UnaryVoidFunction } from '../utils/types';
 
 export type ButtonType = 'primary' | 'danger' | 'dark' | 'success';
@@ -50,7 +50,7 @@ export const IconSize = {
 export const Icons = {
   delete: faTrashCan,
   user: faUser,
-  info: faCircleInfo,
+  bar: faBars,
   success: faCircleCheck,
   check: faCheck,
   unfollow: faUserMinus,

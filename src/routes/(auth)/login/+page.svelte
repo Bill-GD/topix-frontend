@@ -7,6 +7,7 @@
   import { formResultToast } from '$lib/utils/helpers';
 
   const toaster = getToaster();
+  let password = $state<string>('');
 </script>
 
 <svelte:head>
@@ -21,6 +22,7 @@
     return async ({ result, update }) => {
       await formResultToast(result, toaster, 'Signin successfully');
       await update();
+      password = '';
     };
   }}
 >
@@ -29,7 +31,14 @@
       Username
     </FloatingLabelInput>
 
-    <FloatingLabelInput class="w-full" name="password" type="password" peekable required>
+    <FloatingLabelInput
+      class="w-full"
+      name="password"
+      type="password"
+      bind:value={password}
+      peekable
+      required
+    >
       Password
     </FloatingLabelInput>
 

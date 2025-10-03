@@ -13,6 +13,6 @@
   @reference '@/app.css';
 
   .default {
-    @apply flex max-w-fit cursor-pointer items-center justify-end gap-3 rounded-full px-3 py-2 hover:bg-gray-900 active:bg-gray-900;
+    @apply flex h-fit max-w-fit cursor-pointer items-center justify-end gap-3 rounded-full px-3 py-3 hover:bg-gray-900 active:bg-gray-900 md:py-2;
   }
 </style>

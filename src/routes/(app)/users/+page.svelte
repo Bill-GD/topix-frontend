@@ -19,6 +19,10 @@
   }
 </script>
 
+<svelte:head>
+  <title>Users - topix</title>
+</svelte:head>
+
 <HomeLayout self={data.self}>
   <div class="border-b border-gray-700 py-4 text-center text-xl font-semibold">Users</div>
 
