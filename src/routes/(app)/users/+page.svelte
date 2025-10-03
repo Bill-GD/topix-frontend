@@ -28,11 +28,7 @@
 
   <div class="flex flex-col">
     {#each data.users as user}
-      <a
-        class="flex items-center gap-4 p-4 hover:bg-gray-900/40"
-        href="/user/{user.username}"
-        data-sveltekit-preload-data="tap"
-      >
+      <a class="flex items-center gap-4 p-4 hover:bg-gray-900/40" href="/user/{user.username}">
         <img
           class="profile-picture-md"
           src={user.profilePicture ?? '/images/default-user-profile-icon.jpg'}

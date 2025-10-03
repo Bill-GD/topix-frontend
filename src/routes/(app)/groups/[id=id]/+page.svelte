@@ -85,7 +85,7 @@
           {/snippet}
 
           <DropdownItem href="/groups/{data.group.id}/members/all">Members</DropdownItem>
-          {#if data.self.username === data.group.owner.username}
+          {#if data.self.id === data.group.owner.id}
             <DropdownItem href="/groups/{data.group.id}/pending">Pending posts</DropdownItem>
             <DropdownItem href="/groups/{data.group.id}/settings/general">Settings</DropdownItem>
             <DropdownItem class="text-red-500" onclick={() => (showModal = 'delete')}>
@@ -108,7 +108,7 @@
       formaction="?/add-post"
       placeholder="Add new post"
       tags={data.tags}
-      groupApproved={data.self.username === data.group.owner.username}
+      groupApproved={data.self.id === data.group.owner.id}
     />
   {/if}
 
@@ -205,20 +205,27 @@
           };
         }}
       >
-        <FloatingLabelInput name="thread-title" labelClass="bg-gray-900" bind:value={threadTitle}>
+        <FloatingLabelInput
+          class="w-full"
+          name="thread-title"
+          labelClass="bg-gray-900"
+          bind:value={threadTitle}
+        >
           Title
         </FloatingLabelInput>
 
-        <select
-          class="rounded-md border-gray-700 bg-gray-900 text-white"
-          name="tag-id"
-          id="post-tag-select"
-        >
-          {#each data.tags as tag}
-            <option disabled selected value hidden> -- choose tag -- </option>
-            <option value={tag.id}>{tag.name}</option>
-          {/each}
-        </select>
+        {#if data.tags && data.tags.length > 0}
+          <select
+            class="rounded-md border-gray-700 bg-gray-900 text-white"
+            name="tag-id"
+            id="post-tag-select"
+          >
+            {#each data.tags as tag}
+              <option disabled selected value hidden> -- choose tag -- </option>
+              <option value={tag.id}>{tag.name}</option>
+            {/each}
+          </select>
+        {/if}
 
         <div class="flex w-full flex-col gap-2 md:flex-row">
           <Button class="w-full" type="success" onclick={hideModal}>Create</Button>

@@ -96,7 +96,7 @@
         {/snippet}
 
         <DropdownItem>Follow</DropdownItem>
-        {#if data.self.username === data.thread.owner.username}
+        {#if data.self.id === data.thread.owner.id}
           <DropdownItem onclick={() => (editingTitle = true)}>Edit</DropdownItem>
           <DropdownItem class="text-red-500" onclick={() => (showModal = 'thread')}>
             Delete
@@ -105,7 +105,7 @@
       </DropdownMenu>
     </div>
 
-    {#if data.self.username === data.thread.owner.username && data.group.status === 'joined'}
+    {#if data.self.id === data.thread.owner.id && data.group.status === 'joined'}
       <Button type="success" onclick={() => (showModal = 'post')}>Add post</Button>
     {/if}
   </div>

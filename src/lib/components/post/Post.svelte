@@ -247,10 +247,10 @@
         </IconButton>
       {/snippet}
 
-      {#if detail && self.username === post.owner.username}
+      {#if detail && self.id === post.owner.id}
         <DropdownItem>Edit</DropdownItem>
       {/if}
-      {#if self.role === 'admin' || self.username === post.owner.username}
+      {#if self.role === 'admin' || self.id === post.owner.id}
         <DropdownItem class="text-red-500" onclick={() => (showModal = 'delete')}
           >Delete</DropdownItem
         >

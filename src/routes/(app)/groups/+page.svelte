@@ -47,11 +47,7 @@
     {:else}
       <hr class="text-gray-700" />
       {#each data.groups as group}
-        <a
-          class="flex items-center gap-4 p-4 hover:bg-gray-900/40"
-          href="/groups/{group.id}"
-          data-sveltekit-preload-data="tap"
-        >
+        <a class="flex items-center gap-4 p-4 hover:bg-gray-900/40" href="/groups/{group.id}">
           <div class="w-30 overflow-hidden rounded-md">
             <img src={group.bannerPicture ?? '/images/no-image.jpg'} alt="group-banner" />
           </div>

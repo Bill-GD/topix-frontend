@@ -96,7 +96,7 @@
       transition:fade={{ duration: 200 }}
     ></div>
     <aside
-      class="fixed top-0 right-0 z-30 h-screen w-80 flex-nowrap border-l border-gray-700 bg-gray-950 p-3 md:hidden"
+      class="fixed top-0 right-0 z-30 h-screen w-80 flex-nowrap rounded-l-md border-l border-gray-700 bg-gray-950 p-3 md:hidden"
       transition:slide={{ duration: 200, axis: 'x' }}
     >
       {#if right}

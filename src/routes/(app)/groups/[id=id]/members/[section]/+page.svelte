@@ -63,18 +63,14 @@
               alt="profile"
             />
             <div class="flex flex-col gap-2">
-              <a
-                class="flex items-baseline gap-2"
-                href="/user/{user.username}"
-                data-sveltekit-preload-data="tap"
-              >
+              <a class="flex items-baseline gap-2" href="/user/{user.username}">
                 <span class="text-xl font-semibold">{user.displayName}</span>
                 <span class="text-gray-500">@{user.username}</span>
               </a>
               <p>Joined at {new Date(user.dateJoined!).toDateString()}</p>
             </div>
           </div>
-          {#if data.self.username === data.group.owner.username && user.username !== data.group.owner.username}
+          {#if data.self.id === data.group.owner.id && user.id !== data.group.owner.id}
             <div class="flex items-center justify-center gap-2 md:ml-auto">
               <Button
                 class="w-full md:w-fit"
@@ -114,11 +110,7 @@
               alt="profile"
             />
             <div class="flex flex-col gap-2">
-              <a
-                class="flex items-baseline gap-2"
-                href="/user/{user.username}"
-                data-sveltekit-preload-data="tap"
-              >
+              <a class="flex items-baseline gap-2" href="/user/{user.username}">
                 <span class="text-xl font-semibold">{user.displayName}</span>
                 <span class="text-gray-500">@{user.username}</span>
               </a>
@@ -126,7 +118,7 @@
             </div>
           </div>
 
-          {#if data.self.username === data.group.owner.username}
+          {#if data.self.id === data.group.owner.id}
             <form
               class="flex items-center gap-2 md:ml-auto"
               action="?/accept-member"
