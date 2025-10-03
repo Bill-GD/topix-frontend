@@ -28,7 +28,7 @@
 </svelte:head>
 
 <HomeLayout self={data.self}>
-  <div class="sticky-header">
+  <div class="sticky top-0 border-r border-b border-gray-700 bg-gray-950 py-4 text-center text-2xl">
     <div class="relative">
       <IconButton class="absolute left-4 hover:bg-gray-800" onclick={() => window.history.back()}>
         <Icon type="back" />
@@ -137,12 +137,12 @@
   </div>
 
   {#snippet right()}
-    <div class="right-sidebar">
+    <div class="flex w-fit flex-col py-20 text-xl">
       {#each items as item, index}
         <div class="flex">
           <div
             class={[
-              params.section === item ? 'highlighted' : 'not-highlighted',
+              params.section === item ? 'border-gray-300' : 'border-gray-700',
               index === 0 && 'rounded-t-md',
               index === items.length - 1 && 'rounded-b-md',
               'mr-4 w-0 border-l-6',
@@ -201,23 +201,7 @@
 <style lang="postcss">
   @reference '@/app.css';
 
-  .sticky-header {
-    @apply sticky top-0 border-r border-b border-gray-700 bg-gray-950 py-4 text-center text-2xl;
-  }
-
   .input-group {
     @apply flex flex-col items-start gap-2;
-  }
-
-  .highlighted {
-    @apply border-gray-300;
-  }
-
-  .not-highlighted {
-    @apply border-gray-700;
-  }
-
-  .right-sidebar {
-    @apply flex w-fit flex-col py-20 text-xl;
   }
 </style>

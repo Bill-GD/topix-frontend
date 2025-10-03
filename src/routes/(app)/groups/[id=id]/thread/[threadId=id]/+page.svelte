@@ -29,7 +29,7 @@
 </svelte:head>
 
 <HomeLayout self={data.self}>
-  <div class="thread-container">
+  <div class="flex flex-col gap-4 border-b border-gray-700 p-4">
     <IconButton class="hover:bg-gray-800" onclick={() => window.history.back()}>
       <Icon type="back" size="sm" />
     </IconButton>
@@ -160,11 +160,3 @@
     </ModalFooter>
   </Modal>
 </HomeLayout>
-
-<style lang="postcss">
-  @reference '@/app.css';
-
-  .thread-container {
-    @apply flex flex-col gap-4 border-b border-gray-700 p-4;
-  }
-</style>

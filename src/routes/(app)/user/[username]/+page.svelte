@@ -28,7 +28,7 @@
 </svelte:head>
 
 <HomeLayout self={data.self}>
-  <div class="profile-overview">
+  <div class="flex flex-col gap-2 border-b border-gray-700 p-4">
     <IconButton class="hover:bg-gray-800" onclick={() => window.history.back()}>
       <Icon type="back" />
     </IconButton>
@@ -60,7 +60,7 @@
       </div>
     </div>
 
-    <div class="follow-stats">
+    <div class="flex items-baseline gap-6 px-4 py-2 font-semibold">
       <p>Following: {data.user.followingCount}</p>
       <p>Follower: {data.user.followerCount}</p>
     </div>
@@ -128,15 +128,3 @@
     </ModalFooter>
   </Modal>
 </HomeLayout>
-
-<style lang="postcss">
-  @reference '@/app.css';
-
-  .profile-overview {
-    @apply flex flex-col gap-2 border-b border-gray-700 p-4;
-  }
-
-  .follow-stats {
-    @apply flex items-baseline gap-6 px-4 py-2 font-semibold;
-  }
-</style>

@@ -90,7 +90,7 @@
 
 <div
   class={[
-    'main',
+    'flex p-4',
     compact ? 'gap-2' : 'gap-4',
     !detail && 'cursor-pointer hover:bg-gray-900/40',
     className,
@@ -290,14 +290,8 @@ Reaction requires `?/react` formaction
 <style lang="postcss">
   @reference '@/app.css';
 
-  .main {
-    @apply flex p-4;
-  }
-
-  .main {
-    img,
-    video {
-      cursor: initial;
-    }
+  img,
+  video {
+    cursor: initial;
   }
 </style>

@@ -11,7 +11,7 @@
     round = true,
   }: IconButtonProps = $props();
 
-  const buttonClass = `btn-${type}`;
+  const buttonClass = type ? `btn-${type}` : 'hover:bg-gray-900 p-3';
 </script>
 
 {#if onclick}

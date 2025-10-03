@@ -15,7 +15,7 @@
 </svelte:head>
 
 <HomeLayout self={data.self}>
-  <div class="post-container">
+  <div class="flex flex-col border-b border-gray-700 pt-4">
     <div class="flex items-center gap-4 px-4">
       <IconButton class="hover:bg-gray-800" onclick={() => window.history.back()}>
         <Icon type="back" size="sm" />
@@ -51,11 +51,3 @@
     <hr class="text-gray-700" />
   {/each}
 </HomeLayout>
-
-<style lang="postcss">
-  @reference '@/app.css';
-
-  .post-container {
-    @apply flex flex-col border-b border-gray-700 pt-4;
-  }
-</style>

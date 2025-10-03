@@ -5,14 +5,6 @@
   let { children, class: className }: { children: Snippet; class?: ClassValue } = $props();
 </script>
 
-<div class={['modal-content', className]}>
+<div class={['text-gray-300', className]}>
   {@render children()}
 </div>
-
-<style lang="postcss">
-  @reference "@/app.css";
-
-  .modal-content {
-    @apply text-gray-300;
-  }
-</style>

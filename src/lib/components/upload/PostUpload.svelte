@@ -74,7 +74,7 @@
 </script>
 
 <form
-  class="main"
+  class="flex gap-2 p-4"
   method="post"
   enctype="multipart/form-data"
   onsubmit={() => (disablePost = true)}
@@ -230,10 +230,6 @@
 
 <style lang="postcss">
   @reference '@/app.css';
-
-  .main {
-    @apply flex gap-2 p-4;
-  }
 
   .editor {
     @apply min-h-24 w-full rounded-md border border-gray-700 p-4 focus:border-gray-300;

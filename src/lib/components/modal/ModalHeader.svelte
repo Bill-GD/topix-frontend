@@ -5,14 +5,6 @@
   let { class: className, children }: { children: Snippet; class?: ClassValue } = $props();
 </script>
 
-<div class={['modal-header', className]}>
+<div class={['line-clamp-1 text-xl font-semibold', className]}>
   {@render children()}
 </div>
-
-<style lang="postcss">
-  @reference "@/app.css";
-
-  .modal-header {
-    @apply line-clamp-1 text-xl font-semibold;
-  }
-</style>

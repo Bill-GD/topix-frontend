@@ -34,7 +34,10 @@
   ></textarea>
 {:else}
   <input
-    class={['main-input', className]}
+    class={[
+      'w-full rounded-md border border-gray-700 bg-transparent focus:ring-0 focus:outline-2 focus:outline-gray-700',
+      className,
+    ]}
     type={peeking ? 'text' : type}
     {id}
     {required}
@@ -72,11 +75,3 @@
     </IconButton>
   {/key}
 {/if}
-
-<style lang="postcss">
-  @reference "@/app.css";
-
-  .main-input {
-    @apply w-full rounded-md border border-gray-700 bg-transparent focus:ring-0 focus:outline-2 focus:outline-gray-700;
-  }
-</style>

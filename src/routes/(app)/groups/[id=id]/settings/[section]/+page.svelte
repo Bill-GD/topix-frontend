@@ -33,7 +33,7 @@
 </svelte:head>
 
 <HomeLayout self={data.self}>
-  <div class="sticky-header">
+  <div class="sticky top-0 border-r border-b border-gray-700 bg-gray-950 py-4 text-center text-2xl">
     <div class="relative">
       <IconButton class="absolute left-4 hover:bg-gray-800" onclick={() => window.history.back()}>
         <Icon type="back" />
@@ -234,10 +234,6 @@
 
 <style lang="postcss">
   @reference '@/app.css';
-
-  .sticky-header {
-    @apply sticky top-0 border-r border-b border-gray-700 bg-gray-950 py-4 text-center text-2xl;
-  }
 
   .input-group {
     @apply flex flex-col items-start gap-2;

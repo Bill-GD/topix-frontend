@@ -6,7 +6,7 @@
 
   let { class: className, toast }: ToastProps = $props();
 
-  const types: { [toast.type]: [ClassValue, ClassValue, typeof toast.type] } = {
+  const types: { [toast.type]: [ClassValue, ClassValue, string] } = {
     success: ['border-green-500', 'text-green-500', 'success'],
     info: ['border-sky-500', 'text-sky-600', 'info'],
     error: ['border-red-500', 'text-red-700', 'error'],
