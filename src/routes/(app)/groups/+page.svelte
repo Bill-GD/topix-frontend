@@ -59,9 +59,9 @@
           <div class="flex flex-col gap-2">
             <span class="text-xl font-semibold">{group.name}</span>
             <div class="flex items-baseline gap-2 text-gray-500">
-              <span>{capitalize(group.visibility)}</span>
-              <span>-</span>
-              <span>{group.memberCount} member{group.memberCount > 1 ? 's' : ''}</span>
+              {capitalize(group.visibility)}
+              -
+              {group.memberCount} member{group.memberCount > 1 ? 's' : ''}
             </div>
             <p>Owner: {group.owner.displayName}</p>
           </div>

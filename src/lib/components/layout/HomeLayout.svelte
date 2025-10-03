@@ -71,24 +71,19 @@
   </DropdownMenu>
 {/snippet}
 
-<main class="h-screen bg-gray-950 text-white md:flex md:items-center md:justify-between">
+<main class="flex min-h-screen bg-gray-950 pb-16 text-white md:pb-0">
   <header
-    class="hidden h-dvh min-w-fit flex-col items-center gap-4 border-r border-r-gray-700 px-1 py-3 md:flex lg:w-full lg:px-3"
+    class="sticky top-0 hidden h-dvh min-w-fit flex-col items-center gap-4 border-r border-r-gray-700 px-1 py-3 md:flex lg:w-full lg:px-3"
   >
     <span class="hidden w-full p-2 text-end text-2xl lg:inline">topix</span>
     {@render navbar()}
   </header>
 
-  <section
-    class={[
-      'flex h-screen flex-auto flex-col justify-start overflow-y-auto md:max-w-xl md:min-w-xl lg:max-w-2xl lg:min-w-2xl',
-      'no-scrollbar',
-    ]}
-  >
+  <section class="flex w-full flex-col md:min-w-[512px] lg:min-w-[672px]">
     {@render children?.()}
   </section>
 
-  <aside class="hidden h-dvh border-l border-gray-700 p-3 md:block md:w-full">
+  <aside class="sticky top-0 hidden h-dvh border-l border-gray-700 p-3 md:block md:w-full">
     {@render right?.()}
   </aside>
 
@@ -113,7 +108,7 @@
   {/if}
 
   <nav
-    class="sticky bottom-0 z-10 flex h-fit w-full items-center justify-around border-t border-gray-700 bg-gray-950 py-2 md:hidden"
+    class="fixed bottom-0 z-10 flex h-fit w-full items-center justify-around border-t border-gray-700 bg-gray-950 py-1 md:hidden"
   >
     {@render navbar()}
     <IconButton onclick={() => (showNav = !showNav)}>

@@ -154,7 +154,7 @@
           <img
             class="w-full rounded-lg"
             src={post.mediaPaths[imageIndex]}
-            alt="post-image-{imageIndex}"
+            alt="post-{post.id}-image-{imageIndex}"
           />
 
           {#if post.mediaPaths.length > 1}
