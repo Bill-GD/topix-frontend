@@ -17,7 +17,7 @@
   const toaster = getToaster();
   let showModal = $state<'post' | 'thread' | null>(null);
   let editingTitle = $state<boolean>(false);
-  let title = $state<string>(data.thread.title);
+  let title = $derived<string>(data.thread.title);
 
   function hideModal() {
     showModal = null;
@@ -40,11 +40,10 @@
           <form
             class="flex items-center gap-2"
             action="?/update-title"
-            id="update-thread-{data.thread.id}"
             method="post"
             use:enhance={() => {
               return async ({ result, update }) => {
-                await formResultToast(result, toaster, 'Thread deleted successfully.');
+                await formResultToast(result, toaster);
                 await update();
                 editingTitle = false;
               };
@@ -57,9 +56,9 @@
               name="new-title"
               value={title}
             />
-            <Button class="h-fit px-2" type="success">
+            <IconButton class="h-fit px-2" variant="success" type="submit">
               <Icon type="check" size="sm" />
-            </Button>
+            </IconButton>
             <IconButton class="h-fit" variant="danger" onclick={() => (editingTitle = false)}>
               <Icon type="close" size="sm" />
             </IconButton>
@@ -114,8 +113,8 @@
     <hr class="text-gray-700" />
   {/each}
 
-  <Modal class="min-w-1/2" show={showModal === 'post'} backdropCallback={hideModal}>
-    <ModalHeader>Add new post</ModalHeader>
+  <Modal show={showModal === 'post'} backdropCallback={hideModal}>
+    <ModalHeader class="text-center">Add new post</ModalHeader>
     <ModalBody>
       <PostUpload
         userPicture={data.self.profilePicture}
@@ -132,9 +131,8 @@
     <ModalFooter>
       <form
         class="w-full"
-        method="post"
-        id="delete-form-{data.thread.id}"
         action="?/delete-thread"
+        method="post"
         use:enhance={() => {
           return async ({ result, update }) => {
             await formResultToast(result, toaster, 'Thread deleted successfully.');

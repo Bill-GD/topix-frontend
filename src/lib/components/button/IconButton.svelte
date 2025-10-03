@@ -29,9 +29,13 @@
     {@render children()}
   </button>
 {:else}
-  <div class={['main-button', buttonClass, round && 'rounded-full', className]}>
+  <button
+    class={['main-button', buttonClass, round && 'rounded-full', className]}
+    {type}
+    {disabled}
+  >
     {@render children()}
-  </div>
+  </button>
 {/if}
 
 <style lang="postcss">

@@ -21,8 +21,6 @@
   ];
 
   let showNav = $state<boolean>(false);
-  $inspect(showNav);
-
   let dropdownAlign = $state<'left' | 'right'>('left');
 
   function updateDropdownAlign() {

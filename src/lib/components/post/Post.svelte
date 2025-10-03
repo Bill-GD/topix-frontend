@@ -196,7 +196,6 @@
         <form
           action="?/react"
           method="post"
-          id="react-form-{post.id}"
           use:enhance={() => {
             return async ({ result, update }) => {
               await formResultToast(result, toaster);
@@ -209,14 +208,14 @@
 
           <DropdownMenu position="top" align="left" horizontal>
             {#snippet trigger()}
-              <IconButton class="react-button flex gap-2" round>
+              <div class="react-button flex gap-2">
                 <Icon
                   type={reaction}
                   class={[reaction !== 'noReaction' && (reactions[reaction] as string)]}
                   size="sm"
                 />
                 {reactionCount}
-              </IconButton>
+              </div>
             {/snippet}
 
             {#each Object.entries(reactions) as [type, color]}
@@ -266,9 +265,8 @@
   <ModalFooter>
     <form
       class="w-full"
-      method="post"
-      id="delete-form-{post.id}"
       action="?/delete-post"
+      method="post"
       use:enhance={() => {
         return async ({ result, update }) => {
           await formResultToast(result, toaster);
@@ -287,7 +285,6 @@
 @component
 Post component: shows OP, content, interaction counts...  
 Reaction requires `?/react` formaction
-
 -->
 
 <style lang="postcss">

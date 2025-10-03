@@ -124,8 +124,8 @@
   <ModalFooter>
     <form
       class="w-full"
-      method="post"
       action="?/approve-post"
+      method="post"
       use:enhance={() => {
         return async ({ result, update }) => {
           await formResultToast(result, toaster);
@@ -146,8 +146,8 @@
   <ModalFooter>
     <form
       class="w-full"
-      method="post"
       action="?/remove-post"
+      method="post"
       use:enhance={() => {
         return async ({ result, update }) => {
           await formResultToast(result, toaster);

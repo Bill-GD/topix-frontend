@@ -64,8 +64,8 @@
         {:else}
           <form
             class="w-full"
-            method="post"
             action="?/join-group"
+            method="post"
             use:enhance={() => {
               return async ({ result, update }) => {
                 await formResultToast(result, toaster);
@@ -153,8 +153,8 @@
     <ModalFooter>
       <form
         class="w-full"
-        method="post"
         action="?/delete-group"
+        method="post"
         use:enhance={() => {
           return async ({ result, update }) => {
             await formResultToast(result, toaster, 'Group deleted successfully.');
@@ -175,8 +175,8 @@
     <ModalFooter>
       <form
         class="w-full"
-        method="post"
         action="?/leave-group"
+        method="post"
         use:enhance={() => {
           return async ({ result, update }) => {
             await formResultToast(result, toaster);
@@ -195,9 +195,9 @@
     <ModalHeader>Create thread</ModalHeader>
     <ModalBody>
       <form
+        class="flex w-full flex-col gap-4"
         action="?/create-thread"
         method="post"
-        class="flex w-full flex-col gap-4"
         use:enhance={() => {
           return async ({ result, update }) => {
             await formResultToast(result, toaster);

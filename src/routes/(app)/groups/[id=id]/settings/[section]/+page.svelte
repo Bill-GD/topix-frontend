@@ -186,9 +186,9 @@
         />
 
         <div class="flex items-center gap-4">
-          <FloatingLabelInput name="name" labelClass="bg-gray-900" bind:value={tagName} clearable
-            >Tag name</FloatingLabelInput
-          >
+          <FloatingLabelInput name="name" labelClass="bg-gray-900" bind:value={tagName} clearable>
+            Tag name
+          </FloatingLabelInput>
           <input
             class="aspect-square h-full cursor-pointer rounded-md border border-gray-700"
             type="color"
@@ -215,8 +215,8 @@
     <ModalFooter>
       <form
         class="w-full"
-        method="post"
         action="?/delete-tag"
+        method="post"
         use:enhance={() => {
           return async ({ result, update }) => {
             await formResultToast(result, toaster);

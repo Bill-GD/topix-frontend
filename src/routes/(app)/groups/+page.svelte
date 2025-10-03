@@ -29,12 +29,23 @@
 <HomeLayout self={data.self}>
   <div class="border-b border-gray-700 py-4 text-center text-xl font-semibold">Groups</div>
 
+  <!-- svelte-ignore a11y_click_events_have_key_events -->
+  <!-- svelte-ignore a11y_no_static_element_interactions -->
+  <div
+    class="flex w-full cursor-pointer items-center justify-center gap-2 py-4 hover:bg-gray-800/40"
+    onclick={() => (showModal = 'create')}
+  >
+    <span class="font-semibold">Create group</span>
+    <Icon type="add" size="sm" />
+  </div>
+
   <div class="flex flex-col">
     {#if data.groups.length <= 0}
       <p class="p-4 text-center text-xl font-semibold">
         There are no group available in topix yet.
       </p>
     {:else}
+      <hr class="text-gray-700" />
       {#each data.groups as group}
         <a
           class="flex items-center gap-4 p-4 hover:bg-gray-900/40"
@@ -46,9 +57,8 @@
           </div>
 
           <div class="flex flex-col gap-2">
+            <span class="text-xl font-semibold">{group.name}</span>
             <div class="flex items-baseline gap-2 text-gray-500">
-              <span class="text-xl font-semibold text-white">{group.name}</span>
-              <span>-</span>
               <span>{capitalize(group.visibility)}</span>
               <span>-</span>
               <span>{group.memberCount} member{group.memberCount > 1 ? 's' : ''}</span>
@@ -72,29 +82,13 @@
     {/if}
   </div>
 
-  {#snippet right()}
-    <IconButton
-      class="flex gap-2 hover:bg-gray-800"
-      variant="success"
-      onclick={() => (showModal = 'create')}
-    >
-      <span class="font-semibold">Create group</span>
-      <Icon type="add" size="sm" />
-    </IconButton>
-  {/snippet}
-
-  <Modal
-    class="mx-4 w-full md:m-0 md:w-1/3"
-    show={showModal === 'create'}
-    backdropCallback={hideModal}
-    center
-  >
+  <Modal show={showModal === 'create'} backdropCallback={hideModal} center>
     <ModalHeader>Create new group</ModalHeader>
     <ModalBody>
       <form
+        class="flex w-full flex-col items-center gap-4"
         action="?/create-group"
         method="post"
-        class="flex w-full flex-col items-center gap-4"
         use:enhance={() => {
           return async ({ result, update }) => {
             await formResultToast(result, toaster);

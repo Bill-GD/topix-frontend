@@ -55,44 +55,48 @@
   <div class="flex flex-col">
     {#if params.section === 'all'}
       {#each data.members as user}
-        <div class="flex items-center gap-4 p-4 hover:bg-gray-900/40">
-          <img
-            class="profile-picture-md"
-            src={user.profilePicture ?? '/images/default-user-profile-icon.jpg'}
-            alt="profile"
-          />
-          <div class="flex flex-col gap-2">
-            <a
-              class="flex items-baseline gap-2"
-              href="/user/{user.username}"
-              data-sveltekit-preload-data="tap"
-            >
-              <span class="text-xl font-semibold">{user.displayName}</span>
-              <span class="text-gray-500">@{user.username}</span>
-            </a>
-            <p>Joined at {new Date(user.dateJoined!).toDateString()}</p>
+        <div class="flex flex-col gap-2 p-4 hover:bg-gray-900/40 md:flex-row">
+          <div class="flex items-center gap-4">
+            <img
+              class="profile-picture-md"
+              src={user.profilePicture ?? '/images/default-user-profile-icon.jpg'}
+              alt="profile"
+            />
+            <div class="flex flex-col gap-2">
+              <a
+                class="flex items-baseline gap-2"
+                href="/user/{user.username}"
+                data-sveltekit-preload-data="tap"
+              >
+                <span class="text-xl font-semibold">{user.displayName}</span>
+                <span class="text-gray-500">@{user.username}</span>
+              </a>
+              <p>Joined at {new Date(user.dateJoined!).toDateString()}</p>
+            </div>
           </div>
           {#if data.self.username === data.group.owner.username && user.username !== data.group.owner.username}
-            <Button
-              class="ml-auto w-fit"
-              type="primary"
-              onclick={() => {
-                selectedMemberId = user.id;
-                showModal = 'owner';
-              }}
-            >
-              Change owner
-            </Button>
-            <Button
-              class="w-fit"
-              type="danger"
-              onclick={() => {
-                selectedMemberId = user.id;
-                showModal = 'remove';
-              }}
-            >
-              Remove
-            </Button>
+            <div class="flex items-center justify-center gap-2 md:ml-auto">
+              <Button
+                class="w-full md:w-fit"
+                type="primary"
+                onclick={() => {
+                  selectedMemberId = user.id;
+                  showModal = 'owner';
+                }}
+              >
+                Change owner
+              </Button>
+              <Button
+                class="w-full md:w-fit"
+                type="danger"
+                onclick={() => {
+                  selectedMemberId = user.id;
+                  showModal = 'remove';
+                }}
+              >
+                Remove
+              </Button>
+            </div>
           {/if}
         </div>
         <hr class="text-gray-700" />
@@ -102,27 +106,29 @@
         <p class="w-full p-4 text-center text-2xl font-semibold">No pending members.</p>
       {/if}
       {#each data.members as user}
-        <div class="flex items-center gap-4 p-4 hover:bg-gray-900/40">
-          <img
-            class="profile-picture-md"
-            src={user.profilePicture ?? '/images/default-user-profile-icon.jpg'}
-            alt="profile"
-          />
-          <div class="flex flex-col gap-2">
-            <a
-              class="flex items-baseline gap-2"
-              href="/user/{user.username}"
-              data-sveltekit-preload-data="tap"
-            >
-              <span class="text-xl font-semibold">{user.displayName}</span>
-              <span class="text-gray-500">@{user.username}</span>
-            </a>
-            <p>Requested at {new Date(user.dateRequested).toDateString()}</p>
+        <div class="flex flex-col gap-2 p-4 hover:bg-gray-900/40 md:flex-row">
+          <div class="flex items-center gap-4 hover:bg-gray-900/40">
+            <img
+              class="profile-picture-md"
+              src={user.profilePicture ?? '/images/default-user-profile-icon.jpg'}
+              alt="profile"
+            />
+            <div class="flex flex-col gap-2">
+              <a
+                class="flex items-baseline gap-2"
+                href="/user/{user.username}"
+                data-sveltekit-preload-data="tap"
+              >
+                <span class="text-xl font-semibold">{user.displayName}</span>
+                <span class="text-gray-500">@{user.username}</span>
+              </a>
+              <p>Requested at {new Date(user.dateRequested).toDateString()}</p>
+            </div>
           </div>
 
           {#if data.self.username === data.group.owner.username}
             <form
-              class="ml-auto flex gap-2"
+              class="flex items-center gap-2 md:ml-auto"
               action="?/accept-member"
               method="post"
               use:enhance={() => {
@@ -134,14 +140,14 @@
             >
               <input type="number" name="member-id" value={selectedMemberId} hidden readonly />
               <Button
-                class="ml-auto w-fit"
+                class="w-full md:w-fit"
                 type="success"
                 onclick={() => (selectedMemberId = user.id)}
               >
                 Accept
               </Button>
               <Button
-                class="ml-auto w-fit"
+                class="w-full md:w-fit"
                 type="danger"
                 onclick={(ev) => {
                   ev.preventDefault();
@@ -196,8 +202,8 @@
     <ModalFooter>
       <form
         class="w-full"
-        method="post"
         action="?/change-owner"
+        method="post"
         use:enhance={() => {
           return async ({ result, update }) => {
             await formResultToast(result, toaster);
@@ -218,8 +224,8 @@
     <ModalFooter>
       <form
         class="w-full"
-        method="post"
         action="?/remove-member"
+        method="post"
         use:enhance={() => {
           return async ({ result, update }) => {
             await formResultToast(result, toaster);

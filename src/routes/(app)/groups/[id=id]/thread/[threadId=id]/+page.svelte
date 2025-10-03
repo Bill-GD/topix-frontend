@@ -40,7 +40,6 @@
           <form
             class="flex items-center gap-2"
             action="?/update-title"
-            id="update-thread-{data.thread.id}"
             method="post"
             use:enhance={() => {
               return async ({ result, update }) => {
@@ -120,7 +119,7 @@
   {/each}
 
   <Modal class="min-w-1/2" show={showModal === 'post'} backdropCallback={hideModal}>
-    <ModalHeader>Add new post</ModalHeader>
+    <ModalHeader class="text-center">Add new post</ModalHeader>
     <ModalBody>
       <PostUpload
         userPicture={data.self.profilePicture}

@@ -36,7 +36,7 @@
   }
 
   .modal {
-    @apply fixed top-1/2 left-1/2 z-50 flex w-11/12 -translate-1/2 flex-col gap-6 rounded-md border border-gray-700 bg-gray-900 p-4 drop-shadow-xl drop-shadow-black/90 transition-all md:max-w-1/2 md:p-8;
+    @apply fixed top-1/2 left-1/2 z-50 flex w-11/12 -translate-1/2 flex-col gap-4 rounded-md border border-gray-700 bg-gray-900 p-4 drop-shadow-xl drop-shadow-black/90 transition-all md:max-w-1/2 md:p-8;
   }
 
   .modal.modal-show {

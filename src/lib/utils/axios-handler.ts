@@ -1,7 +1,7 @@
 import axios, { AxiosError, type AxiosResponse, type RawAxiosRequestHeaders } from 'axios';
-import { getApiUrl } from './helpers';
-import { CookieName, type ApiResponse } from './types';
 import { fail, type RequestEvent } from '@sveltejs/kit';
+import { getApiUrl } from './helpers';
+import { type ApiResponse, CookieName } from './types';
 
 export class AxiosHandler {
   private static API_URL = getApiUrl();

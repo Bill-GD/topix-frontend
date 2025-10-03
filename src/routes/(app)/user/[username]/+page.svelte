@@ -105,16 +105,15 @@
   <Modal show={showModal === 'thread'} backdropCallback={hideModal} center>
     <ModalHeader>Create thread</ModalHeader>
     <ModalBody>
-      <FloatingLabelInput labelClass="bg-gray-900" bind:value={threadTitle}>
+      <FloatingLabelInput class="w-full" labelClass="bg-gray-900" bind:value={threadTitle}>
         Title
       </FloatingLabelInput>
     </ModalBody>
     <ModalFooter>
       <form
+        class="w-full"
         action="?/create-thread"
         method="post"
-        id="create-thread-form"
-        class="w-full"
         use:enhance={() => {
           return async ({ result, update }) => {
             await formResultToast(result, toaster);

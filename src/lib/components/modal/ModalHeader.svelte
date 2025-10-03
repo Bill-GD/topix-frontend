@@ -1,10 +1,11 @@
 <script lang="ts">
   import type { Snippet } from 'svelte';
+  import type { ClassValue } from 'svelte/elements';
 
-  let { children }: { children: Snippet } = $props();
+  let { class: className, children }: { children: Snippet; class?: ClassValue } = $props();
 </script>
 
-<div class="modal-header">
+<div class={['modal-header', className]}>
   {@render children()}
 </div>
 

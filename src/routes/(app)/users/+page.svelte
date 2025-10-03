@@ -71,9 +71,9 @@
     </ModalBody>
     <ModalFooter>
       <form
+        class="w-full"
         action="?/delete-account"
         method="post"
-        class="w-full"
         use:enhance={() => {
           return async ({ result, update }) => {
             await formResultToast(result, toaster);
