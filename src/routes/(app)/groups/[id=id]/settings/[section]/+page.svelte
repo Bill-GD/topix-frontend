@@ -3,7 +3,7 @@
   import { Button, IconButton } from '$lib/components/button';
   import { FloatingLabelInput, Input } from '$lib/components/input';
   import { HomeLayout } from '$lib/components/layout';
-  import { Flair, Icon } from '$lib/components/misc';
+  import { Flair, Icon, ReturnHeader } from '$lib/components/misc';
   import { Modal, ModalBody, ModalFooter, ModalHeader } from '$lib/components/modal';
   import { getToaster } from '$lib/components/toast';
   import { FileDropzone } from '$lib/components/upload';
@@ -33,14 +33,7 @@
 </svelte:head>
 
 <HomeLayout self={data.self}>
-  <div class="sticky top-0 border-r border-b border-gray-700 bg-gray-950 py-4 text-center text-2xl">
-    <div class="relative">
-      <IconButton class="absolute left-4 hover:bg-gray-800" onclick={() => window.history.back()}>
-        <Icon type="back" />
-      </IconButton>
-    </div>
-    Settings
-  </div>
+  <ReturnHeader>Settings</ReturnHeader>
 
   <div
     class="no-scrollbar flex justify-around overflow-x-scroll border-b border-gray-700 md:hidden"

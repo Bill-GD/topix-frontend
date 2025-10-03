@@ -1,8 +1,8 @@
 <script lang="ts">
   import { enhance } from '$app/forms';
-  import { Button, IconButton } from '$lib/components/button';
+  import { Button } from '$lib/components/button';
   import { HomeLayout } from '$lib/components/layout';
-  import { Icon } from '$lib/components/misc';
+  import { ReturnHeader } from '$lib/components/misc';
   import { Modal, ModalBody, ModalFooter, ModalHeader } from '$lib/components/modal';
   import { getToaster } from '$lib/components/toast';
   import { capitalize, formResultToast } from '$lib/utils/helpers';
@@ -25,14 +25,7 @@
 </svelte:head>
 
 <HomeLayout self={data.self}>
-  <div class="sticky top-0 border-r border-b border-gray-700 bg-gray-950 py-4 text-center text-2xl">
-    <div class="relative">
-      <IconButton class="absolute left-4 hover:bg-gray-800" onclick={() => window.history.back()}>
-        <Icon type="back" />
-      </IconButton>
-    </div>
-    Members
-  </div>
+  <ReturnHeader>Members</ReturnHeader>
 
   <div
     class="no-scrollbar flex justify-around overflow-x-scroll border-b border-gray-700 md:hidden"
@@ -99,7 +92,7 @@
       {/each}
     {:else if params.section === 'pending'}
       {#if data.members.length <= 0}
-        <p class="w-full p-4 text-center text-2xl font-semibold">No pending members.</p>
+        <p class="empty-noti-text">No pending members.</p>
       {/if}
       {#each data.members as user}
         <div class="flex flex-col gap-2 p-4 hover:bg-gray-900/40 md:flex-row">

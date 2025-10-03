@@ -4,7 +4,7 @@
   import { DropdownItem, DropdownMenu } from '$lib/components/dropdown';
   import { FloatingLabelInput } from '$lib/components/input';
   import { HomeLayout } from '$lib/components/layout';
-  import { Icon } from '$lib/components/misc';
+  import { Icon, ReturnHeader } from '$lib/components/misc';
   import { Modal, ModalBody, ModalFooter, ModalHeader } from '$lib/components/modal';
   import { Post } from '$lib/components/post';
   import { ThreadOverview } from '$lib/components/thread';
@@ -29,12 +29,7 @@
 </svelte:head>
 
 <HomeLayout self={data.self}>
-  <div class="flex items-center gap-4 p-2">
-    <IconButton class="hover:bg-gray-800" onclick={() => window.history.back()}>
-      <Icon type="back" size="sm" />
-    </IconButton>
-    <span class="text-lg font-semibold">Group</span>
-  </div>
+  <ReturnHeader>Group</ReturnHeader>
 
   <img
     class="object-fit rounded-md"
@@ -113,7 +108,7 @@
   {/if}
 
   {#if data.posts.length <= 0}
-    <p class="w-full p-4 text-center text-2xl font-semibold">This group has no post.</p>
+    <p class="empty-noti-text">This group has no post.</p>
   {/if}
   {#each data.posts as post}
     <hr class="text-gray-700" />

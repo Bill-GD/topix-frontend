@@ -52,6 +52,10 @@ input[type='color'] {
   display: none;
 }
 
+.empty-noti-text {
+  @apply w-full p-4 text-center text-2xl font-semibold;
+}
+
 @utility btn {
   @apply cursor-pointer rounded-md px-4 py-2 text-base text-white transition-all duration-100 ease-in-out disabled:cursor-not-allowed disabled:opacity-50;
 }

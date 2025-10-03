@@ -2,7 +2,7 @@
   import { enhance } from '$app/forms';
   import { Button, IconButton } from '$lib/components/button';
   import { HomeLayout } from '$lib/components/layout';
-  import { Icon } from '$lib/components/misc';
+  import { Icon, ReturnHeader } from '$lib/components/misc';
   import { Modal, ModalBody, ModalFooter, ModalHeader } from '$lib/components/modal';
   import { getToaster } from '$lib/components/toast';
   import { formResultToast } from '$lib/utils/helpers';
@@ -24,7 +24,7 @@
 </svelte:head>
 
 <HomeLayout self={data.self}>
-  <div class="border-b border-gray-700 py-4 text-center text-xl font-semibold">Users</div>
+  <ReturnHeader>Users</ReturnHeader>
 
   <div class="flex flex-col">
     {#each data.users as user}

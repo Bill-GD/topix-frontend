@@ -95,6 +95,7 @@ export class AxiosHandler {
 
   private static handleError(err: unknown): ApiResponse {
     const error = err as Error;
+    console.log(error.response.data.error);
 
     if (error instanceof AxiosError && error.response) {
       return this.getResponse(error.response!);
@@ -135,7 +136,7 @@ export async function handleReaction(event: RequestEvent) {
 
   let res: ApiResponse;
 
-  if (reaction === 'noReaction') {
+  if (!reaction) {
     res = await AxiosHandler.delete(
       `/post/${postId}/react`,
       event.cookies.get(CookieName.accessToken),
@@ -149,5 +150,5 @@ export async function handleReaction(event: RequestEvent) {
   }
 
   if (!res.success) return fail(res.status, { success: false, message: res.message });
-  // return { success: true, message: res.message };
+  return { success: true, message: res.message };
 }

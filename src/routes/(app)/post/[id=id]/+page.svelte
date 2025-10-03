@@ -1,7 +1,7 @@
 <script lang="ts">
   import { IconButton } from '$lib/components/button';
   import { HomeLayout } from '$lib/components/layout';
-  import { Icon } from '$lib/components/misc';
+  import { Icon, ReturnHeader } from '$lib/components/misc';
   import { Post } from '$lib/components/post';
   import { PostUpload } from '$lib/components/upload';
   import type { PageProps } from './$types';
@@ -15,13 +15,8 @@
 </svelte:head>
 
 <HomeLayout self={data.self}>
-  <div class="flex flex-col border-b border-gray-700 pt-4">
-    <div class="flex items-center gap-4 px-4">
-      <IconButton class="hover:bg-gray-800" onclick={() => window.history.back()}>
-        <Icon type="back" size="sm" />
-      </IconButton>
-      <span class="text-lg font-semibold">{isReply ? 'Reply' : 'Post'}</span>
-    </div>
+  <div class="flex flex-col border-b border-gray-700">
+    <ReturnHeader>{isReply ? 'Reply' : 'Post'}</ReturnHeader>
 
     {#if isReply}
       <Post self={data.self} post={data.post.parentPost!} compact parent />

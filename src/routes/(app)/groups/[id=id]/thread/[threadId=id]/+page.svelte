@@ -111,7 +111,7 @@
   </div>
 
   {#if data.posts.length <= 0}
-    <p class="w-full p-4 text-center text-2xl font-semibold">This thread has no post.</p>
+    <p class="empty-noti-text">This thread has no post.</p>
   {/if}
   {#each data.posts as post}
     <Post self={data.self} {post} compact />

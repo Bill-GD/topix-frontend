@@ -3,7 +3,7 @@
   import { Button, IconButton } from '$lib/components/button';
   import { FloatingLabelInput } from '$lib/components/input';
   import { HomeLayout } from '$lib/components/layout';
-  import { Icon } from '$lib/components/misc';
+  import { Icon, ReturnHeader } from '$lib/components/misc';
   import { Modal, ModalBody, ModalHeader } from '$lib/components/modal';
   import { getToaster } from '$lib/components/toast';
   import { FileDropzone } from '$lib/components/upload';
@@ -27,7 +27,7 @@
 </svelte:head>
 
 <HomeLayout self={data.self}>
-  <div class="border-b border-gray-700 py-4 text-center text-xl font-semibold">Groups</div>
+  <ReturnHeader>Groups</ReturnHeader>
 
   <!-- svelte-ignore a11y_click_events_have_key_events -->
   <!-- svelte-ignore a11y_no_static_element_interactions -->

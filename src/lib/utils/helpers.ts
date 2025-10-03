@@ -97,9 +97,11 @@ export async function formResultToast(
   result: ActionResult,
   toaster: Toaster,
   redirectedMessage?: string,
+  toastOnSuccess: boolean = true,
 ) {
   switch (result.type) {
     case 'success': {
+      if (!toastOnSuccess) break;
       const formResult = result.data as { message: string; success: boolean };
       toaster.addToast(formResult!.message, 'success');
       break;
