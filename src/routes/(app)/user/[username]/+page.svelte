@@ -51,10 +51,10 @@
       </div>
 
       <div class="ml-auto flex flex-col gap-4">
-        <IconButton variant="dark" class="w-full">
+        <IconButton type="dark" class="w-full">
           <Icon type="follow" size="sm" />
         </IconButton>
-        <IconButton variant="dark" class="w-full">
+        <IconButton type="dark" class="w-full">
           <Icon type="message" size="sm" />
         </IconButton>
       </div>
@@ -81,7 +81,7 @@
         <p class="text-xl font-semibold">Threads</p>
         {#if data.self.id === data.user.id}
           <IconButton
-            variant="success"
+            type="success"
             class="ml-auto flex hover:bg-gray-800"
             onclick={() => (showModal = 'thread')}
           >

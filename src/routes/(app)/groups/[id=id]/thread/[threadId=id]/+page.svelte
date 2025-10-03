@@ -59,7 +59,7 @@
             <Button class="h-fit px-2" type="success">
               <Icon type="check" size="sm" />
             </Button>
-            <IconButton class="h-fit" variant="danger" onclick={() => (editingTitle = false)}>
+            <IconButton class="h-fit" type="danger" onclick={() => (editingTitle = false)}>
               <Icon type="close" size="sm" />
             </IconButton>
           </form>

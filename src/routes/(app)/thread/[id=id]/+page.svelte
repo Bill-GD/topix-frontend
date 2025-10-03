@@ -56,10 +56,10 @@
               name="new-title"
               value={title}
             />
-            <IconButton class="h-fit px-2" variant="success" type="submit">
+            <IconButton class="h-fit px-2" type="success" buttonType="submit">
               <Icon type="check" size="sm" />
             </IconButton>
-            <IconButton class="h-fit" variant="danger" onclick={() => (editingTitle = false)}>
+            <IconButton class="h-fit" type="danger" onclick={() => (editingTitle = false)}>
               <Icon type="close" size="sm" />
             </IconButton>
           </form>

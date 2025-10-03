@@ -126,7 +126,7 @@
         <p class="text-xl font-semibold">Threads</p>
         {#if data.group.status === 'joined'}
           <IconButton
-            variant="success"
+            type="success"
             class="ml-auto flex hover:bg-gray-800"
             onclick={() => (showModal = 'thread')}
           >

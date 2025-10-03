@@ -50,7 +50,7 @@
     class="absolute top-1/2 {peekable && initType === 'password'
       ? 'right-8'
       : 'right-1'} -translate-y-1/2"
-    type="button"
+    buttonType="button"
     onclick={() => (value = '')}
   >
     <Icon type="close" class="text-gray-600 hover:text-gray-400" size="sm" />
@@ -61,7 +61,7 @@
   {#key peeking}
     <IconButton
       class="absolute top-1/2 right-1 -translate-y-1/2"
-      type="button"
+      buttonType="button"
       onclick={() => (peeking = !peeking)}
     >
       {#if peeking}

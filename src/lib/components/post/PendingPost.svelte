@@ -109,10 +109,10 @@
   </div>
 
   <div class="ml-auto flex gap-2">
-    <IconButton variant="success" onclick={() => (showModal = 'approve')}>
+    <IconButton type="success" onclick={() => (showModal = 'approve')}>
       <Icon type="check" size="sm" />
     </IconButton>
-    <IconButton variant="danger" onclick={() => (showModal = 'remove')}>
+    <IconButton type="danger" onclick={() => (showModal = 'remove')}>
       <Icon type="close" size="sm" />
     </IconButton>
   </div>

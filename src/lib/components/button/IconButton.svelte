@@ -6,13 +6,12 @@
     onclick,
     disabled = false,
     class: className,
+    buttonType,
     type,
-    variant,
-    outline = false,
     round = true,
   }: IconButtonProps = $props();
 
-  const buttonClass = `btn-${variant}${variant && outline ? '-outline' : ''}`;
+  const buttonClass = `btn-${type}`;
 </script>
 
 {#if onclick}
@@ -23,7 +22,7 @@
       ev.preventDefault();
       onclick?.(ev);
     }}
-    {type}
+    type={buttonType}
     {disabled}
   >
     {@render children()}
@@ -31,7 +30,7 @@
 {:else}
   <button
     class={['main-button', buttonClass, round && 'rounded-full', className]}
-    {type}
+    type={buttonType}
     {disabled}
   >
     {@render children()}
