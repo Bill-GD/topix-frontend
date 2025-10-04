@@ -36,6 +36,7 @@
     userPicture={data.self.profilePicture}
     formaction="?/reply"
     placeholder="Enter your reply"
+    threadId={data.post.threadId ?? undefined}
     groupId={data.post.groupId ?? undefined}
     groupApproved
   />

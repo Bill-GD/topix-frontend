@@ -14,7 +14,7 @@ export const load: PageServerLoad = async ({ cookies, params }) => {
   data.post = postRes.data as unknown as Post;
 
   const repliesRes = await AxiosHandler.get(
-    `/post?parentId=${params.id}${data.post.groupId ? `&groupId=${data.post.groupId}` : ''}`,
+    `/post?parentId=${params.id}${data.post.groupId ? `&groupId=${data.post.groupId}` : ''}${data.post.threadId ? `&threadId=${data.post.threadId}` : ''}`,
     cookies.get(CookieName.accessToken),
   );
   if (!repliesRes.success) {
@@ -38,6 +38,7 @@ export const actions: Actions = {
 
     if (!res.success) return fail(res.status, { success: false, message: res.message });
     if (postId === event.params.id) redirect(303, '/home');
+    return { success: true, message: res.message };
   },
   reply: async ({ request, cookies, params }) => {
     const form = await getPostUploadForm(request);

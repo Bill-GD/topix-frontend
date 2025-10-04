@@ -14,6 +14,7 @@
     formaction,
     placeholder = `What's happening?`,
     tags,
+    threadId,
     groupId,
     groupApproved = false,
     postCallback,
@@ -81,7 +82,7 @@
   use:enhance={() => {
     return async ({ result, update }) => {
       await formResultToast(result, toaster);
-      await update();
+      await update({ reset: false });
 
       inputContent = '';
       images = [];
@@ -223,6 +224,9 @@
     </div>
     {#if groupId !== undefined}
       <input type="number" name="group-id" value={groupId} hidden readonly />
+    {/if}
+    {#if threadId !== undefined}
+      <input type="number" name="thread-id" value={threadId} hidden readonly />
     {/if}
     <input type="checkbox" name="group-approved" checked={groupApproved} hidden readonly />
   </div>

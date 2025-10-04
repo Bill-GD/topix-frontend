@@ -2,22 +2,41 @@
 
 import type { Snippet } from 'svelte';
 import type {
-  ClassValue, HTMLAttributeAnchorTarget, HTMLInputTypeAttribute,
+  ClassValue,
+  HTMLAttributeAnchorTarget,
+  HTMLInputTypeAttribute,
 } from 'svelte/elements';
 import { faThumbsUp as faClassicThumbsUp } from '@fortawesome/free-regular-svg-icons';
 import {
-  faBars, faCheck, faChevronLeft, faChevronRight,
-  faCircleCheck, faEllipsisVertical, faEye, faEyeSlash,
-  faFaceAngry, faFaceFrownOpen, faFaceLaugh, faHeart,
-  faHouse, faImage, faMagnifyingGlass, faMessage,
-  faPlus, faReply, faThumbsUp, faTrashCan,
-  faTriangleExclamation, faUser, faUserGroup, faUserMinus,
-  faUserPlus, faVideo, faXmark,
+  faBars,
+  faCheck,
+  faChevronLeft,
+  faChevronRight,
+  faCircleCheck,
+  faEllipsisVertical,
+  faEye,
+  faEyeSlash,
+  faFaceAngry,
+  faFaceFrownOpen,
+  faFaceLaugh,
+  faHeart,
+  faHouse,
+  faImage,
+  faMagnifyingGlass,
+  faMessage,
+  faPlus,
+  faReply,
+  faThumbsUp,
+  faTrashCan,
+  faTriangleExclamation,
+  faUser,
+  faUserGroup,
+  faUserMinus,
+  faUserPlus,
+  faVideo,
+  faXmark,
 } from '@fortawesome/free-solid-svg-icons';
-import type {
-  CurrentUser, Post, Tag, ToastMessage,
-  UnaryVoidFunction,
-} from '../utils/types';
+import type { CurrentUser, Post, Tag, ToastMessage, UnaryVoidFunction } from '../utils/types';
 
 export type ButtonType = 'primary' | 'danger' | 'dark' | 'success';
 
@@ -193,6 +212,7 @@ export interface PostUploadProps {
   placeholder?: string;
   tags?: Tag[];
   groupApproved?: boolean;
+  threadId?: number;
   groupId?: number;
   postCallback?: VoidFunction;
 }

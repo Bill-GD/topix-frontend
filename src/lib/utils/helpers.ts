@@ -151,6 +151,7 @@ export async function getPostUploadForm(request: Request) {
   form.append('content', content);
   form.append('approved', `${formData.has('group-approved')}`);
   if (formData.has('group-id')) form.append('groupId', `${formData.get('group-id')}`);
+  if (formData.has('thread-id')) form.append('threadId', `${formData.get('thread-id')}`);
   if (!isNaN(tagId) && tagId > 0) form.append('tagId', `${tagId}`);
   if (files.length > 0) files.forEach((f) => form.append('files', f));
 
