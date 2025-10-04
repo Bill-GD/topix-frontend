@@ -111,7 +111,7 @@
       spellcheck="true"
       data-placeholder={placeholder}
     ></div>
-    <textarea name="content" value={inputContent} hidden></textarea>
+    <textarea name="content" value={inputContent} hidden readonly></textarea>
 
     {#if images.length > 0}
       <div class="flex flex-wrap gap-4 pb-2">
@@ -182,13 +182,13 @@
           />
         </label>
         <input
-          class="hidden"
           type="file"
           id="image-input"
           name="images"
           accept="image/*"
-          multiple
           disabled={imageDisabled}
+          multiple
+          hidden
         />
       </div>
 
@@ -203,12 +203,12 @@
           />
         </label>
         <input
-          class="hidden"
           type="file"
           id="video-input"
           name="video"
           accept="video/mp4"
           disabled={videoDisabled}
+          hidden
         />
       </div>
 

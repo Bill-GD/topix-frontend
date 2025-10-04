@@ -122,7 +122,7 @@
         }}
       >
         <Button class="w-full" type="success" onclick={hideModal}>Create</Button>
-        <input hidden type="text" name="thread-title" readonly value={threadTitle} />
+        <input type="text" name="thread-title" value={threadTitle} hidden readonly />
       </form>
       <Button class="w-full" type="dark" onclick={hideModal}>Cancel</Button>
     </ModalFooter>

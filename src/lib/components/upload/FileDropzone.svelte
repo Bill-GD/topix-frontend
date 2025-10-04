@@ -51,7 +51,7 @@
 
 <div class={[hasDroppedFile ? 'dropped' : 'empty', className]} id="file-drop">
   <p class={[errorText !== '' && 'text-red-500']}>{errorText !== '' ? errorText : dropzoneText}</p>
-  <input class="hidden" type="text" name={contentInputName} bind:value={contentValue} />
+  <input type="text" name={contentInputName} bind:value={contentValue} hidden readonly />
 </div>
 
 <style lang="postcss">

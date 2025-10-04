@@ -78,7 +78,7 @@
         }}
       >
         <Button class="w-full" type="danger" onclick={hideModal}>Delete</Button>
-        <input hidden type="text" name="username" readonly value={username} />
+        <input type="text" name="username" value={username} hidden readonly />
       </form>
       <Button class="w-full" type="dark" onclick={hideModal}>Cancel</Button>
     </ModalFooter>

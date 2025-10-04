@@ -252,7 +252,7 @@
       use:enhance={() => {
         return async ({ result, update }) => {
           await formResultToast(result, toaster);
-          await update();
+          await update({ reset: false });
         };
       }}
     >
