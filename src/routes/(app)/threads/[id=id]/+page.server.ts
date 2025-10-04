@@ -1,11 +1,15 @@
 import { AxiosHandler, handleReaction } from '$lib/utils/axios-handler';
 import { getPostUploadForm } from '$lib/utils/helpers';
-import { CookieName, type Post, type Thread } from '$lib/utils/types';
+import { CookieName, type CurrentUser, type Post, type Thread } from '$lib/utils/types';
 import { type Actions, error, fail, isActionFailure, redirect } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ cookies, params }) => {
-  const data: { thread: Thread; posts: Post[] } = { thread: {} as Thread, posts: [] };
+  const data: { thread: Thread; posts: Post[]; joinedGroup: boolean } = {
+    thread: {} as Thread,
+    posts: [],
+    joinedGroup: true,
+  };
 
   const threadRes = await AxiosHandler.get(
     `/thread/${params.id}`,
@@ -15,12 +19,23 @@ export const load: PageServerLoad = async ({ cookies, params }) => {
     error(threadRes.status, { message: threadRes.message, status: threadRes.status });
   }
   data.thread = threadRes.data as unknown as Thread;
+
   if (data.thread.groupId) {
-    redirect(303, `/groups/${data.thread.groupId}/thread/${params.id}`);
+    const joinedGroupRes = await AxiosHandler.get(
+      `/group/${data.thread.groupId}/join-status`,
+      cookies.get(CookieName.accessToken),
+    );
+    if (!joinedGroupRes.success) {
+      error(joinedGroupRes.status, {
+        message: joinedGroupRes.message,
+        status: joinedGroupRes.status,
+      });
+    }
+    data.joinedGroup = joinedGroupRes.data as unknown as boolean;
   }
 
   const postRes = await AxiosHandler.get(
-    `/post?threadId=${params.id}`,
+    `/post?threadId=${params.id}${data.thread.groupId ? `&groupId=${data.thread.groupId}` : ''}`,
     cookies.get(CookieName.accessToken),
   );
   if (!postRes.success) {
@@ -33,14 +48,21 @@ export const load: PageServerLoad = async ({ cookies, params }) => {
 
 export const actions: Actions = {
   react: handleReaction,
-  'delete-thread': async ({ params, cookies }) => {
+  'delete-thread': async ({ request, params, cookies }) => {
+    const formData = await request.formData();
     const res = await AxiosHandler.delete(
       `/thread/${params.id}`,
       cookies.get(CookieName.accessToken),
     );
 
     if (!res.success) return fail(res.status, { success: false, message: res.message });
-    redirect(303, `/home`);
+    if (formData.has('group-id')) redirect(303, `/groups/${formData.get('group-id')}`);
+
+    const currentUserStr = cookies.get(CookieName.currentUser);
+    if (currentUserStr) {
+      redirect(303, `/user/${(JSON.parse(currentUserStr) as CurrentUser).username}`);
+    }
+    redirect(303, '/home');
   },
   'update-title': async (event) => {
     const formData = await event.request.formData();

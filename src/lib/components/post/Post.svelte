@@ -104,10 +104,12 @@
       <Flair class="ignore-click" tag={post.tag} />
     {/if}
 
-    {#if compact}
-      <p class="ignore-click line-clamp-2 whitespace-pre-line">{post.content}</p>
-    {:else}
-      <span class="ignore-click whitespace-pre-line">{post.content}</span>
+    {#if post.content.length > 0}
+      {#if compact}
+        <p class="ignore-click line-clamp-2 whitespace-pre-line">{post.content}</p>
+      {:else}
+        <span class="ignore-click whitespace-pre-line">{post.content}</span>
+      {/if}
     {/if}
 
     {#if post.mediaPaths.length > 0}

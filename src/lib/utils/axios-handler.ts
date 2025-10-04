@@ -95,7 +95,6 @@ export class AxiosHandler {
 
   private static handleError(err: unknown): ApiResponse {
     const error = err as Error;
-    console.log(error.response.data.error);
 
     if (error instanceof AxiosError && error.response) {
       return this.getResponse(error.response!);

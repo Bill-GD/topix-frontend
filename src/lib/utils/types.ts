@@ -89,7 +89,7 @@ export type Group = {
   memberCount: number;
   description: string | null;
   visibility: 'public' | 'private' | 'hidden';
-  status: 'none' | 'pending' | 'joined';
+  status: boolean | null;
   dateJoined: string | null;
   dateCreated: string;
   dateUpdated: string;

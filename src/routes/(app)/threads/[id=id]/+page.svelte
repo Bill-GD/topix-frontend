@@ -4,7 +4,7 @@
   import { DropdownItem, DropdownMenu } from '$lib/components/dropdown';
   import { Input } from '$lib/components/input';
   import { HomeLayout } from '$lib/components/layout';
-  import { Icon } from '$lib/components/misc';
+  import { Flair, Icon, ReturnHeader } from '$lib/components/misc';
   import { Modal, ModalBody, ModalFooter, ModalHeader } from '$lib/components/modal';
   import { Post } from '$lib/components/post';
   import { getToaster } from '$lib/components/toast';
@@ -29,11 +29,9 @@
 </svelte:head>
 
 <HomeLayout self={data.self}>
-  <div class="flex flex-col gap-4 border-b border-gray-700 p-4">
-    <IconButton class="hover:bg-gray-800" onclick={() => window.history.back()}>
-      <Icon type="back" size="sm" />
-    </IconButton>
+  <ReturnHeader>Thread</ReturnHeader>
 
+  <div class="flex flex-col gap-4 border-b border-gray-700 p-4">
     <div class="flex">
       <div class="flex flex-col gap-2 text-gray-500">
         {#if editingTitle}
@@ -43,7 +41,7 @@
             method="post"
             use:enhance={() => {
               return async ({ result, update }) => {
-                await formResultToast(result, toaster);
+                await formResultToast(result, toaster, 'Thread deleted successfully.');
                 await update();
                 editingTitle = false;
               };
@@ -66,6 +64,11 @@
         {:else}
           <p class="text-4xl font-semibold text-white">{data.thread.title}</p>
         {/if}
+
+        {#if data.thread.tag}
+          <Flair tag={data.thread.tag} />
+        {/if}
+
         <div>
           <p>Created by @{data.thread.owner.username}</p>
           <span>
@@ -100,7 +103,7 @@
       </DropdownMenu>
     </div>
 
-    {#if data.self.id === data.thread.owner.id}
+    {#if data.self.id === data.thread.owner.id && data.joinedGroup === true}
       <Button type="success" onclick={() => (showModal = 'post')}>Add post</Button>
     {/if}
   </div>
@@ -121,6 +124,8 @@
         formaction="?/add-post"
         placeholder="Add new post"
         postCallback={hideModal}
+        groupId={data.thread.groupId ?? undefined}
+        groupApproved
       />
     </ModalBody>
   </Modal>
@@ -140,6 +145,9 @@
           };
         }}
       >
+        {#if data.thread.groupId}
+          <input type="number" name="group-id" value={data.thread.groupId} hidden readonly />
+        {/if}
         <Button class="w-full" type="danger" onclick={hideModal}>Delete</Button>
       </form>
 

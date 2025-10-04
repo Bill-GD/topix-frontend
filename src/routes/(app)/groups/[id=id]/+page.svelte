@@ -32,7 +32,7 @@
   <ReturnHeader>Group</ReturnHeader>
 
   <img
-    class="object-fit rounded-md"
+    class="object-fit rounded-b-lg"
     src={data.group.bannerPicture ?? '/images/no-image.jpg'}
     alt="group-banner"
   />
@@ -52,9 +52,9 @@
       </div>
 
       <div class="ml-auto flex items-center gap-2">
-        {#if data.group.status !== 'none'}
+        {#if data.group.status !== null}
           <Button class="hover:bg-gray-800" type="primary" disabled>
-            {capitalize(data.group.status)}
+            {data.group.status ? 'Joined' : 'Pending'}
           </Button>
         {:else}
           <form
@@ -86,7 +86,7 @@
             <DropdownItem class="text-red-500" onclick={() => (showModal = 'delete')}>
               Delete
             </DropdownItem>
-          {:else if data.group.status !== 'none'}
+          {:else if data.group.status !== null}
             <DropdownItem class="text-red-500" onclick={() => (showModal = 'leave')}>
               Leave
             </DropdownItem>
@@ -96,7 +96,7 @@
     </div>
   </div>
 
-  {#if data.group.status === 'joined'}
+  {#if data.group.status === true}
     <hr class="text-gray-700" />
     <PostUpload
       userPicture={data.self.profilePicture}
@@ -119,7 +119,7 @@
     <div class="rounded-md border border-gray-700 2xl:max-w-1/2">
       <div class="flex items-baseline p-4">
         <p class="text-xl font-semibold">Threads</p>
-        {#if data.group.status === 'joined'}
+        {#if data.group.status === true}
           <IconButton
             type="success"
             class="ml-auto flex hover:bg-gray-800"

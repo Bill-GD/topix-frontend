@@ -62,14 +62,11 @@
             <p>Owner: {group.owner.displayName}</p>
           </div>
 
-          {#if group.status !== 'none'}
+          {#if group.status !== null}
             <div
-              class={[
-                'ml-auto font-semibold',
-                group.status === 'joined' ? 'text-green-700' : 'text-sky-500',
-              ]}
+              class={['ml-auto font-semibold', group.status ? 'text-green-700' : 'text-sky-500']}
             >
-              {capitalize(group.status)}
+              {group.status ? 'Joined' : 'Pending'}
             </div>
           {/if}
         </a>
