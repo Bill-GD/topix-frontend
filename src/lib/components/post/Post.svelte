@@ -82,7 +82,7 @@
         </span>
       {/if}
 
-      <div class="ignore-click flex items-baseline gap-2 text-gray-500">
+      <div class="ignore-click flex w-fit items-baseline gap-2 text-gray-500">
         <a
           class="text-xl text-white decoration-white hover:underline"
           href="/user/{post.owner.username}"
@@ -166,7 +166,7 @@
 
     <!-- reactions -->
     {#if !parent}
-      <div class="ignore-click flex w-fit gap-6">
+      <div class="flex w-fit gap-6">
         <form
           action="?/react"
           method="post"
@@ -180,7 +180,7 @@
           <input type="text" name="reaction" value={reaction} hidden readonly />
           <input type="number" name="post-id" value={post.id} hidden readonly />
 
-          <DropdownMenu position="top" align="left" horizontal>
+          <DropdownMenu class="ignore-click" position="top" align="left" horizontal>
             {#snippet trigger()}
               <div class="react-button flex gap-2">
                 <Icon
@@ -272,8 +272,7 @@ Reaction requires `?/react` formaction
 <style lang="postcss">
   @reference '@/app.css';
 
-  img,
-  video {
+  .ignore-click {
     cursor: initial;
   }
 </style>
