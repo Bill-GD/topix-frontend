@@ -6,13 +6,12 @@
     onclick,
     disabled = false,
     class: className,
+    buttonType,
     type,
-    variant,
-    outline = false,
     round = true,
   }: IconButtonProps = $props();
 
-  const buttonClass = `btn-${variant}${variant && outline ? '-outline' : ''}`;
+  const buttonClass = type ? `btn-${type}` : 'hover:bg-gray-900 p-3';
 </script>
 
 {#if onclick}
@@ -23,15 +22,19 @@
       ev.preventDefault();
       onclick?.(ev);
     }}
-    {type}
+    type={buttonType}
     {disabled}
   >
     {@render children()}
   </button>
 {:else}
-  <div class={['main-button', buttonClass, round && 'rounded-full', className]}>
+  <button
+    class={['main-button', buttonClass, round && 'rounded-full', className]}
+    type={buttonType}
+    {disabled}
+  >
     {@render children()}
-  </div>
+  </button>
 {/if}
 
 <style lang="postcss">

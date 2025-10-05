@@ -7,29 +7,39 @@
   import { formResultToast } from '$lib/utils/helpers';
 
   const toaster = getToaster();
+  let password = $state<string>('');
 </script>
 
 <svelte:head>
   <title>Login - topix</title>
 </svelte:head>
 
-<p>Sign in to your account</p>
+<p class="text-4xl font-semibold">Sign in to your account</p>
 
 <form
+  class="mt-8 flex flex-col gap-6"
   method="post"
   use:enhance={() => {
     return async ({ result, update }) => {
       await formResultToast(result, toaster, 'Signin successfully');
       await update();
+      password = '';
     };
   }}
 >
-  <div>
+  <div class="flex flex-col gap-4">
     <FloatingLabelInput class="w-full" name="username" type="text" required>
       Username
     </FloatingLabelInput>
 
-    <FloatingLabelInput class="w-full" name="password" type="password" peekable required>
+    <FloatingLabelInput
+      class="w-full"
+      name="password"
+      type="password"
+      bind:value={password}
+      peekable
+      required
+    >
       Password
     </FloatingLabelInput>
 
@@ -40,19 +50,3 @@
 
   <Link href="/register">Don't have an account?</Link>
 </form>
-
-<style lang="postcss">
-  @reference "@/app.css";
-
-  p {
-    @apply text-4xl font-semibold;
-  }
-
-  form {
-    @apply mt-8 flex flex-col gap-6;
-  }
-
-  div {
-    @apply flex flex-col gap-4;
-  }
-</style>

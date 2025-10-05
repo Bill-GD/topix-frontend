@@ -1,22 +1,26 @@
 <script lang="ts">
-  import { IconButton, Button } from '$lib/components/button';
-  import { Icon } from '$lib/components/misc';
-  import { Post } from '$lib/components/post';
-  import { PostUpload } from '$lib/components/upload';
-  import { HomeLayout } from '$lib/components/layout';
-  import { Modal, ModalHeader, ModalBody, ModalFooter } from '$lib/components/modal';
+  import { enhance } from '$app/forms';
+  import { Button, IconButton } from '$lib/components/button';
   import { FloatingLabelInput } from '$lib/components/input';
+  import { HomeLayout } from '$lib/components/layout';
+  import { Icon } from '$lib/components/misc';
+  import { Modal, ModalBody, ModalFooter, ModalHeader } from '$lib/components/modal';
+  import { Post } from '$lib/components/post';
   import { ThreadOverview } from '$lib/components/thread';
   import { getToaster } from '$lib/components/toast';
+  import { PostUpload } from '$lib/components/upload';
   import { formResultToast } from '$lib/utils/helpers';
   import type { PageProps } from './$types';
-  import { enhance } from '$app/forms';
 
   let { data }: PageProps = $props();
 
   const toaster = getToaster();
-  let showModal = $state<boolean>(false);
+  let showModal = $state<'thread' | null>(null);
   let threadTitle = $state<string>('');
+
+  function hideModal() {
+    showModal = null;
+  }
 </script>
 
 <svelte:head>
@@ -24,7 +28,7 @@
 </svelte:head>
 
 <HomeLayout self={data.self}>
-  <div class="profile-overview">
+  <div class="flex flex-col gap-2 border-b border-gray-700 p-4">
     <IconButton class="hover:bg-gray-800" onclick={() => window.history.back()}>
       <Icon type="back" />
     </IconButton>
@@ -47,16 +51,16 @@
       </div>
 
       <div class="ml-auto flex flex-col gap-4">
-        <IconButton variant="dark" class="w-full">
+        <IconButton type="dark" class="w-full">
           <Icon type="follow" size="sm" />
         </IconButton>
-        <IconButton variant="dark" class="w-full">
+        <IconButton type="dark" class="w-full">
           <Icon type="message" size="sm" />
         </IconButton>
       </div>
     </div>
 
-    <div class="follow-stats">
+    <div class="flex items-baseline gap-6 px-4 py-2 font-semibold">
       <p>Following: {data.user.followingCount}</p>
       <p>Follower: {data.user.followerCount}</p>
     </div>
@@ -77,9 +81,9 @@
         <p class="text-xl font-semibold">Threads</p>
         {#if data.self.id === data.user.id}
           <IconButton
-            variant="success"
+            type="success"
             class="ml-auto flex hover:bg-gray-800"
-            onclick={() => (showModal = true)}
+            onclick={() => (showModal = 'thread')}
           >
             <Icon type="add" size="xs" />
           </IconButton>
@@ -98,19 +102,18 @@
     </div>
   {/snippet}
 
-  <Modal id="modal-create-thread" bind:show={showModal} center>
+  <Modal show={showModal === 'thread'} backdropCallback={hideModal} center>
     <ModalHeader>Create thread</ModalHeader>
     <ModalBody>
-      <FloatingLabelInput labelClass="bg-gray-900" bind:value={threadTitle}>
+      <FloatingLabelInput class="w-full" labelClass="bg-gray-900" bind:value={threadTitle}>
         Title
       </FloatingLabelInput>
     </ModalBody>
     <ModalFooter>
       <form
+        class="w-full"
         action="?/create-thread"
         method="post"
-        id="create-thread-form"
-        class="w-full"
         use:enhance={() => {
           return async ({ result, update }) => {
             await formResultToast(result, toaster);
@@ -118,22 +121,10 @@
           };
         }}
       >
-        <Button class="w-full" type="success" onclick={() => (showModal = false)}>Create</Button>
-        <input hidden type="text" name="thread-title" readonly value={threadTitle} />
+        <Button class="w-full" type="success" onclick={hideModal}>Create</Button>
+        <input type="text" name="thread-title" value={threadTitle} hidden readonly />
       </form>
-      <Button class="w-full" type="dark" onclick={() => (showModal = false)}>Cancel</Button>
+      <Button class="w-full" type="dark" onclick={hideModal}>Cancel</Button>
     </ModalFooter>
   </Modal>
 </HomeLayout>
-
-<style lang="postcss">
-  @reference '@/app.css';
-
-  .profile-overview {
-    @apply flex flex-col gap-2 border-b border-gray-700 p-4;
-  }
-
-  .follow-stats {
-    @apply flex items-baseline gap-6 px-4 py-2 font-semibold;
-  }
-</style>

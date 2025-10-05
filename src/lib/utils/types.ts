@@ -39,6 +39,13 @@ export type User = {
   role: 'user' | 'admin';
 };
 
+export type Owner = {
+  id: number;
+  username: string;
+  displayName: string;
+  profilePicture: string | null;
+};
+
 export type Tag = {
   id: number;
   name: string;
@@ -47,7 +54,7 @@ export type Tag = {
 
 export type Post = {
   id: number;
-  owner: Partial<User>;
+  owner: Owner;
   content: string;
   reaction: string | null;
   reactionCount: number;
@@ -57,7 +64,7 @@ export type Post = {
   threadId: number | null;
   groupId: number | null;
   tag: Tag | null;
-  // groupAccepted: boolean;
+  groupApproved: boolean;
   visibility: 'public' | 'private' | 'hidden';
   dateCreated: string;
   dateUpdated: string | null;
@@ -66,7 +73,7 @@ export type Post = {
 export type Thread = {
   id: number;
   title: string;
-  owner: Partial<User>;
+  owner: Owner;
   postCount: number;
   groupId: number | null;
   tag: Tag | null;
@@ -77,12 +84,12 @@ export type Thread = {
 export type Group = {
   id: number;
   name: string;
-  owner: Partial<User>;
+  owner: Owner;
   bannerPicture: string | null;
   memberCount: number;
   description: string | null;
   visibility: 'public' | 'private' | 'hidden';
-  status: 'none' | 'pending' | 'joined';
+  status: boolean | null;
   dateJoined: string | null;
   dateCreated: string;
   dateUpdated: string;

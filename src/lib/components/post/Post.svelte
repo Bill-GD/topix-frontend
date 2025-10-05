@@ -1,20 +1,19 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
   import { enhance } from '$app/forms';
   import { getToaster } from '$lib/components/toast';
-  import { formResultToast, getTimeAgo } from '$lib/utils/helpers';
   import type { PostProps } from '$lib/components/types';
-  import Link from '../link/Link.svelte';
+  import { formResultToast, getTimeAgo } from '$lib/utils/helpers';
+  import { onMount } from 'svelte';
+  import Button from '../button/Button.svelte';
   import IconButton from '../button/IconButton.svelte';
-  import Icon from '../misc/Icon.svelte';
-  import DropdownMenu from '../dropdown/DropdownMenu.svelte';
   import DropdownItem from '../dropdown/DropdownItem.svelte';
+  import DropdownMenu from '../dropdown/DropdownMenu.svelte';
+  import Flair from '../misc/Flair.svelte';
+  import Icon from '../misc/Icon.svelte';
   import Modal from '../modal/Modal.svelte';
-  import ModalHeader from '../modal/ModalHeader.svelte';
   import ModalBody from '../modal/ModalBody.svelte';
   import ModalFooter from '../modal/ModalFooter.svelte';
-  import Button from '../button/Button.svelte';
-  import Flair from '../misc/Flair.svelte';
+  import ModalHeader from '../modal/ModalHeader.svelte';
 
   let {
     class: className,
@@ -38,55 +37,31 @@
     angry: 'text-red-500',
   };
 
-  let reaction = $derived((post.reaction ?? 'noReaction') as keyof typeof reactions | 'noReaction');
+  let reaction = $derived(post.reaction);
   let reactionCount = $derived(post.reactionCount);
   let imageIndex = $state<number>(0);
-  let showModal = $state<boolean>(false);
-
-  let reactInput: HTMLInputElement;
+  let showModal = $state<'delete' | null>(null);
 
   onMount(() => {
     const main = document.getElementById(`post-${post.id}`) as HTMLElement;
     if (!detail) {
       main.addEventListener('click', (ev) => {
         const target = ev.target as HTMLElement;
-        if (
-          target.closest('video') ||
-          target.closest('img') ||
-          target.closest('svg') ||
-          target.closest('a') ||
-          target.closest('button') ||
-          target.closest('.dropdown-menu') ||
-          target.closest('.react-button') ||
-          target.closest('.reaction-button')
-        ) {
-          return;
-        }
-
+        if (target.closest('.ignore-click')) return;
         ev.preventDefault();
         window.location.href = `/post/${post.id}`;
       });
     }
-
-    reactInput = document.getElementById(`react-input-${post.id}`) as HTMLInputElement;
   });
 
-  function reactHandle(newReaction: keyof typeof reactions) {
-    if (newReaction === reaction) {
-      reaction = 'noReaction';
-      reactionCount--;
-    } else {
-      if (reaction === 'noReaction') reactionCount++;
-      reaction = newReaction;
-    }
-
-    reactInput.value = reaction;
+  function hideModal() {
+    showModal = null;
   }
 </script>
 
 <div
   class={[
-    'main',
+    'flex p-4',
     compact ? 'gap-2' : 'gap-4',
     !detail && 'cursor-pointer hover:bg-gray-900/40',
     className,
@@ -94,7 +69,7 @@
   id="post-{post.id}"
 >
   <img
-    class="profile-picture-sm"
+    class="profile-picture-sm ignore-click"
     src={post.owner.profilePicture ?? '/images/default-user-profile-icon.jpg'}
     alt="profile"
   />
@@ -107,13 +82,14 @@
         </span>
       {/if}
 
-      <div class="flex items-baseline gap-2 text-gray-500">
-        <Link class="flex items-baseline gap-2" href="/user/{post.owner.username}">
-          <span class="text-xl text-white decoration-white hover:underline">
-            {post.owner.displayName}
-          </span>
-          <span class="text-gray-500">@{post.owner.username}</span>
-        </Link>
+      <div class="ignore-click flex w-fit items-baseline gap-2 text-gray-500">
+        <a
+          class="text-xl text-white decoration-white hover:underline"
+          href="/user/{post.owner.username}"
+        >
+          {post.owner.displayName}
+        </a>
+        <span class="text-gray-500">@{post.owner.username}</span>
 
         <span>-</span>
         <span>{getTimeAgo(Date.parse(post.dateCreated))}</span>
@@ -125,18 +101,20 @@
     </div>
 
     {#if post.tag}
-      <Flair tag={post.tag} />
+      <Flair class="ignore-click" tag={post.tag} />
     {/if}
 
-    {#if compact}
-      <p class="line-clamp-2 whitespace-pre-line">{post.content}</p>
-    {:else}
-      <span class="whitespace-pre-line">{post.content}</span>
+    {#if post.content.length > 0}
+      {#if compact}
+        <p class="ignore-click line-clamp-2 whitespace-pre-line">{post.content}</p>
+      {:else}
+        <span class="ignore-click whitespace-pre-line">{post.content}</span>
+      {/if}
     {/if}
 
     {#if post.mediaPaths.length > 0}
       {#if isImages}
-        <div class="relative min-w-1/2">
+        <div class="ignore-click relative min-w-1/2">
           {#if imageIndex > 0}
             <IconButton
               class="absolute top-1/2 left-0 h-full -translate-y-1/2 hover:bg-gray-900/20"
@@ -150,7 +128,7 @@
           <img
             class="w-full rounded-lg"
             src={post.mediaPaths[imageIndex]}
-            alt="post-image-{imageIndex}"
+            alt="post-{post.id}-image-{imageIndex}"
           />
 
           {#if post.mediaPaths.length > 1}
@@ -180,7 +158,7 @@
 
       {#if isVideo}
         <!-- svelte-ignore a11y_media_has_caption -->
-        <video class={['w-full min-w-1/2 rounded-lg']} controls>
+        <video class="ignore-click w-full min-w-1/2 rounded-lg" controls>
           <source src={post.mediaPaths[0]} type="video/mp4" />
         </video>
       {/if}
@@ -192,34 +170,41 @@
         <form
           action="?/react"
           method="post"
-          id="react-form-{post.id}"
           use:enhance={() => {
             return async ({ result, update }) => {
-              await formResultToast(result, toaster);
-              await update();
+              await formResultToast(result, toaster, undefined, false);
+              await update({ reset: false });
             };
           }}
         >
-          <input type="text" name="reaction" id="react-input-{post.id}" hidden readonly />
-          <input type="text" name="post-id" value={post.id} hidden readonly />
+          <input type="text" name="reaction" value={reaction} hidden readonly />
+          <input type="number" name="post-id" value={post.id} hidden readonly />
 
-          <DropdownMenu position="top" align="left" horizontal>
+          <DropdownMenu class="ignore-click" position="top" align="left" horizontal>
             {#snippet trigger()}
-              <IconButton class="react-button flex gap-2" round>
+              <div class="react-button flex gap-2">
                 <Icon
-                  type={reaction}
-                  class={[reaction !== 'noReaction' && (reactions[reaction] as string)]}
+                  type={(reaction ?? 'noReaction') as keyof typeof reactions}
+                  class={[reaction !== null && reactions[reaction as keyof typeof reactions]]}
                   size="sm"
                 />
                 {reactionCount}
-              </IconButton>
+              </div>
             {/snippet}
 
             {#each Object.entries(reactions) as [type, color]}
               <DropdownItem
                 class="reaction-button"
                 noHover
-                onclick={() => reactHandle(type as keyof typeof reactions)}
+                onclick={() => {
+                  if (reaction === type) {
+                    reaction = null;
+                    reactionCount--;
+                  } else {
+                    if (!reaction) reactionCount++;
+                    reaction = type;
+                  }
+                }}
               >
                 <Icon type={type as keyof typeof reactions} class={color} size="sm" hover />
               </DropdownItem>
@@ -237,43 +222,44 @@
 
   <!-- option menu -->
   {#if !parent}
-    <DropdownMenu class="ml-auto h-fit" position="bottom" align="right">
+    <DropdownMenu class="ignore-click ml-auto h-fit" position="bottom" align="right">
       {#snippet trigger()}
         <IconButton class="hover:bg-gray-800" round>
           <Icon type="menu" size="sm" />
         </IconButton>
       {/snippet}
 
-      {#if detail && self.username === post.owner.username}
+      {#if detail && self.id === post.owner.id}
         <DropdownItem>Edit</DropdownItem>
       {/if}
-      {#if self.role === 'admin' || self.username === post.owner.username}
-        <DropdownItem class="text-red-500" onclick={() => (showModal = true)}>Delete</DropdownItem>
+      {#if self.role === 'admin' || self.id === post.owner.id}
+        <DropdownItem class="text-red-500" onclick={() => (showModal = 'delete')}
+          >Delete</DropdownItem
+        >
       {/if}
     </DropdownMenu>
   {/if}
 </div>
 
-<Modal class="absolute" id="delete-modal-post-{post.id}" bind:show={showModal} center>
+<Modal show={showModal === 'delete'} backdropCallback={hideModal} center>
   <ModalHeader>Delete post</ModalHeader>
   <ModalBody>Are you sure you want to delete this post? This is irreversible.</ModalBody>
   <ModalFooter>
     <form
       class="w-full"
-      method="post"
-      id="delete-form-{post.id}"
       action="?/delete-post"
+      method="post"
       use:enhance={() => {
         return async ({ result, update }) => {
           await formResultToast(result, toaster);
-          await update();
+          await update({ reset: false });
         };
       }}
     >
-      <Button class="w-full" type="danger" onclick={() => (showModal = false)}>Delete</Button>
+      <Button class="w-full" type="danger" onclick={hideModal}>Delete</Button>
       <input type="text" name="post-id" value={post.id} hidden readonly />
     </form>
-    <Button class="w-full" type="dark" onclick={() => (showModal = false)}>Cancel</Button>
+    <Button class="w-full" type="dark" onclick={hideModal}>Cancel</Button>
   </ModalFooter>
 </Modal>
 
@@ -281,20 +267,12 @@
 @component
 Post component: shows OP, content, interaction counts...  
 Reaction requires `?/react` formaction
-
 -->
 
 <style lang="postcss">
   @reference '@/app.css';
 
-  .main {
-    @apply flex p-4;
-  }
-
-  .main {
-    img,
-    video {
-      cursor: initial;
-    }
+  .ignore-click {
+    cursor: initial;
   }
 </style>

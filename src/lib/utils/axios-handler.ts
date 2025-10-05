@@ -1,7 +1,7 @@
 import axios, { AxiosError, type AxiosResponse, type RawAxiosRequestHeaders } from 'axios';
-import { getApiUrl } from './helpers';
-import { CookieName, type ApiResponse } from './types';
 import { fail, type RequestEvent } from '@sveltejs/kit';
+import { getApiUrl } from './helpers';
+import { type ApiResponse, CookieName } from './types';
 
 export class AxiosHandler {
   private static API_URL = getApiUrl();
@@ -135,7 +135,7 @@ export async function handleReaction(event: RequestEvent) {
 
   let res: ApiResponse;
 
-  if (reaction === 'noReaction') {
+  if (!reaction) {
     res = await AxiosHandler.delete(
       `/post/${postId}/react`,
       event.cookies.get(CookieName.accessToken),
@@ -149,5 +149,5 @@ export async function handleReaction(event: RequestEvent) {
   }
 
   if (!res.success) return fail(res.status, { success: false, message: res.message });
-  // return { success: true, message: res.message };
+  return { success: true, message: res.message };
 }

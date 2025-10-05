@@ -1,20 +1,23 @@
 <script lang="ts">
-  import { capitalize, formResultToast } from '$lib/utils/helpers';
-  import { IconButton, Button } from '$lib/components/button';
-  import { Icon } from '$lib/components/misc';
-  import { HomeLayout } from '$lib/components/layout';
-  import { getToaster } from '$lib/components/toast';
-  import { Modal, ModalHeader, ModalBody, ModalFooter } from '$lib/components/modal';
-  import type { PageProps } from './$types';
   import { enhance } from '$app/forms';
+  import { Button } from '$lib/components/button';
+  import { HomeLayout } from '$lib/components/layout';
+  import { ReturnHeader } from '$lib/components/misc';
+  import { Modal, ModalBody, ModalFooter, ModalHeader } from '$lib/components/modal';
+  import { getToaster } from '$lib/components/toast';
+  import { capitalize, formResultToast } from '$lib/utils/helpers';
+  import type { PageProps } from './$types';
 
   let { data, params }: PageProps = $props();
 
   const toaster = getToaster();
   const items = ['all', 'pending'];
-  let showRemoveModal = $state<boolean>(false);
-  let showOwnerModal = $state<boolean>(false);
+  let showModal = $state<'remove' | 'owner' | null>(null);
   let selectedMemberId = $state<number>(0);
+
+  function hideModal() {
+    showModal = null;
+  }
 </script>
 
 <svelte:head>
@@ -22,14 +25,7 @@
 </svelte:head>
 
 <HomeLayout self={data.self}>
-  <div class="sticky-header">
-    <div class="relative">
-      <IconButton class="absolute left-4 hover:bg-gray-800" onclick={() => window.history.back()}>
-        <Icon type="back" />
-      </IconButton>
-    </div>
-    Members
-  </div>
+  <ReturnHeader>Members</ReturnHeader>
 
   <div
     class="no-scrollbar flex justify-around overflow-x-scroll border-b border-gray-700 md:hidden"
@@ -52,74 +48,72 @@
   <div class="flex flex-col">
     {#if params.section === 'all'}
       {#each data.members as user}
-        <div class="flex items-center gap-4 p-4 hover:bg-gray-900/40">
-          <img
-            class="profile-picture-md"
-            src={user.profilePicture ?? '/images/default-user-profile-icon.jpg'}
-            alt="profile"
-          />
-          <div class="flex flex-col gap-2">
-            <a
-              class="flex items-baseline gap-2"
-              href="/user/{user.username}"
-              data-sveltekit-preload-data="tap"
-            >
-              <span class="text-xl font-semibold">{user.displayName}</span>
-              <span class="text-gray-500">@{user.username}</span>
-            </a>
-            <p>Joined at {new Date(user.dateJoined!).toDateString()}</p>
+        <div class="flex flex-col gap-2 p-4 hover:bg-gray-900/40 md:flex-row">
+          <div class="flex items-center gap-4">
+            <img
+              class="profile-picture-md"
+              src={user.profilePicture ?? '/images/default-user-profile-icon.jpg'}
+              alt="profile"
+            />
+            <div class="flex flex-col gap-2">
+              <a class="flex items-baseline gap-2" href="/user/{user.username}">
+                <span class="text-xl font-semibold">{user.displayName}</span>
+                <span class="text-gray-500">@{user.username}</span>
+              </a>
+              <p>Joined at {new Date(user.dateJoined!).toDateString()}</p>
+            </div>
           </div>
-          {#if data.self.username === data.group.owner.username && user.username !== data.group.owner.username}
-            <Button
-              class="ml-auto w-fit"
-              type="primary"
-              onclick={() => {
-                selectedMemberId = user.id;
-                showOwnerModal = true;
-              }}
-            >
-              Change owner
-            </Button>
-            <Button
-              class="w-fit"
-              type="danger"
-              onclick={() => {
-                selectedMemberId = user.id;
-                showRemoveModal = true;
-              }}
-            >
-              Remove
-            </Button>
+          {#if data.self.id === data.group.owner.id && user.id !== data.group.owner.id}
+            <div class="flex items-center justify-center gap-2 md:ml-auto">
+              <Button
+                class="w-full md:w-fit"
+                type="primary"
+                onclick={() => {
+                  selectedMemberId = user.id;
+                  showModal = 'owner';
+                }}
+              >
+                Change owner
+              </Button>
+              <Button
+                class="w-full md:w-fit"
+                type="danger"
+                onclick={() => {
+                  selectedMemberId = user.id;
+                  showModal = 'remove';
+                }}
+              >
+                Remove
+              </Button>
+            </div>
           {/if}
         </div>
         <hr class="text-gray-700" />
       {/each}
     {:else if params.section === 'pending'}
       {#if data.members.length <= 0}
-        <p class="w-full p-4 text-center text-2xl font-semibold">No pending members.</p>
+        <p class="empty-noti-text">No pending members.</p>
       {/if}
       {#each data.members as user}
-        <div class="flex items-center gap-4 p-4 hover:bg-gray-900/40">
-          <img
-            class="profile-picture-md"
-            src={user.profilePicture ?? '/images/default-user-profile-icon.jpg'}
-            alt="profile"
-          />
-          <div class="flex flex-col gap-2">
-            <a
-              class="flex items-baseline gap-2"
-              href="/user/{user.username}"
-              data-sveltekit-preload-data="tap"
-            >
-              <span class="text-xl font-semibold">{user.displayName}</span>
-              <span class="text-gray-500">@{user.username}</span>
-            </a>
-            <p>Requested at {new Date(user.dateRequested).toDateString()}</p>
+        <div class="flex flex-col gap-2 p-4 hover:bg-gray-900/40 md:flex-row">
+          <div class="flex items-center gap-4 hover:bg-gray-900/40">
+            <img
+              class="profile-picture-md"
+              src={user.profilePicture ?? '/images/default-user-profile-icon.jpg'}
+              alt="profile"
+            />
+            <div class="flex flex-col gap-2">
+              <a class="flex items-baseline gap-2" href="/user/{user.username}">
+                <span class="text-xl font-semibold">{user.displayName}</span>
+                <span class="text-gray-500">@{user.username}</span>
+              </a>
+              <p>Requested at {new Date(user.dateRequested).toDateString()}</p>
+            </div>
           </div>
 
-          {#if data.self.username === data.group.owner.username}
+          {#if data.self.id === data.group.owner.id}
             <form
-              class="ml-auto flex gap-2"
+              class="flex items-center gap-2 md:ml-auto"
               action="?/accept-member"
               method="post"
               use:enhance={() => {
@@ -131,19 +125,19 @@
             >
               <input type="number" name="member-id" value={selectedMemberId} hidden readonly />
               <Button
-                class="ml-auto w-fit"
+                class="w-full md:w-fit"
                 type="success"
                 onclick={() => (selectedMemberId = user.id)}
               >
                 Accept
               </Button>
               <Button
-                class="ml-auto w-fit"
+                class="w-full md:w-fit"
                 type="danger"
                 onclick={(ev) => {
                   ev.preventDefault();
                   selectedMemberId = user.id;
-                  showRemoveModal = true;
+                  showModal = 'remove';
                 }}
               >
                 Remove
@@ -184,7 +178,7 @@
     </div>
   {/snippet}
 
-  <Modal bind:show={showOwnerModal} center>
+  <Modal show={showModal === 'owner'} backdropCallback={hideModal} center>
     <ModalHeader>Change ownership</ModalHeader>
     <ModalBody>
       Are you sure you want to appoint this member as the owner? You will nullify all your rights as
@@ -193,8 +187,8 @@
     <ModalFooter>
       <form
         class="w-full"
-        method="post"
         action="?/change-owner"
+        method="post"
         use:enhance={() => {
           return async ({ result, update }) => {
             await formResultToast(result, toaster);
@@ -203,22 +197,20 @@
         }}
       >
         <input type="number" name="member-id" value={selectedMemberId} hidden readonly />
-        <Button class="w-full" type="primary" onclick={() => (showOwnerModal = false)}>
-          Change
-        </Button>
+        <Button class="w-full" type="primary" onclick={hideModal}>Change</Button>
       </form>
-      <Button class="w-full" type="dark" onclick={() => (showOwnerModal = false)}>Cancel</Button>
+      <Button class="w-full" type="dark" onclick={hideModal}>Cancel</Button>
     </ModalFooter>
   </Modal>
 
-  <Modal bind:show={showRemoveModal} center>
+  <Modal show={showModal === 'remove'} backdropCallback={hideModal} center>
     <ModalHeader>Remove member</ModalHeader>
     <ModalBody>Are you sure you want to remove this member?</ModalBody>
     <ModalFooter>
       <form
         class="w-full"
-        method="post"
         action="?/remove-member"
+        method="post"
         use:enhance={() => {
           return async ({ result, update }) => {
             await formResultToast(result, toaster);
@@ -227,21 +219,15 @@
         }}
       >
         <input type="number" name="member-id" value={selectedMemberId} hidden readonly />
-        <Button class="w-full" type="danger" onclick={() => (showRemoveModal = false)}>
-          Remove
-        </Button>
+        <Button class="w-full" type="danger" onclick={hideModal}>Remove</Button>
       </form>
-      <Button class="w-full" type="dark" onclick={() => (showRemoveModal = false)}>Cancel</Button>
+      <Button class="w-full" type="dark" onclick={hideModal}>Cancel</Button>
     </ModalFooter>
   </Modal>
 </HomeLayout>
 
 <style lang="postcss">
   @reference '@/app.css';
-
-  .sticky-header {
-    @apply sticky top-0 border-r border-b border-gray-700 bg-gray-950 py-4 text-center text-2xl;
-  }
 
   .input-group {
     @apply flex flex-col items-start gap-2;

@@ -10,12 +10,13 @@
   import Icon from '../misc/Icon.svelte';
 
   let {
-    tags,
-    groupId,
     userPicture = '/images/default-user-profile-icon.jpg',
     formaction,
     placeholder = `What's happening?`,
-    groupAccepted = false,
+    tags,
+    threadId,
+    groupId,
+    groupApproved = false,
     postCallback,
   }: PostUploadProps = $props();
 
@@ -74,14 +75,14 @@
 </script>
 
 <form
-  class="main"
+  class="flex gap-2 p-4"
   method="post"
   enctype="multipart/form-data"
   onsubmit={() => (disablePost = true)}
   use:enhance={() => {
     return async ({ result, update }) => {
       await formResultToast(result, toaster);
-      await update();
+      await update({ reset: false });
 
       inputContent = '';
       images = [];
@@ -95,7 +96,7 @@
   }}
 >
   <img
-    class="profile-picture-sm"
+    class="profile-picture-sm hidden md:block"
     src={userPicture ?? '/images/default-user-profile-icon.jpg'}
     alt="profile"
   />
@@ -110,10 +111,10 @@
       spellcheck="true"
       data-placeholder={placeholder}
     ></div>
-    <textarea name="content" value={inputContent} hidden></textarea>
+    <textarea name="content" value={inputContent} hidden readonly></textarea>
 
     {#if images.length > 0}
-      <div class="media-viewer scrollbar">
+      <div class="flex flex-wrap gap-4 pb-2">
         {#each images as file, index (index)}
           <div class="relative">
             <IconButton
@@ -164,7 +165,7 @@
           id="post-tag-select"
         >
           {#each tags as tag}
-            <option disabled selected value hidden> -- choose tag -- </option>
+            <option disabled selected value hidden>-- choose tag --</option>
             <option value={tag.id}>{tag.name}</option>
           {/each}
         </select>
@@ -181,13 +182,13 @@
           />
         </label>
         <input
-          class="hidden"
           type="file"
           id="image-input"
           name="images"
           accept="image/*"
-          multiple
           disabled={imageDisabled}
+          multiple
+          hidden
         />
       </div>
 
@@ -202,12 +203,12 @@
           />
         </label>
         <input
-          class="hidden"
           type="file"
           id="video-input"
           name="video"
           accept="video/mp4"
           disabled={videoDisabled}
+          hidden
         />
       </div>
 
@@ -224,16 +225,15 @@
     {#if groupId !== undefined}
       <input type="number" name="group-id" value={groupId} hidden readonly />
     {/if}
-    <input type="checkbox" name="accept-post" checked={groupAccepted} hidden readonly />
+    {#if threadId !== undefined}
+      <input type="number" name="thread-id" value={threadId} hidden readonly />
+    {/if}
+    <input type="checkbox" name="group-approved" checked={groupApproved} hidden readonly />
   </div>
 </form>
 
 <style lang="postcss">
   @reference '@/app.css';
-
-  .main {
-    @apply flex gap-2 p-4;
-  }
 
   .editor {
     @apply min-h-24 w-full rounded-md border border-gray-700 p-4 focus:border-gray-300;
@@ -242,9 +242,5 @@
   .editor.empty::after {
     content: attr(data-placeholder);
     @apply text-gray-500;
-  }
-
-  .media-viewer {
-    @apply flex gap-4 overflow-x-scroll pb-2;
   }
 </style>

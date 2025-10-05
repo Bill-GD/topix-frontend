@@ -12,11 +12,12 @@
   <title>Confirm email - topix</title>
 </svelte:head>
 
-<p class="title">Verify your email</p>
+<p class="text-4xl font-semibold">Verify your email</p>
 
 <p class="mt-8">We sent the code to the email you specified.</p>
 
 <form
+  class="mt-8 flex flex-col gap-6"
   method="post"
   use:enhance={() => {
     return async ({ result, update }) => {
@@ -30,15 +31,3 @@
   <Button formaction="?/otp" type="success">Send</Button>
   <Button formaction="?/resend" type="dark">Send again</Button>
 </form>
-
-<style lang="postcss">
-  @reference "@/app.css";
-
-  .title {
-    @apply text-4xl font-semibold;
-  }
-
-  form {
-    @apply mt-8 flex flex-col gap-6;
-  }
-</style>

@@ -1,6 +1,7 @@
 import { AxiosHandler, handleReaction } from '$lib/utils/axios-handler';
+import { getPostUploadForm } from '$lib/utils/helpers';
 import { CookieName, type Post, type Tag, type Thread } from '$lib/utils/types';
-import { error, fail, redirect, type Actions } from '@sveltejs/kit';
+import { type Actions, error, fail, isActionFailure, redirect } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ cookies, params }) => {
@@ -36,58 +37,15 @@ export const load: PageServerLoad = async ({ cookies, params }) => {
 };
 
 export const actions: Actions = {
-  'add-post': async (event) => {
-    const formData = await event.request.formData();
-    const files: File[] = [];
-    let urls: string[] = [];
-    let type = 'image';
-    const content = `${formData.get('content')}`.replaceAll('\r\n\r\n', '\n');
-
-    if (formData.has('video')) {
-      const vid = formData.get('video') as File;
-      if (vid.size > 0) {
-        type = 'video';
-        files.push(vid);
-      }
-    } else if (formData.has('images')) {
-      files.push(...(formData.getAll('images') as File[]).filter((f) => f.size > 0));
-    }
-
-    if (files.length <= 0 && content.length <= 0) {
-      return fail(400, {
-        success: false,
-        message: 'Content must not be empty if no image or video uploaded.',
-      });
-    }
-
-    if (files.length > 0) {
-      const form = new FormData();
-      files.forEach((f) => form.append('files', f));
-
-      const fileRes = await AxiosHandler.post(
-        '/file/upload',
-        form,
-        event.cookies.get(CookieName.accessToken),
-        { 'Content-Type': 'multipart/form-data' },
-      );
-      if (!fileRes.success) {
-        return fail(fileRes.status, { success: false, message: fileRes.message });
-      }
-      urls = fileRes.data as string[];
-    }
-
-    const tagId = Number(formData.get('tag-id'));
+  'add-post': async ({ request, params, cookies }) => {
+    const form = await getPostUploadForm(request);
+    if (isActionFailure(form)) return form;
 
     const res = await AxiosHandler.post(
-      `/group/${event.params.id}/post`,
-      {
-        type,
-        content,
-        mediaPaths: urls,
-        tagId: tagId > 0 ? tagId : undefined,
-        accepted: formData.has('accept-post'),
-      },
-      event.cookies.get(CookieName.accessToken),
+      `/group/${params.id}/post`,
+      form,
+      cookies.get(CookieName.accessToken),
+      { 'Content-Type': 'multipart/form-data' },
     );
 
     if (!res.success) return fail(res.status, { success: false, message: res.message });
@@ -113,10 +71,10 @@ export const actions: Actions = {
     if (!res.success) return fail(res.status, { success: false, message: res.message });
     return { success: true, message: res.message };
   },
-  'delete-group': async (event) => {
+  'delete-group': async ({ params, cookies }) => {
     const res = await AxiosHandler.delete(
-      `/group/${event.params.id}`,
-      event.cookies.get(CookieName.accessToken),
+      `/group/${params.id}`,
+      cookies.get(CookieName.accessToken),
     );
 
     if (!res.success) return fail(res.status, { success: false, message: res.message });

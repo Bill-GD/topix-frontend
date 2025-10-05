@@ -1,30 +1,34 @@
 <script lang="ts">
-  import { IconButton, Button } from '$lib/components/button';
+  import { enhance } from '$app/forms';
+  import { Button, IconButton } from '$lib/components/button';
   import { HomeLayout } from '$lib/components/layout';
+  import { Icon, ReturnHeader } from '$lib/components/misc';
+  import { Modal, ModalBody, ModalFooter, ModalHeader } from '$lib/components/modal';
   import { getToaster } from '$lib/components/toast';
   import { formResultToast } from '$lib/utils/helpers';
-  import { Icon } from '$lib/components/misc';
-  import { Modal, ModalHeader, ModalBody, ModalFooter } from '$lib/components/modal';
   import type { PageProps } from './$types';
-  import { enhance } from '$app/forms';
 
   let { data }: PageProps = $props();
 
   const toaster = getToaster();
-  let showModal = $state<boolean>(false);
+  let showModal = $state<'delete' | null>(null);
   let username = $state<string>('');
+
+  function hideModal() {
+    showModal = null;
+  }
 </script>
 
+<svelte:head>
+  <title>Users - topix</title>
+</svelte:head>
+
 <HomeLayout self={data.self}>
-  <div class="border-b border-gray-700 py-4 text-center text-xl font-semibold">Users</div>
+  <ReturnHeader>Users</ReturnHeader>
 
   <div class="flex flex-col">
     {#each data.users as user}
-      <a
-        class="flex items-center gap-4 p-4 hover:bg-gray-900/40"
-        href="/user/{user.username}"
-        data-sveltekit-preload-data="tap"
-      >
+      <a class="flex items-center gap-4 p-4 hover:bg-gray-900/40" href="/user/{user.username}">
         <img
           class="profile-picture-md"
           src={user.profilePicture ?? '/images/default-user-profile-icon.jpg'}
@@ -43,7 +47,7 @@
           <IconButton
             class="ml-auto hover:bg-gray-800"
             onclick={() => {
-              showModal = true;
+              showModal = 'delete';
               username = user.username;
             }}
           >
@@ -55,7 +59,7 @@
     {/each}
   </div>
 
-  <Modal id="delete-modal-account" bind:show={showModal} center>
+  <Modal show={showModal === 'delete'} backdropCallback={hideModal} center>
     <ModalHeader>Delete account</ModalHeader>
     <ModalBody>
       Are you sure you want to delete this account? This action is irreversible and all data can not
@@ -63,9 +67,9 @@
     </ModalBody>
     <ModalFooter>
       <form
+        class="w-full"
         action="?/delete-account"
         method="post"
-        class="w-full"
         use:enhance={() => {
           return async ({ result, update }) => {
             await formResultToast(result, toaster);
@@ -73,10 +77,10 @@
           };
         }}
       >
-        <Button class="w-full" type="danger" onclick={() => (showModal = false)}>Delete</Button>
-        <input hidden type="text" name="username" readonly value={username} />
+        <Button class="w-full" type="danger" onclick={hideModal}>Delete</Button>
+        <input type="text" name="username" value={username} hidden readonly />
       </form>
-      <Button class="w-full" type="dark" onclick={() => (showModal = false)}>Cancel</Button>
+      <Button class="w-full" type="dark" onclick={hideModal}>Cancel</Button>
     </ModalFooter>
   </Modal>
 </HomeLayout>

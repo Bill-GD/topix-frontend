@@ -1,28 +1,31 @@
 <script lang="ts">
-  import { capitalize, formResultToast } from '$lib/utils/helpers';
-  import { IconButton, Button } from '$lib/components/button';
+  import { enhance } from '$app/forms';
+  import { Button, IconButton } from '$lib/components/button';
   import { FloatingLabelInput, Input } from '$lib/components/input';
-  import { Flair, Icon } from '$lib/components/misc';
-  import { FileDropzone } from '$lib/components/upload';
   import { HomeLayout } from '$lib/components/layout';
+  import { Flair, Icon, ReturnHeader } from '$lib/components/misc';
+  import { Modal, ModalBody, ModalFooter, ModalHeader } from '$lib/components/modal';
   import { getToaster } from '$lib/components/toast';
-  import { Modal, ModalHeader, ModalBody, ModalFooter } from '$lib/components/modal';
+  import { FileDropzone } from '$lib/components/upload';
+  import { capitalize, formResultToast } from '$lib/utils/helpers';
   import type { Tag } from '$lib/utils/types';
   import type { PageProps } from './$types';
-  import { enhance } from '$app/forms';
 
   let { data, params }: PageProps = $props();
 
   const toaster = getToaster();
   const items = ['general', 'tags'];
   let saving = $state<boolean>(false);
-  let showModal = $state<boolean>(false);
-  let showTagModal = $state<boolean>(false);
+  let showModal = $state<'add' | 'delete' | null>(null);
   let bannerValue = $derived<string>('');
   let filenameValue = $state<string>('');
   let tagName = $state<string>('example');
   let colorValue = $state<string>('#000000');
   let selectedTag = $state<Tag | null>(null);
+
+  function hideModal() {
+    showModal = null;
+  }
 </script>
 
 <svelte:head>
@@ -30,14 +33,7 @@
 </svelte:head>
 
 <HomeLayout self={data.self}>
-  <div class="sticky-header">
-    <div class="relative">
-      <IconButton class="absolute left-4 hover:bg-gray-800" onclick={() => window.history.back()}>
-        <Icon type="back" />
-      </IconButton>
-    </div>
-    Settings
-  </div>
+  <ReturnHeader>Settings</ReturnHeader>
 
   <div
     class="no-scrollbar flex justify-around overflow-x-scroll border-b border-gray-700 md:hidden"
@@ -100,17 +96,12 @@
             alt="user-profile"
           />
 
-          <FileDropzone
-            contentInputName="group-banner"
-            bind:contentValue={bannerValue}
-            filenameInputName="group-banner-name"
-            bind:filenameValue
-          />
+          <FileDropzone contentInputName="group-banner" bind:contentValue={bannerValue} />
         </div>
       </form>
     {:else if params.section === 'tags'}
       <div class="flex flex-col gap-4">
-        <Button class="ml-auto" type="success" onclick={() => (showModal = true)}>Add tag</Button>
+        <Button class="ml-auto" type="success" onclick={() => (showModal = 'add')}>Add tag</Button>
 
         <p class="text-lg font-semibold">Current tags</p>
         <div class="flex flex-wrap gap-4">
@@ -120,7 +111,7 @@
               <IconButton
                 class="hover:bg-gray-800"
                 onclick={() => {
-                  showTagModal = true;
+                  showModal = 'delete';
                   selectedTag = tag;
                 }}
               >
@@ -161,7 +152,7 @@
     </div>
   {/snippet}
 
-  <Modal bind:show={showModal} center>
+  <Modal show={showModal === 'add'} backdropCallback={hideModal} center>
     <ModalHeader>Add new tag</ModalHeader>
     <ModalBody>
       <form
@@ -173,7 +164,7 @@
           return async ({ result, update }) => {
             await formResultToast(result, toaster);
             await update();
-            showModal = false;
+            hideModal();
             tagName = 'example';
             colorValue = '#000000';
           };
@@ -203,7 +194,7 @@
           class="ml-auto w-full"
           type="success"
           disabled={tagName.length <= 0}
-          onclick={() => (showModal = true)}
+          onclick={hideModal}
         >
           Add tag
         </Button>
@@ -211,14 +202,14 @@
     </ModalBody>
   </Modal>
 
-  <Modal bind:show={showTagModal} center>
+  <Modal show={showModal === 'delete'} backdropCallback={hideModal} center>
     <ModalHeader>Delete tag</ModalHeader>
     <ModalBody>Are you sure you want to delete tag <Flair tag={selectedTag!} />?</ModalBody>
     <ModalFooter>
       <form
         class="w-full"
-        method="post"
         action="?/delete-tag"
+        method="post"
         use:enhance={() => {
           return async ({ result, update }) => {
             await formResultToast(result, toaster);
@@ -227,19 +218,15 @@
         }}
       >
         <input type="text" name="tag-id" value={selectedTag?.id} hidden readonly />
-        <Button class="w-full" type="danger" onclick={() => (showTagModal = false)}>Delete</Button>
+        <Button class="w-full" type="danger" onclick={hideModal}>Delete</Button>
       </form>
-      <Button class="w-full" type="dark" onclick={() => (showTagModal = false)}>Cancel</Button>
+      <Button class="w-full" type="dark" onclick={hideModal}>Cancel</Button>
     </ModalFooter>
   </Modal>
 </HomeLayout>
 
 <style lang="postcss">
   @reference '@/app.css';
-
-  .sticky-header {
-    @apply sticky top-0 border-r border-b border-gray-700 bg-gray-950 py-4 text-center text-2xl;
-  }
 
   .input-group {
     @apply flex flex-col items-start gap-2;

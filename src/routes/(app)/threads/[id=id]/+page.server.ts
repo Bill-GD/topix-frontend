@@ -1,10 +1,15 @@
 import { AxiosHandler, handleReaction } from '$lib/utils/axios-handler';
-import { CookieName, type Post, type Thread } from '$lib/utils/types';
-import { error, fail, redirect, type Actions } from '@sveltejs/kit';
+import { getPostUploadForm } from '$lib/utils/helpers';
+import { CookieName, type CurrentUser, type Post, type Thread } from '$lib/utils/types';
+import { type Actions, error, fail, isActionFailure, redirect } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ cookies, params }) => {
-  const data: { thread: Thread; posts: Post[] } = { thread: {} as Thread, posts: [] };
+  const data: { thread: Thread; posts: Post[]; joinedGroup: boolean } = {
+    thread: {} as Thread,
+    posts: [],
+    joinedGroup: true,
+  };
 
   const threadRes = await AxiosHandler.get(
     `/thread/${params.id}`,
@@ -15,8 +20,22 @@ export const load: PageServerLoad = async ({ cookies, params }) => {
   }
   data.thread = threadRes.data as unknown as Thread;
 
+  if (data.thread.groupId) {
+    const joinedGroupRes = await AxiosHandler.get(
+      `/group/${data.thread.groupId}/join-status`,
+      cookies.get(CookieName.accessToken),
+    );
+    if (!joinedGroupRes.success) {
+      error(joinedGroupRes.status, {
+        message: joinedGroupRes.message,
+        status: joinedGroupRes.status,
+      });
+    }
+    data.joinedGroup = joinedGroupRes.data as unknown as boolean;
+  }
+
   const postRes = await AxiosHandler.get(
-    `/post?threadId=${params.id}`,
+    `/post?threadId=${params.id}${data.thread.groupId ? `&groupId=${data.thread.groupId}` : ''}`,
     cookies.get(CookieName.accessToken),
   );
   if (!postRes.success) {
@@ -29,17 +48,21 @@ export const load: PageServerLoad = async ({ cookies, params }) => {
 
 export const actions: Actions = {
   react: handleReaction,
-  'delete-thread': async (event) => {
-    const formData = await event.request.formData();
-    const threadId = formData.get('thread-id');
-
+  'delete-thread': async ({ request, params, cookies }) => {
+    const formData = await request.formData();
     const res = await AxiosHandler.delete(
-      `/thread/${threadId}`,
-      event.cookies.get(CookieName.accessToken),
+      `/thread/${params.id}`,
+      cookies.get(CookieName.accessToken),
     );
 
     if (!res.success) return fail(res.status, { success: false, message: res.message });
-    redirect(303, `/home`);
+    if (formData.has('group-id')) redirect(303, `/groups/${formData.get('group-id')}`);
+
+    const currentUserStr = cookies.get(CookieName.currentUser);
+    if (currentUserStr) {
+      redirect(303, `/user/${(JSON.parse(currentUserStr) as CurrentUser).username}`);
+    }
+    redirect(303, '/home');
   },
   'update-title': async (event) => {
     const formData = await event.request.formData();
@@ -54,56 +77,15 @@ export const actions: Actions = {
     if (!res.success) return fail(res.status, { success: false, message: res.message });
     return { success: true, message: res.message };
   },
-  'add-post': async (event) => {
-    const formData = await event.request.formData();
-    const files: File[] = [];
-    let urls: string[] = [];
-    let type = 'image';
-    const content = `${formData.get('content')}`.replaceAll('\r\n\r\n', '\n');
-
-    if (formData.has('video')) {
-      const vid = formData.get('video') as File;
-      if (vid.size > 0) {
-        type = 'video';
-        files.push(vid);
-      }
-    } else if (formData.has('images')) {
-      files.push(...(formData.getAll('images') as File[]).filter((f) => f.size > 0));
-    }
-
-    if (files.length <= 0 && content.length <= 0) {
-      return fail(400, {
-        success: false,
-        message: 'Content must not be empty if no image or video uploaded.',
-      });
-    }
-
-    if (files.length > 0) {
-      const form = new FormData();
-      files.forEach((f) => form.append('files', f));
-
-      const fileRes = await AxiosHandler.post(
-        '/file/upload',
-        form,
-        event.cookies.get(CookieName.accessToken),
-        { 'Content-Type': 'multipart/form-data' },
-      );
-      if (!fileRes.success) {
-        return fail(fileRes.status, { success: false, message: fileRes.message });
-      }
-      urls = fileRes.data as string[];
-    }
-
-    const dto = {
-      type,
-      content,
-      mediaPaths: urls,
-    };
+  'add-post': async ({ request, params, cookies }) => {
+    const form = await getPostUploadForm(request);
+    if (isActionFailure(form)) return form;
 
     const res = await AxiosHandler.post(
-      `/thread/${event.params.id}/post`,
-      dto,
-      event.cookies.get(CookieName.accessToken),
+      `/thread/${params.id}/post`,
+      form,
+      cookies.get(CookieName.accessToken),
+      { 'Content-Type': 'multipart/form-data' },
     );
 
     if (!res.success) return fail(res.status, { success: false, message: res.message });

@@ -1,12 +1,18 @@
 // component-related types
 
+import type { Snippet } from 'svelte';
+import type {
+  ClassValue,
+  HTMLAttributeAnchorTarget,
+  HTMLInputTypeAttribute,
+} from 'svelte/elements';
 import { faThumbsUp as faClassicThumbsUp } from '@fortawesome/free-regular-svg-icons';
 import {
+  faBars,
   faCheck,
   faChevronLeft,
   faChevronRight,
   faCircleCheck,
-  faCircleInfo,
   faEllipsisVertical,
   faEye,
   faEyeSlash,
@@ -30,12 +36,6 @@ import {
   faVideo,
   faXmark,
 } from '@fortawesome/free-solid-svg-icons';
-import type { Snippet } from 'svelte';
-import type {
-  ClassValue,
-  HTMLAttributeAnchorTarget,
-  HTMLInputTypeAttribute,
-} from 'svelte/elements';
 import type { CurrentUser, Post, Tag, ToastMessage, UnaryVoidFunction } from '../utils/types';
 
 export type ButtonType = 'primary' | 'danger' | 'dark' | 'success';
@@ -50,7 +50,7 @@ export const IconSize = {
 export const Icons = {
   delete: faTrashCan,
   user: faUser,
-  info: faCircleInfo,
+  bar: faBars,
   success: faCircleCheck,
   check: faCheck,
   unfollow: faUserMinus,
@@ -115,9 +115,7 @@ export interface ToastProps {
 
 export interface FileDropzoneProps {
   contentInputName: string;
-  filenameInputName: string;
   contentValue: string;
-  filenameValue: string;
   class?: ClassValue;
 }
 
@@ -150,9 +148,8 @@ export interface IconButtonProps {
   children: Snippet;
   onclick?: VoidFunction | UnaryVoidFunction<Event>;
   disabled?: boolean | null;
-  type?: 'submit' | 'reset' | 'button' | null;
-  variant?: ButtonType;
-  outline?: boolean;
+  buttonType?: 'submit' | 'reset' | 'button' | null;
+  type?: ButtonType;
   class?: ClassValue;
   round?: boolean;
 }
@@ -184,6 +181,7 @@ export interface ModalProps {
   icon?: Snippet;
   show: boolean;
   center?: boolean;
+  backdropCallback: VoidFunction;
 }
 
 export interface NavItemProps {
@@ -213,7 +211,8 @@ export interface PostUploadProps {
   formaction?: string;
   placeholder?: string;
   tags?: Tag[];
-  groupAccepted?: boolean;
+  groupApproved?: boolean;
+  threadId?: number;
   groupId?: number;
   postCallback?: VoidFunction;
 }

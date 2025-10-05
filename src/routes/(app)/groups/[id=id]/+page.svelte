@@ -4,7 +4,7 @@
   import { DropdownItem, DropdownMenu } from '$lib/components/dropdown';
   import { FloatingLabelInput } from '$lib/components/input';
   import { HomeLayout } from '$lib/components/layout';
-  import { Icon } from '$lib/components/misc';
+  import { Icon, ReturnHeader } from '$lib/components/misc';
   import { Modal, ModalBody, ModalFooter, ModalHeader } from '$lib/components/modal';
   import { Post } from '$lib/components/post';
   import { ThreadOverview } from '$lib/components/thread';
@@ -16,10 +16,12 @@
   let { data }: PageProps = $props();
 
   const toaster = getToaster();
-  let showDeleteGroupModal = $state<boolean>(false);
-  let showLeaveModal = $state<boolean>(false);
-  let showThreadModal = $state<boolean>(false);
+  let showModal = $state<'thread' | 'leave' | 'delete' | null>(null);
   let threadTitle = $state<string>('');
+
+  function hideModal() {
+    showModal = null;
+  }
 </script>
 
 <svelte:head>
@@ -27,15 +29,10 @@
 </svelte:head>
 
 <HomeLayout self={data.self}>
-  <div class="flex items-center gap-4 p-2">
-    <IconButton class="hover:bg-gray-800" onclick={() => window.history.back()}>
-      <Icon type="back" size="sm" />
-    </IconButton>
-    <span class="text-lg font-semibold">Group</span>
-  </div>
+  <ReturnHeader>Group</ReturnHeader>
 
   <img
-    class="object-fit rounded-md"
+    class="object-fit rounded-b-lg"
     src={data.group.bannerPicture ?? '/images/no-image.jpg'}
     alt="group-banner"
   />
@@ -55,15 +52,15 @@
       </div>
 
       <div class="ml-auto flex items-center gap-2">
-        {#if data.group.status !== 'none'}
+        {#if data.group.status !== null}
           <Button class="hover:bg-gray-800" type="primary" disabled>
-            {capitalize(data.group.status)}
+            {data.group.status ? 'Joined' : 'Pending'}
           </Button>
         {:else}
           <form
             class="w-full"
-            method="post"
             action="?/join-group"
+            method="post"
             use:enhance={() => {
               return async ({ result, update }) => {
                 await formResultToast(result, toaster);
@@ -83,14 +80,14 @@
           {/snippet}
 
           <DropdownItem href="/groups/{data.group.id}/members/all">Members</DropdownItem>
-          {#if data.self.username === data.group.owner.username}
+          {#if data.self.id === data.group.owner.id}
             <DropdownItem href="/groups/{data.group.id}/pending">Pending posts</DropdownItem>
             <DropdownItem href="/groups/{data.group.id}/settings/general">Settings</DropdownItem>
-            <DropdownItem class="text-red-500" onclick={() => (showDeleteGroupModal = true)}>
+            <DropdownItem class="text-red-500" onclick={() => (showModal = 'delete')}>
               Delete
             </DropdownItem>
-          {:else if data.group.status !== 'none'}
-            <DropdownItem class="text-red-500" onclick={() => (showLeaveModal = true)}>
+          {:else if data.group.status !== null}
+            <DropdownItem class="text-red-500" onclick={() => (showModal = 'leave')}>
               Leave
             </DropdownItem>
           {/if}
@@ -99,19 +96,19 @@
     </div>
   </div>
 
-  {#if data.group.status === 'joined'}
+  {#if data.group.status === true}
     <hr class="text-gray-700" />
     <PostUpload
       userPicture={data.self.profilePicture}
       formaction="?/add-post"
       placeholder="Add new post"
       tags={data.tags}
-      groupAccepted={data.self.username === data.group.owner.username}
+      groupApproved={data.self.id === data.group.owner.id}
     />
   {/if}
 
   {#if data.posts.length <= 0}
-    <p class="w-full p-4 text-center text-2xl font-semibold">This group has no post.</p>
+    <p class="empty-noti-text">This group has no post.</p>
   {/if}
   {#each data.posts as post}
     <hr class="text-gray-700" />
@@ -122,11 +119,11 @@
     <div class="rounded-md border border-gray-700 2xl:max-w-1/2">
       <div class="flex items-baseline p-4">
         <p class="text-xl font-semibold">Threads</p>
-        {#if data.group.status === 'joined'}
+        {#if data.group.status === true}
           <IconButton
-            variant="success"
+            type="success"
             class="ml-auto flex hover:bg-gray-800"
-            onclick={() => (showThreadModal = true)}
+            onclick={() => (showModal = 'thread')}
           >
             <Icon type="add" size="xs" />
           </IconButton>
@@ -145,14 +142,14 @@
     </div>
   {/snippet}
 
-  <Modal bind:show={showDeleteGroupModal} center>
+  <Modal show={showModal === 'delete'} backdropCallback={hideModal} center>
     <ModalHeader>Delete group</ModalHeader>
     <ModalBody>Are you sure you want to delete this group? This is irreversible.</ModalBody>
     <ModalFooter>
       <form
         class="w-full"
-        method="post"
         action="?/delete-group"
+        method="post"
         use:enhance={() => {
           return async ({ result, update }) => {
             await formResultToast(result, toaster, 'Group deleted successfully.');
@@ -160,25 +157,21 @@
           };
         }}
       >
-        <Button class="w-full" type="danger" onclick={() => (showDeleteGroupModal = false)}>
-          Delete
-        </Button>
+        <Button class="w-full" type="danger" onclick={hideModal}>Delete</Button>
       </form>
 
-      <Button class="w-full" type="dark" onclick={() => (showDeleteGroupModal = false)}>
-        Cancel
-      </Button>
+      <Button class="w-full" type="dark" onclick={hideModal}>Cancel</Button>
     </ModalFooter>
   </Modal>
 
-  <Modal bind:show={showLeaveModal} center>
+  <Modal show={showModal === 'leave'} backdropCallback={hideModal} center>
     <ModalHeader>Leave group</ModalHeader>
     <ModalBody>Are you sure you want to leave this group?</ModalBody>
     <ModalFooter>
       <form
         class="w-full"
-        method="post"
         action="?/leave-group"
+        method="post"
         use:enhance={() => {
           return async ({ result, update }) => {
             await formResultToast(result, toaster);
@@ -186,20 +179,20 @@
           };
         }}
       >
-        <Button class="w-full" type="danger" onclick={() => (showLeaveModal = false)}>Leave</Button>
+        <Button class="w-full" type="danger" onclick={hideModal}>Leave</Button>
       </form>
 
-      <Button class="w-full" type="dark" onclick={() => (showLeaveModal = false)}>Cancel</Button>
+      <Button class="w-full" type="dark" onclick={hideModal}>Cancel</Button>
     </ModalFooter>
   </Modal>
 
-  <Modal bind:show={showThreadModal} center>
+  <Modal show={showModal === 'thread'} backdropCallback={hideModal} center>
     <ModalHeader>Create thread</ModalHeader>
     <ModalBody>
       <form
+        class="flex w-full flex-col gap-4"
         action="?/create-thread"
         method="post"
-        class="flex w-full flex-col gap-4"
         use:enhance={() => {
           return async ({ result, update }) => {
             await formResultToast(result, toaster);
@@ -207,26 +200,38 @@
           };
         }}
       >
-        <FloatingLabelInput name="thread-title" labelClass="bg-gray-900" bind:value={threadTitle}>
+        <FloatingLabelInput
+          class="w-full"
+          name="thread-title"
+          labelClass="bg-gray-900"
+          bind:value={threadTitle}
+        >
           Title
         </FloatingLabelInput>
 
-        <select
-          class="rounded-md border-gray-700 bg-gray-900 text-white"
-          name="tag-id"
-          id="post-tag-select"
-        >
-          {#each data.tags as tag}
-            <option disabled selected value hidden> -- choose tag -- </option>
-            <option value={tag.id}>{tag.name}</option>
-          {/each}
-        </select>
+        {#if data.tags && data.tags.length > 0}
+          <select
+            class="rounded-md border-gray-700 bg-gray-900 text-white"
+            name="tag-id"
+            id="post-tag-select"
+          >
+            {#each data.tags as tag}
+              <option disabled selected value hidden> -- choose tag -- </option>
+              <option value={tag.id}>{tag.name}</option>
+            {/each}
+          </select>
+        {/if}
 
         <div class="flex w-full flex-col gap-2 md:flex-row">
-          <Button class="w-full" type="success" onclick={() => (showThreadModal = false)}>
-            Create
-          </Button>
-          <Button class="w-full" type="dark" onclick={() => (showThreadModal = false)}>
+          <Button class="w-full" type="success" onclick={hideModal}>Create</Button>
+          <Button
+            class="w-full"
+            type="dark"
+            onclick={(ev) => {
+              ev.preventDefault();
+              hideModal();
+            }}
+          >
             Cancel
           </Button>
         </div>

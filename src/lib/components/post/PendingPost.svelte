@@ -1,17 +1,17 @@
 <script lang="ts">
   import { enhance } from '$app/forms';
   import { getToaster } from '$lib/components/toast';
-  import { formResultToast, getTimeAgo } from '$lib/utils/helpers';
   import type { PendingPostProps } from '$lib/components/types';
-  import Link from '../link/Link.svelte';
+  import { formResultToast, getTimeAgo } from '$lib/utils/helpers';
+  import Button from '../button/Button.svelte';
   import IconButton from '../button/IconButton.svelte';
+  import Link from '../link/Link.svelte';
+  import Flair from '../misc/Flair.svelte';
   import Icon from '../misc/Icon.svelte';
   import Modal from '../modal/Modal.svelte';
-  import ModalHeader from '../modal/ModalHeader.svelte';
   import ModalBody from '../modal/ModalBody.svelte';
   import ModalFooter from '../modal/ModalFooter.svelte';
-  import Button from '../button/Button.svelte';
-  import Flair from '../misc/Flair.svelte';
+  import ModalHeader from '../modal/ModalHeader.svelte';
 
   let { class: className, post }: PendingPostProps = $props();
 
@@ -20,8 +20,11 @@
   const isVideo = $derived(post.mediaPaths.every((m) => m.includes('video')));
 
   let imageIndex = $state<number>(0);
-  let showApproveModal = $state<boolean>(false);
-  let showRemoveModal = $state<boolean>(false);
+  let showModal = $state<'approve' | 'remove' | null>(null);
+
+  function hideModal() {
+    showModal = null;
+  }
 </script>
 
 <div class={['flex items-center gap-2 p-4', className]}>
@@ -106,23 +109,23 @@
   </div>
 
   <div class="ml-auto flex gap-2">
-    <IconButton variant="success" onclick={() => (showApproveModal = true)}>
+    <IconButton type="success" onclick={() => (showModal = 'approve')}>
       <Icon type="check" size="sm" />
     </IconButton>
-    <IconButton variant="danger" onclick={() => (showRemoveModal = true)}>
+    <IconButton type="danger" onclick={() => (showModal = 'remove')}>
       <Icon type="close" size="sm" />
     </IconButton>
   </div>
 </div>
 
-<Modal bind:show={showApproveModal} center>
+<Modal show={showModal === 'approve'} backdropCallback={hideModal} center>
   <ModalHeader>Approve post</ModalHeader>
   <ModalBody>Are you sure you want to approve this post?</ModalBody>
   <ModalFooter>
     <form
       class="w-full"
+      action="?/approve-post"
       method="post"
-      action="?/accept-post"
       use:enhance={() => {
         return async ({ result, update }) => {
           await formResultToast(result, toaster);
@@ -131,22 +134,20 @@
       }}
     >
       <input type="number" name="post-id" value={post.id} hidden readonly />
-      <Button class="w-full" type="success" onclick={() => (showApproveModal = false)}
-        >Approve</Button
-      >
+      <Button class="w-full" type="success" onclick={hideModal}>Approve</Button>
     </form>
-    <Button class="w-full" type="dark" onclick={() => (showApproveModal = false)}>Cancel</Button>
+    <Button class="w-full" type="dark" onclick={hideModal}>Cancel</Button>
   </ModalFooter>
 </Modal>
 
-<Modal bind:show={showRemoveModal} center>
+<Modal show={showModal === 'remove'} backdropCallback={hideModal} center>
   <ModalHeader>Remove post</ModalHeader>
   <ModalBody>Are you sure you want to remove this post?</ModalBody>
   <ModalFooter>
     <form
       class="w-full"
-      method="post"
       action="?/remove-post"
+      method="post"
       use:enhance={() => {
         return async ({ result, update }) => {
           await formResultToast(result, toaster);
@@ -155,8 +156,8 @@
       }}
     >
       <input type="number" name="post-id" value={post.id} hidden readonly />
-      <Button class="w-full" type="danger" onclick={() => (showRemoveModal = false)}>Remove</Button>
+      <Button class="w-full" type="danger" onclick={hideModal}>Remove</Button>
     </form>
-    <Button class="w-full" type="dark" onclick={() => (showRemoveModal = false)}>Cancel</Button>
+    <Button class="w-full" type="dark" onclick={hideModal}>Cancel</Button>
   </ModalFooter>
 </Modal>

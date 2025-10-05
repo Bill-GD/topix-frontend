@@ -16,8 +16,7 @@
   let showMenu = $state<boolean>(false);
 
   function toggleMenu() {
-    if (showMenu) return;
-    showMenu = true;
+    showMenu = !showMenu;
   }
 
   async function menuPosition() {

@@ -1,14 +1,14 @@
 <script lang="ts">
-  import { capitalize, formResultToast } from '$lib/utils/helpers';
-  import { IconButton, Button } from '$lib/components/button';
+  import { enhance } from '$app/forms';
+  import { Button, IconButton } from '$lib/components/button';
   import { Input } from '$lib/components/input';
-  import { Icon } from '$lib/components/misc';
-  import { FileDropzone } from '$lib/components/upload';
   import { HomeLayout } from '$lib/components/layout';
+  import { Icon, ReturnHeader } from '$lib/components/misc';
   import { Modal, ModalBody, ModalHeader } from '$lib/components/modal';
   import { getToaster } from '$lib/components/toast';
+  import { FileDropzone } from '$lib/components/upload';
+  import { capitalize, formResultToast } from '$lib/utils/helpers';
   import type { PageProps } from './$types';
-  import { enhance } from '$app/forms';
 
   let { data, params }: PageProps = $props();
 
@@ -16,8 +16,11 @@
   const items = ['account', 'profile', 'danger'];
   let passwordValue = $state<string>('');
   let profileValue = $state<string>('');
-  let profileFilenameValue = $state<string>('');
-  let showModal = $state<boolean>(false);
+  let showModal = $state<'delete' | null>(null);
+
+  function hideModal() {
+    showModal = null;
+  }
 </script>
 
 <svelte:head>
@@ -25,14 +28,7 @@
 </svelte:head>
 
 <HomeLayout self={data.self}>
-  <div class="sticky-header">
-    <div class="relative">
-      <IconButton class="absolute left-4 hover:bg-gray-800" onclick={() => window.history.back()}>
-        <Icon type="back" />
-      </IconButton>
-    </div>
-    Settings
-  </div>
+  <ReturnHeader>Settings</ReturnHeader>
 
   <div
     class="no-scrollbar flex justify-around overflow-x-scroll border-b border-gray-700 md:hidden"
@@ -117,34 +113,29 @@
               alt="user-profile"
             />
 
-            <FileDropzone
-              contentInputName="profile-picture"
-              bind:contentValue={profileValue}
-              filenameInputName="profile-picture-name"
-              bind:filenameValue={profileFilenameValue}
-            />
+            <FileDropzone contentInputName="profile-picture" bind:contentValue={profileValue} />
           </div>
         </div>
       </form>
     {:else if params.section === 'danger'}
-      <!-- {#if data.self.role !== 'admin'} -->
-      <div class="flex flex-col gap-2">
-        <p class="text-xl">Delete account</p>
-        <div class="flex gap-4">
-          <Button type="danger" onclick={() => (showModal = true)}>Delete</Button>
+      {#if data.self.role !== 'admin'}
+        <div class="flex flex-col gap-2">
+          <p class="text-xl">Delete account</p>
+          <div class="flex gap-4">
+            <Button type="danger" onclick={() => (showModal = 'delete')}>Delete</Button>
+          </div>
         </div>
-      </div>
-      <!-- {/if} -->
+      {/if}
     {/if}
   </div>
 
   {#snippet right()}
-    <div class="right-sidebar">
+    <div class="flex w-fit flex-col py-20 text-xl">
       {#each items as item, index}
         <div class="flex">
           <div
             class={[
-              params.section === item ? 'highlighted' : 'not-highlighted',
+              params.section === item ? 'border-gray-300' : 'border-gray-700',
               index === 0 && 'rounded-t-md',
               index === items.length - 1 && 'rounded-b-md',
               'mr-4 w-0 border-l-6',
@@ -166,7 +157,7 @@
     </div>
   {/snippet}
 
-  <Modal id="delete-modal-account-{data.self.id}" bind:show={showModal} center>
+  <Modal show={showModal === 'delete'} backdropCallback={hideModal} center>
     <ModalHeader>Delete account</ModalHeader>
     <ModalBody>
       <form
@@ -177,7 +168,7 @@
           return async ({ result, update }) => {
             await formResultToast(result, toaster, 'Account deleted successfully.');
             await update();
-            showModal = false;
+            hideModal();
             passwordValue = '';
           };
         }}
@@ -203,23 +194,7 @@
 <style lang="postcss">
   @reference '@/app.css';
 
-  .sticky-header {
-    @apply sticky top-0 border-r border-b border-gray-700 bg-gray-950 py-4 text-center text-2xl;
-  }
-
   .input-group {
     @apply flex flex-col items-start gap-2;
-  }
-
-  .highlighted {
-    @apply border-gray-300;
-  }
-
-  .not-highlighted {
-    @apply border-gray-700;
-  }
-
-  .right-sidebar {
-    @apply flex w-fit flex-col py-20 text-xl;
   }
 </style>
