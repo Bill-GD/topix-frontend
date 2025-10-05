@@ -1,10 +1,16 @@
 @import 'tailwindcss';
 @plugin '@tailwindcss/forms';
 
-input[type='color'] {
+input[type='color'],
+input[type='radio'] {
   appearance: none;
   -moz-appearance: none;
   -webkit-appearance: none;
+}
+
+input[type='radio']:focus {
+  outline: none;
+  box-shadow: none;
 }
 
 ::-webkit-color-swatch-wrapper {

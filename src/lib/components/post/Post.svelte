@@ -101,7 +101,7 @@
     </div>
 
     {#if post.tag}
-      <Flair class="ignore-click" tag={post.tag} />
+      <Flair class="ignore-click" tag={post.tag} compact />
     {/if}
 
     {#if post.content.length > 0}

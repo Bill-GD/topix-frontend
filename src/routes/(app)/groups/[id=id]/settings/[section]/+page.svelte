@@ -106,7 +106,7 @@
         <p class="text-lg font-semibold">Current tags</p>
         <div class="flex flex-wrap gap-4">
           {#each data.tags as tag (tag.id)}
-            <div class="flex w-min items-center gap-2 rounded-md border border-gray-700 p-2">
+            <div class="flex w-min items-center">
               <Flair {tag} />
               <IconButton
                 class="hover:bg-gray-800"
@@ -204,7 +204,7 @@
 
   <Modal show={showModal === 'delete'} backdropCallback={hideModal} center>
     <ModalHeader>Delete tag</ModalHeader>
-    <ModalBody>Are you sure you want to delete tag <Flair tag={selectedTag!} />?</ModalBody>
+    <ModalBody>Are you sure you want to delete tag <Flair tag={selectedTag!} compact />?</ModalBody>
     <ModalFooter>
       <form
         class="w-full"

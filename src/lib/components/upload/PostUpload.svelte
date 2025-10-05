@@ -4,10 +4,16 @@
   import type { PostUploadProps } from '$lib/components/types';
   import { ImageSizeLimit, VideoSizeLimit } from '$lib/utils/constants';
   import { formResultToast, getReadableSize } from '$lib/utils/helpers';
+  import { type Tag } from '$lib/utils/types';
   import { onMount } from 'svelte';
   import Button from '../button/Button.svelte';
   import IconButton from '../button/IconButton.svelte';
+  import Flair from '../misc/Flair.svelte';
   import Icon from '../misc/Icon.svelte';
+  import Modal from '../modal/Modal.svelte';
+  import ModalBody from '../modal/ModalBody.svelte';
+  import ModalFooter from '../modal/ModalFooter.svelte';
+  import ModalHeader from '../modal/ModalHeader.svelte';
 
   let {
     userPicture = '/images/default-user-profile-icon.jpg',
@@ -28,6 +34,9 @@
   let imageDisabled = $derived(video !== null);
   let videoDisabled = $derived(images.length > 0);
   let disablePost = $state<boolean>(false);
+  let showModal = $state<'tag' | null>(null);
+  let chosenTag = $state<Tag | null>(null);
+  let selectedTag = $state<Tag | null>(null);
 
   onMount(() => {
     const editor = document.getElementById('editor')!;
@@ -72,6 +81,10 @@
       video = { file, url: URL.createObjectURL(file) };
     });
   });
+
+  function hideModal() {
+    showModal = null;
+  }
 </script>
 
 <form
@@ -86,7 +99,7 @@
 
       inputContent = '';
       images = [];
-      video = null;
+      video = selectedTag = chosenTag = null;
       disablePost = false;
       (document.querySelector('#editor') as HTMLInputElement).innerHTML = '';
       (document.querySelector('#editor') as HTMLInputElement).classList.add('empty');
@@ -157,18 +170,30 @@
       </div>
     {/if}
 
-    <div class="flex gap-4">
-      {#if tags && tags.length > 0}
-        <select
-          class="rounded-md border-gray-700 bg-gray-950 text-white"
-          name="tag-id"
-          id="post-tag-select"
+    <div class="flex items-center gap-4">
+      {#if chosenTag}
+        <button
+          class="flex cursor-pointer items-center gap-2"
+          onclick={(ev) => {
+            ev.preventDefault();
+            showModal = 'tag';
+          }}
         >
-          {#each tags as tag}
-            <option disabled selected value hidden>-- choose tag --</option>
-            <option value={tag.id}>{tag.name}</option>
-          {/each}
-        </select>
+          <input name="tag-id" type="number" value={chosenTag.id} hidden readonly />
+          <Flair tag={chosenTag} />
+          <Icon type="edit" size="sm" />
+        </button>
+      {:else if tags && tags.length > 0}
+        <Button
+          type="dark"
+          outline
+          onclick={(ev) => {
+            ev.preventDefault();
+            showModal = 'tag';
+          }}
+        >
+          Choose tag
+        </Button>
       {/if}
 
       <div class="ml-auto flex items-center">
@@ -232,6 +257,52 @@
   </div>
 </form>
 
+<Modal class="md:w-fit" show={showModal === 'tag'} backdropCallback={hideModal}>
+  <ModalHeader class="text-center">Select tag</ModalHeader>
+  <ModalBody>
+    <div class="flex flex-col gap-4">
+      {#each tags! as tag}
+        <div class="tag-input flex items-center gap-4">
+          <input type="radio" id={`${tag.id}`} name="tag" oninput={() => (selectedTag = tag)} />
+          <label for={`${tag.id}`}><Flair {tag} /></label>
+        </div>
+      {/each}
+    </div>
+  </ModalBody>
+  <ModalFooter>
+    <Button
+      class="w-full"
+      type="success"
+      onclick={() => {
+        hideModal();
+        chosenTag = selectedTag;
+      }}
+    >
+      Confirm
+    </Button>
+    <Button
+      class="w-full"
+      type="dark"
+      onclick={() => {
+        hideModal();
+        selectedTag = null;
+      }}
+    >
+      Cancel
+    </Button>
+    <Button
+      class="w-full"
+      type="dark"
+      onclick={() => {
+        hideModal();
+        selectedTag = chosenTag = null;
+      }}
+    >
+      Remove
+    </Button>
+  </ModalFooter>
+</Modal>
+
 <style lang="postcss">
   @reference '@/app.css';
 
@@ -242,5 +313,21 @@
   .editor.empty::after {
     content: attr(data-placeholder);
     @apply text-gray-500;
+  }
+
+  .tag-input {
+    input {
+      @apply rounded-md bg-gray-950 transition-all duration-150 checked:border-2 checked:border-sky-500;
+    }
+
+    * {
+      @apply cursor-pointer;
+    }
+
+    &:hover {
+      input {
+        @apply bg-gray-800;
+      }
+    }
   }
 </style>

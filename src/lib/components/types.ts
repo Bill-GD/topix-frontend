@@ -6,36 +6,35 @@ import type {
   HTMLAttributeAnchorTarget,
   HTMLInputTypeAttribute,
 } from 'svelte/elements';
-import { faThumbsUp as faClassicThumbsUp } from '@fortawesome/free-regular-svg-icons';
-import {
-  faBars,
-  faCheck,
-  faChevronLeft,
-  faChevronRight,
-  faCircleCheck,
-  faEllipsisVertical,
-  faEye,
-  faEyeSlash,
-  faFaceAngry,
-  faFaceFrownOpen,
-  faFaceLaugh,
-  faHeart,
-  faHouse,
-  faImage,
-  faMagnifyingGlass,
-  faMessage,
-  faPlus,
-  faReply,
-  faThumbsUp,
-  faTrashCan,
-  faTriangleExclamation,
-  faUser,
-  faUserGroup,
-  faUserMinus,
-  faUserPlus,
-  faVideo,
-  faXmark,
-} from '@fortawesome/free-solid-svg-icons';
+import { faThumbsUp as faRegularThumbsUp } from '@fortawesome/free-regular-svg-icons/faThumbsUp';
+import { faBars } from '@fortawesome/free-solid-svg-icons/faBars';
+import { faCheck } from '@fortawesome/free-solid-svg-icons/faCheck';
+import { faChevronLeft } from '@fortawesome/free-solid-svg-icons/faChevronLeft';
+import { faChevronRight } from '@fortawesome/free-solid-svg-icons/faChevronRight';
+import { faCircleCheck } from '@fortawesome/free-solid-svg-icons/faCircleCheck';
+import { faEllipsisVertical } from '@fortawesome/free-solid-svg-icons/faEllipsisVertical';
+import { faEye } from '@fortawesome/free-solid-svg-icons/faEye';
+import { faEyeSlash } from '@fortawesome/free-solid-svg-icons/faEyeSlash';
+import { faFaceAngry } from '@fortawesome/free-solid-svg-icons/faFaceAngry';
+import { faFaceFrownOpen } from '@fortawesome/free-solid-svg-icons/faFaceFrownOpen';
+import { faFaceLaugh } from '@fortawesome/free-solid-svg-icons/faFaceLaugh';
+import { faHeart } from '@fortawesome/free-solid-svg-icons/faHeart';
+import { faHouse } from '@fortawesome/free-solid-svg-icons/faHouse';
+import { faImage } from '@fortawesome/free-solid-svg-icons/faImage';
+import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons/faMagnifyingGlass';
+import { faMessage } from '@fortawesome/free-solid-svg-icons/faMessage';
+import { faPen } from '@fortawesome/free-solid-svg-icons/faPen';
+import { faPlus } from '@fortawesome/free-solid-svg-icons/faPlus';
+import { faReply } from '@fortawesome/free-solid-svg-icons/faReply';
+import { faThumbsUp } from '@fortawesome/free-solid-svg-icons/faThumbsUp';
+import { faTrashCan } from '@fortawesome/free-solid-svg-icons/faTrashCan';
+import { faTriangleExclamation } from '@fortawesome/free-solid-svg-icons/faTriangleExclamation';
+import { faUser } from '@fortawesome/free-solid-svg-icons/faUser';
+import { faUserGroup } from '@fortawesome/free-solid-svg-icons/faUserGroup';
+import { faUserMinus } from '@fortawesome/free-solid-svg-icons/faUserMinus';
+import { faUserPlus } from '@fortawesome/free-solid-svg-icons/faUserPlus';
+import { faVideo } from '@fortawesome/free-solid-svg-icons/faVideo';
+import { faXmark } from '@fortawesome/free-solid-svg-icons/faXmark';
 import type { CurrentUser, Post, Tag, ToastMessage, UnaryVoidFunction } from '../utils/types';
 
 export type ButtonType = 'primary' | 'danger' | 'dark' | 'success';
@@ -48,6 +47,7 @@ export const IconSize = {
 };
 
 export const Icons = {
+  edit: faPen,
   delete: faTrashCan,
   user: faUser,
   bar: faBars,
@@ -70,7 +70,7 @@ export const Icons = {
   reply: faReply,
   menu: faEllipsisVertical,
   close: faXmark,
-  noReaction: faClassicThumbsUp,
+  noReaction: faRegularThumbsUp,
   like: faThumbsUp,
   heart: faHeart,
   laugh: faFaceLaugh,
@@ -122,6 +122,7 @@ export interface FileDropzoneProps {
 export interface FlairProps {
   tag: Tag;
   class?: ClassValue;
+  compact?: boolean;
 }
 
 export interface FloatingLabelInputProps {
