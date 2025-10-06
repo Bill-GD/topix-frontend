@@ -117,7 +117,7 @@
   <div class="flex w-full flex-col gap-4">
     <div
       id="editor"
-      class="editor empty text-white"
+      class="editor empty dark:text-white"
       contenteditable
       role="textbox"
       aria-multiline="true"
@@ -201,7 +201,9 @@
           <Icon
             class={[
               'text-gray-500',
-              imageDisabled ? 'cursor-not-allowed' : 'cursor-pointer hover:text-gray-300',
+              imageDisabled
+                ? 'cursor-not-allowed'
+                : 'cursor-pointer hover:text-gray-700 dark:hover:text-gray-300',
             ]}
             type="image"
           />
@@ -222,7 +224,9 @@
           <Icon
             class={[
               'text-gray-500',
-              videoDisabled ? 'cursor-not-allowed' : 'cursor-pointer hover:text-gray-300',
+              videoDisabled
+                ? 'cursor-not-allowed'
+                : 'cursor-pointer hover:text-gray-700 dark:hover:text-gray-300',
             ]}
             type="video"
           />
@@ -317,7 +321,7 @@
 
   .tag-input {
     input {
-      @apply rounded-md bg-gray-950 transition-all duration-150 checked:border-2 checked:border-sky-500;
+      @apply rounded-md bg-gray-100 transition-all duration-150 checked:border-2 checked:border-sky-500 checked:bg-sky-500 dark:bg-gray-950;
     }
 
     * {
@@ -326,7 +330,7 @@
 
     &:hover {
       input {
-        @apply bg-gray-800;
+        @apply not-checked:bg-gray-300 dark:not-checked:bg-gray-800;
       }
     }
   }

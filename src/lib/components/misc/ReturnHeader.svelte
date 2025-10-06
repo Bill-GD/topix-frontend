@@ -7,8 +7,13 @@
 </script>
 
 <!-- <div class="sticky top-0 border-r border-b border-gray-700 bg-gray-950 py-4 text-center text-2xl"> -->
-<div class="sticky top-0 z-20 flex items-center gap-4 border-b border-gray-700 bg-gray-950 p-2">
-  <IconButton class="hover:bg-gray-800" onclick={() => window.history.back()}>
+<div
+  class="sticky top-0 z-20 flex items-center gap-4 border-b border-gray-400 bg-gray-100 p-2 dark:border-gray-700 dark:bg-gray-950"
+>
+  <IconButton
+    class="hover:bg-gray-200 dark:hover:bg-gray-800"
+    onclick={() => window.history.back()}
+  >
     <Icon type="back" size="sm" />
   </IconButton>
   <span class="text-lg font-semibold">{@render children()}</span>

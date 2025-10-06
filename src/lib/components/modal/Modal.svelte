@@ -23,7 +23,7 @@
   <div in:fade={{ duration: 200 }} out:fade={{ duration: 300 }}>
     <div
       class={[
-        'fixed top-1/2 left-1/2 z-50 flex w-11/12 -translate-1/2 flex-col gap-4 rounded-md border border-gray-700 bg-gray-900 p-4 drop-shadow-xl drop-shadow-black/90 transition-all md:max-w-1/2 md:p-6',
+        'fixed top-1/2 left-1/2 z-50 flex w-11/12 -translate-1/2 flex-col gap-4 rounded-md border border-gray-400 bg-gray-200 p-4 drop-shadow-xl drop-shadow-black/30 transition-all md:max-w-1/2 md:p-6 dark:border-gray-700 dark:bg-gray-900 dark:drop-shadow-black/90',
         center && 'text-center',
         className,
       ]}

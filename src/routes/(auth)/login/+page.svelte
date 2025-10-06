@@ -3,6 +3,7 @@
   import { Button } from '$lib/components/button';
   import { FloatingLabelInput } from '$lib/components/input';
   import { Link } from '$lib/components/link';
+  import { Divider } from '$lib/components/misc';
   import { getToaster } from '$lib/components/toast';
   import { formResultToast } from '$lib/utils/helpers';
 
@@ -14,7 +15,7 @@
   <title>Login - topix</title>
 </svelte:head>
 
-<p class="text-4xl font-semibold">Sign in to your account</p>
+<p class="text-4xl font-semibold dark:text-white">Sign in to your account</p>
 
 <form
   class="mt-8 flex flex-col gap-6"
@@ -28,12 +29,19 @@
   }}
 >
   <div class="flex flex-col gap-4">
-    <FloatingLabelInput class="w-full" name="username" type="text" required>
+    <FloatingLabelInput
+      class="w-full"
+      labelClass="bg-gray-100 dark:bg-gray-950"
+      name="username"
+      type="text"
+      required
+    >
       Username
     </FloatingLabelInput>
 
     <FloatingLabelInput
       class="w-full"
+      labelClass="bg-gray-100 dark:bg-gray-950"
       name="password"
       type="password"
       bind:value={password}
@@ -46,7 +54,7 @@
     <Button type="success">Login</Button>
   </div>
 
-  <hr class="text-gray-700" />
+  <Divider />
 
   <Link href="/register">Don't have an account?</Link>
 </form>

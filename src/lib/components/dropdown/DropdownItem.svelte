@@ -14,7 +14,11 @@
 <li>
   {#if href}
     <a
-      class={['block px-4 py-2 whitespace-nowrap', !noHover && 'hover:bg-gray-700', className]}
+      class={[
+        'block px-4 py-2 whitespace-nowrap',
+        !noHover && 'hover:bg-gray-400/50 dark:hover:bg-gray-700',
+        className,
+      ]}
       {href}
       {rel}
       {onclick}
@@ -25,7 +29,7 @@
     <button
       class={[
         'block w-full cursor-pointer px-4 py-2 text-left',
-        !noHover && 'hover:bg-gray-700',
+        !noHover && 'hover:bg-gray-400/50 dark:hover:bg-gray-700',
         className,
       ]}
       {onclick}

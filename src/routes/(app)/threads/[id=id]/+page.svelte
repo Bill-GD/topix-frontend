@@ -4,7 +4,7 @@
   import { DropdownItem, DropdownMenu } from '$lib/components/dropdown';
   import { Input } from '$lib/components/input';
   import { HomeLayout } from '$lib/components/layout';
-  import { Flair, Icon, ReturnHeader } from '$lib/components/misc';
+  import { Divider, Flair, Icon, ReturnHeader } from '$lib/components/misc';
   import { Modal, ModalBody, ModalFooter, ModalHeader } from '$lib/components/modal';
   import { Post } from '$lib/components/post';
   import { getToaster } from '$lib/components/toast';
@@ -33,7 +33,7 @@
 
   <div class="flex flex-col gap-4 border-b border-gray-700 p-4">
     <div class="flex">
-      <div class="flex flex-col gap-2 text-gray-500">
+      <div class="flex flex-col gap-2">
         {#if editingTitle}
           <form
             class="flex items-center gap-2"
@@ -49,7 +49,7 @@
           >
             <Input
               type="text"
-              class="text-white"
+              class="dark:text-white"
               placeholder="Title"
               name="new-title"
               value={title}
@@ -62,14 +62,14 @@
             </IconButton>
           </form>
         {:else}
-          <p class="text-4xl font-semibold text-white">{data.thread.title}</p>
+          <p class="text-4xl font-semibold">{data.thread.title}</p>
         {/if}
 
         {#if data.thread.tag}
           <Flair tag={data.thread.tag} />
         {/if}
 
-        <div>
+        <div class="text-gray-500">
           <p>Created by @{data.thread.owner.username}</p>
           <span>
             Created {getTimeAgo(Date.parse(data.thread.dateCreated), true)}
@@ -88,7 +88,7 @@
 
       <DropdownMenu class="ml-auto h-fit" position="bottom" align="right">
         {#snippet trigger()}
-          <IconButton class="hover:bg-gray-800" round>
+          <IconButton round>
             <Icon type="menu" size="sm" />
           </IconButton>
         {/snippet}
@@ -113,7 +113,7 @@
   {/if}
   {#each data.posts as post}
     <Post self={data.self} {post} compact />
-    <hr class="text-gray-700" />
+    <Divider />
   {/each}
 
   <Modal show={showModal === 'post'} backdropCallback={hideModal}>

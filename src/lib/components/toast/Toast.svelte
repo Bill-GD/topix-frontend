@@ -15,7 +15,7 @@
 
 <div
   class={[
-    'flex w-fit items-center gap-2 rounded-md border-2 bg-gray-950 p-3',
+    'flex w-fit items-center gap-2 rounded-md border-2 bg-gray-100 p-3 dark:bg-gray-950',
     types[toast.type][0],
     className,
   ]}

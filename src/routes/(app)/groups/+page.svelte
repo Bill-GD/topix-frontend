@@ -1,9 +1,9 @@
 <script lang="ts">
   import { enhance } from '$app/forms';
-  import { Button, IconButton } from '$lib/components/button';
+  import { Button } from '$lib/components/button';
   import { FloatingLabelInput } from '$lib/components/input';
   import { HomeLayout } from '$lib/components/layout';
-  import { Icon, ReturnHeader } from '$lib/components/misc';
+  import { Divider, Icon, ReturnHeader } from '$lib/components/misc';
   import { Modal, ModalBody, ModalHeader } from '$lib/components/modal';
   import { getToaster } from '$lib/components/toast';
   import { FileDropzone } from '$lib/components/upload';
@@ -32,7 +32,7 @@
   <!-- svelte-ignore a11y_click_events_have_key_events -->
   <!-- svelte-ignore a11y_no_static_element_interactions -->
   <div
-    class="flex w-full cursor-pointer items-center justify-center gap-2 py-4 hover:bg-gray-800/40"
+    class="flex w-full cursor-pointer items-center justify-center gap-2 py-4 hover:bg-gray-300/40 dark:hover:bg-gray-800/40"
     onclick={() => (showModal = 'create')}
   >
     <span class="font-semibold">Create group</span>
@@ -45,9 +45,12 @@
         There are no group available in topix yet.
       </p>
     {:else}
-      <hr class="text-gray-700" />
+      <Divider />
       {#each data.groups as group}
-        <a class="flex items-center gap-4 p-4 hover:bg-gray-900/40" href="/groups/{group.id}">
+        <a
+          class="flex items-center gap-4 p-4 hover:bg-gray-300/40 dark:hover:bg-gray-900/40"
+          href="/groups/{group.id}"
+        >
           <div class="w-30 overflow-hidden rounded-md">
             <img src={group.bannerPicture ?? '/images/no-image.jpg'} alt="group-banner" />
           </div>
@@ -70,7 +73,7 @@
             </div>
           {/if}
         </a>
-        <hr class="text-gray-700" />
+        <Divider />
       {/each}
     {/if}
   </div>

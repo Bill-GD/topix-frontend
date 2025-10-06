@@ -5,6 +5,6 @@
   let { children, class: className }: { children: Snippet; class?: ClassValue } = $props();
 </script>
 
-<div class={['text-gray-300', className]}>
+<div class={['dark:text-gray-300', className]}>
   {@render children()}
 </div>

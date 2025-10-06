@@ -1,7 +1,6 @@
 <script lang="ts">
-  import { IconButton } from '$lib/components/button';
   import { HomeLayout } from '$lib/components/layout';
-  import { Icon, ReturnHeader } from '$lib/components/misc';
+  import { Divider, ReturnHeader } from '$lib/components/misc';
   import { Post } from '$lib/components/post';
   import { PostUpload } from '$lib/components/upload';
   import type { PageProps } from './$types';
@@ -41,9 +40,9 @@
     groupApproved
   />
 
-  <hr class="text-gray-700" />
+  <Divider />
   {#each data.replies as reply}
     <Post self={data.self} post={reply} compact hideReplyMark />
-    <hr class="text-gray-700" />
+    <Divider />
   {/each}
 </HomeLayout>

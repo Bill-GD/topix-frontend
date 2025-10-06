@@ -26,7 +26,14 @@
     };
   }}
 >
-  <FloatingLabelInput class="w-full" name="otp" type="text">Code</FloatingLabelInput>
+  <FloatingLabelInput
+    class="w-full"
+    labelClass="bg-gray-100 dark:bg-gray-950"
+    name="otp"
+    type="text"
+  >
+    Code
+  </FloatingLabelInput>
 
   <Button formaction="?/otp" type="success">Send</Button>
   <Button formaction="?/resend" type="dark">Send again</Button>

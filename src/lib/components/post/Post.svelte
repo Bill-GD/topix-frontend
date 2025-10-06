@@ -63,7 +63,7 @@
   class={[
     'flex p-4',
     compact ? 'gap-2' : 'gap-4',
-    !detail && 'cursor-pointer hover:bg-gray-900/40',
+    !detail && 'cursor-pointer hover:bg-gray-300/40 dark:hover:bg-gray-900/40',
     className,
   ]}
   id="post-{post.id}"
@@ -84,7 +84,7 @@
 
       <div class="ignore-click flex w-fit items-baseline gap-2 text-gray-500">
         <a
-          class="text-xl text-white decoration-white hover:underline"
+          class="text-xl text-black hover:underline dark:text-white dark:decoration-white"
           href="/user/{post.owner.username}"
         >
           {post.owner.displayName}
@@ -117,7 +117,7 @@
         <div class="ignore-click relative min-w-1/2">
           {#if imageIndex > 0}
             <IconButton
-              class="absolute top-1/2 left-0 h-full -translate-y-1/2 hover:bg-gray-900/20"
+              class="absolute top-1/2 left-0 h-full -translate-y-1/2 hover:bg-gray-200 dark:hover:bg-gray-900/20"
               round={false}
               onclick={() => (imageIndex = Math.max(0, imageIndex - 1))}
             >
@@ -146,7 +146,7 @@
 
           {#if imageIndex < post.mediaPaths.length - 1}
             <IconButton
-              class="absolute top-1/2 right-0 h-full -translate-y-1/2 hover:bg-gray-900/20"
+              class="absolute top-1/2 right-0 h-full -translate-y-1/2 hover:bg-gray-200 dark:hover:bg-gray-900/20"
               round={false}
               onclick={() => (imageIndex = Math.min(post.mediaPaths.length - 1, imageIndex + 1))}
             >
@@ -224,7 +224,7 @@
   {#if !parent}
     <DropdownMenu class="ignore-click ml-auto h-fit" position="bottom" align="right">
       {#snippet trigger()}
-        <IconButton class="hover:bg-gray-800" round>
+        <IconButton class="hover:bg-gray-300 dark:hover:bg-gray-800" round>
           <Icon type="menu" size="sm" />
         </IconButton>
       {/snippet}

@@ -4,7 +4,7 @@
   import { DropdownItem, DropdownMenu } from '$lib/components/dropdown';
   import { FloatingLabelInput } from '$lib/components/input';
   import { HomeLayout } from '$lib/components/layout';
-  import { Icon, ReturnHeader } from '$lib/components/misc';
+  import { Divider, Icon, ReturnHeader } from '$lib/components/misc';
   import { Modal, ModalBody, ModalFooter, ModalHeader } from '$lib/components/modal';
   import { Post } from '$lib/components/post';
   import { ThreadOverview } from '$lib/components/thread';
@@ -74,7 +74,7 @@
 
         <DropdownMenu class="ml-auto" position="bottom" align="right">
           {#snippet trigger()}
-            <IconButton class="hover:bg-gray-800" round>
+            <IconButton round>
               <Icon type="menu" size="sm" />
             </IconButton>
           {/snippet}
@@ -97,7 +97,7 @@
   </div>
 
   {#if data.group.status === true}
-    <hr class="text-gray-700" />
+    <Divider />
     <PostUpload
       userPicture={data.self.profilePicture}
       formaction="?/add-post"
@@ -111,7 +111,7 @@
     <p class="empty-noti-text">This group has no post.</p>
   {/if}
   {#each data.posts as post}
-    <hr class="text-gray-700" />
+    <Divider />
     <Post self={data.self} {post} compact />
   {/each}
 
@@ -120,22 +120,18 @@
       <div class="flex items-baseline p-4">
         <p class="text-xl font-semibold">Threads</p>
         {#if data.group.status === true}
-          <IconButton
-            type="success"
-            class="ml-auto flex hover:bg-gray-800"
-            onclick={() => (showModal = 'thread')}
-          >
+          <IconButton type="success" class="ml-auto" onclick={() => (showModal = 'thread')}>
             <Icon type="add" size="xs" />
           </IconButton>
         {/if}
       </div>
 
       {#if data.threads.length <= 0}
-        <hr class="text-gray-700" />
+        <Divider />
         <p class="w-full px-4 py-2">This group has no thread.</p>
       {:else}
         {#each data.threads as thread}
-          <hr class="text-gray-700" />
+          <Divider />
           <ThreadOverview {thread} />
         {/each}
       {/if}
@@ -203,7 +199,7 @@
         <FloatingLabelInput
           class="w-full"
           name="thread-title"
-          labelClass="bg-gray-900"
+          labelClass="bg-gray-200 dark:bg-gray-900"
           bind:value={threadTitle}
         >
           Title
@@ -211,7 +207,7 @@
 
         {#if data.tags && data.tags.length > 0}
           <select
-            class="rounded-md border-gray-700 bg-gray-900 text-white"
+            class="rounded-md border-gray-700 bg-gray-200 dark:bg-gray-900"
             name="tag-id"
             id="post-tag-select"
           >

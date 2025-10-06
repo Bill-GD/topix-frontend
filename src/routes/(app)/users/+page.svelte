@@ -2,7 +2,7 @@
   import { enhance } from '$app/forms';
   import { Button, IconButton } from '$lib/components/button';
   import { HomeLayout } from '$lib/components/layout';
-  import { Icon, ReturnHeader } from '$lib/components/misc';
+  import { Divider, Icon, ReturnHeader } from '$lib/components/misc';
   import { Modal, ModalBody, ModalFooter, ModalHeader } from '$lib/components/modal';
   import { getToaster } from '$lib/components/toast';
   import { formResultToast } from '$lib/utils/helpers';
@@ -28,7 +28,10 @@
 
   <div class="flex flex-col">
     {#each data.users as user}
-      <a class="flex items-center gap-4 p-4 hover:bg-gray-900/40" href="/user/{user.username}">
+      <a
+        class="flex items-center gap-4 p-4 hover:bg-gray-300/40 dark:hover:bg-gray-900/40"
+        href="/user/{user.username}"
+      >
         <img
           class="profile-picture-md"
           src={user.profilePicture ?? '/images/default-user-profile-icon.jpg'}
@@ -45,7 +48,7 @@
 
         {#if user.role !== 'admin'}
           <IconButton
-            class="ml-auto hover:bg-gray-800"
+            class="ml-auto hover:bg-gray-300 dark:hover:bg-gray-800"
             onclick={() => {
               showModal = 'delete';
               username = user.username;
@@ -55,7 +58,7 @@
           </IconButton>
         {/if}
       </a>
-      <hr class="text-gray-700" />
+      <Divider />
     {/each}
   </div>
 

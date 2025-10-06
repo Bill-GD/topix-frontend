@@ -36,15 +36,15 @@
   <ReturnHeader>Settings</ReturnHeader>
 
   <div
-    class="no-scrollbar flex justify-around overflow-x-scroll border-b border-gray-700 md:hidden"
+    class="no-scrollbar flex justify-around overflow-x-scroll border-b border-gray-400 md:hidden dark:border-gray-700"
   >
     {#each items as item}
       <a
         class={[
           'w-full py-2 text-center',
           params.section === item
-            ? `bg-gray-800/40 font-semibold ${item.includes('danger') ? 'text-red-600' : 'text-gray-300'}`
-            : `${item.includes('danger') ? 'text-red-800' : 'text-gray-500'}`,
+            ? 'bg-gray-300/40 font-semibold dark:bg-gray-800/40 dark:text-gray-300'
+            : 'text-gray-500',
         ]}
         href={item}
       >
@@ -109,7 +109,6 @@
             <div class="flex w-min items-center">
               <Flair {tag} />
               <IconButton
-                class="hover:bg-gray-800"
                 onclick={() => {
                   showModal = 'delete';
                   selectedTag = tag;
@@ -130,7 +129,9 @@
         <div class="flex">
           <div
             class={[
-              params.section === item ? 'border-gray-300' : 'border-gray-700',
+              params.section === item
+                ? 'border-gray-700 dark:border-gray-300'
+                : 'border-gray-300 dark:border-gray-700',
               index === 0 && 'rounded-t-md',
               index === items.length - 1 && 'rounded-b-md',
               'mr-4 w-0 border-l-6',
@@ -139,9 +140,7 @@
           <a
             class={[
               'py-2',
-              params.section === item
-                ? `font-semibold ${item.includes('danger') ? 'text-red-600' : 'text-gray-300'}`
-                : `${item.includes('danger') ? 'text-red-800' : 'text-gray-500'}`,
+              params.section === item ? 'font-semibold dark:text-gray-300' : 'text-gray-500',
             ]}
             href={item}
           >

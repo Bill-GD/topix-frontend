@@ -6,7 +6,7 @@
 </script>
 
 <a
-  class="flex cursor-pointer items-center gap-2 px-4 py-2 hover:bg-gray-900/40"
+  class="flex cursor-pointer items-center gap-2 px-4 py-2 hover:bg-gray-300/60 dark:hover:bg-gray-900/60"
   href="/threads/{thread.id}"
 >
   <div class="flex flex-col items-start">

@@ -2,7 +2,7 @@
   import { enhance } from '$app/forms';
   import { Button } from '$lib/components/button';
   import { HomeLayout } from '$lib/components/layout';
-  import { ReturnHeader } from '$lib/components/misc';
+  import { Divider, ReturnHeader } from '$lib/components/misc';
   import { Modal, ModalBody, ModalFooter, ModalHeader } from '$lib/components/modal';
   import { getToaster } from '$lib/components/toast';
   import { capitalize, formResultToast } from '$lib/utils/helpers';
@@ -28,14 +28,14 @@
   <ReturnHeader>Members</ReturnHeader>
 
   <div
-    class="no-scrollbar flex justify-around overflow-x-scroll border-b border-gray-700 md:hidden"
+    class="no-scrollbar flex justify-around overflow-x-scroll border-b border-gray-400 md:hidden dark:border-gray-700"
   >
     {#each items as item}
       <a
         class={[
           'w-full py-2 text-center',
           params.section === item
-            ? `bg-gray-800/40 font-semibold ${item.includes('danger') ? 'text-red-600' : 'text-gray-300'}`
+            ? `bg-gray-300/40 font-semibold dark:bg-gray-800/40 ${item.includes('danger') ? 'text-red-600' : 'dark:text-gray-300'}`
             : `${item.includes('danger') ? 'text-red-800' : 'text-gray-500'}`,
         ]}
         href={item}
@@ -48,7 +48,9 @@
   <div class="flex flex-col">
     {#if params.section === 'all'}
       {#each data.members as user}
-        <div class="flex flex-col gap-2 p-4 hover:bg-gray-900/40 md:flex-row">
+        <div
+          class="flex flex-col gap-2 p-4 hover:bg-gray-300/40 md:flex-row dark:hover:bg-gray-900/40"
+        >
           <div class="flex items-center gap-4">
             <img
               class="profile-picture-md"
@@ -88,15 +90,17 @@
             </div>
           {/if}
         </div>
-        <hr class="text-gray-700" />
+        <Divider />
       {/each}
     {:else if params.section === 'pending'}
       {#if data.members.length <= 0}
         <p class="empty-noti-text">No pending members.</p>
       {/if}
       {#each data.members as user}
-        <div class="flex flex-col gap-2 p-4 hover:bg-gray-900/40 md:flex-row">
-          <div class="flex items-center gap-4 hover:bg-gray-900/40">
+        <div
+          class="flex flex-col gap-2 p-4 hover:bg-gray-300/40 md:flex-row dark:hover:bg-gray-900/40"
+        >
+          <div class="flex items-center gap-4">
             <img
               class="profile-picture-md"
               src={user.profilePicture ?? '/images/default-user-profile-icon.jpg'}
@@ -145,7 +149,7 @@
             </form>
           {/if}
         </div>
-        <hr class="text-gray-700" />
+        <Divider />
       {/each}
     {/if}
   </div>
@@ -156,7 +160,9 @@
         <div class="flex">
           <div
             class={[
-              params.section === item ? 'border-gray-300' : 'border-gray-700',
+              params.section === item
+                ? 'border-gray-700 dark:border-gray-300'
+                : 'border-gray-300 dark:border-gray-700',
               index === 0 && 'rounded-t-md',
               index === items.length - 1 && 'rounded-b-md',
               'mr-4 w-0 border-l-6',
@@ -165,9 +171,7 @@
           <a
             class={[
               'py-2',
-              params.section === item
-                ? `font-semibold ${item.includes('danger') ? 'text-red-600' : 'text-gray-300'}`
-                : `${item.includes('danger') ? 'text-red-800' : 'text-gray-500'}`,
+              params.section === item ? 'font-semibold dark:text-gray-300' : 'text-gray-500',
             ]}
             href={item}
           >

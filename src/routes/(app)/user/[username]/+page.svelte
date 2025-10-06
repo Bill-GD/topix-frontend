@@ -3,7 +3,7 @@
   import { Button, IconButton } from '$lib/components/button';
   import { FloatingLabelInput } from '$lib/components/input';
   import { HomeLayout } from '$lib/components/layout';
-  import { Icon } from '$lib/components/misc';
+  import { Divider, Icon, ReturnHeader } from '$lib/components/misc';
   import { Modal, ModalBody, ModalFooter, ModalHeader } from '$lib/components/modal';
   import { Post } from '$lib/components/post';
   import { ThreadOverview } from '$lib/components/thread';
@@ -28,11 +28,9 @@
 </svelte:head>
 
 <HomeLayout self={data.self}>
-  <div class="flex flex-col gap-2 border-b border-gray-700 p-4">
-    <IconButton class="hover:bg-gray-800" onclick={() => window.history.back()}>
-      <Icon type="back" />
-    </IconButton>
+  <ReturnHeader>{data.user.displayName}</ReturnHeader>
 
+  <div class="flex flex-col gap-2 border-b border-gray-700 p-4">
     <div class="flex items-start gap-4">
       <img
         class="profile-picture-md"
@@ -71,7 +69,7 @@
   {/if}
 
   {#each data.posts as post (post.id)}
-    <hr class="text-gray-700" />
+    <Divider />
     <Post self={data.self} {post} />
   {/each}
 
@@ -80,22 +78,18 @@
       <div class="flex items-baseline p-4">
         <p class="text-xl font-semibold">Threads</p>
         {#if data.self.id === data.user.id}
-          <IconButton
-            type="success"
-            class="ml-auto flex hover:bg-gray-800"
-            onclick={() => (showModal = 'thread')}
-          >
+          <IconButton type="success" class="ml-auto" onclick={() => (showModal = 'thread')}>
             <Icon type="add" size="xs" />
           </IconButton>
         {/if}
       </div>
 
       {#if data.threads.length <= 0}
-        <hr class="text-gray-700" />
+        <Divider />
         <p class="w-full px-4 py-2">This user has no thread.</p>
       {:else}
         {#each data.threads as thread}
-          <hr class="text-gray-700" />
+          <Divider />
           <ThreadOverview {thread} />
         {/each}
       {/if}
@@ -105,7 +99,11 @@
   <Modal show={showModal === 'thread'} backdropCallback={hideModal} center>
     <ModalHeader>Create thread</ModalHeader>
     <ModalBody>
-      <FloatingLabelInput class="w-full" labelClass="bg-gray-900" bind:value={threadTitle}>
+      <FloatingLabelInput
+        class="w-full"
+        labelClass="bg-gray-200 dark:bg-gray-900"
+        bind:value={threadTitle}
+      >
         Title
       </FloatingLabelInput>
     </ModalBody>
