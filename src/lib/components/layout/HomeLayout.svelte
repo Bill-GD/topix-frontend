@@ -3,7 +3,6 @@
   import { NavigationItem } from '$lib/components/link';
   import { Icon } from '$lib/components/misc';
   import { Icons, type HomeLayoutProps } from '$lib/components/types';
-  import { getTheme } from '$lib/utils/theme.svelte';
   import { onMount } from 'svelte';
   import { fade, slide } from 'svelte/transition';
   import IconButton from '../button/IconButton.svelte';
@@ -23,7 +22,6 @@
 
   let showNav = $state<boolean>(false);
   let dropdownAlign = $state<'left' | 'right'>('left');
-  let theme = getTheme();
 
   function updateDropdownAlign() {
     dropdownAlign = window.matchMedia('(min-width: 768px)').matches ? 'left' : 'right';
@@ -69,7 +67,6 @@
 
     <DropdownItem href="/user/{self.username}">Profile</DropdownItem>
     <DropdownItem href="/settings/account">Settings</DropdownItem>
-    <DropdownItem onclick={theme.toggle}>Dark theme</DropdownItem>
     <DropdownItem class="text-red-500" href="/logout" rel="external">Log out</DropdownItem>
   </DropdownMenu>
 {/snippet}

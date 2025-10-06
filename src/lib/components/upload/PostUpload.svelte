@@ -330,7 +330,7 @@
 
     &:hover {
       input {
-        @apply not-checked:bg-gray-300 dark:not-checked:bg-gray-800;
+        @apply not-checked:bg-gray-300 dark:not-checked:bg-gray-700;
       }
     }
   }

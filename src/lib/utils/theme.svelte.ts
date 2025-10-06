@@ -15,8 +15,8 @@ export class Theme {
     return this.#mode === 'dark';
   }
 
-  toggle = () => {
-    this.#mode = this.#mode === 'light' ? 'dark' : 'light';
+  toggle = (mode: 'dark' | 'light') => {
+    this.#mode = mode;
     if (browser) {
       localStorage.setItem('theme', this.#mode);
     }
