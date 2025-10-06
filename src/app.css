@@ -1,6 +1,8 @@
 @import 'tailwindcss';
 @plugin '@tailwindcss/forms';
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 input[type='color'],
 input[type='radio'] {
   appearance: none;
