@@ -96,8 +96,9 @@
     </div>
   </div>
 
+  <Divider />
+
   {#if data.group.status === true}
-    <Divider />
     <PostUpload
       userPicture={data.self.profilePicture}
       formaction="?/add-post"
@@ -107,13 +108,17 @@
     />
   {/if}
 
-  {#if data.posts.length <= 0}
-    <p class="empty-noti-text">This group has no post.</p>
+  {#if data.group.visibility === 'private' && !data.group.status}
+    <p class="empty-noti-text">You have to join to see posts of this group.</p>
+  {:else}
+    {#if data.posts.length <= 0}
+      <p class="empty-noti-text">This group has no post.</p>
+    {/if}
+    {#each data.posts as post}
+      <Divider />
+      <Post self={data.self} {post} compact />
+    {/each}
   {/if}
-  {#each data.posts as post}
-    <Divider />
-    <Post self={data.self} {post} compact />
-  {/each}
 
   {#snippet right()}
     <div class="rounded-md border border-gray-700 2xl:max-w-1/2">
@@ -125,8 +130,10 @@
           </IconButton>
         {/if}
       </div>
-
-      {#if data.threads.length <= 0}
+      {#if data.group.visibility === 'private' && !data.group.status}
+        <Divider />
+        <p class="w-full px-4 py-2">You have to join to see threads of this group.</p>
+      {:else if data.threads.length <= 0}
         <Divider />
         <p class="w-full px-4 py-2">This group has no thread.</p>
       {:else}

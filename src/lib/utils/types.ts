@@ -77,6 +77,7 @@ export type Thread = {
   postCount: number;
   groupId: number | null;
   tag: Tag | null;
+  visibility: 'public' | 'private' | 'hidden';
   dateCreated: string;
   dateUpdated: string | null;
 };
