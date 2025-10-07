@@ -94,7 +94,7 @@
       >
         <FloatingLabelInput
           class="w-full"
-          labelClass="bg-gray-900"
+          labelClass="bg-gray-200 dark:bg-gray-900"
           name="group-name"
           bind:value={groupName}
           required
@@ -112,7 +112,16 @@
           <Button class="w-full" type="success" onclick={hideModal} disabled={groupName === ''}
             >Create</Button
           >
-          <Button class="w-full" type="dark" onclick={hideModal}>Cancel</Button>
+          <Button
+            class="w-full"
+            type="dark"
+            onclick={(ev) => {
+              ev.preventDefault();
+              hideModal();
+            }}
+          >
+            Cancel
+          </Button>
         </div>
       </form>
     </ModalBody>

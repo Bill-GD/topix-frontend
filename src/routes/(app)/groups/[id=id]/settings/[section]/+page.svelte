@@ -178,7 +178,12 @@
         />
 
         <div class="flex items-center gap-4">
-          <FloatingLabelInput name="name" labelClass="bg-gray-900" bind:value={tagName} clearable>
+          <FloatingLabelInput
+            name="name"
+            labelClass="bg-gray-200 dark:bg-gray-900"
+            bind:value={tagName}
+            clearable
+          >
             Tag name
           </FloatingLabelInput>
           <input

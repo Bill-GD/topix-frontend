@@ -55,7 +55,7 @@
   >
     <Icon
       type="close"
-      class="text-gray-600 hover:text-gray-800 dark:hover:text-gray-400"
+      class="text-gray-600 hover:text-gray-900 dark:hover:text-gray-400"
       size="sm"
     />
   </IconButton>
@@ -71,13 +71,13 @@
       {#if peeking}
         <Icon
           type="eyeSlash"
-          class="text-gray-600 hover:text-gray-800 dark:hover:text-gray-400"
+          class="text-gray-600 hover:text-gray-900 dark:hover:text-gray-400"
           size="sm"
         />
       {:else}
         <Icon
           type="eye"
-          class="text-gray-600 hover:text-gray-800 dark:hover:text-gray-400"
+          class="text-gray-600 hover:text-gray-900 dark:hover:text-gray-400"
           size="sm"
         />
       {/if}
