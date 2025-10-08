@@ -45,7 +45,12 @@
     {/if}
 
     <div class="flex items-center">
-      <div class="text-gray-500">
+      <div class="flex items-center gap-2 text-gray-500">
+        {#if data.group.visibility === 'private'}
+          <Icon type="lock" size="xs" />
+        {:else if data.group.visibility === 'hidden'}
+          <Icon type="eyeSlash" size="xs" />
+        {/if}
         <span>{capitalize(data.group.visibility)}</span>
         <span>-</span>
         <span>{data.group.memberCount} member{data.group.memberCount > 1 ? 's' : ''}</span>

@@ -4,7 +4,9 @@ import { CookieName, type Post, type Thread, type User } from '$lib/utils/types'
 import { type Actions, error, fail, isActionFailure } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
-export const load: PageServerLoad = async ({ params, cookies }) => {
+export const load: PageServerLoad = async ({ parent, params, cookies }) => {
+  const self = (await parent()).self;
+
   const userRes = await AxiosHandler.get(
     `/user/${params.username}`,
     cookies.get(CookieName.accessToken),
@@ -13,12 +15,12 @@ export const load: PageServerLoad = async ({ params, cookies }) => {
   const user = userRes.data as User;
 
   const postsRes = await AxiosHandler.get(
-    `/post?username=${user.username}`,
+    `/post?username=${params.username}${self.username === params.username ? '&visibility=private' : ''}`,
     cookies.get(CookieName.accessToken),
   );
 
   const threadsRes = await AxiosHandler.get(
-    `/thread?username=${user.username}&size=5`,
+    `/thread?username=${user.username}&size=5${self.username === params.username ? '&visibility=private' : ''}`,
     cookies.get(CookieName.accessToken),
   );
 

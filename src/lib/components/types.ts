@@ -1,11 +1,5 @@
 // component-related types
 
-import type { Snippet } from 'svelte';
-import type {
-  ClassValue,
-  HTMLAttributeAnchorTarget,
-  HTMLInputTypeAttribute,
-} from 'svelte/elements';
 import { faThumbsUp as faRegularThumbsUp } from '@fortawesome/free-regular-svg-icons/faThumbsUp';
 import { faBars } from '@fortawesome/free-solid-svg-icons/faBars';
 import { faCheck } from '@fortawesome/free-solid-svg-icons/faCheck';
@@ -21,6 +15,7 @@ import { faFaceLaugh } from '@fortawesome/free-solid-svg-icons/faFaceLaugh';
 import { faHeart } from '@fortawesome/free-solid-svg-icons/faHeart';
 import { faHouse } from '@fortawesome/free-solid-svg-icons/faHouse';
 import { faImage } from '@fortawesome/free-solid-svg-icons/faImage';
+import { faLock } from '@fortawesome/free-solid-svg-icons/faLock';
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons/faMagnifyingGlass';
 import { faMessage } from '@fortawesome/free-solid-svg-icons/faMessage';
 import { faPen } from '@fortawesome/free-solid-svg-icons/faPen';
@@ -35,6 +30,12 @@ import { faUserMinus } from '@fortawesome/free-solid-svg-icons/faUserMinus';
 import { faUserPlus } from '@fortawesome/free-solid-svg-icons/faUserPlus';
 import { faVideo } from '@fortawesome/free-solid-svg-icons/faVideo';
 import { faXmark } from '@fortawesome/free-solid-svg-icons/faXmark';
+import type { Snippet } from 'svelte';
+import type {
+  ClassValue,
+  HTMLAttributeAnchorTarget,
+  HTMLInputTypeAttribute,
+} from 'svelte/elements';
 import type { CurrentUser, Post, Tag, ToastMessage, UnaryVoidFunction } from '../utils/types';
 
 export type ButtonType = 'primary' | 'danger' | 'dark' | 'success';
@@ -47,6 +48,7 @@ export const IconSize = {
 };
 
 export const Icons = {
+  lock: faLock,
   edit: faPen,
   delete: faTrashCan,
   user: faUser,

@@ -58,6 +58,11 @@
           <div class="flex flex-col gap-2">
             <span class="text-xl font-semibold">{group.name}</span>
             <div class="flex items-baseline gap-2 text-gray-500">
+              {#if group.visibility === 'private'}
+                <Icon type="lock" size="xs" />
+              {:else if group.visibility === 'hidden'}
+                <Icon type="eyeSlash" size="xs" />
+              {/if}
               {capitalize(group.visibility)}
               -
               {group.memberCount} member{group.memberCount > 1 ? 's' : ''}
