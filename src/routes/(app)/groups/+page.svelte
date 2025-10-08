@@ -3,8 +3,8 @@
   import { Button } from '$lib/components/button';
   import { FloatingLabelInput } from '$lib/components/input';
   import { HomeLayout } from '$lib/components/layout';
-  import { Divider, Icon, ReturnHeader } from '$lib/components/misc';
-  import { Modal, ModalBody, ModalHeader } from '$lib/components/modal';
+  import { Divider, Icon, ReturnHeader, VisibilitySelector } from '$lib/components/misc';
+  import { Modal, ModalBody, ModalFooter, ModalHeader } from '$lib/components/modal';
   import { getToaster } from '$lib/components/toast';
   import { FileDropzone } from '$lib/components/upload';
   import { capitalize, formResultToast } from '$lib/utils/helpers';
@@ -106,6 +106,7 @@
         >
           Name
         </FloatingLabelInput>
+        <VisibilitySelector />
 
         {#if bannerValue !== ''}
           <img class="rounded-md" src={bannerValue} alt="user-profile" />
@@ -113,10 +114,10 @@
 
         <FileDropzone contentInputName="group-banner" bind:contentValue={bannerValue} />
 
-        <div class="flex w-full flex-col gap-2 md:flex-row">
-          <Button class="w-full" type="success" onclick={hideModal} disabled={groupName === ''}
-            >Create</Button
-          >
+        <ModalFooter>
+          <Button class="w-full" type="success" onclick={hideModal} disabled={groupName === ''}>
+            Create
+          </Button>
           <Button
             class="w-full"
             type="dark"
@@ -127,7 +128,7 @@
           >
             Cancel
           </Button>
-        </div>
+        </ModalFooter>
       </form>
     </ModalBody>
   </Modal>

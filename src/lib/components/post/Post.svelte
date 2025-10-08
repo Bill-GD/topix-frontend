@@ -14,6 +14,7 @@
   import ModalBody from '../modal/ModalBody.svelte';
   import ModalFooter from '../modal/ModalFooter.svelte';
   import ModalHeader from '../modal/ModalHeader.svelte';
+  import VisibilitySelector from '../misc/VisibilitySelector.svelte';
 
   let {
     class: className,
@@ -23,11 +24,17 @@
     compact = false,
     parent = false,
     hideReplyMark = false,
+    allowEditVisibility = false,
   }: PostProps = $props();
 
   const toaster = getToaster();
   const isImages = $derived(post.mediaPaths.every((m) => m.includes('image')));
   const isVideo = $derived(post.mediaPaths.every((m) => m.includes('video')));
+  const canClickPost = $derived(
+    !detail &&
+      (post.visibility === 'public' ||
+        (post.visibility === 'private' && self.id === post.owner.id)),
+  );
   const isReply = post.parentPost !== undefined;
   const reactions = {
     like: 'text-sky-500',
@@ -40,11 +47,11 @@
   let reaction = $derived(post.reaction);
   let reactionCount = $derived(post.reactionCount);
   let imageIndex = $state<number>(0);
-  let showModal = $state<'delete' | null>(null);
+  let showModal = $state<'delete' | 'visibility' | null>(null);
 
   onMount(() => {
     const main = document.getElementById(`post-${post.id}`) as HTMLElement;
-    if (!detail && post.visibility === 'public') {
+    if (canClickPost) {
       main.addEventListener('click', (ev) => {
         const target = ev.target as HTMLElement;
         if (target.closest('.ignore-click')) return;
@@ -63,9 +70,7 @@
   class={[
     'flex p-4',
     compact ? 'gap-2' : 'gap-4',
-    !detail &&
-      post.visibility === 'public' &&
-      'cursor-pointer hover:bg-gray-300/40 dark:hover:bg-gray-900/40',
+    canClickPost && 'cursor-pointer hover:bg-gray-300/40 dark:hover:bg-gray-900/40',
     className,
   ]}
   id="post-{post.id}"
@@ -240,13 +245,13 @@
         </IconButton>
       {/snippet}
 
-      {#if detail && self.id === post.owner.id}
-        <DropdownItem>Edit</DropdownItem>
+      {#if detail && self.id === post.owner.id && allowEditVisibility}
+        <DropdownItem onclick={() => (showModal = 'visibility')}>Edit</DropdownItem>
       {/if}
       {#if self.role === 'admin' || self.id === post.owner.id}
-        <DropdownItem class="text-red-500" onclick={() => (showModal = 'delete')}
-          >Delete</DropdownItem
-        >
+        <DropdownItem class="text-red-500" onclick={() => (showModal = 'delete')}>
+          Delete
+        </DropdownItem>
       {/if}
     </DropdownMenu>
   {/if}
@@ -272,6 +277,37 @@
     </form>
     <Button class="w-full" type="dark" onclick={hideModal}>Cancel</Button>
   </ModalFooter>
+</Modal>
+
+<Modal show={showModal === 'visibility'} backdropCallback={hideModal} center>
+  <ModalHeader>Change post visibility</ModalHeader>
+  <form
+    class="flex w-full flex-col gap-4"
+    action="?/update-post-visibility"
+    method="post"
+    use:enhance={() => {
+      return async ({ result, update }) => {
+        await formResultToast(result, toaster);
+        await update({ reset: false });
+      };
+    }}
+  >
+    <VisibilitySelector visibility={post.visibility} />
+
+    <ModalFooter>
+      <Button class="w-full" type="success" onclick={hideModal}>Update</Button>
+      <Button
+        class="w-full"
+        type="dark"
+        onclick={(ev) => {
+          ev.preventDefault();
+          hideModal();
+        }}
+      >
+        Cancel
+      </Button>
+    </ModalFooter>
+  </form>
 </Modal>
 
 <!--

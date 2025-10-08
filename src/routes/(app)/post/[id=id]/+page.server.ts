@@ -53,4 +53,15 @@ export const actions: Actions = {
     if (!res.success) return fail(res.status, { success: false, message: res.message });
     return { success: true, message: res.message };
   },
+  'update-post-visibility': async ({ request, cookies, params }) => {
+    const formData = await request.formData();
+
+    const res = await AxiosHandler.patch(
+      `/post/${params.id}`,
+      { visibility: `${formData.get('visibility')}` },
+      cookies.get(CookieName.accessToken),
+    );
+    if (!res.success) return fail(res.status, { success: false, message: res.message });
+    return { success: true, message: res.message };
+  },
 };

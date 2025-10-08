@@ -24,10 +24,21 @@
     {#if isReply}
       <div class="flex gap-2">
         <div class="px-4"></div>
-        <Post class="w-full" self={data.self} post={data.post} detail />
+        <Post
+          class="w-full"
+          self={data.self}
+          post={data.post}
+          detail
+          allowEditVisibility={data.post.threadId === null && data.post.groupId === null}
+        />
       </div>
     {:else}
-      <Post self={data.self} post={data.post} detail />
+      <Post
+        self={data.self}
+        post={data.post}
+        detail
+        allowEditVisibility={data.post.threadId === null && data.post.groupId === null}
+      />
     {/if}
   </div>
 

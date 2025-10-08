@@ -65,7 +65,7 @@ export const actions: Actions = {
 
     const res = await AxiosHandler.post(
       '/thread',
-      { title },
+      { title, visibility: `${formData.get('visibility')}` },
       event.cookies.get(CookieName.accessToken),
     );
 

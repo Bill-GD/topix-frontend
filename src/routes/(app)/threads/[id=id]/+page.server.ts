@@ -64,13 +64,17 @@ export const actions: Actions = {
     }
     redirect(303, '/home');
   },
-  'update-title': async (event) => {
+  'update-thread': async (event) => {
     const formData = await event.request.formData();
     const newTitle = formData.get('new-title');
 
+    if (!newTitle || newTitle === '') {
+      return fail(400, { success: false, message: 'Thread title must not be empty.' });
+    }
+
     const res = await AxiosHandler.patch(
       `/thread/${event.params.id}`,
-      { title: newTitle },
+      { title: newTitle, visibility: formData.get('visibility') ?? undefined },
       event.cookies.get(CookieName.accessToken),
     );
 

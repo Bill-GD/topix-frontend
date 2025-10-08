@@ -1,9 +1,10 @@
 <script lang="ts">
   import type { Snippet } from 'svelte';
+  import type { ClassValue } from 'svelte/elements';
 
-  let { children }: { children: Snippet } = $props();
+  let { children, class: className }: { children: Snippet; class?: ClassValue } = $props();
 </script>
 
-<div class="flex flex-col items-center gap-4 md:flex-row-reverse md:justify-start">
+<div class={['flex flex-col items-center gap-4 md:flex-row-reverse md:justify-start', className]}>
   {@render children()}
 </div>

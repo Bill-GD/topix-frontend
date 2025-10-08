@@ -1,5 +1,11 @@
 // component-related types
 
+import type { Snippet } from 'svelte';
+import type {
+  ClassValue,
+  HTMLAttributeAnchorTarget,
+  HTMLInputTypeAttribute,
+} from 'svelte/elements';
 import { faThumbsUp as faRegularThumbsUp } from '@fortawesome/free-regular-svg-icons/faThumbsUp';
 import { faBars } from '@fortawesome/free-solid-svg-icons/faBars';
 import { faCheck } from '@fortawesome/free-solid-svg-icons/faCheck';
@@ -30,12 +36,6 @@ import { faUserMinus } from '@fortawesome/free-solid-svg-icons/faUserMinus';
 import { faUserPlus } from '@fortawesome/free-solid-svg-icons/faUserPlus';
 import { faVideo } from '@fortawesome/free-solid-svg-icons/faVideo';
 import { faXmark } from '@fortawesome/free-solid-svg-icons/faXmark';
-import type { Snippet } from 'svelte';
-import type {
-  ClassValue,
-  HTMLAttributeAnchorTarget,
-  HTMLInputTypeAttribute,
-} from 'svelte/elements';
 import type { CurrentUser, Post, Tag, ToastMessage, UnaryVoidFunction } from '../utils/types';
 
 export type ButtonType = 'primary' | 'danger' | 'dark' | 'success';
@@ -207,6 +207,7 @@ export interface PostProps {
   compact?: boolean;
   parent?: boolean;
   hideReplyMark?: boolean;
+  allowEditVisibility?: boolean;
 }
 
 export interface PostUploadProps {
@@ -215,6 +216,7 @@ export interface PostUploadProps {
   placeholder?: string;
   tags?: Tag[];
   groupApproved?: boolean;
+  showVisibilitySelector?: boolean;
   threadId?: number;
   groupId?: number;
   postCallback?: VoidFunction;

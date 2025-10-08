@@ -3,7 +3,7 @@
   import { Button, IconButton } from '$lib/components/button';
   import { FloatingLabelInput, Input } from '$lib/components/input';
   import { HomeLayout } from '$lib/components/layout';
-  import { Flair, Icon, ReturnHeader } from '$lib/components/misc';
+  import { Flair, Icon, ReturnHeader, VisibilitySelector } from '$lib/components/misc';
   import { Modal, ModalBody, ModalFooter, ModalHeader } from '$lib/components/modal';
   import { getToaster } from '$lib/components/toast';
   import { FileDropzone } from '$lib/components/upload';
@@ -86,6 +86,11 @@
             placeholder="No description"
             textarea
           />
+        </div>
+
+        <div class="input-group">
+          <label class="text-xl" for="group-visibility">Visibility</label>
+          <VisibilitySelector name="group-visibility" visibility={data.group.visibility} />
         </div>
 
         <div class="input-group">

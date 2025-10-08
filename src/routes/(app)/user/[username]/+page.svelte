@@ -3,7 +3,7 @@
   import { Button, IconButton } from '$lib/components/button';
   import { FloatingLabelInput } from '$lib/components/input';
   import { HomeLayout } from '$lib/components/layout';
-  import { Divider, Icon, ReturnHeader } from '$lib/components/misc';
+  import { Divider, Icon, ReturnHeader, VisibilitySelector } from '$lib/components/misc';
   import { Modal, ModalBody, ModalFooter, ModalHeader } from '$lib/components/modal';
   import { Post } from '$lib/components/post';
   import { ThreadOverview } from '$lib/components/thread';
@@ -65,7 +65,11 @@
   </div>
 
   {#if data.self.id === data.user.id}
-    <PostUpload userPicture={data.self.profilePicture} formaction="?/post-upload" />
+    <PostUpload
+      userPicture={data.self.profilePicture}
+      formaction="?/post-upload"
+      showVisibilitySelector
+    />
   {/if}
 
   {#each data.posts as post (post.id)}
@@ -98,31 +102,41 @@
 
   <Modal show={showModal === 'thread'} backdropCallback={hideModal} center>
     <ModalHeader>Create thread</ModalHeader>
-    <ModalBody>
+    <form
+      class="flex w-full flex-col gap-4"
+      action="?/create-thread"
+      method="post"
+      use:enhance={() => {
+        return async ({ result, update }) => {
+          await formResultToast(result, toaster);
+          await update();
+        };
+      }}
+    >
       <FloatingLabelInput
         class="w-full"
+        name="thread-title"
         labelClass="bg-gray-200 dark:bg-gray-900"
         bind:value={threadTitle}
       >
         Title
       </FloatingLabelInput>
-    </ModalBody>
-    <ModalFooter>
-      <form
-        class="w-full"
-        action="?/create-thread"
-        method="post"
-        use:enhance={() => {
-          return async ({ result, update }) => {
-            await formResultToast(result, toaster);
-            await update();
-          };
-        }}
-      >
+
+      <VisibilitySelector />
+
+      <ModalFooter>
         <Button class="w-full" type="success" onclick={hideModal}>Create</Button>
-        <input type="text" name="thread-title" value={threadTitle} hidden readonly />
-      </form>
-      <Button class="w-full" type="dark" onclick={hideModal}>Cancel</Button>
-    </ModalFooter>
+        <Button
+          class="w-full"
+          type="dark"
+          onclick={(ev) => {
+            ev.preventDefault();
+            hideModal();
+          }}
+        >
+          Cancel
+        </Button>
+      </ModalFooter>
+    </form>
   </Modal>
 </HomeLayout>
