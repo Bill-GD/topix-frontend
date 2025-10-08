@@ -4,14 +4,30 @@ import { CookieName, type Post } from '$lib/utils/types';
 import { type Actions, error, fail, isActionFailure, redirect } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
-export const load: PageServerLoad = async ({ cookies, params }) => {
-  const data: { post: Post; replies: Post[] } = { post: {} as Post, replies: [] };
+export const load: PageServerLoad = async ({ parent, cookies, params }) => {
+  const self = (await parent()).self;
+  const data: { post: Post; replies: Post[] } = {
+    post: {} as Post,
+    replies: [],
+  };
 
   const postRes = await AxiosHandler.get(`/post/${params.id}`, cookies.get(CookieName.accessToken));
   if (!postRes.success) {
     error(postRes.status, { message: postRes.message, status: postRes.status });
   }
   data.post = postRes.data as unknown as Post;
+
+  if (data.post.groupId && data.post.groupVisibility !== 'public' && !data.post.joinedGroup) {
+    redirect(303, `/groups/${data.post.groupId}`);
+  }
+
+  if (
+    data.post.threadId &&
+    data.post.threadVisibility !== 'public' &&
+    self.id !== data.post.threadOwnerId
+  ) {
+    redirect(303, `/threads/${data.post.threadId}`);
+  }
 
   const repliesRes = await AxiosHandler.get(
     `/post?parentId=${params.id}${data.post.groupId ? `&groupId=${data.post.groupId}` : ''}${data.post.threadId ? `&threadId=${data.post.threadId}` : ''}`,

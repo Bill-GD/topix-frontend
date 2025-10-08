@@ -106,7 +106,7 @@
         >
           Name
         </FloatingLabelInput>
-        <VisibilitySelector />
+        <VisibilitySelector class="w-full" />
 
         {#if bannerValue !== ''}
           <img class="rounded-md" src={bannerValue} alt="user-profile" />

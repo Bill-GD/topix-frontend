@@ -5,10 +5,9 @@ import { type Actions, error, fail, isActionFailure, redirect } from '@sveltejs/
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ cookies, params }) => {
-  const data: { thread: Thread; posts: Post[]; joinedGroup: boolean } = {
+  const data: { thread: Thread; posts: Post[] } = {
     thread: {} as Thread,
     posts: [],
-    joinedGroup: true,
   };
 
   const threadRes = await AxiosHandler.get(
@@ -20,18 +19,8 @@ export const load: PageServerLoad = async ({ cookies, params }) => {
   }
   data.thread = threadRes.data as unknown as Thread;
 
-  if (data.thread.groupId) {
-    const joinedGroupRes = await AxiosHandler.get(
-      `/group/${data.thread.groupId}/join-status`,
-      cookies.get(CookieName.accessToken),
-    );
-    if (!joinedGroupRes.success) {
-      error(joinedGroupRes.status, {
-        message: joinedGroupRes.message,
-        status: joinedGroupRes.status,
-      });
-    }
-    data.joinedGroup = joinedGroupRes.data as unknown as boolean;
+  if (data.thread.groupId && data.thread.groupVisibility !== 'public' && !data.thread.joinedGroup) {
+    redirect(303, `/groups/${data.thread.groupId}`);
   }
 
   const postRes = await AxiosHandler.get(

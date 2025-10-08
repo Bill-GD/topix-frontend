@@ -1,11 +1,17 @@
 <script lang="ts">
   import { capitalize } from '$lib/utils/helpers';
+  import type { ClassValue } from 'svelte/elements';
   import Button from '../button/Button.svelte';
 
   let {
+    class: className,
     visibility = 'public',
     name = 'visibility',
-  }: { visibility?: 'public' | 'private' | 'hidden'; name?: string } = $props();
+  }: {
+    visibility?: 'public' | 'private' | 'hidden';
+    name?: string;
+    class?: ClassValue;
+  } = $props();
 
   const modes = ['public', 'private', 'hidden'];
   let index = Math.max(
@@ -15,7 +21,7 @@
 </script>
 
 <Button
-  class="w-full"
+  class={[className]}
   type="dark"
   outline
   onclick={(ev) => {

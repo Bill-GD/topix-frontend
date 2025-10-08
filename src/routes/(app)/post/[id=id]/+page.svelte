@@ -18,7 +18,7 @@
     <ReturnHeader>{isReply ? 'Reply' : 'Post'}</ReturnHeader>
 
     {#if isReply}
-      <Post self={data.self} post={data.post.parentPost!} compact parent />
+      <Post self={data.self} post={data.post.parentPost!} compact parent showThreadAndGroupName />
     {/if}
 
     {#if isReply}
@@ -37,6 +37,7 @@
         self={data.self}
         post={data.post}
         detail
+        showThreadAndGroupName
         allowEditVisibility={data.post.threadId === null && data.post.groupId === null}
       />
     {/if}

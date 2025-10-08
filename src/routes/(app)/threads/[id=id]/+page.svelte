@@ -31,99 +31,74 @@
 <HomeLayout self={data.self}>
   <ReturnHeader>Thread</ReturnHeader>
 
-  <div class="flex flex-col gap-4 border-b border-gray-700 p-4">
-    <div class="flex">
-      <div class="flex flex-col gap-2">
-        <!-- {#if editingTitle}
-          <form
-            class="flex items-center gap-2"
-            action="?/update-title"
-            method="post"
-            use:enhance={() => {
-              return async ({ result, update }) => {
-                await formResultToast(result, toaster, 'Thread deleted successfully.');
-                await update();
-                editingTitle = false;
-              };
-            }}
-          >
-            <Input
-              type="text"
-              class="dark:text-white"
-              placeholder="Title"
-              name="new-title"
-              value={title}
-            />
-            <IconButton class="h-fit px-2" type="success" buttonType="submit">
-              <Icon type="check" size="sm" />
-            </IconButton>
-            <IconButton class="h-fit" type="danger" onclick={() => (editingTitle = false)}>
-              <Icon type="close" size="sm" />
-            </IconButton>
-          </form>
-        {:else} -->
-        <p class="text-4xl font-semibold">{data.thread.title}</p>
-        <!-- {/if} -->
+  {#if data.thread.visibility !== 'public' && data.self.id !== data.thread.owner.id}
+    <p class="empty-noti-text">This thread is privated by the author.</p>
+  {:else}
+    <div class="flex flex-col gap-4 border-b border-gray-700 p-4">
+      <div class="flex">
+        <div class="flex flex-col gap-2">
+          <p class="text-4xl font-semibold">{data.thread.title}</p>
 
-        {#if data.thread.tag}
-          <Flair tag={data.thread.tag} />
-        {/if}
-
-        <div class="text-gray-500">
-          <div class="flex items-center gap-2">
-            Created by @{data.thread.owner.username}
-            -
-            {#if data.thread.visibility === 'private'}
-              <Icon type="lock" size="xs" />
-            {:else if data.thread.visibility === 'hidden'}
-              <Icon type="eyeSlash" size="xs" />
-            {/if}
-            {capitalize(data.thread.visibility)}
-          </div>
-          <span>
-            Created {getTimeAgo(Date.parse(data.thread.dateCreated), true)}
-          </span>
-          {#if data.thread.dateUpdated}
-            <span>-</span>
-            <span>
-              Updated {getTimeAgo(Date.parse(data.thread.dateUpdated), true)}
-            </span>
+          {#if data.thread.tag}
+            <Flair tag={data.thread.tag} />
           {/if}
+
+          <div class="text-gray-500">
+            <div class="flex items-center gap-2">
+              Created by @{data.thread.owner.username}
+              -
+              {#if data.thread.visibility === 'private'}
+                <Icon type="lock" size="xs" />
+              {:else if data.thread.visibility === 'hidden'}
+                <Icon type="eyeSlash" size="xs" />
+              {/if}
+              {capitalize(data.thread.visibility)}
+            </div>
+            <span>
+              Created {getTimeAgo(Date.parse(data.thread.dateCreated), true)}
+            </span>
+            {#if data.thread.dateUpdated}
+              <span>-</span>
+              <span>
+                Updated {getTimeAgo(Date.parse(data.thread.dateUpdated), true)}
+              </span>
+            {/if}
+          </div>
+          <p>
+            {data.thread.postCount} post{data.thread.postCount > 1 ? 's' : ''}
+          </p>
         </div>
-        <p>
-          {data.thread.postCount} post{data.thread.postCount > 1 ? 's' : ''}
-        </p>
+
+        <DropdownMenu class="ml-auto h-fit" position="bottom" align="right">
+          {#snippet trigger()}
+            <IconButton round>
+              <Icon type="menu" size="sm" />
+            </IconButton>
+          {/snippet}
+
+          <DropdownItem>Follow</DropdownItem>
+          {#if data.self.id === data.thread.owner.id}
+            <DropdownItem onclick={() => (showModal = 'update')}>Edit</DropdownItem>
+            <DropdownItem class="text-red-500" onclick={() => (showModal = 'delete')}>
+              Delete
+            </DropdownItem>
+          {/if}
+        </DropdownMenu>
       </div>
 
-      <DropdownMenu class="ml-auto h-fit" position="bottom" align="right">
-        {#snippet trigger()}
-          <IconButton round>
-            <Icon type="menu" size="sm" />
-          </IconButton>
-        {/snippet}
-
-        <DropdownItem>Follow</DropdownItem>
-        {#if data.self.id === data.thread.owner.id}
-          <DropdownItem onclick={() => (showModal = 'update')}>Edit</DropdownItem>
-          <DropdownItem class="text-red-500" onclick={() => (showModal = 'delete')}>
-            Delete
-          </DropdownItem>
-        {/if}
-      </DropdownMenu>
+      {#if data.self.id === data.thread.owner.id && ((data.thread.groupId && data.thread.joinedGroup === true) || !data.thread.groupId)}
+        <Button type="success" onclick={() => (showModal = 'post')}>Add post</Button>
+      {/if}
     </div>
 
-    {#if data.self.id === data.thread.owner.id && data.joinedGroup === true}
-      <Button type="success" onclick={() => (showModal = 'post')}>Add post</Button>
+    {#if data.posts.length <= 0}
+      <p class="empty-noti-text">This thread has no post.</p>
     {/if}
-  </div>
-
-  {#if data.posts.length <= 0}
-    <p class="empty-noti-text">This thread has no post.</p>
+    {#each data.posts as post}
+      <Post self={data.self} {post} compact />
+      <Divider />
+    {/each}
   {/if}
-  {#each data.posts as post}
-    <Post self={data.self} {post} compact />
-    <Divider />
-  {/each}
 
   <Modal show={showModal === 'post'} backdropCallback={hideModal}>
     <ModalHeader class="text-center">Add new post</ModalHeader>
@@ -166,25 +141,6 @@
 
   <Modal show={showModal === 'update'} backdropCallback={hideModal} center>
     <ModalHeader>Update thread</ModalHeader>
-    <!-- <form
-      class="flex items-center gap-2"
-      action="?/update-title"
-      method="post"
-      use:enhance={() => {
-        return async ({ result, update }) => {
-          await formResultToast(result, toaster);
-          await update();
-          editingTitle = false;
-        };
-      }}
-    >
-      <IconButton class="h-fit px-2" type="success" buttonType="submit">
-        <Icon type="check" size="sm" />
-      </IconButton>
-      <IconButton class="h-fit" type="danger" onclick={() => (editingTitle = false)}>
-        <Icon type="close" size="sm" />
-      </IconButton>
-    </form> -->
     <form
       class="flex w-full flex-col gap-4"
       action="?/update-thread"

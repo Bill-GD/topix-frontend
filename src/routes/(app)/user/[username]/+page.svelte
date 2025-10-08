@@ -70,11 +70,12 @@
       formaction="?/post-upload"
       showVisibilitySelector
     />
+    <Divider />
   {/if}
 
   {#each data.posts as post (post.id)}
-    <Divider />
     <Post self={data.self} {post} />
+    <Divider />
   {/each}
 
   {#snippet right()}

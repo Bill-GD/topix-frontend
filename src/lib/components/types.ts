@@ -207,6 +207,7 @@ export interface PostProps {
   compact?: boolean;
   parent?: boolean;
   hideReplyMark?: boolean;
+  showThreadAndGroupName?: boolean;
   allowEditVisibility?: boolean;
 }
 

@@ -24,6 +24,7 @@
     compact = false,
     parent = false,
     hideReplyMark = false,
+    showThreadAndGroupName = false,
     allowEditVisibility = false,
   }: PostProps = $props();
 
@@ -83,11 +84,31 @@
 
   <div class={['flex flex-col', compact ? 'gap-3' : 'gap-6']}>
     <div class="flex flex-col">
-      {#if !detail && !hideReplyMark && isReply}
-        <span class="text-xs text-gray-500">
-          replied to {post.parentPost?.owner.displayName}
-        </span>
-      {/if}
+      <div class="flex items-center gap-2 text-xs">
+        {#if !detail && !hideReplyMark && isReply}
+          <span class="line-clamp-1 w-fit max-w-1/2 text-gray-500">
+            replied to {post.parentPost?.owner.displayName}
+          </span>
+        {/if}
+
+        {#if showThreadAndGroupName}
+          {#if post.threadTitle}
+            > <a
+              class="line-clamp-1 w-fit max-w-1/2 overflow-ellipsis hover:underline"
+              href="/threads/{post.threadId}"
+            >
+              {post.threadTitle}
+            </a>
+          {:else if post.groupName}
+            > <a
+              class="line-clamp-1 w-fit max-w-1/2 overflow-ellipsis hover:underline"
+              href="/groups/{post.groupId}"
+            >
+              {post.groupName}
+            </a>
+          {/if}
+        {/if}
+      </div>
 
       <div class="ignore-click flex w-fit items-baseline gap-2 text-gray-500">
         <a
