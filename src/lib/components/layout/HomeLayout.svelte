@@ -36,13 +36,13 @@
 
 {#snippet navbar()}
   {#each navItems as item}
-    <NavigationItem class="md:ml-auto" title={item.title} href={item.href}>
+    <NavigationItem class="lg:ml-auto" title={item.title} href={item.href}>
       <Icon type={item.icon} />
     </NavigationItem>
   {/each}
 
   {#if self.role === 'admin'}
-    <NavigationItem class="md:ml-auto" title="Users" href="/users">
+    <NavigationItem class="lg:ml-auto" title="Users" href="/users">
       <Icon type="user" />
     </NavigationItem>
   {/if}
@@ -52,9 +52,9 @@
       <div
         class="flex w-fit cursor-pointer items-center justify-end rounded-full p-2 hover:bg-gray-200 lg:w-full lg:gap-4 lg:px-4 dark:hover:bg-gray-900"
       >
-        <div class="flex flex-col text-right">
-          <span class="hidden text-xl lg:inline dark:text-white">{self.displayName}</span>
-          <span class="hidden text-sm text-gray-500 lg:inline">@{self.username}</span>
+        <div class="hidden flex-col text-right lg:flex">
+          <span class=" text-xl dark:text-white">{self.displayName}</span>
+          <span class=" text-sm text-gray-500">@{self.username}</span>
         </div>
 
         <img

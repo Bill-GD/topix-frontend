@@ -1,6 +1,6 @@
 import { AxiosHandler, handleReaction } from '$lib/utils/axios-handler';
 import { getPostUploadForm } from '$lib/utils/helpers';
-import { CookieName, type Post, type Thread, type User } from '$lib/utils/types';
+import { CookieName, type Group, type Post, type Thread, type User } from '$lib/utils/types';
 import { type Actions, error, fail, isActionFailure } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
@@ -24,10 +24,16 @@ export const load: PageServerLoad = async ({ parent, params, cookies }) => {
     cookies.get(CookieName.accessToken),
   );
 
+  const groupsRes = await AxiosHandler.get(
+    `/group?ownerId=${user.id}&size=5`,
+    cookies.get(CookieName.accessToken),
+  );
+
   return {
     user,
     posts: postsRes.data as unknown as Post[],
     threads: threadsRes.data as unknown as Thread[],
+    groups: groupsRes.data as unknown as Group[],
   };
 };
 

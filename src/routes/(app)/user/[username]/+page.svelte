@@ -1,15 +1,16 @@
 <script lang="ts">
   import { enhance } from '$app/forms';
   import { Button, IconButton } from '$lib/components/button';
+  import { DropdownItem, DropdownMenu } from '$lib/components/dropdown';
   import { FloatingLabelInput } from '$lib/components/input';
   import { HomeLayout } from '$lib/components/layout';
   import { Divider, Icon, ReturnHeader, VisibilitySelector } from '$lib/components/misc';
-  import { Modal, ModalBody, ModalFooter, ModalHeader } from '$lib/components/modal';
+  import { Modal, ModalFooter, ModalHeader } from '$lib/components/modal';
   import { Post } from '$lib/components/post';
   import { ThreadOverview } from '$lib/components/thread';
   import { getToaster } from '$lib/components/toast';
   import { PostUpload } from '$lib/components/upload';
-  import { formResultToast } from '$lib/utils/helpers';
+  import { capitalize, formResultToast } from '$lib/utils/helpers';
   import type { PageProps } from './$types';
 
   let { data }: PageProps = $props();
@@ -49,6 +50,18 @@
       </div>
 
       <div class="ml-auto flex flex-col gap-4">
+        {#if data.self.id === data.user.id}
+          <DropdownMenu class="ml-auto h-fit" position="bottom" align="right">
+            {#snippet trigger()}
+              <IconButton round>
+                <Icon type="menu" size="sm" />
+              </IconButton>
+            {/snippet}
+
+            <DropdownItem href="/user/{data.self.username}/hidden">View hidden items</DropdownItem>
+          </DropdownMenu>
+        {/if}
+
         <IconButton type="dark" class="w-full">
           <Icon type="follow" size="sm" />
         </IconButton>
@@ -79,25 +92,70 @@
   {/each}
 
   {#snippet right()}
-    <div class="rounded-md border border-gray-700 2xl:max-w-1/2">
-      <div class="flex items-baseline p-4">
-        <p class="text-xl font-semibold">Threads</p>
-        {#if data.self.id === data.user.id}
-          <IconButton type="success" class="ml-auto" onclick={() => (showModal = 'thread')}>
-            <Icon type="add" size="xs" />
-          </IconButton>
+    <div class="flex flex-col gap-4">
+      <div class="rounded-md border border-gray-700 2xl:max-w-1/2">
+        <div class="flex items-baseline p-4">
+          <p class="text-xl font-semibold">Threads</p>
+          {#if data.self.id === data.user.id}
+            <IconButton type="success" class="ml-auto" onclick={() => (showModal = 'thread')}>
+              <Icon type="add" size="xs" />
+            </IconButton>
+          {/if}
+        </div>
+
+        {#if data.threads.length <= 0}
+          <Divider />
+          <p class="w-full px-4 py-2">This user has no thread.</p>
+        {:else}
+          {#each data.threads as thread}
+            <Divider />
+            <ThreadOverview {thread} />
+          {/each}
         {/if}
       </div>
 
-      {#if data.threads.length <= 0}
-        <Divider />
-        <p class="w-full px-4 py-2">This user has no thread.</p>
-      {:else}
-        {#each data.threads as thread}
+      <div class="rounded-md border border-gray-700 2xl:max-w-1/2">
+        <div class="flex items-baseline p-4">
+          <p class="text-xl font-semibold">Groups</p>
+        </div>
+
+        {#if data.groups.length <= 0}
           <Divider />
-          <ThreadOverview {thread} />
-        {/each}
-      {/if}
+          <p class="w-full px-4 py-2">This user has no thread.</p>
+        {:else}
+          {#each data.groups as group}
+            <Divider /><a
+              class="flex items-center gap-4 px-4 py-2 hover:bg-gray-300/40 dark:hover:bg-gray-900/40"
+              href="/groups/{group.id}"
+            >
+              <div class="flex flex-col gap-2">
+                <span class="text-xl font-semibold">{group.name}</span>
+                <div class="flex items-baseline gap-2 text-gray-500">
+                  {#if group.visibility === 'private'}
+                    <Icon type="lock" size="xs" />
+                  {:else if group.visibility === 'hidden'}
+                    <Icon type="eyeSlash" size="xs" />
+                  {/if}
+                  {capitalize(group.visibility)}
+                  -
+                  {group.memberCount} member{group.memberCount > 1 ? 's' : ''}
+                </div>
+              </div>
+
+              {#if group.status !== null}
+                <div
+                  class={[
+                    'ml-auto font-semibold',
+                    group.status ? 'text-green-700' : 'text-sky-500',
+                  ]}
+                >
+                  {group.status ? 'Joined' : 'Pending'}
+                </div>
+              {/if}
+            </a>
+          {/each}
+        {/if}
+      </div>
     </div>
   {/snippet}
 
