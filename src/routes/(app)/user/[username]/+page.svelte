@@ -48,32 +48,34 @@
           {data.user.description ?? 'No description.'}
         </p>
       </div>
+    </div>
 
-      <div class="ml-auto flex flex-col gap-4">
-        {#if data.self.id === data.user.id}
-          <DropdownMenu class="ml-auto h-fit" position="bottom" align="right">
-            {#snippet trigger()}
-              <IconButton round>
-                <Icon type="menu" size="sm" />
-              </IconButton>
-            {/snippet}
+    <div class="flex items-baseline gap-4 px-2 py-2 font-semibold md:gap-6 md:px-4">
+      <p>Following: {data.user.followingCount}</p>
+      <p>Follower: {data.user.followerCount}</p>
 
-            <DropdownItem href="/user/{data.self.username}/hidden">View hidden items</DropdownItem>
-          </DropdownMenu>
-        {/if}
-
+      <div class="ml-auto flex gap-2 md:gap-4">
         <IconButton type="dark" class="w-full">
           <Icon type="follow" size="sm" />
         </IconButton>
         <IconButton type="dark" class="w-full">
           <Icon type="message" size="sm" />
         </IconButton>
-      </div>
-    </div>
 
-    <div class="flex items-baseline gap-6 px-4 py-2 font-semibold">
-      <p>Following: {data.user.followingCount}</p>
-      <p>Follower: {data.user.followerCount}</p>
+        {#if data.self.id === data.user.id}
+          <DropdownMenu class="ml-auto h-fit" position="bottom" align="right">
+            {#snippet trigger()}
+              <IconButton round>
+                <Icon type="bar" size="sm" />
+              </IconButton>
+            {/snippet}
+
+            <DropdownItem href="/user/{data.self.username}/hidden/post"
+              >View hidden items</DropdownItem
+            >
+          </DropdownMenu>
+        {/if}
+      </div>
     </div>
   </div>
 

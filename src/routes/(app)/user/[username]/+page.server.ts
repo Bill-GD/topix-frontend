@@ -49,20 +49,17 @@ export const actions: Actions = {
     return { success: true, message: res.message };
   },
   react: handleReaction,
-  'delete-post': async (event) => {
-    const formData = await event.request.formData();
+  'delete-post': async ({ request, cookies }) => {
+    const formData = await request.formData();
     const postId = formData.get('post-id');
 
-    const res = await AxiosHandler.delete(
-      `/post/${postId}`,
-      event.cookies.get(CookieName.accessToken),
-    );
+    const res = await AxiosHandler.delete(`/post/${postId}`, cookies.get(CookieName.accessToken));
 
     if (!res.success) return fail(res.status, { success: false, message: res.message });
     return { success: true, message: res.message };
   },
-  'create-thread': async (event) => {
-    const formData = await event.request.formData();
+  'create-thread': async ({ request, cookies }) => {
+    const formData = await request.formData();
     const title = `${formData.get('thread-title')}`;
 
     if (title === null || title.length <= 0) {
@@ -72,7 +69,7 @@ export const actions: Actions = {
     const res = await AxiosHandler.post(
       '/thread',
       { title, visibility: `${formData.get('visibility')}` },
-      event.cookies.get(CookieName.accessToken),
+      cookies.get(CookieName.accessToken),
     );
 
     if (!res.success) return fail(res.status, { success: false, message: res.message });

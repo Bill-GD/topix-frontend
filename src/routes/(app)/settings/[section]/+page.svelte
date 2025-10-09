@@ -43,7 +43,7 @@
             ? 'bg-gray-300/40 font-semibold dark:bg-gray-800/40 dark:text-gray-300'
             : 'text-gray-500',
         ]}
-        href="/settings/{item}"
+        href={item}
       >
         {capitalize(item)}
       </a>
@@ -186,7 +186,7 @@
                 ? `font-semibold ${item.includes('danger') ? 'text-red-600' : 'dark:text-gray-300'}`
                 : `${item.includes('danger') ? 'text-red-800' : 'text-gray-500'}`,
             ]}
-            href="/settings/{item}"
+            href={item}
           >
             {capitalize(item)}
           </a>
