@@ -21,6 +21,7 @@ import { faFaceLaugh } from '@fortawesome/free-solid-svg-icons/faFaceLaugh';
 import { faHeart } from '@fortawesome/free-solid-svg-icons/faHeart';
 import { faHouse } from '@fortawesome/free-solid-svg-icons/faHouse';
 import { faImage } from '@fortawesome/free-solid-svg-icons/faImage';
+import { faLock } from '@fortawesome/free-solid-svg-icons/faLock';
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons/faMagnifyingGlass';
 import { faMessage } from '@fortawesome/free-solid-svg-icons/faMessage';
 import { faPen } from '@fortawesome/free-solid-svg-icons/faPen';
@@ -47,6 +48,7 @@ export const IconSize = {
 };
 
 export const Icons = {
+  lock: faLock,
   edit: faPen,
   delete: faTrashCan,
   user: faUser,
@@ -205,6 +207,8 @@ export interface PostProps {
   compact?: boolean;
   parent?: boolean;
   hideReplyMark?: boolean;
+  showThreadAndGroupName?: boolean;
+  allowEditVisibility?: boolean;
 }
 
 export interface PostUploadProps {
@@ -213,6 +217,7 @@ export interface PostUploadProps {
   placeholder?: string;
   tags?: Tag[];
   groupApproved?: boolean;
+  showVisibilitySelector?: boolean;
   threadId?: number;
   groupId?: number;
   postCallback?: VoidFunction;

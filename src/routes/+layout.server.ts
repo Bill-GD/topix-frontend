@@ -1,8 +1,8 @@
+import { AxiosHandler } from '$lib/utils/axios-handler';
+import { deleteCookies } from '$lib/utils/helpers';
+import { CookieName } from '$lib/utils/types';
 import { error, redirect } from '@sveltejs/kit';
 import type { LayoutServerLoad } from './$types';
-import { AxiosHandler } from '$lib/utils/axios-handler';
-import { CookieName } from '$lib/utils/types';
-import { deleteCookies } from '$lib/utils/helpers';
 
 export const load: LayoutServerLoad = async ({ locals, cookies, route }) => {
   if (!locals.hasAT) {
@@ -24,7 +24,7 @@ export const load: LayoutServerLoad = async ({ locals, cookies, route }) => {
         maxAge: Number(resObject['time']),
       });
       locals.hasAT = true;
-      redirect(303, '/home');
+      if (!route.id?.includes('(app)')) redirect(303, '/home');
     }
 
     if (res.message.toLowerCase().includes('invalid signature')) {
@@ -35,5 +35,5 @@ export const load: LayoutServerLoad = async ({ locals, cookies, route }) => {
     error(res.status, { message: res.message, status: res.status });
   }
 
-  if (locals.hasAT && !route.id?.includes('(app)')) redirect(303, '/home');
+  if (locals.hasAT && route.id?.includes('(auth)')) redirect(303, '/home');
 };

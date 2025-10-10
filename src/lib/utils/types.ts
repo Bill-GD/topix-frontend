@@ -62,7 +62,13 @@ export type Post = {
   mediaPaths: string[];
   parentPost?: Post;
   threadId: number | null;
+  threadTitle: string | null;
+  threadOwnerId: number | null;
+  threadVisibility: 'public' | 'private' | 'hidden';
   groupId: number | null;
+  groupName: string | null;
+  groupVisibility: 'public' | 'private' | 'hidden';
+  joinedGroup: boolean | null;
   tag: Tag | null;
   groupApproved: boolean;
   visibility: 'public' | 'private' | 'hidden';
@@ -76,7 +82,11 @@ export type Thread = {
   owner: Owner;
   postCount: number;
   groupId: number | null;
+  groupName: string | null;
+  groupVisibility: 'public' | 'private' | 'hidden';
+  joinedGroup: boolean | null;
   tag: Tag | null;
+  visibility: 'public' | 'private' | 'hidden';
   dateCreated: string;
   dateUpdated: string | null;
 };

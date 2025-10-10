@@ -1,7 +1,7 @@
 import { AxiosHandler } from '$lib/utils/axios-handler';
-import { CookieName, type Group } from '$lib/utils/types';
 import { dataUrlToFile } from '$lib/utils/helpers';
-import { error, fail, type Actions } from '@sveltejs/kit';
+import { CookieName, type Group } from '$lib/utils/types';
+import { type Actions, error, fail } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ cookies }) => {
@@ -24,6 +24,7 @@ export const actions: Actions = {
 
     const form = new FormData();
     form.append('name', `${groupName}`);
+    form.append('visibility', `${formData.get('visibility')}`);
 
     if (formData.get('group-banner') !== '') {
       form.append('banner', dataUrlToFile(`${formData.get('group-banner')}`));

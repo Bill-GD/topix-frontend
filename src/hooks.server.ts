@@ -1,4 +1,4 @@
-import { redirect, type Handle } from '@sveltejs/kit';
+import { type Handle, redirect } from '@sveltejs/kit';
 import { requestLogger } from './lib/middlewares';
 import { CookieName } from './lib/utils/types';
 

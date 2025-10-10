@@ -14,6 +14,7 @@
   import ModalBody from '../modal/ModalBody.svelte';
   import ModalFooter from '../modal/ModalFooter.svelte';
   import ModalHeader from '../modal/ModalHeader.svelte';
+  import VisibilitySelector from '../misc/VisibilitySelector.svelte';
 
   let {
     userPicture = '/images/default-user-profile-icon.jpg',
@@ -23,6 +24,7 @@
     threadId,
     groupId,
     groupApproved = false,
+    showVisibilitySelector = false,
     postCallback,
   }: PostUploadProps = $props();
 
@@ -194,6 +196,10 @@
         >
           Choose tag
         </Button>
+      {/if}
+
+      {#if showVisibilitySelector}
+        <VisibilitySelector />
       {/if}
 
       <div class="ml-auto flex items-center">

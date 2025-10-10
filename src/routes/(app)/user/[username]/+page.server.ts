@@ -1,10 +1,12 @@
 import { AxiosHandler, handleReaction } from '$lib/utils/axios-handler';
 import { getPostUploadForm } from '$lib/utils/helpers';
-import { CookieName, type Post, type Thread, type User } from '$lib/utils/types';
+import { CookieName, type Group, type Post, type Thread, type User } from '$lib/utils/types';
 import { type Actions, error, fail, isActionFailure } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
-export const load: PageServerLoad = async ({ params, cookies }) => {
+export const load: PageServerLoad = async ({ parent, params, cookies }) => {
+  const self = (await parent()).self;
+
   const userRes = await AxiosHandler.get(
     `/user/${params.username}`,
     cookies.get(CookieName.accessToken),
@@ -13,12 +15,17 @@ export const load: PageServerLoad = async ({ params, cookies }) => {
   const user = userRes.data as User;
 
   const postsRes = await AxiosHandler.get(
-    `/post?username=${user.username}`,
+    `/post?username=${params.username}${self.username === params.username ? '&visibility=private' : ''}`,
     cookies.get(CookieName.accessToken),
   );
 
   const threadsRes = await AxiosHandler.get(
-    `/thread?username=${user.username}&size=5`,
+    `/thread?username=${user.username}&size=5${self.username === params.username ? '&visibility=private' : ''}`,
+    cookies.get(CookieName.accessToken),
+  );
+
+  const groupsRes = await AxiosHandler.get(
+    `/group?ownerId=${user.id}&size=5`,
     cookies.get(CookieName.accessToken),
   );
 
@@ -26,6 +33,7 @@ export const load: PageServerLoad = async ({ params, cookies }) => {
     user,
     posts: postsRes.data as unknown as Post[],
     threads: threadsRes.data as unknown as Thread[],
+    groups: groupsRes.data as unknown as Group[],
   };
 };
 
@@ -41,20 +49,17 @@ export const actions: Actions = {
     return { success: true, message: res.message };
   },
   react: handleReaction,
-  'delete-post': async (event) => {
-    const formData = await event.request.formData();
+  'delete-post': async ({ request, cookies }) => {
+    const formData = await request.formData();
     const postId = formData.get('post-id');
 
-    const res = await AxiosHandler.delete(
-      `/post/${postId}`,
-      event.cookies.get(CookieName.accessToken),
-    );
+    const res = await AxiosHandler.delete(`/post/${postId}`, cookies.get(CookieName.accessToken));
 
     if (!res.success) return fail(res.status, { success: false, message: res.message });
     return { success: true, message: res.message };
   },
-  'create-thread': async (event) => {
-    const formData = await event.request.formData();
+  'create-thread': async ({ request, cookies }) => {
+    const formData = await request.formData();
     const title = `${formData.get('thread-title')}`;
 
     if (title === null || title.length <= 0) {
@@ -63,8 +68,8 @@ export const actions: Actions = {
 
     const res = await AxiosHandler.post(
       '/thread',
-      { title },
-      event.cookies.get(CookieName.accessToken),
+      { title, visibility: `${formData.get('visibility')}` },
+      cookies.get(CookieName.accessToken),
     );
 
     if (!res.success) return fail(res.status, { success: false, message: res.message });

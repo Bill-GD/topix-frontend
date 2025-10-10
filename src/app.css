@@ -28,15 +28,15 @@ input[type='radio']:focus {
   @apply rounded-md p-1;
 }
 
-.profile-picture-lg {
+@utility profile-picture-lg {
   @apply aspect-square h-30 w-30 rounded-full;
 }
 
-.profile-picture-md {
+@utility profile-picture-md {
   @apply aspect-square h-20 w-20 rounded-full;
 }
 
-.profile-picture-sm {
+@utility profile-picture-sm {
   @apply aspect-square h-10 w-10 rounded-full;
 }
 
@@ -89,7 +89,7 @@ input[type='radio']:focus {
 }
 
 .btn-dark-outline {
-  @apply btn outlined text-gray-700 outline-gray-700 hover:bg-gray-700 active:bg-gray-500 active:outline-gray-500;
+  @apply btn outlined text-gray-400 outline-gray-700 hover:bg-gray-700 active:bg-gray-500 active:outline-gray-500;
 }
 
 .btn-primary-outline {

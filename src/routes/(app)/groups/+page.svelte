@@ -3,8 +3,8 @@
   import { Button } from '$lib/components/button';
   import { FloatingLabelInput } from '$lib/components/input';
   import { HomeLayout } from '$lib/components/layout';
-  import { Divider, Icon, ReturnHeader } from '$lib/components/misc';
-  import { Modal, ModalBody, ModalHeader } from '$lib/components/modal';
+  import { Divider, Icon, ReturnHeader, VisibilitySelector } from '$lib/components/misc';
+  import { Modal, ModalBody, ModalFooter, ModalHeader } from '$lib/components/modal';
   import { getToaster } from '$lib/components/toast';
   import { FileDropzone } from '$lib/components/upload';
   import { capitalize, formResultToast } from '$lib/utils/helpers';
@@ -58,6 +58,11 @@
           <div class="flex flex-col gap-2">
             <span class="text-xl font-semibold">{group.name}</span>
             <div class="flex items-baseline gap-2 text-gray-500">
+              {#if group.visibility === 'private'}
+                <Icon type="lock" size="xs" />
+              {:else if group.visibility === 'hidden'}
+                <Icon type="eyeSlash" size="xs" />
+              {/if}
               {capitalize(group.visibility)}
               -
               {group.memberCount} member{group.memberCount > 1 ? 's' : ''}
@@ -94,13 +99,14 @@
       >
         <FloatingLabelInput
           class="w-full"
-          labelClass="bg-gray-900"
+          labelClass="bg-gray-200 dark:bg-gray-900"
           name="group-name"
           bind:value={groupName}
           required
         >
           Name
         </FloatingLabelInput>
+        <VisibilitySelector class="w-full" />
 
         {#if bannerValue !== ''}
           <img class="rounded-md" src={bannerValue} alt="user-profile" />
@@ -108,12 +114,21 @@
 
         <FileDropzone contentInputName="group-banner" bind:contentValue={bannerValue} />
 
-        <div class="flex w-full flex-col gap-2 md:flex-row">
-          <Button class="w-full" type="success" onclick={hideModal} disabled={groupName === ''}
-            >Create</Button
+        <ModalFooter>
+          <Button class="w-full" type="success" onclick={hideModal} disabled={groupName === ''}>
+            Create
+          </Button>
+          <Button
+            class="w-full"
+            type="dark"
+            onclick={(ev) => {
+              ev.preventDefault();
+              hideModal();
+            }}
           >
-          <Button class="w-full" type="dark" onclick={hideModal}>Cancel</Button>
-        </div>
+            Cancel
+          </Button>
+        </ModalFooter>
       </form>
     </ModalBody>
   </Modal>

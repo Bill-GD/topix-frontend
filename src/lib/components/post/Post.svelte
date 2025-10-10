@@ -14,6 +14,7 @@
   import ModalBody from '../modal/ModalBody.svelte';
   import ModalFooter from '../modal/ModalFooter.svelte';
   import ModalHeader from '../modal/ModalHeader.svelte';
+  import VisibilitySelector from '../misc/VisibilitySelector.svelte';
 
   let {
     class: className,
@@ -23,11 +24,18 @@
     compact = false,
     parent = false,
     hideReplyMark = false,
+    showThreadAndGroupName = false,
+    allowEditVisibility = false,
   }: PostProps = $props();
 
   const toaster = getToaster();
   const isImages = $derived(post.mediaPaths.every((m) => m.includes('image')));
   const isVideo = $derived(post.mediaPaths.every((m) => m.includes('video')));
+  const canClickPost = $derived(
+    !detail &&
+      (post.visibility === 'public' ||
+        (post.visibility === 'private' && self.id === post.owner.id)),
+  );
   const isReply = post.parentPost !== undefined;
   const reactions = {
     like: 'text-sky-500',
@@ -40,11 +48,11 @@
   let reaction = $derived(post.reaction);
   let reactionCount = $derived(post.reactionCount);
   let imageIndex = $state<number>(0);
-  let showModal = $state<'delete' | null>(null);
+  let showModal = $state<'delete' | 'visibility' | null>(null);
 
   onMount(() => {
     const main = document.getElementById(`post-${post.id}`) as HTMLElement;
-    if (!detail) {
+    if (canClickPost) {
       main.addEventListener('click', (ev) => {
         const target = ev.target as HTMLElement;
         if (target.closest('.ignore-click')) return;
@@ -63,7 +71,7 @@
   class={[
     'flex p-4',
     compact ? 'gap-2' : 'gap-4',
-    !detail && 'cursor-pointer hover:bg-gray-300/40 dark:hover:bg-gray-900/40',
+    canClickPost && 'cursor-pointer hover:bg-gray-300/40 dark:hover:bg-gray-900/40',
     className,
   ]}
   id="post-{post.id}"
@@ -76,11 +84,31 @@
 
   <div class={['flex flex-col', compact ? 'gap-3' : 'gap-6']}>
     <div class="flex flex-col">
-      {#if !detail && !hideReplyMark && isReply}
-        <span class="text-xs text-gray-500">
-          replied to {post.parentPost?.owner.displayName}
-        </span>
-      {/if}
+      <div class="flex items-center gap-2 text-xs">
+        {#if !detail && !hideReplyMark && isReply}
+          <span class="line-clamp-1 w-fit max-w-1/2 text-gray-500">
+            replied to {post.parentPost?.owner.displayName}
+          </span>
+        {/if}
+
+        {#if showThreadAndGroupName}
+          {#if post.threadTitle}
+            > <a
+              class="line-clamp-1 w-fit max-w-1/2 overflow-ellipsis hover:underline"
+              href="/threads/{post.threadId}"
+            >
+              {post.threadTitle}
+            </a>
+          {:else if post.groupName}
+            > <a
+              class="line-clamp-1 w-fit max-w-1/2 overflow-ellipsis hover:underline"
+              href="/groups/{post.groupId}"
+            >
+              {post.groupName}
+            </a>
+          {/if}
+        {/if}
+      </div>
 
       <div class="ignore-click flex w-fit items-baseline gap-2 text-gray-500">
         <a
@@ -97,6 +125,11 @@
           <span>-</span>
           <span>edited {getTimeAgo(Date.parse(post.dateUpdated))}</span>
         {/if}
+        {#if post.visibility === 'private'}
+          <Icon type="lock" size="xs" />
+        {:else if post.visibility === 'hidden'}
+          <Icon type="eyeSlash" size="xs" />
+        {/if}
       </div>
     </div>
 
@@ -104,63 +137,67 @@
       <Flair class="ignore-click" tag={post.tag} compact />
     {/if}
 
-    {#if post.content.length > 0}
-      {#if compact}
-        <p class="ignore-click line-clamp-2 whitespace-pre-line">{post.content}</p>
-      {:else}
-        <span class="ignore-click whitespace-pre-line">{post.content}</span>
-      {/if}
-    {/if}
-
-    {#if post.mediaPaths.length > 0}
-      {#if isImages}
-        <div class="ignore-click relative min-w-1/2">
-          {#if imageIndex > 0}
-            <IconButton
-              class="absolute top-1/2 left-0 h-full -translate-y-1/2 hover:bg-gray-200 dark:hover:bg-gray-900/20"
-              round={false}
-              onclick={() => (imageIndex = Math.max(0, imageIndex - 1))}
-            >
-              <Icon type="back" size="sm" />
-            </IconButton>
-          {/if}
-
-          <img
-            class="w-full rounded-lg"
-            src={post.mediaPaths[imageIndex]}
-            alt="post-{post.id}-image-{imageIndex}"
-          />
-
-          {#if post.mediaPaths.length > 1}
-            <div class="absolute bottom-1 left-1/2 z-2 flex -translate-x-1/2 gap-1">
-              {#each post.mediaPaths as _, index}
-                <span
-                  class={[
-                    'h-2 w-2 rounded-full border border-white',
-                    index === imageIndex && 'bg-white',
-                  ]}
-                ></span>
-              {/each}
-            </div>
-          {/if}
-
-          {#if imageIndex < post.mediaPaths.length - 1}
-            <IconButton
-              class="absolute top-1/2 right-0 h-full -translate-y-1/2 hover:bg-gray-200 dark:hover:bg-gray-900/20"
-              round={false}
-              onclick={() => (imageIndex = Math.min(post.mediaPaths.length - 1, imageIndex + 1))}
-            >
-              <Icon type="next" size="sm" />
-            </IconButton>
-          {/if}
-        </div>
+    {#if parent && post.visibility !== 'public' && self.id !== post.owner.id}
+      <span class="ignore-click">Post is privated or hidden.</span>
+    {:else}
+      {#if post.content.length > 0}
+        {#if compact}
+          <p class="ignore-click line-clamp-2 whitespace-pre-line">{post.content}</p>
+        {:else}
+          <span class="ignore-click whitespace-pre-line">{post.content}</span>
+        {/if}
       {/if}
 
-      {#if isVideo}
-        <!-- svelte-ignore a11y_media_has_caption -->
-        <video class="ignore-click w-full min-w-1/2 rounded-lg" controls>
-          <source src={post.mediaPaths[0]} type="video/mp4" />
-        </video>
+      {#if post.mediaPaths.length > 0}
+        {#if isImages}
+          <div class="ignore-click relative min-w-1/2">
+            {#if imageIndex > 0}
+              <IconButton
+                class="absolute top-1/2 left-0 h-full -translate-y-1/2 hover:bg-gray-200 dark:hover:bg-gray-900/20"
+                round={false}
+                onclick={() => (imageIndex = Math.max(0, imageIndex - 1))}
+              >
+                <Icon type="back" size="sm" />
+              </IconButton>
+            {/if}
+
+            <img
+              class="w-full rounded-lg"
+              src={post.mediaPaths[imageIndex]}
+              alt="post-{post.id}-image-{imageIndex}"
+            />
+
+            {#if post.mediaPaths.length > 1}
+              <div class="absolute bottom-1 left-1/2 z-2 flex -translate-x-1/2 gap-1">
+                {#each post.mediaPaths as _, index}
+                  <span
+                    class={[
+                      'h-2 w-2 rounded-full border border-white',
+                      index === imageIndex && 'bg-white',
+                    ]}
+                  ></span>
+                {/each}
+              </div>
+            {/if}
+
+            {#if imageIndex < post.mediaPaths.length - 1}
+              <IconButton
+                class="absolute top-1/2 right-0 h-full -translate-y-1/2 hover:bg-gray-200 dark:hover:bg-gray-900/20"
+                round={false}
+                onclick={() => (imageIndex = Math.min(post.mediaPaths.length - 1, imageIndex + 1))}
+              >
+                <Icon type="next" size="sm" />
+              </IconButton>
+            {/if}
+          </div>
+        {/if}
+
+        {#if isVideo}
+          <!-- svelte-ignore a11y_media_has_caption -->
+          <video class="ignore-click w-full min-w-1/2 rounded-lg" controls>
+            <source src={post.mediaPaths[0]} type="video/mp4" />
+          </video>
+        {/if}
       {/if}
     {/if}
 
@@ -229,13 +266,13 @@
         </IconButton>
       {/snippet}
 
-      {#if detail && self.id === post.owner.id}
-        <DropdownItem>Edit</DropdownItem>
+      {#if detail && self.id === post.owner.id && allowEditVisibility}
+        <DropdownItem onclick={() => (showModal = 'visibility')}>Edit</DropdownItem>
       {/if}
       {#if self.role === 'admin' || self.id === post.owner.id}
-        <DropdownItem class="text-red-500" onclick={() => (showModal = 'delete')}
-          >Delete</DropdownItem
-        >
+        <DropdownItem class="text-red-500" onclick={() => (showModal = 'delete')}>
+          Delete
+        </DropdownItem>
       {/if}
     </DropdownMenu>
   {/if}
@@ -261,6 +298,37 @@
     </form>
     <Button class="w-full" type="dark" onclick={hideModal}>Cancel</Button>
   </ModalFooter>
+</Modal>
+
+<Modal show={showModal === 'visibility'} backdropCallback={hideModal} center>
+  <ModalHeader>Change post visibility</ModalHeader>
+  <form
+    class="flex w-full flex-col gap-4"
+    action="?/update-post-visibility"
+    method="post"
+    use:enhance={() => {
+      return async ({ result, update }) => {
+        await formResultToast(result, toaster);
+        await update({ reset: false });
+      };
+    }}
+  >
+    <VisibilitySelector visibility={post.visibility} />
+
+    <ModalFooter>
+      <Button class="w-full" type="success" onclick={hideModal}>Update</Button>
+      <Button
+        class="w-full"
+        type="dark"
+        onclick={(ev) => {
+          ev.preventDefault();
+          hideModal();
+        }}
+      >
+        Cancel
+      </Button>
+    </ModalFooter>
+  </form>
 </Modal>
 
 <!--
