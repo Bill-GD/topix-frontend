@@ -34,7 +34,7 @@
   <div class="flex flex-col gap-2 border-b border-gray-700 p-4">
     <div class="flex items-start gap-4">
       <img
-        class="profile-picture-md"
+        class="md:profile-picture-md profile-picture-sm"
         src={data.user.profilePicture ?? '/images/default-user-profile-icon.jpg'}
         alt="user-profile"
       />

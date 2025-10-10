@@ -28,15 +28,15 @@ input[type='radio']:focus {
   @apply rounded-md p-1;
 }
 
-.profile-picture-lg {
+@utility profile-picture-lg {
   @apply aspect-square h-30 w-30 rounded-full;
 }
 
-.profile-picture-md {
+@utility profile-picture-md {
   @apply aspect-square h-20 w-20 rounded-full;
 }
 
-.profile-picture-sm {
+@utility profile-picture-sm {
   @apply aspect-square h-10 w-10 rounded-full;
 }
 
