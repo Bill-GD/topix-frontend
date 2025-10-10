@@ -36,6 +36,7 @@ export type User = {
   profilePicture: string | null;
   followerCount: number;
   followingCount: number;
+  followed: boolean;
   role: 'user' | 'admin';
 };
 

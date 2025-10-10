@@ -34,7 +34,7 @@
   <div class="flex flex-col gap-2 border-b border-gray-700 p-4">
     <div class="flex items-start gap-4">
       <img
-        class="md:profile-picture-md profile-picture-sm"
+        class="profile-picture-sm md:profile-picture-md"
         src={data.user.profilePicture ?? '/images/default-user-profile-icon.jpg'}
         alt="user-profile"
       />
@@ -55,13 +55,6 @@
       <p>Follower: {data.user.followerCount}</p>
 
       <div class="ml-auto flex gap-2 md:gap-4">
-        <IconButton type="dark" class="w-full">
-          <Icon type="follow" size="sm" />
-        </IconButton>
-        <IconButton type="dark" class="w-full">
-          <Icon type="message" size="sm" />
-        </IconButton>
-
         {#if data.self.id === data.user.id}
           <DropdownMenu class="ml-auto h-fit" position="bottom" align="right">
             {#snippet trigger()}
@@ -74,6 +67,43 @@
               >View hidden items</DropdownItem
             >
           </DropdownMenu>
+        {:else}
+          <IconButton type="dark" class="w-full">
+            <Icon type="message" size="sm" />
+          </IconButton>
+          {#if data.user.followed}
+            <form
+              action="?/unfollow"
+              method="post"
+              use:enhance={() => {
+                return async ({ result, update }) => {
+                  await formResultToast(result, toaster);
+                  await update();
+                };
+              }}
+            >
+              <IconButton type="danger" class="w-full">
+                <Icon type="unfollow" size="sm" />
+              </IconButton>
+              <input type="number" name="user-id" value={data.user.id} hidden readonly />
+            </form>
+          {:else}
+            <form
+              action="?/follow"
+              method="post"
+              use:enhance={() => {
+                return async ({ result, update }) => {
+                  await formResultToast(result, toaster);
+                  await update();
+                };
+              }}
+            >
+              <IconButton type="dark" class="w-full">
+                <Icon type="follow" size="sm" />
+              </IconButton>
+              <input type="number" name="user-id" value={data.user.id} hidden readonly />
+            </form>
+          {/if}
         {/if}
       </div>
     </div>
