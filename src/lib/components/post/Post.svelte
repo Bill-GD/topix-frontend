@@ -77,12 +77,12 @@
   id="post-{post.id}"
 >
   <img
-    class="profile-picture-sm ignore-click"
+    class="ignore-click profile-picture-sm"
     src={post.owner.profilePicture ?? '/images/default-user-profile-icon.jpg'}
     alt="profile"
   />
 
-  <div class={['flex flex-col', compact ? 'gap-3' : 'gap-6']}>
+  <div class={['flex flex-col', compact ? 'gap-3' : 'gap-4']}>
     <div class="flex flex-col">
       <div class="flex items-center gap-2 text-xs">
         {#if !detail && !hideReplyMark && isReply}
@@ -219,7 +219,9 @@
 
           <DropdownMenu class="ignore-click" position="top" align="left" horizontal>
             {#snippet trigger()}
-              <div class="react-button flex gap-2">
+              <div
+                class="react-button flex items-center gap-2 rounded-md p-2 hover:bg-gray-300 dark:hover:bg-gray-800/60"
+              >
                 <Icon
                   type={(reaction ?? 'noReaction') as keyof typeof reactions}
                   class={[reaction !== null && reactions[reaction as keyof typeof reactions]]}
