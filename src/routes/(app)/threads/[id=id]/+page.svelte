@@ -76,7 +76,33 @@
             </IconButton>
           {/snippet}
 
-          <DropdownItem>Follow</DropdownItem>
+          {#if data.thread.followed}
+            <form
+              action="?/unfollow"
+              method="post"
+              use:enhance={() => {
+                return async ({ result, update }) => {
+                  await formResultToast(result, toaster);
+                  await update();
+                };
+              }}
+            >
+              <DropdownItem class="text-red-500">Unfollow</DropdownItem>
+            </form>
+          {:else}
+            <form
+              action="?/follow"
+              method="post"
+              use:enhance={() => {
+                return async ({ result, update }) => {
+                  await formResultToast(result, toaster);
+                  await update();
+                };
+              }}
+            >
+              <DropdownItem>Follow</DropdownItem>
+            </form>
+          {/if}
           {#if data.self.id === data.thread.owner.id}
             <DropdownItem onclick={() => (showModal = 'update')}>Edit</DropdownItem>
             <DropdownItem class="text-red-500" onclick={() => (showModal = 'delete')}>

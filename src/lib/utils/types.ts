@@ -88,6 +88,7 @@ export type Thread = {
   joinedGroup: boolean | null;
   tag: Tag | null;
   visibility: 'public' | 'private' | 'hidden';
+  followed: boolean;
   dateCreated: string;
   dateUpdated: string | null;
 };
