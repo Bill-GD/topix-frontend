@@ -3,7 +3,7 @@
 export type ToastMessage = {
   id: number;
   message: string;
-  type: 'success' | 'info' | 'error';
+  type: 'success' | 'error';
 };
 
 export type ApiResponse = {
