@@ -9,7 +9,7 @@
 
   let { data }: PageProps = $props();
   const tab = $derived(page.url.searchParams.get('tab') ?? 'new');
-  const items = ['new', 'following'];
+  const items = $derived(['new', 'following']);
 </script>
 
 <svelte:head>
@@ -41,7 +41,16 @@
       <Post self={data.self} {post} />
       <Divider />
     {/each}
-  {:else if tab === 'following'}{/if}
+  {:else if tab === 'following'}
+    {#if data.posts!.length <= 0}
+      <p class="empty-noti-text">You haven't follow anyone or thread.</p>
+    {:else}
+      {#each data.posts as post (post.id)}
+        <Post self={data.self} {post} showThreadAndGroupName />
+        <Divider />
+      {/each}
+    {/if}
+  {/if}
 
   {#snippet right()}
     {#if tab === 'new'}

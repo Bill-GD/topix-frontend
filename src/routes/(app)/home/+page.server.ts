@@ -23,7 +23,14 @@ export const load: PageServerLoad = async ({ cookies, url }) => {
     }
 
     case 'following': {
-      break;
+      const postRes = await AxiosHandler.get(
+        '/post/following',
+        cookies.get(CookieName.accessToken),
+      );
+      if (!postRes.success)
+        error(postRes.status, { status: postRes.status, message: postRes.message });
+
+      return { posts: postRes.data as unknown as Post[] };
     }
   }
 };
