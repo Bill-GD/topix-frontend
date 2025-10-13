@@ -3,36 +3,30 @@ import { CookieName, type Post, type Thread } from '$lib/utils/types';
 import { type Actions, error, fail } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
-export const load: PageServerLoad = async ({ cookies, url }) => {
+export const load: PageServerLoad = async ({ cookies, url, fetch }) => {
   const tab = url.searchParams.get('tab') ?? 'new';
 
   switch (tab) {
     case 'new': {
-      const postRes = await AxiosHandler.get('/post', cookies.get(CookieName.accessToken));
-      if (!postRes.success)
-        error(postRes.status, { status: postRes.status, message: postRes.message });
+      const res = await fetch('/api/posts');
 
       const threadRes = await AxiosHandler.get('/thread', cookies.get(CookieName.accessToken));
-      if (!threadRes.success)
+      if (!threadRes.success) {
         error(threadRes.status, { status: threadRes.status, message: threadRes.message });
+      }
 
       return {
-        posts: postRes.data as unknown as Post[],
+        posts: (await res.json()) as unknown as Post[],
         threads: threadRes.data as unknown as Thread[],
       };
     }
 
     case 'following': {
-      const postRes = await AxiosHandler.get(
-        '/post/following',
-        cookies.get(CookieName.accessToken),
-      );
-      if (!postRes.success)
-        error(postRes.status, { status: postRes.status, message: postRes.message });
-
-      return { posts: postRes.data as unknown as Post[] };
+      const res = await fetch('/api/posts?following');
+      return { posts: (await res.json()) as unknown as Post[] };
     }
   }
+  error(500);
 };
 
 export const actions: Actions = {

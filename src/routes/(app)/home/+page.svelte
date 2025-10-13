@@ -1,15 +1,44 @@
 <script lang="ts">
   import { page } from '$app/state';
-  import { HomeLayout } from '$lib/components/layout';
+  import { HomeLayout, Scroller } from '$lib/components/layout';
   import { Divider } from '$lib/components/misc';
   import { Post } from '$lib/components/post';
   import { ThreadOverview } from '$lib/components/thread';
-  import { capitalize } from '@/lib/utils/helpers';
+  import { capitalize } from '$lib/utils/helpers';
+  import type { Attachment } from 'svelte/attachments';
   import type { PageProps } from './$types';
 
   let { data }: PageProps = $props();
   const tab = $derived(page.url.searchParams.get('tab') ?? 'new');
   const items = $derived(['new', 'following']);
+  let pageIndex = 1;
+  let isFetching = $state<boolean>(false);
+  let disableScroller = $state<boolean>(false);
+  let posts = $derived(data.posts);
+
+  function scrollerAttachment(following: boolean = false): Attachment {
+    return (node) => {
+      const observer = new IntersectionObserver(async (entries, observer) => {
+        if (disableScroller) return;
+        if (!entries[0].isIntersecting) return;
+
+        isFetching = true;
+        const res = await fetch(`/api/posts?page=${++pageIndex}${following ? '&following' : ''}`);
+        const newPosts = await res.json();
+        if (newPosts.length <= 0) disableScroller = true;
+        posts = [...posts, ...newPosts];
+        isFetching = false;
+      });
+
+      observer.observe(node);
+
+      return () => {
+        pageIndex = 1;
+        disableScroller = false;
+        observer.disconnect();
+      };
+    };
+  }
 </script>
 
 <svelte:head>
@@ -37,20 +66,30 @@
   </div>
 
   {#if tab === 'new'}
-    {#each data.posts as post (post.id)}
+    {#each posts as post (post.id)}
       <Post self={data.self} {post} />
       <Divider />
     {/each}
   {:else if tab === 'following'}
-    {#if data.posts!.length <= 0}
+    {#if posts!.length <= 0}
       <p class="empty-noti-text">You haven't follow anyone or thread.</p>
     {:else}
-      {#each data.posts as post (post.id)}
+      {#each posts as post (post.id)}
         <Post self={data.self} {post} showThreadAndGroupName />
         <Divider />
       {/each}
     {/if}
   {/if}
+
+  <Scroller {@attach scrollerAttachment(tab === 'following')} disabled={disableScroller}>
+    {#if isFetching}
+      Loading more...
+    {:else if disableScroller}
+      No more posts.
+    {:else}
+      Load more.
+    {/if}
+  </Scroller>
 
   {#snippet right()}
     {#if tab === 'new'}
