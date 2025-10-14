@@ -46,7 +46,7 @@
           <div class="text-gray-500">
             <div class="flex items-center gap-2">
               Created by @{data.thread.owner.username}
-              -
+              •
               {#if data.thread.visibility === 'private'}
                 <Icon type="lock" size="xs" />
               {:else if data.thread.visibility === 'hidden'}
@@ -58,7 +58,7 @@
               Created {getTimeAgo(Date.parse(data.thread.dateCreated), true)}
             </span>
             {#if data.thread.dateUpdated}
-              <span>-</span>
+              <span>•</span>
               <span>
                 Updated {getTimeAgo(Date.parse(data.thread.dateUpdated), true)}
               </span>

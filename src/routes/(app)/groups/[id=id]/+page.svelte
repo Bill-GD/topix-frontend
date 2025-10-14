@@ -52,7 +52,7 @@
           <Icon type="eyeSlash" size="xs" />
         {/if}
         <span>{capitalize(data.group.visibility)}</span>
-        <span>-</span>
+        <span>•</span>
         <span>{data.group.memberCount} member{data.group.memberCount > 1 ? 's' : ''}</span>
       </div>
 

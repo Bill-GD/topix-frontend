@@ -10,11 +10,11 @@
   import DropdownMenu from '../dropdown/DropdownMenu.svelte';
   import Flair from '../misc/Flair.svelte';
   import Icon from '../misc/Icon.svelte';
+  import VisibilitySelector from '../misc/VisibilitySelector.svelte';
   import Modal from '../modal/Modal.svelte';
   import ModalBody from '../modal/ModalBody.svelte';
   import ModalFooter from '../modal/ModalFooter.svelte';
   import ModalHeader from '../modal/ModalHeader.svelte';
-  import VisibilitySelector from '../misc/VisibilitySelector.svelte';
 
   let {
     class: className,
@@ -119,10 +119,10 @@
         </a>
         <span class="text-gray-500">@{post.owner.username}</span>
 
-        <span>-</span>
+        <span>•</span>
         <span>{getTimeAgo(Date.parse(post.dateCreated))}</span>
         {#if post.dateUpdated}
-          <span>-</span>
+          <span>•</span>
           <span>edited {getTimeAgo(Date.parse(post.dateUpdated))}</span>
         {/if}
         {#if post.visibility === 'private'}

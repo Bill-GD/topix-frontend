@@ -63,9 +63,9 @@
               </IconButton>
             {/snippet}
 
-            <DropdownItem href="/user/{data.self.username}/hidden/post"
-              >View hidden items</DropdownItem
-            >
+            <DropdownItem href="/user/{data.self.username}/hidden/post">
+              View hidden items
+            </DropdownItem>
           </DropdownMenu>
         {:else}
           <IconButton type="dark" class="w-full">

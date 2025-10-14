@@ -44,7 +44,7 @@
           <span class="text-gray-500">@{post.owner.username}</span>
         </Link>
 
-        <span>-</span>
+        <span>•</span>
         <span>{getTimeAgo(Date.parse(post.dateCreated))}</span>
       </div>
     </div>
