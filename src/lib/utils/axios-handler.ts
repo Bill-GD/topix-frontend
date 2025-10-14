@@ -102,7 +102,7 @@ export class AxiosHandler {
 
     if (error.name === 'AggregateError') {
       const typed = error as AggregateError;
-      if (typed.code.includes('ECONNREFUSED')) {
+      if (typed.code.includes('ECONN')) {
         return {
           success: false,
           status: 503,

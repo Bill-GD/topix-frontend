@@ -44,13 +44,13 @@
           <span class="text-gray-500">@{post.owner.username}</span>
         </Link>
 
-        <span>-</span>
+        <span>•</span>
         <span>{getTimeAgo(Date.parse(post.dateCreated))}</span>
       </div>
     </div>
 
     {#if post.tag}
-      <Flair tag={post.tag} />
+      <Flair tag={post.tag} compact />
     {/if}
 
     <span class="whitespace-pre-line">{post.content}</span>

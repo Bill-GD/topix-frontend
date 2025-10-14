@@ -3,7 +3,7 @@
   import { Button, IconButton } from '$lib/components/button';
   import { DropdownItem, DropdownMenu } from '$lib/components/dropdown';
   import { Input } from '$lib/components/input';
-  import { HomeLayout } from '$lib/components/layout';
+  import { HomeLayout, Scroller } from '$lib/components/layout';
   import { Divider, Flair, Icon, ReturnHeader, VisibilitySelector } from '$lib/components/misc';
   import { Modal, ModalBody, ModalFooter, ModalHeader } from '$lib/components/modal';
   import { Post } from '$lib/components/post';
@@ -16,8 +16,10 @@
 
   const toaster = getToaster();
   let showModal = $state<'post' | 'delete' | 'update' | null>(null);
-  // let editingTitle = $state<boolean>(false);
   let title = $derived<string>(data.thread.title);
+  let pageIndex = 1;
+  let disableScroller = $state<boolean>(false);
+  let posts = $derived(data.posts);
 
   function hideModal() {
     showModal = null;
@@ -46,7 +48,7 @@
           <div class="text-gray-500">
             <div class="flex items-center gap-2">
               Created by @{data.thread.owner.username}
-              -
+              •
               {#if data.thread.visibility === 'private'}
                 <Icon type="lock" size="xs" />
               {:else if data.thread.visibility === 'hidden'}
@@ -58,7 +60,7 @@
               Created {getTimeAgo(Date.parse(data.thread.dateCreated), true)}
             </span>
             {#if data.thread.dateUpdated}
-              <span>-</span>
+              <span>•</span>
               <span>
                 Updated {getTimeAgo(Date.parse(data.thread.dateUpdated), true)}
               </span>
@@ -76,7 +78,33 @@
             </IconButton>
           {/snippet}
 
-          <DropdownItem>Follow</DropdownItem>
+          {#if data.thread.followed}
+            <form
+              action="?/unfollow"
+              method="post"
+              use:enhance={() => {
+                return async ({ result, update }) => {
+                  await formResultToast(result, toaster);
+                  await update();
+                };
+              }}
+            >
+              <DropdownItem class="text-red-500">Unfollow</DropdownItem>
+            </form>
+          {:else}
+            <form
+              action="?/follow"
+              method="post"
+              use:enhance={() => {
+                return async ({ result, update }) => {
+                  await formResultToast(result, toaster);
+                  await update();
+                };
+              }}
+            >
+              <DropdownItem>Follow</DropdownItem>
+            </form>
+          {/if}
           {#if data.self.id === data.thread.owner.id}
             <DropdownItem onclick={() => (showModal = 'update')}>Edit</DropdownItem>
             <DropdownItem class="text-red-500" onclick={() => (showModal = 'delete')}>
@@ -93,11 +121,26 @@
 
     {#if data.posts.length <= 0}
       <p class="empty-noti-text">This thread has no post.</p>
+    {:else}
+      {#each posts as post}
+        <Post self={data.self} {post} compact />
+        <Divider />
+      {/each}
+
+      <Scroller
+        disabled={disableScroller}
+        attachmentCallback={async () => {
+          const res = await fetch(`/api/posts?threadId=${data.thread.id}&page=${++pageIndex}`);
+          const newData = await res.json();
+          if (newData.length <= 0) disableScroller = true;
+          posts = [...posts, ...newData];
+        }}
+        detachCleanup={() => {
+          pageIndex = 1;
+          disableScroller = false;
+        }}
+      />
     {/if}
-    {#each data.posts as post}
-      <Post self={data.self} {post} compact />
-      <Divider />
-    {/each}
   {/if}
 
   <Modal show={showModal === 'post'} backdropCallback={hideModal}>

@@ -75,4 +75,27 @@ export const actions: Actions = {
     if (!res.success) return fail(res.status, { success: false, message: res.message });
     return { success: true, message: res.message };
   },
+  follow: async ({ request, cookies }) => {
+    const formData = await request.formData();
+
+    const res = await AxiosHandler.post(
+      `/user/${formData.get('user-id')}/follow`,
+      undefined,
+      cookies.get(CookieName.accessToken),
+    );
+
+    if (!res.success) return fail(res.status, { success: false, message: res.message });
+    return { success: true, message: res.message };
+  },
+  unfollow: async ({ request, cookies }) => {
+    const formData = await request.formData();
+
+    const res = await AxiosHandler.delete(
+      `/user/${formData.get('user-id')}/follow`,
+      cookies.get(CookieName.accessToken),
+    );
+
+    if (!res.success) return fail(res.status, { success: false, message: res.message });
+    return { success: true, message: res.message };
+  },
 };

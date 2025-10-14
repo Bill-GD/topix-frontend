@@ -96,4 +96,23 @@ export const actions: Actions = {
     if (!res.success) return fail(res.status, { success: false, message: res.message });
     return { success: true, message: res.message };
   },
+  follow: async ({ params, cookies }) => {
+    const res = await AxiosHandler.post(
+      `/thread/${params.id}/follow`,
+      undefined,
+      cookies.get(CookieName.accessToken),
+    );
+
+    if (!res.success) return fail(res.status, { success: false, message: res.message });
+    return { success: true, message: res.message };
+  },
+  unfollow: async ({ params, cookies }) => {
+    const res = await AxiosHandler.delete(
+      `/thread/${params.id}/follow`,
+      cookies.get(CookieName.accessToken),
+    );
+
+    if (!res.success) return fail(res.status, { success: false, message: res.message });
+    return { success: true, message: res.message };
+  },
 };

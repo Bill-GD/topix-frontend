@@ -3,7 +3,7 @@
 export type ToastMessage = {
   id: number;
   message: string;
-  type: 'success' | 'info' | 'error';
+  type: 'success' | 'error';
 };
 
 export type ApiResponse = {
@@ -36,6 +36,7 @@ export type User = {
   profilePicture: string | null;
   followerCount: number;
   followingCount: number;
+  followed: boolean;
   role: 'user' | 'admin';
 };
 
@@ -87,6 +88,7 @@ export type Thread = {
   joinedGroup: boolean | null;
   tag: Tag | null;
   visibility: 'public' | 'private' | 'hidden';
+  followed: boolean;
   dateCreated: string;
   dateUpdated: string | null;
 };

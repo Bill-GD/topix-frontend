@@ -3,7 +3,7 @@
   import { Button, IconButton } from '$lib/components/button';
   import { DropdownItem, DropdownMenu } from '$lib/components/dropdown';
   import { FloatingLabelInput } from '$lib/components/input';
-  import { HomeLayout } from '$lib/components/layout';
+  import { HomeLayout, Scroller } from '$lib/components/layout';
   import { Divider, Icon, ReturnHeader, VisibilitySelector } from '$lib/components/misc';
   import { Modal, ModalFooter, ModalHeader } from '$lib/components/modal';
   import { Post } from '$lib/components/post';
@@ -18,6 +18,9 @@
   const toaster = getToaster();
   let showModal = $state<'thread' | null>(null);
   let threadTitle = $state<string>('');
+  let pageIndex = 1;
+  let disableScroller = $state<boolean>(false);
+  let posts = $derived(data.posts);
 
   function hideModal() {
     showModal = null;
@@ -34,7 +37,7 @@
   <div class="flex flex-col gap-2 border-b border-gray-700 p-4">
     <div class="flex items-start gap-4">
       <img
-        class="md:profile-picture-md profile-picture-sm"
+        class="profile-picture-sm md:profile-picture-md"
         src={data.user.profilePicture ?? '/images/default-user-profile-icon.jpg'}
         alt="user-profile"
       />
@@ -55,13 +58,6 @@
       <p>Follower: {data.user.followerCount}</p>
 
       <div class="ml-auto flex gap-2 md:gap-4">
-        <IconButton type="dark" class="w-full">
-          <Icon type="follow" size="sm" />
-        </IconButton>
-        <IconButton type="dark" class="w-full">
-          <Icon type="message" size="sm" />
-        </IconButton>
-
         {#if data.self.id === data.user.id}
           <DropdownMenu class="ml-auto h-fit" position="bottom" align="right">
             {#snippet trigger()}
@@ -70,10 +66,47 @@
               </IconButton>
             {/snippet}
 
-            <DropdownItem href="/user/{data.self.username}/hidden/post"
-              >View hidden items</DropdownItem
-            >
+            <DropdownItem href="/user/{data.self.username}/hidden/post">
+              View hidden items
+            </DropdownItem>
           </DropdownMenu>
+        {:else}
+          <IconButton type="dark" class="w-full">
+            <Icon type="message" size="sm" />
+          </IconButton>
+          {#if data.user.followed}
+            <form
+              action="?/unfollow"
+              method="post"
+              use:enhance={() => {
+                return async ({ result, update }) => {
+                  await formResultToast(result, toaster);
+                  await update();
+                };
+              }}
+            >
+              <IconButton type="danger" class="w-full">
+                <Icon type="unfollow" size="sm" />
+              </IconButton>
+              <input type="number" name="user-id" value={data.user.id} hidden readonly />
+            </form>
+          {:else}
+            <form
+              action="?/follow"
+              method="post"
+              use:enhance={() => {
+                return async ({ result, update }) => {
+                  await formResultToast(result, toaster);
+                  await update();
+                };
+              }}
+            >
+              <IconButton type="dark" class="w-full">
+                <Icon type="follow" size="sm" />
+              </IconButton>
+              <input type="number" name="user-id" value={data.user.id} hidden readonly />
+            </form>
+          {/if}
         {/if}
       </div>
     </div>
@@ -88,10 +121,24 @@
     <Divider />
   {/if}
 
-  {#each data.posts as post (post.id)}
+  {#each posts as post (post.id)}
     <Post self={data.self} {post} />
     <Divider />
   {/each}
+
+  <Scroller
+    disabled={disableScroller}
+    attachmentCallback={async () => {
+      const res = await fetch(`/api/posts?username=${data.user.username}&page=${++pageIndex}`);
+      const newData = await res.json();
+      if (newData.length <= 0) disableScroller = true;
+      posts = [...posts, ...newData];
+    }}
+    detachCleanup={() => {
+      pageIndex = 1;
+      disableScroller = false;
+    }}
+  />
 
   {#snippet right()}
     <div class="flex flex-col gap-4">

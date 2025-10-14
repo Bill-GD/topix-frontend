@@ -1,5 +1,5 @@
 import type { ToastMessage } from '$lib/utils/types';
-import { setContext, getContext } from 'svelte';
+import { getContext, setContext } from 'svelte';
 
 export class Toaster {
   #toastId = 0;
@@ -7,7 +7,7 @@ export class Toaster {
 
   addToast(message: string, type: 'success' | 'info' | 'error') {
     this.toasts.push({ id: this.#toastId++, message, type });
-    setTimeout(() => this.toasts.shift(), 4000);
+    setTimeout(() => this.toasts.shift(), 4100);
   }
 }
 

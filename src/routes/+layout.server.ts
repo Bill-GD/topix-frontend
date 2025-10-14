@@ -4,7 +4,7 @@ import { CookieName } from '$lib/utils/types';
 import { error, redirect } from '@sveltejs/kit';
 import type { LayoutServerLoad } from './$types';
 
-export const load: LayoutServerLoad = async ({ locals, cookies, route }) => {
+export const load: LayoutServerLoad = async ({ locals, cookies, route, url }) => {
   if (!locals.hasAT) {
     if (!locals.hasRT) {
       if (route.id?.includes('(auth)')) return;
@@ -35,5 +35,6 @@ export const load: LayoutServerLoad = async ({ locals, cookies, route }) => {
     error(res.status, { message: res.message, status: res.status });
   }
 
-  if (locals.hasAT && route.id?.includes('(auth)')) redirect(303, '/home');
+  if (locals.hasAT && (url.pathname === '/' || route.id?.includes('(auth)')))
+    redirect(303, '/home');
 };

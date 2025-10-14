@@ -3,7 +3,7 @@
   import Flair from '../misc/Flair.svelte';
   import Icon from '../misc/Icon.svelte';
 
-  let { thread }: { thread: Thread } = $props();
+  let { thread, showOwner = false }: { thread: Thread; showOwner?: boolean } = $props();
 </script>
 
 <a
@@ -20,9 +20,15 @@
         <Icon type="eyeSlash" size="xs" />
       {/if}
     </div>
-    <span class="line-clamp-1 text-gray-500">
-      {thread.postCount} post{thread.postCount > 1 ? 's' : ''}
-    </span>
+    <div class="flex gap-2 text-gray-500">
+      {#if showOwner}
+        <span class="line-clamp-1">by @{thread.owner.username}</span>
+        -
+      {/if}
+      <span class="line-clamp-1">
+        {thread.postCount} post{thread.postCount > 1 ? 's' : ''}
+      </span>
+    </div>
   </div>
 
   {#if thread.tag}

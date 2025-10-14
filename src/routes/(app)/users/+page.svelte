@@ -1,7 +1,7 @@
 <script lang="ts">
   import { enhance } from '$app/forms';
   import { Button, IconButton } from '$lib/components/button';
-  import { HomeLayout } from '$lib/components/layout';
+  import { HomeLayout, Scroller } from '$lib/components/layout';
   import { Divider, Icon, ReturnHeader } from '$lib/components/misc';
   import { Modal, ModalBody, ModalFooter, ModalHeader } from '$lib/components/modal';
   import { getToaster } from '$lib/components/toast';
@@ -13,6 +13,9 @@
   const toaster = getToaster();
   let showModal = $state<'delete' | null>(null);
   let username = $state<string>('');
+  let pageIndex = 1;
+  let disableScroller = $state<boolean>(false);
+  let users = $derived(data.users);
 
   function hideModal() {
     showModal = null;
@@ -27,7 +30,7 @@
   <ReturnHeader>Users</ReturnHeader>
 
   <div class="flex flex-col">
-    {#each data.users as user}
+    {#each users as user}
       <a
         class="flex items-center gap-4 p-4 hover:bg-gray-300/40 dark:hover:bg-gray-900/40"
         href="/user/{user.username}"
@@ -60,6 +63,20 @@
       </a>
       <Divider />
     {/each}
+
+    <Scroller
+      disabled={disableScroller}
+      attachmentCallback={async () => {
+        const res = await fetch(`/api/users?page=${++pageIndex}`);
+        const newData = await res.json();
+        if (newData.length <= 0) disableScroller = true;
+        users = [...users, ...newData];
+      }}
+      detachCleanup={() => {
+        pageIndex = 1;
+        disableScroller = false;
+      }}
+    />
   </div>
 
   <Modal show={showModal === 'delete'} backdropCallback={hideModal} center>
