@@ -2,7 +2,7 @@
   import { enhance } from '$app/forms';
   import { Button } from '$lib/components/button';
   import { FloatingLabelInput } from '$lib/components/input';
-  import { HomeLayout } from '$lib/components/layout';
+  import { HomeLayout, Scroller } from '$lib/components/layout';
   import { Divider, Icon, ReturnHeader, VisibilitySelector } from '$lib/components/misc';
   import { Modal, ModalBody, ModalFooter, ModalHeader } from '$lib/components/modal';
   import { getToaster } from '$lib/components/toast';
@@ -16,6 +16,9 @@
   let showModal = $state<'create' | null>(null);
   let groupName = $state<string>('');
   let bannerValue = $state<string>('');
+  let pageIndex = 1;
+  let disableScroller = $state<boolean>(false);
+  let groups = $derived(data.groups);
 
   function hideModal() {
     showModal = null;
@@ -46,7 +49,7 @@
       </p>
     {:else}
       <Divider />
-      {#each data.groups as group}
+      {#each groups as group}
         <a
           class="flex items-center gap-4 p-4 hover:bg-gray-300/40 dark:hover:bg-gray-900/40"
           href="/groups/{group.id}"
@@ -80,6 +83,20 @@
         </a>
         <Divider />
       {/each}
+
+      <Scroller
+        disabled={disableScroller}
+        attachmentCallback={async () => {
+          const res = await fetch(`/api/groups?page=${++pageIndex}`);
+          const newData = await res.json();
+          if (newData.length <= 0) disableScroller = true;
+          groups = [...groups, ...newData];
+        }}
+        detachCleanup={() => {
+          pageIndex = 1;
+          disableScroller = false;
+        }}
+      />
     {/if}
   </div>
 

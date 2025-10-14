@@ -3,7 +3,7 @@
   import { Button, IconButton } from '$lib/components/button';
   import { DropdownItem, DropdownMenu } from '$lib/components/dropdown';
   import { FloatingLabelInput } from '$lib/components/input';
-  import { HomeLayout } from '$lib/components/layout';
+  import { HomeLayout, Scroller } from '$lib/components/layout';
   import { Divider, Icon, ReturnHeader } from '$lib/components/misc';
   import { Modal, ModalBody, ModalFooter, ModalHeader } from '$lib/components/modal';
   import { Post } from '$lib/components/post';
@@ -18,6 +18,9 @@
   const toaster = getToaster();
   let showModal = $state<'thread' | 'leave' | 'delete' | null>(null);
   let threadTitle = $state<string>('');
+  let pageIndex = 1;
+  let disableScroller = $state<boolean>(false);
+  let posts = $derived(data.posts);
 
   function hideModal() {
     showModal = null;
@@ -115,14 +118,29 @@
 
   {#if data.group.visibility === 'private' && !data.group.status}
     <p class="empty-noti-text">You have to join to see posts of this group.</p>
+  {:else if data.posts.length <= 0}
+    <p class="empty-noti-text">This group has no post.</p>
   {:else}
-    {#if data.posts.length <= 0}
-      <p class="empty-noti-text">This group has no post.</p>
-    {/if}
-    {#each data.posts as post}
+    {#each posts as post}
       <Divider />
       <Post self={data.self} {post} compact />
     {/each}
+
+    <Scroller
+      disabled={disableScroller}
+      attachmentCallback={async () => {
+        const res = await fetch(
+          `/api/posts?groupId=${data.group.id}&accepted=true&page=${++pageIndex}`,
+        );
+        const newData = await res.json();
+        if (newData.length <= 0) disableScroller = true;
+        posts = [...posts, ...newData];
+      }}
+      detachCleanup={() => {
+        pageIndex = 1;
+        disableScroller = false;
+      }}
+    />
   {/if}
 
   {#snippet right()}

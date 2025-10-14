@@ -3,7 +3,7 @@
   import { Button, IconButton } from '$lib/components/button';
   import { DropdownItem, DropdownMenu } from '$lib/components/dropdown';
   import { FloatingLabelInput } from '$lib/components/input';
-  import { HomeLayout } from '$lib/components/layout';
+  import { HomeLayout, Scroller } from '$lib/components/layout';
   import { Divider, Icon, ReturnHeader, VisibilitySelector } from '$lib/components/misc';
   import { Modal, ModalFooter, ModalHeader } from '$lib/components/modal';
   import { Post } from '$lib/components/post';
@@ -18,6 +18,9 @@
   const toaster = getToaster();
   let showModal = $state<'thread' | null>(null);
   let threadTitle = $state<string>('');
+  let pageIndex = 1;
+  let disableScroller = $state<boolean>(false);
+  let posts = $derived(data.posts);
 
   function hideModal() {
     showModal = null;
@@ -118,10 +121,24 @@
     <Divider />
   {/if}
 
-  {#each data.posts as post (post.id)}
+  {#each posts as post (post.id)}
     <Post self={data.self} {post} />
     <Divider />
   {/each}
+
+  <Scroller
+    disabled={disableScroller}
+    attachmentCallback={async () => {
+      const res = await fetch(`/api/posts?username=${data.user.username}&page=${++pageIndex}`);
+      const newData = await res.json();
+      if (newData.length <= 0) disableScroller = true;
+      posts = [...posts, ...newData];
+    }}
+    detachCleanup={() => {
+      pageIndex = 1;
+      disableScroller = false;
+    }}
+  />
 
   {#snippet right()}
     <div class="flex flex-col gap-4">

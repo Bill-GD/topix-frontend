@@ -5,40 +5,14 @@
   import { Post } from '$lib/components/post';
   import { ThreadOverview } from '$lib/components/thread';
   import { capitalize } from '$lib/utils/helpers';
-  import type { Attachment } from 'svelte/attachments';
   import type { PageProps } from './$types';
 
   let { data }: PageProps = $props();
   const tab = $derived(page.url.searchParams.get('tab') ?? 'new');
   const items = $derived(['new', 'following']);
   let pageIndex = 1;
-  let isFetching = $state<boolean>(false);
   let disableScroller = $state<boolean>(false);
   let posts = $derived(data.posts);
-
-  function scrollerAttachment(following: boolean = false): Attachment {
-    return (node) => {
-      const observer = new IntersectionObserver(async (entries, observer) => {
-        if (disableScroller) return;
-        if (!entries[0].isIntersecting) return;
-
-        isFetching = true;
-        const res = await fetch(`/api/posts?page=${++pageIndex}${following ? '&following' : ''}`);
-        const newPosts = await res.json();
-        if (newPosts.length <= 0) disableScroller = true;
-        posts = [...posts, ...newPosts];
-        isFetching = false;
-      });
-
-      observer.observe(node);
-
-      return () => {
-        pageIndex = 1;
-        disableScroller = false;
-        observer.disconnect();
-      };
-    };
-  }
 </script>
 
 <svelte:head>
@@ -71,7 +45,7 @@
       <Divider />
     {/each}
   {:else if tab === 'following'}
-    {#if posts!.length <= 0}
+    {#if data.posts!.length <= 0}
       <p class="empty-noti-text">You haven't follow anyone or thread.</p>
     {:else}
       {#each posts as post (post.id)}
@@ -81,15 +55,23 @@
     {/if}
   {/if}
 
-  <Scroller {@attach scrollerAttachment(tab === 'following')} disabled={disableScroller}>
-    {#if isFetching}
-      Loading more...
-    {:else if disableScroller}
-      No more posts.
-    {:else}
-      Load more.
-    {/if}
-  </Scroller>
+  {#key tab}
+    <Scroller
+      disabled={disableScroller}
+      attachmentCallback={async () => {
+        const res = await fetch(
+          `/api/posts?page=${++pageIndex}${tab === 'following' ? '&following' : ''}`,
+        );
+        const newData = await res.json();
+        if (newData.length <= 0) disableScroller = true;
+        posts = [...posts, ...newData];
+      }}
+      detachCleanup={() => {
+        pageIndex = 1;
+        disableScroller = false;
+      }}
+    />
+  {/key}
 
   {#snippet right()}
     {#if tab === 'new'}

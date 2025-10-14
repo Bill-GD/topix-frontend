@@ -1,7 +1,7 @@
 <script lang="ts">
   import { enhance } from '$app/forms';
   import { Button } from '$lib/components/button';
-  import { HomeLayout } from '$lib/components/layout';
+  import { HomeLayout, Scroller } from '$lib/components/layout';
   import { Divider, ReturnHeader } from '$lib/components/misc';
   import { Modal, ModalBody, ModalFooter, ModalHeader } from '$lib/components/modal';
   import { getToaster } from '$lib/components/toast';
@@ -14,6 +14,9 @@
   const items = ['all', 'pending'];
   let showModal = $state<'remove' | 'owner' | null>(null);
   let selectedMemberId = $state<number>(0);
+  let pageIndex = 1;
+  let disableScroller = $state<boolean>(false);
+  let members = $derived(data.members);
 
   function hideModal() {
     showModal = null;
@@ -47,7 +50,7 @@
 
   <div class="flex flex-col">
     {#if params.section === 'all'}
-      {#each data.members as user}
+      {#each members as user}
         <div
           class="flex flex-col gap-2 p-4 hover:bg-gray-300/40 md:flex-row dark:hover:bg-gray-900/40"
         >
@@ -95,63 +98,83 @@
     {:else if params.section === 'pending'}
       {#if data.members.length <= 0}
         <p class="empty-noti-text">No pending members.</p>
-      {/if}
-      {#each data.members as user}
-        <div
-          class="flex flex-col gap-2 p-4 hover:bg-gray-300/40 md:flex-row dark:hover:bg-gray-900/40"
-        >
-          <div class="flex items-center gap-4">
-            <img
-              class="profile-picture-md"
-              src={user.profilePicture ?? '/images/default-user-profile-icon.jpg'}
-              alt="profile"
-            />
-            <div class="flex flex-col gap-2">
-              <a class="flex items-baseline gap-2" href="/user/{user.username}">
-                <span class="text-xl font-semibold">{user.displayName}</span>
-                <span class="text-gray-500">@{user.username}</span>
-              </a>
-              <p>Requested at {new Date(user.dateRequested).toDateString()}</p>
+      {:else}
+        {#each members as user}
+          <div
+            class="flex flex-col gap-2 p-4 hover:bg-gray-300/40 md:flex-row dark:hover:bg-gray-900/40"
+          >
+            <div class="flex items-center gap-4">
+              <img
+                class="profile-picture-md"
+                src={user.profilePicture ?? '/images/default-user-profile-icon.jpg'}
+                alt="profile"
+              />
+              <div class="flex flex-col gap-2">
+                <a class="flex items-baseline gap-2" href="/user/{user.username}">
+                  <span class="text-xl font-semibold">{user.displayName}</span>
+                  <span class="text-gray-500">@{user.username}</span>
+                </a>
+                <p>Requested at {new Date(user.dateRequested).toDateString()}</p>
+              </div>
             </div>
-          </div>
 
-          {#if data.self.id === data.group.owner.id}
-            <form
-              class="flex items-center gap-2 md:ml-auto"
-              action="?/accept-member"
-              method="post"
-              use:enhance={() => {
-                return async ({ result, update }) => {
-                  await formResultToast(result, toaster);
-                  await update();
-                };
-              }}
-            >
-              <input type="number" name="member-id" value={selectedMemberId} hidden readonly />
-              <Button
-                class="w-full md:w-fit"
-                type="success"
-                onclick={() => (selectedMemberId = user.id)}
-              >
-                Accept
-              </Button>
-              <Button
-                class="w-full md:w-fit"
-                type="danger"
-                onclick={(ev) => {
-                  ev.preventDefault();
-                  selectedMemberId = user.id;
-                  showModal = 'remove';
+            {#if data.self.id === data.group.owner.id}
+              <form
+                class="flex items-center gap-2 md:ml-auto"
+                action="?/accept-member"
+                method="post"
+                use:enhance={() => {
+                  return async ({ result, update }) => {
+                    await formResultToast(result, toaster);
+                    await update();
+                  };
                 }}
               >
-                Remove
-              </Button>
-            </form>
-          {/if}
-        </div>
-        <Divider />
-      {/each}
+                <input type="number" name="member-id" value={selectedMemberId} hidden readonly />
+                <Button
+                  class="w-full md:w-fit"
+                  type="success"
+                  onclick={() => (selectedMemberId = user.id)}
+                >
+                  Accept
+                </Button>
+                <Button
+                  class="w-full md:w-fit"
+                  type="danger"
+                  onclick={(ev) => {
+                    ev.preventDefault();
+                    selectedMemberId = user.id;
+                    showModal = 'remove';
+                  }}
+                >
+                  Remove
+                </Button>
+              </form>
+            {/if}
+          </div>
+          <Divider />
+        {/each}
+      {/if}
     {/if}
+
+    {#key params.section}
+      <Scroller
+        hideText
+        disabled={disableScroller}
+        attachmentCallback={async () => {
+          const res = await fetch(
+            `/api/groups?id=${data.group.id}&members&accepted=${params.section === 'all'}&page=${++pageIndex}`,
+          );
+          const newData = await res.json();
+          if (newData.length <= 0) disableScroller = true;
+          members = [...members, ...newData];
+        }}
+        detachCleanup={() => {
+          pageIndex = 1;
+          disableScroller = false;
+        }}
+      />
+    {/key}
   </div>
 
   {#snippet right()}

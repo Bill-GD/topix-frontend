@@ -50,7 +50,7 @@
     </div>
 
     {#if post.tag}
-      <Flair tag={post.tag} />
+      <Flair tag={post.tag} compact />
     {/if}
 
     <span class="whitespace-pre-line">{post.content}</span>
