@@ -21,7 +21,7 @@
 
 <HomeLayout self={data.self}>
   <div
-    class="no-scrollbar sticky top-0 z-10 flex overflow-x-scroll border-b border-gray-400 bg-zinc-100 dark:border-gray-700 dark:bg-zinc-950"
+    class="no-scrollbar sticky top-0 z-[2] flex overflow-x-scroll border-b border-gray-400 bg-zinc-50 dark:border-gray-700 dark:bg-zinc-950"
   >
     {#each items as item}
       <a
@@ -39,21 +39,21 @@
     {/each}
   </div>
 
-  {#if tab === 'new'}
-    {#each posts as post (post.id)}
-      <Post self={data.self} {post} />
-      <Divider />
-    {/each}
-  {:else if tab === 'following'}
-    {#if data.posts!.length <= 0}
-      <p class="empty-noti-text">You haven't follow anyone or thread.</p>
-    {:else}
+  <div class="mx-2 mt-4 flex flex-col gap-4 md:mx-0">
+    {#if tab === 'new'}
       {#each posts as post (post.id)}
-        <Post self={data.self} {post} showThreadAndGroupName />
-        <Divider />
+        <Post self={data.self} {post} />
       {/each}
+    {:else if tab === 'following'}
+      {#if data.posts!.length <= 0}
+        <p class="empty-noti-text">You haven't follow anyone or thread.</p>
+      {:else}
+        {#each posts as post (post.id)}
+          <Post self={data.self} {post} showThreadAndGroupName />
+        {/each}
+      {/if}
     {/if}
-  {/if}
+  </div>
 
   {#key tab}
     <Scroller
@@ -75,7 +75,7 @@
 
   {#snippet right()}
     {#if tab === 'new'}
-      <div class="rounded-md border border-gray-700 2xl:max-w-1/2">
+      <div class="rounded-md border border-gray-700">
         <div class="flex items-baseline p-4">
           <p class="text-xl font-semibold">Newly updated threads</p>
         </div>

@@ -2,9 +2,7 @@
 
 import type { Snippet } from 'svelte';
 import type {
-  ClassValue,
-  HTMLAttributeAnchorTarget,
-  HTMLInputTypeAttribute,
+  ClassValue, HTMLAttributeAnchorTarget, HTMLInputTypeAttribute,
 } from 'svelte/elements';
 import { faThumbsUp as faRegularThumbsUp } from '@fortawesome/free-regular-svg-icons/faThumbsUp';
 import { faBars } from '@fortawesome/free-solid-svg-icons/faBars';
@@ -12,7 +10,7 @@ import { faCheck } from '@fortawesome/free-solid-svg-icons/faCheck';
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons/faChevronLeft';
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons/faChevronRight';
 import { faCircleCheck } from '@fortawesome/free-solid-svg-icons/faCircleCheck';
-import { faEllipsisVertical } from '@fortawesome/free-solid-svg-icons/faEllipsisVertical';
+import { faEllipsisH } from '@fortawesome/free-solid-svg-icons/faEllipsisH';
 import { faEye } from '@fortawesome/free-solid-svg-icons/faEye';
 import { faEyeSlash } from '@fortawesome/free-solid-svg-icons/faEyeSlash';
 import { faFaceAngry } from '@fortawesome/free-solid-svg-icons/faFaceAngry';
@@ -36,12 +34,15 @@ import { faUserMinus } from '@fortawesome/free-solid-svg-icons/faUserMinus';
 import { faUserPlus } from '@fortawesome/free-solid-svg-icons/faUserPlus';
 import { faVideo } from '@fortawesome/free-solid-svg-icons/faVideo';
 import { faXmark } from '@fortawesome/free-solid-svg-icons/faXmark';
-import type { CurrentUser, Post, Tag, ToastMessage, UnaryVoidFunction } from '../utils/types';
+import type {
+  CurrentUser, Post, Tag, ToastMessage,
+  UnaryVoidFunction,
+} from '../utils/types';
 
 export type ButtonType = 'primary' | 'danger' | 'dark' | 'success';
 
 export const IconSize = {
-  xs: ['h-3', 'w-3'],
+  xs: ['h-4', 'w-4'],
   sm: ['h-5', 'w-5'],
   md: ['h-6', 'w-6'],
   lg: ['h-8', 'w-8'],
@@ -70,7 +71,7 @@ export const Icons = {
   group: faUserGroup,
   message: faMessage,
   reply: faReply,
-  menu: faEllipsisVertical,
+  menu: faEllipsisH,
   close: faXmark,
   noReaction: faRegularThumbsUp,
   like: faThumbsUp,
@@ -204,8 +205,8 @@ export interface PostProps {
   self: CurrentUser;
   post: Post;
   detail?: boolean;
-  compact?: boolean;
-  parent?: boolean;
+  hideReaction?: boolean;
+  hideOptions?: boolean;
   hideReplyMark?: boolean;
   showThreadAndGroupName?: boolean;
   allowEditVisibility?: boolean;
