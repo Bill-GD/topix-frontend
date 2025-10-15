@@ -8,7 +8,7 @@
     peekable = false,
     type,
     class: className,
-    labelClass = 'bg-gray-950',
+    labelClass = 'bg-zinc-950',
     name: inputName,
     required = false,
     value = $bindable(''),

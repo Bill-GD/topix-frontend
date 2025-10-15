@@ -21,14 +21,14 @@
 
 <HomeLayout self={data.self}>
   <div
-    class="no-scrollbar sticky top-0 z-10 flex overflow-x-scroll border-b border-gray-400 bg-gray-100 dark:border-gray-700 dark:bg-gray-950"
+    class="no-scrollbar sticky top-0 z-10 flex overflow-x-scroll border-b border-gray-400 bg-zinc-100 dark:border-gray-700 dark:bg-zinc-950"
   >
     {#each items as item}
       <a
         class={[
           'flex-1 px-4 py-2 text-center',
           tab === item
-            ? 'bg-gray-300/40 font-semibold dark:bg-gray-800/40 dark:text-gray-300'
+            ? 'bg-zinc-300/40 font-semibold dark:bg-zinc-800/40 dark:text-gray-300'
             : 'text-gray-500',
         ]}
         href="?tab={item}"

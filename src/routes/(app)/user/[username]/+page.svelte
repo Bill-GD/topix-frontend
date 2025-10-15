@@ -174,7 +174,7 @@
         {:else}
           {#each data.groups as group}
             <Divider /><a
-              class="flex items-center gap-4 px-4 py-2 hover:bg-gray-300/40 dark:hover:bg-gray-900/40"
+              class="flex items-center gap-4 px-4 py-2 hover:bg-zinc-300/40 dark:hover:bg-zinc-900/40"
               href="/groups/{group.id}"
             >
               <div class="flex flex-col gap-2">
@@ -224,7 +224,7 @@
       <FloatingLabelInput
         class="w-full"
         name="thread-title"
-        labelClass="bg-gray-200 dark:bg-gray-900"
+        labelClass="bg-zinc-200 dark:bg-zinc-900"
         bind:value={threadTitle}
       >
         Title

@@ -38,7 +38,7 @@
         class={[
           'w-full py-2 text-center',
           params.section === item
-            ? `bg-gray-300/40 font-semibold dark:bg-gray-800/40 ${item.includes('danger') ? 'text-red-600' : 'dark:text-gray-300'}`
+            ? `bg-zinc-300/40 font-semibold dark:bg-zinc-800/40 ${item.includes('danger') ? 'text-red-600' : 'dark:text-gray-300'}`
             : `${item.includes('danger') ? 'text-red-800' : 'text-gray-500'}`,
         ]}
         href={item}
@@ -52,7 +52,7 @@
     {#if params.section === 'all'}
       {#each members as user}
         <div
-          class="flex flex-col gap-2 p-4 hover:bg-gray-300/40 md:flex-row dark:hover:bg-gray-900/40"
+          class="flex flex-col gap-2 p-4 hover:bg-zinc-300/40 md:flex-row dark:hover:bg-zinc-900/40"
         >
           <div class="flex items-center gap-4">
             <img
@@ -101,7 +101,7 @@
       {:else}
         {#each members as user}
           <div
-            class="flex flex-col gap-2 p-4 hover:bg-gray-300/40 md:flex-row dark:hover:bg-gray-900/40"
+            class="flex flex-col gap-2 p-4 hover:bg-zinc-300/40 md:flex-row dark:hover:bg-zinc-900/40"
           >
             <div class="flex items-center gap-4">
               <img

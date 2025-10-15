@@ -29,7 +29,7 @@
   <div class="flex flex-col gap-4">
     <FloatingLabelInput
       class="w-full"
-      labelClass="bg-gray-100 dark:bg-gray-950"
+      labelClass="bg-zinc-100 dark:bg-zinc-950"
       name="email"
       type="email"
       required>Email</FloatingLabelInput
@@ -37,7 +37,7 @@
 
     <FloatingLabelInput
       class="w-full"
-      labelClass="bg-gray-100 dark:bg-gray-950"
+      labelClass="bg-zinc-100 dark:bg-zinc-950"
       name="username"
       type="text"
       required
@@ -47,7 +47,7 @@
 
     <FloatingLabelInput
       class="w-full"
-      labelClass="bg-gray-100 dark:bg-gray-950"
+      labelClass="bg-zinc-100 dark:bg-zinc-950"
       name="password"
       type="password"
       peekable
@@ -58,7 +58,7 @@
 
     <FloatingLabelInput
       class="w-full"
-      labelClass="bg-gray-100 dark:bg-gray-950"
+      labelClass="bg-zinc-100 dark:bg-zinc-950"
       name="confirm-password"
       type="password"
       peekable

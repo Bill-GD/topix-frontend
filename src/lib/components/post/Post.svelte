@@ -153,7 +153,7 @@
           <div class="ignore-click relative min-w-1/2">
             {#if imageIndex > 0}
               <IconButton
-                class="absolute top-1/2 left-0 h-full -translate-y-1/2 hover:bg-gray-200 dark:hover:bg-gray-900/20"
+                class="absolute top-1/2 left-0 h-full -translate-y-1/2 hover:bg-zinc-200 dark:hover:bg-zinc-900/20"
                 round={false}
                 onclick={() => (imageIndex = Math.max(0, imageIndex - 1))}
               >
@@ -182,7 +182,7 @@
 
             {#if imageIndex < post.mediaPaths.length - 1}
               <IconButton
-                class="absolute top-1/2 right-0 h-full -translate-y-1/2 hover:bg-gray-200 dark:hover:bg-gray-900/20"
+                class="absolute top-1/2 right-0 h-full -translate-y-1/2 hover:bg-zinc-200 dark:hover:bg-zinc-900/20"
                 round={false}
                 onclick={() => (imageIndex = Math.min(post.mediaPaths.length - 1, imageIndex + 1))}
               >
@@ -220,7 +220,7 @@
           <DropdownMenu class="ignore-click" position="top" align="left" horizontal>
             {#snippet trigger()}
               <div
-                class="react-button flex items-center gap-2 rounded-md p-2 hover:bg-gray-300 dark:hover:bg-gray-800/60"
+                class="react-button flex items-center gap-2 rounded-md p-2 hover:bg-zinc-300 dark:hover:bg-zinc-800/60"
               >
                 <Icon
                   type={(reaction ?? 'noReaction') as keyof typeof reactions}
@@ -263,7 +263,7 @@
   {#if !parent}
     <DropdownMenu class="ignore-click ml-auto h-fit" position="bottom" align="right">
       {#snippet trigger()}
-        <IconButton class="hover:bg-gray-300 dark:hover:bg-gray-800" round>
+        <IconButton class="hover:bg-zinc-300 dark:hover:bg-zinc-800" round>
           <Icon type="menu" size="sm" />
         </IconButton>
       {/snippet}

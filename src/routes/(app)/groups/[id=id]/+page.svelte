@@ -61,7 +61,7 @@
 
       <div class="ml-auto flex items-center gap-2">
         {#if data.group.status !== null}
-          <Button class="hover:bg-gray-800" type="primary" disabled>
+          <Button class="hover:bg-zinc-800" type="primary" disabled>
             {data.group.status ? 'Joined' : 'Pending'}
           </Button>
         {:else}
@@ -76,7 +76,7 @@
               };
             }}
           >
-            <Button class="hover:bg-gray-800" type="primary">Join</Button>
+            <Button class="hover:bg-zinc-800" type="primary">Join</Button>
           </form>
         {/if}
 
@@ -229,7 +229,7 @@
         <FloatingLabelInput
           class="w-full"
           name="thread-title"
-          labelClass="bg-gray-200 dark:bg-gray-900"
+          labelClass="bg-zinc-200 dark:bg-zinc-900"
           bind:value={threadTitle}
         >
           Title
@@ -237,7 +237,7 @@
 
         {#if data.tags && data.tags.length > 0}
           <select
-            class="rounded-md border-gray-700 bg-gray-200 dark:bg-gray-900"
+            class="rounded-md border-gray-700 bg-zinc-200 dark:bg-zinc-900"
             name="tag-id"
             id="post-tag-select"
           >

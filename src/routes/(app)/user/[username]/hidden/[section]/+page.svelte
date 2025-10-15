@@ -1,7 +1,7 @@
 <script lang="ts">
   import { HomeLayout } from '$lib/components/layout';
   import { Divider, Icon, ReturnHeader } from '$lib/components/misc';
-  import { PendingPost, Post } from '$lib/components/post';
+  import { Post } from '$lib/components/post';
   import { ThreadOverview } from '$lib/components/thread';
   import { capitalize } from '$lib/utils/helpers';
   import type { PageProps } from './$types';
@@ -26,7 +26,7 @@
         class={[
           'w-full py-2 text-center',
           params.section === item
-            ? 'bg-gray-300/40 font-semibold dark:bg-gray-800/40 dark:text-gray-300'
+            ? 'bg-zinc-300/40 font-semibold dark:bg-zinc-800/40 dark:text-gray-300'
             : 'text-gray-500',
         ]}
         href={item}
@@ -59,7 +59,7 @@
       {/if}
       {#each data.groups! as group (group.id)}
         <a
-          class="flex items-center gap-4 p-4 hover:bg-gray-300/40 dark:hover:bg-gray-900/40"
+          class="flex items-center gap-4 p-4 hover:bg-zinc-300/40 dark:hover:bg-zinc-900/40"
           href="/groups/{group.id}"
         >
           <div class="w-30 overflow-hidden rounded-md">

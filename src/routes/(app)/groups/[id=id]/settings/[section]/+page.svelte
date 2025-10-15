@@ -43,7 +43,7 @@
         class={[
           'w-full py-2 text-center',
           params.section === item
-            ? 'bg-gray-300/40 font-semibold dark:bg-gray-800/40 dark:text-gray-300'
+            ? 'bg-zinc-300/40 font-semibold dark:bg-zinc-800/40 dark:text-gray-300'
             : 'text-gray-500',
         ]}
         href={item}
@@ -185,7 +185,7 @@
         <div class="flex items-center gap-4">
           <FloatingLabelInput
             name="name"
-            labelClass="bg-gray-200 dark:bg-gray-900"
+            labelClass="bg-zinc-200 dark:bg-zinc-900"
             bind:value={tagName}
             clearable
           >

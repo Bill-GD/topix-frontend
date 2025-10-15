@@ -32,7 +32,7 @@
   <div class="flex flex-col">
     {#each users as user}
       <a
-        class="flex items-center gap-4 p-4 hover:bg-gray-300/40 dark:hover:bg-gray-900/40"
+        class="flex items-center gap-4 p-4 hover:bg-zinc-300/40 dark:hover:bg-zinc-900/40"
         href="/user/{user.username}"
       >
         <img
@@ -51,7 +51,7 @@
 
         {#if user.role !== 'admin'}
           <IconButton
-            class="ml-auto hover:bg-gray-300 dark:hover:bg-gray-800"
+            class="ml-auto hover:bg-zinc-300 dark:hover:bg-zinc-800"
             onclick={() => {
               showModal = 'delete';
               username = user.username;

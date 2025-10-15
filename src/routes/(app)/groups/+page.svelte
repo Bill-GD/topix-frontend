@@ -35,7 +35,7 @@
   <!-- svelte-ignore a11y_click_events_have_key_events -->
   <!-- svelte-ignore a11y_no_static_element_interactions -->
   <div
-    class="flex w-full cursor-pointer items-center justify-center gap-2 py-4 hover:bg-gray-300/40 dark:hover:bg-gray-800/40"
+    class="flex w-full cursor-pointer items-center justify-center gap-2 py-4 hover:bg-zinc-300/40 dark:hover:bg-zinc-800/40"
     onclick={() => (showModal = 'create')}
   >
     <span class="font-semibold">Create group</span>
@@ -51,7 +51,7 @@
       <Divider />
       {#each groups as group}
         <a
-          class="flex items-center gap-4 p-4 hover:bg-gray-300/40 dark:hover:bg-gray-900/40"
+          class="flex items-center gap-4 p-4 hover:bg-zinc-300/40 dark:hover:bg-zinc-900/40"
           href="/groups/{group.id}"
         >
           <div class="w-30 overflow-hidden rounded-md">
@@ -116,7 +116,7 @@
       >
         <FloatingLabelInput
           class="w-full"
-          labelClass="bg-gray-200 dark:bg-gray-900"
+          labelClass="bg-zinc-200 dark:bg-zinc-900"
           name="group-name"
           bind:value={groupName}
           required

@@ -8,15 +8,15 @@
     class: className,
     buttonType,
     type,
-    round = true,
+    round = false,
   }: IconButtonProps = $props();
 
-  const buttonClass = type ? `btn-${type}` : 'hover:bg-gray-200 dark:hover:bg-gray-900 p-3';
+  const buttonClass = type ? `btn-${type}` : 'hover:bg-zinc-300 dark:hover:bg-zinc-900';
 </script>
 
 {#if onclick}
   <button
-    class={['main-button', buttonClass, round && 'rounded-full', className]}
+    class={['main-button', buttonClass, round ? 'rounded-full' : 'rounded-md', className]}
     onclick={(ev) => {
       ev.stopPropagation();
       ev.preventDefault();
@@ -29,7 +29,7 @@
   </button>
 {:else}
   <button
-    class={['main-button', buttonClass, round && 'rounded-full', className]}
+    class={['main-button', buttonClass, round ? 'rounded-full' : 'rounded-md', className]}
     type={buttonType}
     {disabled}
   >
@@ -41,6 +41,6 @@
   @reference '@/app.css';
 
   .main-button {
-    @apply flex w-fit cursor-pointer items-center p-2;
+    @apply flex w-fit cursor-pointer items-center;
   }
 </style>

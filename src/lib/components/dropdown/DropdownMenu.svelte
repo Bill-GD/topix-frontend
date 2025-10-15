@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { tick } from 'svelte';
   import type { DropdownMenuProps } from '$lib/components/types';
+  import { tick } from 'svelte';
   import { scale } from 'svelte/transition';
 
   let {
@@ -50,14 +50,14 @@
       <div
         class={[
           'dropdown-menu',
-          'absolute z-20 rounded-lg bg-gray-300 transition-all dark:bg-gray-800',
+          'absolute z-20 rounded-lg bg-zinc-100 box-drop-shadow transition-all dark:bg-zinc-800',
           showMenu ? 'scale-100 opacity-100 duration-100' : 'scale-50 opacity-0 duration-200',
         ]}
         id="dropdown-menu-{id}"
         in:scale={{ start: 0.75, duration: 100 }}
         out:scale={{ start: 1, duration: 200 }}
       >
-        <ul class={['py-2 dark:text-white', horizontal && 'flex']}>
+        <ul class={['p-1 dark:text-white', horizontal && 'flex']}>
           {@render children()}
         </ul>
       </div>

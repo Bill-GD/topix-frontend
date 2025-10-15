@@ -40,7 +40,7 @@
         class={[
           'w-full py-2 text-center',
           params.section === item
-            ? 'bg-gray-300/40 font-semibold dark:bg-gray-800/40 dark:text-gray-300'
+            ? 'bg-zinc-300/40 font-semibold dark:bg-zinc-800/40 dark:text-gray-300'
             : 'text-gray-500',
         ]}
         href={item}
@@ -124,11 +124,11 @@
         <span class="text-xl">Theme</span>
         <div class="flex w-full justify-center gap-4">
           <label
-            class="theme-input flex w-full items-center rounded-lg border border-gray-400 bg-gray-100 p-6 text-black md:w-fit md:gap-4"
+            class="theme-input flex w-full items-center rounded-lg border border-gray-400 bg-zinc-100 p-6 text-black md:w-fit md:gap-4"
             for="light-theme"
           >
             <input
-              class="bg-gray-100 hover:not-checked:bg-gray-300"
+              class="bg-zinc-100 hover:not-checked:bg-zinc-300"
               type="radio"
               id="light-theme"
               name="theme"
@@ -138,11 +138,11 @@
             <span class="mx-auto font-bold">Light</span>
           </label>
           <label
-            class="theme-input flex w-full items-center rounded-lg border border-gray-700 bg-gray-950 p-6 text-white md:w-fit md:gap-4"
+            class="theme-input flex w-full items-center rounded-lg border border-gray-700 bg-zinc-950 p-6 text-white md:w-fit md:gap-4"
             for="dark-theme"
           >
             <input
-              class="bg-gray-950 hover:not-checked:bg-gray-700"
+              class="bg-zinc-950 hover:not-checked:bg-zinc-700"
               type="radio"
               id="dark-theme"
               name="theme"

@@ -36,32 +36,32 @@
 
 {#snippet navbar()}
   {#each navItems as item}
-    <NavigationItem class="lg:ml-auto" title={item.title} href={item.href}>
+    <NavigationItem title={item.title} href={item.href}>
       <Icon type={item.icon} />
     </NavigationItem>
   {/each}
 
   {#if self.role === 'admin'}
-    <NavigationItem class="lg:ml-auto" title="Users" href="/users">
+    <NavigationItem title="Users" href="/users">
       <Icon type="user" />
     </NavigationItem>
   {/if}
 
-  <DropdownMenu class="md:mt-auto md:ml-auto" position="top" align={dropdownAlign}>
+  <DropdownMenu class="md:mt-auto md:w-full" position="top" align={dropdownAlign}>
     {#snippet trigger()}
       <div
-        class="flex w-fit cursor-pointer items-center justify-end rounded-full p-2 hover:bg-gray-200 lg:w-full lg:gap-4 lg:px-4 dark:hover:bg-gray-900"
+        class="flex cursor-pointer items-center rounded-full p-2 hover:bg-zinc-300 md:rounded-md lg:w-full lg:gap-4 lg:px-4 dark:hover:bg-zinc-900"
       >
-        <div class="hidden flex-col text-right lg:flex">
-          <span class=" text-xl dark:text-white">{self.displayName}</span>
-          <span class=" text-sm text-gray-500">@{self.username}</span>
-        </div>
-
         <img
           class="profile-picture-sm"
           src={self.profilePicture ?? '/images/default-user-profile-icon.jpg'}
           alt="profile"
         />
+
+        <div class="hidden flex-col text-right lg:flex">
+          <span class=" text-xl dark:text-white">{self.displayName}</span>
+          <span class=" text-sm text-gray-500">@{self.username}</span>
+        </div>
       </div>
     {/snippet}
 
@@ -71,11 +71,11 @@
   </DropdownMenu>
 {/snippet}
 
-<main class="flex min-h-screen bg-gray-100 pb-16 md:pb-0 dark:bg-gray-950 dark:text-white">
+<main class="flex min-h-screen bg-zinc-200 pb-16 md:pb-0 dark:bg-zinc-950 dark:text-white">
   <header
-    class="sticky top-0 hidden h-dvh min-w-fit flex-col items-center gap-4 border-r border-r-gray-400 px-1 py-3 md:flex lg:w-full lg:px-3 dark:border-r-gray-700"
+    class="sticky top-0 hidden h-dvh min-w-fit flex-col items-center gap-4 px-1 py-3 md:flex lg:w-full lg:px-3"
   >
-    <span class="hidden w-full p-2 text-end text-2xl lg:inline">topix</span>
+    <span class="hidden w-full px-2 text-start text-4xl lg:inline">topix</span>
     {@render navbar()}
   </header>
 
@@ -83,9 +83,7 @@
     {@render children?.()}
   </section>
 
-  <aside
-    class="sticky top-0 hidden h-dvh border-l border-gray-400 p-3 md:block md:w-full dark:border-gray-700"
-  >
+  <aside class="sticky top-0 hidden h-dvh p-3 md:block md:w-full">
     {@render right?.()}
   </aside>
 
@@ -93,12 +91,12 @@
     <!-- svelte-ignore a11y_click_events_have_key_events -->
     <!-- svelte-ignore a11y_no_static_element_interactions -->
     <div
-      class="fixed inset-0 z-[20] bg-gray-900/40"
+      class="fixed inset-0 z-[20] bg-zinc-900/40"
       onclick={() => (showNav = false)}
       transition:fade={{ duration: 200 }}
     ></div>
     <aside
-      class="fixed top-0 right-0 z-30 h-screen w-80 flex-nowrap rounded-l-md border-l border-gray-400 bg-gray-200 p-3 md:hidden dark:border-gray-700 dark:bg-gray-950"
+      class="fixed top-0 right-0 z-30 h-screen w-80 flex-nowrap rounded-l-md border-l border-gray-400 bg-zinc-200 p-3 md:hidden dark:border-gray-700 dark:bg-zinc-950"
       transition:slide={{ duration: 200, axis: 'x' }}
     >
       {#if right}
@@ -110,10 +108,10 @@
   {/if}
 
   <nav
-    class="fixed bottom-0 z-10 flex h-fit w-full items-center justify-around border-t border-gray-400 bg-gray-100 py-1 md:hidden dark:border-gray-700 dark:bg-gray-950"
+    class="fixed bottom-0 z-10 flex h-fit w-full items-center justify-around bg-zinc-100 py-1 box-drop-shadow md:hidden dark:bg-zinc-950"
   >
     {@render navbar()}
-    <IconButton onclick={() => (showNav = !showNav)}>
+    <IconButton class="p-3" onclick={() => (showNav = !showNav)} round>
       <Icon type="bar" />
     </IconButton>
   </nav>

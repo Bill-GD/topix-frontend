@@ -40,20 +40,24 @@ input[type='radio']:focus {
   @apply aspect-square h-10 w-10 rounded-full;
 }
 
+@utility box-drop-shadow {
+  @apply drop-shadow-md drop-shadow-zinc-500/40;
+}
+
 .scrollbar::-webkit-scrollbar {
   @apply h-3;
 }
 
 .scrollbar::-webkit-scrollbar-track {
-  @apply rounded-md bg-gray-800;
+  @apply rounded-md bg-zinc-800;
 }
 
 .scrollbar::-webkit-scrollbar-thumb {
-  @apply rounded-md bg-gray-500;
+  @apply rounded-md bg-zinc-500;
 }
 
 .scrollbar::-webkit-scrollbar-thumb:hover {
-  @apply bg-gray-300;
+  @apply bg-zinc-300;
 }
 
 .no-scrollbar::-webkit-scrollbar {
@@ -73,7 +77,7 @@ input[type='radio']:focus {
 }
 
 .btn-dark {
-  @apply btn bg-gray-700 hover:bg-gray-600 active:bg-gray-500;
+  @apply btn bg-zinc-700 hover:bg-zinc-600 active:bg-zinc-500;
 }
 
 .btn-primary {
@@ -89,7 +93,7 @@ input[type='radio']:focus {
 }
 
 .btn-dark-outline {
-  @apply btn outlined text-gray-400 outline-gray-700 hover:bg-gray-700 active:bg-gray-500 active:outline-gray-500;
+  @apply btn outlined text-gray-400 outline-gray-700 hover:bg-zinc-700 active:bg-zinc-500 active:outline-gray-500;
 }
 
 .btn-primary-outline {

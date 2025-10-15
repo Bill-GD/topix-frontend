@@ -15,8 +15,8 @@
   {#if href}
     <a
       class={[
-        'block w-max min-w-full px-4 py-2',
-        !noHover && 'hover:bg-gray-400/50 dark:hover:bg-gray-700',
+        'block w-max min-w-full rounded-md px-4 py-2',
+        !noHover && 'hover:bg-zinc-200 dark:hover:bg-zinc-700',
         className,
       ]}
       {href}
@@ -28,8 +28,8 @@
   {:else}
     <button
       class={[
-        'block w-full cursor-pointer px-4 py-2 text-left',
-        !noHover && 'hover:bg-gray-400/50 dark:hover:bg-gray-700',
+        'block w-full cursor-pointer rounded-md px-4 py-2 text-left',
+        !noHover && 'hover:bg-zinc-200 dark:hover:bg-zinc-700',
         className,
       ]}
       {onclick}
