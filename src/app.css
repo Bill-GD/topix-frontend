@@ -3,6 +3,10 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+* {
+  --header-height: 56px;
+}
+
 input[type='color'],
 input[type='radio'] {
   appearance: none;
@@ -29,7 +33,7 @@ input[type='radio']:focus {
 }
 
 @utility profile-picture-lg {
-  @apply aspect-square h-30 w-30 rounded-full;
+  @apply h-30 w-30 aspect-square rounded-full;
 }
 
 @utility profile-picture-md {
@@ -41,7 +45,7 @@ input[type='radio']:focus {
 }
 
 @utility box-drop-shadow {
-  @apply drop-shadow-md drop-shadow-zinc-500/40;
+  @apply drop-shadow-zinc-500/40 drop-shadow-md;
 }
 
 .scrollbar::-webkit-scrollbar {

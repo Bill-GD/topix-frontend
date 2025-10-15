@@ -15,7 +15,7 @@
   {#if href}
     <a
       class={[
-        'block w-max min-w-full rounded-md px-4 py-2',
+        'block w-max min-w-full rounded-md px-3 py-2',
         !noHover && 'hover:bg-zinc-200 dark:hover:bg-zinc-700',
         className,
       ]}
@@ -28,7 +28,7 @@
   {:else}
     <button
       class={[
-        'block w-full cursor-pointer rounded-md px-4 py-2 text-left',
+        'block w-full cursor-pointer rounded-md px-3 py-2 text-left',
         !noHover && 'hover:bg-zinc-200 dark:hover:bg-zinc-700',
         className,
       ]}
