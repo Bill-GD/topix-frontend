@@ -124,11 +124,11 @@
         <span class="text-xl">Theme</span>
         <div class="flex w-full justify-center gap-4">
           <label
-            class="theme-input flex w-full items-center rounded-lg border border-gray-400 bg-zinc-100 p-6 text-black md:w-fit md:gap-4"
+            class="theme-input flex w-full items-center rounded-lg border border-gray-400 bg-zinc-50 p-6 text-black md:w-fit md:gap-4"
             for="light-theme"
           >
             <input
-              class="bg-zinc-100 hover:not-checked:bg-zinc-300"
+              class="bg-zinc-50 hover:not-checked:bg-zinc-300"
               type="radio"
               id="light-theme"
               name="theme"

@@ -38,7 +38,7 @@
 
 <main class="min-h-screen bg-zinc-200 pb-16 md:pb-0 dark:bg-zinc-950 dark:text-white">
   <header
-    class="fixed top-0 z-[4] flex h-(--header-height) w-full items-center bg-zinc-100 px-2 box-drop-shadow md:px-4"
+    class="fixed top-0 z-[4] flex h-(--header-height) w-full items-center bg-zinc-50 px-2 box-drop-shadow md:px-4"
   >
     <IconButton class="mr-2 inline p-2 lg:hidden" onclick={() => (showNav = !showNav)} round>
       <Icon type="bar" />

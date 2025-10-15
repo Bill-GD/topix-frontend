@@ -28,7 +28,7 @@
 >
   <FloatingLabelInput
     class="w-full"
-    labelClass="bg-zinc-100 dark:bg-zinc-950"
+    labelClass="bg-zinc-50 dark:bg-zinc-950"
     name="otp"
     type="text"
   >

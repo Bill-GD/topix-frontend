@@ -31,7 +31,7 @@
   <div class="flex flex-col gap-4">
     <FloatingLabelInput
       class="w-full"
-      labelClass="bg-zinc-100 dark:bg-zinc-950"
+      labelClass="bg-zinc-50 dark:bg-zinc-950"
       name="username"
       type="text"
       required
@@ -41,7 +41,7 @@
 
     <FloatingLabelInput
       class="w-full"
-      labelClass="bg-zinc-100 dark:bg-zinc-950"
+      labelClass="bg-zinc-50 dark:bg-zinc-950"
       name="password"
       type="password"
       bind:value={password}

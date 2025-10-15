@@ -327,7 +327,7 @@
 
   .tag-input {
     input {
-      @apply rounded-md bg-zinc-100 transition-all duration-150 checked:border-2 checked:border-sky-500 checked:bg-sky-500 dark:bg-zinc-950;
+      @apply rounded-md bg-zinc-50 transition-all duration-150 checked:border-2 checked:border-sky-500 checked:bg-sky-500 dark:bg-zinc-950;
     }
 
     * {
