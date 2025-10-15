@@ -4,6 +4,7 @@
   import '@/app.css';
   import 'tippy.js/dist/tippy.css';
   import type { LayoutProps } from './$types';
+  import { onMount } from 'svelte';
 
   let { children }: LayoutProps = $props();
 
@@ -12,6 +13,10 @@
 
   const toaster = getToaster();
   const theme = getTheme();
+
+  onMount(() => {
+    document.documentElement.classList.remove('dark');
+  });
 </script>
 
 <div class={[theme.isDark && 'dark']}>
