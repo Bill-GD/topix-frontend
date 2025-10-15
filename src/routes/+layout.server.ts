@@ -32,9 +32,10 @@ export const load: LayoutServerLoad = async ({ locals, cookies, route, url }) =>
       redirect(303, '/login');
     }
 
-    error(res.status, { message: res.message, status: res.status });
+    error(res.status, res.message);
   }
 
-  if (locals.hasAT && (url.pathname === '/' || route.id?.includes('(auth)')))
+  if (locals.hasAT && (url.pathname === '/' || route.id?.includes('(auth)'))) {
     redirect(303, '/home');
+  }
 };

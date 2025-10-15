@@ -20,7 +20,7 @@ export const load: PageServerLoad = async ({ parent, cookies }) => {
   );
 
   if (res.success) return { self: res.data as User };
-  error(res.status, { status: res.status, message: res.message });
+  error(res.status, res.message);
 };
 
 export const actions: Actions = {

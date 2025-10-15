@@ -8,9 +8,7 @@ export const load: LayoutServerLoad = async ({ cookies, params }) => {
     `/group/${params.id}`,
     cookies.get(CookieName.accessToken),
   );
-  if (!groupRes.success) {
-    error(groupRes.status, { status: groupRes.status, message: groupRes.message });
-  }
+  if (!groupRes.success) error(groupRes.status, groupRes.message);
 
   return { group: groupRes.data as unknown as Group };
 };

@@ -2,9 +2,7 @@
 // for information about these interfaces
 declare global {
   namespace App {
-    interface Error {
-      status: number;
-    }
+    // interface Error {}
     interface Locals {
       hasAT: boolean;
       hasRT: boolean;

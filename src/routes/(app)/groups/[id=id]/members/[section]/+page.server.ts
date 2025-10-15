@@ -1,6 +1,6 @@
 import { AxiosHandler } from '$lib/utils/axios-handler';
 import { CookieName } from '$lib/utils/types';
-import { error, fail, type Actions } from '@sveltejs/kit';
+import { type Actions, error, fail } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ params, cookies }) => {
@@ -9,9 +9,7 @@ export const load: PageServerLoad = async ({ params, cookies }) => {
     `/group/${params.id}/members?accepted=${accepted}`,
     cookies.get(CookieName.accessToken),
   );
-  if (!res.success) {
-    error(res.status, { status: res.status, message: res.message });
-  }
+  if (!res.success) error(res.status, res.message);
 
   return {
     members: res.data as unknown as {

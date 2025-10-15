@@ -1,7 +1,10 @@
 import { AxiosHandler, handleReaction } from '$lib/utils/axios-handler';
 import { getPostUploadForm } from '$lib/utils/helpers';
 import { CookieName, type CurrentUser, type Post, type Thread } from '$lib/utils/types';
-import { type Actions, error, fail, isActionFailure, redirect } from '@sveltejs/kit';
+import {
+  type Actions, error, fail, isActionFailure,
+  redirect,
+} from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ cookies, params }) => {
@@ -14,9 +17,8 @@ export const load: PageServerLoad = async ({ cookies, params }) => {
     `/thread/${params.id}`,
     cookies.get(CookieName.accessToken),
   );
-  if (!threadRes.success) {
-    error(threadRes.status, { message: threadRes.message, status: threadRes.status });
-  }
+  if (!threadRes.success) error(threadRes.status, threadRes.message);
+
   data.thread = threadRes.data as unknown as Thread;
 
   if (data.thread.groupId && data.thread.groupVisibility !== 'public' && !data.thread.joinedGroup) {
@@ -27,9 +29,8 @@ export const load: PageServerLoad = async ({ cookies, params }) => {
     `/post?threadId=${params.id}${data.thread.groupId ? `&groupId=${data.thread.groupId}` : ''}`,
     cookies.get(CookieName.accessToken),
   );
-  if (!postRes.success) {
-    error(postRes.status, { message: postRes.message, status: postRes.status });
-  }
+  if (!postRes.success) error(postRes.status, postRes.message);
+
   data.posts = postRes.data as unknown as Post[];
 
   return data;

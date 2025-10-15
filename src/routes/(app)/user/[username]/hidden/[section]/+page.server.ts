@@ -6,7 +6,7 @@ import type { PageServerLoad } from './$types';
 export const load: PageServerLoad = async ({ parent, cookies, params }) => {
   const self = (await parent()).self;
   if (self.username !== params.username) {
-    error(403, { status: 403, message: 'Unauthorized' });
+    error(403, 'Unauthorized');
   }
 
   switch (params.section) {
@@ -16,7 +16,7 @@ export const load: PageServerLoad = async ({ parent, cookies, params }) => {
         cookies.get(CookieName.accessToken),
       );
 
-      if (!res.success) error(res.status, { status: res.status, message: res.message });
+      if (!res.success) error(res.status, res.message);
       return { posts: res.data as unknown as Post[] };
     }
     case 'thread': {
@@ -24,7 +24,7 @@ export const load: PageServerLoad = async ({ parent, cookies, params }) => {
         `/thread?username=${self.username}&visibility=hidden`,
         cookies.get(CookieName.accessToken),
       );
-      if (!res.success) error(res.status, { status: res.status, message: res.message });
+      if (!res.success) error(res.status, res.message);
       return { threads: res.data as unknown as Thread[] };
     }
     case 'group': {
@@ -32,7 +32,7 @@ export const load: PageServerLoad = async ({ parent, cookies, params }) => {
         `/group?ownerId=${self.id}&hidden=true`,
         cookies.get(CookieName.accessToken),
       );
-      if (!res.success) error(res.status, { status: res.status, message: res.message });
+      if (!res.success) error(res.status, res.message);
       return { groups: res.data as unknown as Group[] };
     }
   }

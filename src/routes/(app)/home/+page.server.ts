@@ -11,22 +11,21 @@ export const load: PageServerLoad = async ({ cookies, url, fetch }) => {
       const res = await fetch('/api/posts');
 
       const threadRes = await AxiosHandler.get('/thread', cookies.get(CookieName.accessToken));
-      if (!threadRes.success) {
-        error(threadRes.status, { status: threadRes.status, message: threadRes.message });
-      }
+      if (!threadRes.success) error(threadRes.status, threadRes.message);
 
       return {
         posts: (await res.json()) as unknown as Post[],
         threads: threadRes.data as unknown as Thread[],
       };
     }
-
     case 'following': {
       const res = await fetch('/api/posts?following');
       return { posts: (await res.json()) as unknown as Post[] };
     }
+    default: {
+      error(404, "Tab should only be either 'new' or 'following'");
+    }
   }
-  error(500);
 };
 
 export const actions: Actions = {

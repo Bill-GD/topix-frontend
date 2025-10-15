@@ -2,7 +2,7 @@ import { browser } from '$app/environment';
 import { getContext, setContext } from 'svelte';
 
 export class Theme {
-  #mode = $state<'dark' | 'light'>('dark');
+  #mode = $state<'dark' | 'light'>('light');
 
   constructor() {
     if (browser) {

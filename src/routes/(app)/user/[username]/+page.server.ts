@@ -1,6 +1,9 @@
 import { AxiosHandler, handleReaction } from '$lib/utils/axios-handler';
 import { getPostUploadForm } from '$lib/utils/helpers';
-import { CookieName, type Group, type Post, type Thread, type User } from '$lib/utils/types';
+import {
+  CookieName, type Group, type Post, type Thread,
+  type User,
+} from '$lib/utils/types';
 import { type Actions, error, fail, isActionFailure } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
@@ -11,7 +14,7 @@ export const load: PageServerLoad = async ({ parent, params, cookies }) => {
     `/user/${params.username}`,
     cookies.get(CookieName.accessToken),
   );
-  if (!userRes.success) return error(404, { status: 404, message: 'User not found' });
+  if (!userRes.success) return error(userRes.status, userRes.message);
   const user = userRes.data as User;
 
   const postsRes = await AxiosHandler.get(

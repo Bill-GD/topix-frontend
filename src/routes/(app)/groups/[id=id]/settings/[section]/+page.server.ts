@@ -9,12 +9,9 @@ export const load: PageServerLoad = async ({ cookies, params }) => {
     `/group/${params.id}/tags`,
     cookies.get(CookieName.accessToken),
   );
-  if (!tagsRes.success) {
-    error(tagsRes.status, { status: tagsRes.status, message: tagsRes.message });
-  }
-  return {
-    tags: tagsRes.data as unknown as Tag[],
-  };
+  if (!tagsRes.success) error(tagsRes.status, tagsRes.message);
+
+  return { tags: tagsRes.data as unknown as Tag[] };
 };
 
 export const actions: Actions = {

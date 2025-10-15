@@ -6,7 +6,7 @@ import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ cookies }) => {
   const res = await AxiosHandler.get('/group', cookies.get(CookieName.accessToken));
-  if (!res.success) error(res.status, { status: res.status, message: res.message });
+  if (!res.success) error(res.status, res.message);
   return {
     groups: res.data as unknown as Group[],
   };

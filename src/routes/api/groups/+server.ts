@@ -13,8 +13,7 @@ export async function GET({ cookies, url }) {
     `/group/${groupId}${members}${url.search}`,
     cookies.get(CookieName.accessToken),
   );
-  if (!res.success) {
-    error(res.status, { status: res.status, message: res.message });
-  }
+  if (!res.success) error(res.status, res.message);
+
   return json(res.data);
 }
