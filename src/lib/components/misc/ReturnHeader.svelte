@@ -7,12 +7,11 @@
 </script>
 
 <!-- <div class="sticky top-0 border-r border-b border-gray-700 bg-zinc-950 py-4 text-center text-2xl"> -->
-<div
-  class="sticky top-0 z-20 flex items-center gap-4 border-b border-gray-400 bg-zinc-50 p-2 dark:border-gray-700 dark:bg-zinc-950"
->
+<div class="sticky top-0 z-[3] flex items-center gap-4 p-2 dark:bg-zinc-950">
   <IconButton
-    class="hover:bg-zinc-200 dark:hover:bg-zinc-800"
+    class="p-2 hover:bg-zinc-300 dark:hover:bg-zinc-800"
     onclick={() => window.history.back()}
+    round
   >
     <Icon type="back" size="sm" />
   </IconButton>

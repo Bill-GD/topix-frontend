@@ -61,8 +61,10 @@
     className,
   ]}
 >
-  <!-- svelte-ignore a11y_consider_explicit_label -->
-  <a class="absolute inset-0" href="/post/{post.id}"></a>
+  {#if !detail}
+    <!-- svelte-ignore a11y_consider_explicit_label -->
+    <a class="absolute inset-0" href="/post/{post.id}"></a>
+  {/if}
 
   <div class="flex items-center gap-3">
     <img
@@ -230,7 +232,9 @@
 
         <DropdownMenu position="top" align="left" horizontal>
           {#snippet trigger()}
-            <div class="z-[2] flex items-center gap-2 rounded-md bg-zinc-200 p-2 hover:bg-zinc-300">
+            <div
+              class="z-[2] flex cursor-pointer items-center gap-2 rounded-md bg-zinc-200 p-2 hover:bg-zinc-300"
+            >
               <Icon
                 type={(reaction ?? 'noReaction') as keyof typeof reactions}
                 class={[reaction !== null && reactions[reaction as keyof typeof reactions]]}
@@ -262,7 +266,7 @@
 
       <a
         class="z-[2] flex items-center gap-2 rounded-md bg-zinc-200 p-2 hover:bg-zinc-300"
-        href="/post/{post.id}"
+        href={detail ? '' : `/post/${post.id}`}
       >
         <Icon type="reply" size="sm" />
         {post.replyCount}

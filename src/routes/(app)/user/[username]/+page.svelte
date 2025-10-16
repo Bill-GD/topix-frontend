@@ -34,7 +34,7 @@
 <HomeLayout self={data.self}>
   <ReturnHeader>{data.user.displayName}</ReturnHeader>
 
-  <div class="flex flex-col gap-2 border-b border-gray-700 p-4">
+  <div class="mb-4 flex flex-col gap-2 rounded-lg bg-zinc-50 p-4 box-drop-shadow">
     <div class="flex items-start gap-4">
       <img
         class="profile-picture-sm md:profile-picture-md"
@@ -114,17 +114,18 @@
 
   {#if data.self.id === data.user.id}
     <PostUpload
+      class="mb-4"
       userPicture={data.self.profilePicture}
       formaction="?/post-upload"
       showVisibilitySelector
     />
-    <Divider />
   {/if}
 
-  {#each posts as post (post.id)}
-    <Post self={data.self} {post} />
-    <Divider />
-  {/each}
+  <div class="flex flex-col gap-4">
+    {#each posts as post (post.id)}
+      <Post self={data.self} {post} />
+    {/each}
+  </div>
 
   <Scroller
     disabled={disableScroller}
@@ -173,7 +174,9 @@
           <p class="w-full px-4 py-2">This user has no thread.</p>
         {:else}
           {#each data.groups as group}
-            <Divider /><a
+            <Divider />
+
+            <a
               class="flex items-center gap-4 px-4 py-2 hover:bg-zinc-300/40 dark:hover:bg-zinc-900/40"
               href="/groups/{group.id}"
             >

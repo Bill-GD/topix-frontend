@@ -4,7 +4,7 @@
   import { DropdownItem, DropdownMenu } from '$lib/components/dropdown';
   import { Input } from '$lib/components/input';
   import { HomeLayout, Scroller } from '$lib/components/layout';
-  import { Divider, Flair, Icon, ReturnHeader, VisibilitySelector } from '$lib/components/misc';
+  import { Flair, Icon, ReturnHeader, VisibilitySelector } from '$lib/components/misc';
   import { Modal, ModalBody, ModalFooter, ModalHeader } from '$lib/components/modal';
   import { Post } from '$lib/components/post';
   import { getToaster } from '$lib/components/toast';
@@ -36,7 +36,7 @@
   {#if data.thread.visibility !== 'public' && data.self.id !== data.thread.owner.id}
     <p class="empty-noti-text">This thread is privated by the author.</p>
   {:else}
-    <div class="flex flex-col gap-4 border-b border-gray-700 p-4">
+    <div class="mb-4 flex flex-col gap-4 rounded-lg bg-zinc-50 p-4 box-drop-shadow">
       <div class="flex">
         <div class="flex flex-col gap-2">
           <p class="text-4xl font-semibold">{data.thread.title}</p>
@@ -73,37 +73,39 @@
 
         <DropdownMenu class="ml-auto h-fit" position="bottom" align="right">
           {#snippet trigger()}
-            <IconButton round>
+            <IconButton class="p-2" round>
               <Icon type="menu" size="sm" />
             </IconButton>
           {/snippet}
 
-          {#if data.thread.followed}
-            <form
-              action="?/unfollow"
-              method="post"
-              use:enhance={() => {
-                return async ({ result, update }) => {
-                  await formResultToast(result, toaster);
-                  await update();
-                };
-              }}
-            >
-              <DropdownItem class="text-red-500">Unfollow</DropdownItem>
-            </form>
-          {:else}
-            <form
-              action="?/follow"
-              method="post"
-              use:enhance={() => {
-                return async ({ result, update }) => {
-                  await formResultToast(result, toaster);
-                  await update();
-                };
-              }}
-            >
-              <DropdownItem>Follow</DropdownItem>
-            </form>
+          {#if data.self.id !== data.thread.owner.id}
+            {#if data.thread.followed}
+              <form
+                action="?/unfollow"
+                method="post"
+                use:enhance={() => {
+                  return async ({ result, update }) => {
+                    await formResultToast(result, toaster);
+                    await update();
+                  };
+                }}
+              >
+                <DropdownItem class="text-red-500">Unfollow</DropdownItem>
+              </form>
+            {:else}
+              <form
+                action="?/follow"
+                method="post"
+                use:enhance={() => {
+                  return async ({ result, update }) => {
+                    await formResultToast(result, toaster);
+                    await update();
+                  };
+                }}
+              >
+                <DropdownItem>Follow</DropdownItem>
+              </form>
+            {/if}
           {/if}
           {#if data.self.id === data.thread.owner.id}
             <DropdownItem onclick={() => (showModal = 'update')}>Edit</DropdownItem>
@@ -122,10 +124,11 @@
     {#if data.posts.length <= 0}
       <p class="empty-noti-text">This thread has no post.</p>
     {:else}
-      {#each posts as post}
-        <Post self={data.self} {post} compact />
-        <Divider />
-      {/each}
+      <div class="flex flex-col gap-4">
+        {#each posts as post}
+          <Post self={data.self} {post} />
+        {/each}
+      </div>
 
       <Scroller
         disabled={disableScroller}
@@ -153,6 +156,7 @@
         postCallback={hideModal}
         groupId={data.thread.groupId ?? undefined}
         groupApproved
+        hideBox
       />
     </ModalBody>
   </Modal>

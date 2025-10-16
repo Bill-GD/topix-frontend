@@ -2,7 +2,9 @@
 
 import type { Snippet } from 'svelte';
 import type {
-  ClassValue, HTMLAttributeAnchorTarget, HTMLInputTypeAttribute,
+  ClassValue,
+  HTMLAttributeAnchorTarget,
+  HTMLInputTypeAttribute,
 } from 'svelte/elements';
 import { faThumbsUp as faRegularThumbsUp } from '@fortawesome/free-regular-svg-icons/faThumbsUp';
 import { faBars } from '@fortawesome/free-solid-svg-icons/faBars';
@@ -34,10 +36,7 @@ import { faUserMinus } from '@fortawesome/free-solid-svg-icons/faUserMinus';
 import { faUserPlus } from '@fortawesome/free-solid-svg-icons/faUserPlus';
 import { faVideo } from '@fortawesome/free-solid-svg-icons/faVideo';
 import { faXmark } from '@fortawesome/free-solid-svg-icons/faXmark';
-import type {
-  CurrentUser, Post, Tag, ToastMessage,
-  UnaryVoidFunction,
-} from '../utils/types';
+import type { CurrentUser, Post, Tag, ToastMessage, UnaryVoidFunction } from '../utils/types';
 
 export type ButtonType = 'primary' | 'danger' | 'dark' | 'success';
 
@@ -213,10 +212,12 @@ export interface PostProps {
 }
 
 export interface PostUploadProps {
+  class?: ClassValue;
   userPicture: string | null;
   formaction?: string;
   placeholder?: string;
   tags?: Tag[];
+  hideBox?: boolean;
   groupApproved?: boolean;
   showVisibilitySelector?: boolean;
   threadId?: number;

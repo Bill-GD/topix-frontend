@@ -17,6 +17,7 @@
   import ModalHeader from '../modal/ModalHeader.svelte';
 
   let {
+    class: className,
     userPicture = '/images/default-user-profile-icon.jpg',
     formaction,
     placeholder = `What's happening?`,
@@ -25,6 +26,7 @@
     groupId,
     groupApproved = false,
     showVisibilitySelector = false,
+    hideBox = false,
     postCallback,
   }: PostUploadProps = $props();
 
@@ -90,7 +92,7 @@
 </script>
 
 <form
-  class="flex gap-2 p-4"
+  class={['flex gap-2 p-4', !hideBox && 'rounded-lg bg-zinc-50 box-drop-shadow', className]}
   method="post"
   enctype="multipart/form-data"
   onsubmit={() => (disablePost = true)}
