@@ -49,8 +49,7 @@
     {#if showMenu}
       <div
         class={[
-          'dropdown-menu',
-          'absolute z-[5] rounded-lg bg-zinc-50 box-drop-shadow transition-all dark:bg-zinc-800',
+          'dropdown-menu absolute z-5 rounded-lg bg-zinc-50 box-drop-shadow transition-all dark:bg-zinc-800',
           showMenu ? 'scale-100 opacity-100 duration-100' : 'scale-50 opacity-0 duration-200',
         ]}
         id="dropdown-menu-{id}"

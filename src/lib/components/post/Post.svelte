@@ -83,14 +83,14 @@
         {#if showThreadAndGroupName}
           {#if post.threadTitle}
             <a
-              class="z-[2] line-clamp-1 w-fit font-semibold overflow-ellipsis hover:underline"
+              class="line-clamp-1 w-fit font-semibold overflow-ellipsis hover:underline"
               href="/threads/{post.threadId}"
             >
               {post.threadTitle}
             </a>
           {:else if post.groupName}
             <a
-              class="z-[2] line-clamp-1 w-fit font-semibold overflow-ellipsis hover:underline"
+              class="line-clamp-1 w-fit font-semibold overflow-ellipsis hover:underline"
               href="/groups/{post.groupId}"
             >
               {post.groupName}
@@ -101,7 +101,7 @@
 
       <div class="flex w-fit items-baseline gap-2 text-gray-500">
         <a
-          class="z-[2] font-semibold text-black hover:underline dark:text-white dark:decoration-white"
+          class="z-1 font-semibold text-black hover:underline dark:text-white dark:decoration-white"
           href="/user/{post.owner.username}"
         >
           {post.owner.displayName}
@@ -233,7 +233,7 @@
         <DropdownMenu position="top" align="left" horizontal>
           {#snippet trigger()}
             <div
-              class="z-[2] flex cursor-pointer items-center gap-2 rounded-md bg-zinc-200 p-2 hover:bg-zinc-300"
+              class="z-1 flex cursor-pointer items-center gap-2 rounded-md bg-zinc-200 p-2 hover:bg-zinc-300"
             >
               <Icon
                 type={(reaction ?? 'noReaction') as keyof typeof reactions}
@@ -265,7 +265,7 @@
       </form>
 
       <a
-        class="z-[2] flex items-center gap-2 rounded-md bg-zinc-200 p-2 hover:bg-zinc-300"
+        class="z-1 flex items-center gap-2 rounded-md bg-zinc-200 p-2 hover:bg-zinc-300"
         href={detail ? '' : `/post/${post.id}`}
       >
         <Icon type="reply" size="sm" />

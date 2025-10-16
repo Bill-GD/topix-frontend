@@ -38,7 +38,7 @@
       <div class="flex flex-col">
         <div class="flex items-baseline gap-2 text-gray-500">
           <a
-            class="z-[2] font-semibold text-black hover:underline dark:text-white dark:decoration-white"
+            class="font-semibold text-black hover:underline dark:text-white dark:decoration-white"
             href="/user/{post.owner.username}"
           >
             {post.owner.displayName}
@@ -61,7 +61,7 @@
         <div class="relative min-w-1/2">
           {#if imageIndex > 0}
             <IconButton
-              class="absolute top-1/2 left-0 h-full -translate-y-1/2 hover:bg-zinc-300/40 dark:hover:bg-zinc-900/40"
+              class="absolute top-1/2 left-0 h-full -translate-y-1/2 hover:bg-zinc-400/40 dark:hover:bg-zinc-900/40"
               round={false}
               onclick={() => (imageIndex = Math.max(0, imageIndex - 1))}
             >
@@ -70,13 +70,15 @@
           {/if}
 
           <img
-            class="w-full rounded-lg"
+            class="aspect-square w-full rounded-lg bg-zinc-200 object-contain"
             src={post.mediaPaths[imageIndex]}
             alt="post-image-{imageIndex}"
           />
 
           {#if post.mediaPaths.length > 1}
-            <div class="absolute bottom-1 left-1/2 z-2 flex -translate-x-1/2 gap-1">
+            <div
+              class="absolute bottom-1 left-1/2 z-2 flex -translate-x-1/2 gap-1 rounded-full bg-zinc-700/60 p-2"
+            >
               {#each post.mediaPaths as _, index}
                 <span
                   class={[
@@ -90,7 +92,7 @@
 
           {#if imageIndex < post.mediaPaths.length - 1}
             <IconButton
-              class="absolute top-1/2 right-0 h-full -translate-y-1/2 hover:bg-zinc-300/40 dark:hover:bg-zinc-900/40"
+              class="absolute top-1/2 right-0 h-full -translate-y-1/2 hover:bg-zinc-400/50 dark:hover:bg-zinc-900/40"
               round={false}
               onclick={() => (imageIndex = Math.min(post.mediaPaths.length - 1, imageIndex + 1))}
             >
