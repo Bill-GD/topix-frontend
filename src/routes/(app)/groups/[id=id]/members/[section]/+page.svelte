@@ -30,29 +30,29 @@
 <HomeLayout self={data.self}>
   <ReturnHeader>Members</ReturnHeader>
 
-  <div
-    class="no-scrollbar flex justify-around overflow-x-scroll border-b border-gray-400 md:hidden dark:border-gray-700"
-  >
-    {#each items as item}
-      <a
-        class={[
-          'w-full py-2 text-center',
-          params.section === item
-            ? `bg-zinc-300/40 font-semibold dark:bg-zinc-800/40 ${item.includes('danger') ? 'text-red-600' : 'dark:text-gray-300'}`
-            : `${item.includes('danger') ? 'text-red-800' : 'text-gray-500'}`,
-        ]}
-        href={item}
-      >
-        {capitalize(item)}
-      </a>
-    {/each}
-  </div>
+  <div class="flex flex-col gap-4">
+    <div class="flex gap-2 dark:bg-zinc-950">
+      {#each items as item}
+        <a
+          class={[
+            'flex-1 rounded-md px-4 py-2 text-center',
+            params.section === item
+              ? 'bg-zinc-50 font-semibold box-drop-shadow dark:bg-zinc-800/40 dark:text-gray-300'
+              : 'bg-zinc-200 text-gray-500',
+          ]}
+          href={item}
+          data-sveltekit-replacestate
+        >
+          {capitalize(item)}
+        </a>
+      {/each}
+    </div>
 
-  <div class="flex flex-col">
     {#if params.section === 'all'}
       {#each members as user}
-        <div
-          class="flex flex-col gap-2 p-4 hover:bg-zinc-300/40 md:flex-row dark:hover:bg-zinc-900/40"
+        <a
+          class="flex flex-col gap-4 rounded-lg bg-zinc-50 p-4 box-drop-shadow hover:bg-zinc-100 md:flex-row dark:hover:bg-zinc-900/40"
+          href="/user/{user.username}"
         >
           <div class="flex items-center gap-4">
             <img
@@ -61,19 +61,22 @@
               alt="profile"
             />
             <div class="flex flex-col gap-2">
-              <a class="flex items-baseline gap-2" href="/user/{user.username}">
+              <div class="flex items-baseline gap-2">
                 <span class="text-xl font-semibold">{user.displayName}</span>
                 <span class="text-gray-500">@{user.username}</span>
-              </a>
+              </div>
               <p>Joined at {new Date(user.dateJoined!).toDateString()}</p>
             </div>
           </div>
+
           {#if data.self.id === data.group.owner.id && user.id !== data.group.owner.id}
             <div class="flex items-center justify-center gap-2 md:ml-auto">
               <Button
-                class="w-full md:w-fit"
+                class="z-1 w-full md:w-fit"
                 type="primary"
-                onclick={() => {
+                onclick={(ev) => {
+                  ev.preventDefault();
+                  ev.stopPropagation();
                   selectedMemberId = user.id;
                   showModal = 'owner';
                 }}
@@ -81,9 +84,11 @@
                 Change owner
               </Button>
               <Button
-                class="w-full md:w-fit"
+                class="z-1 w-full md:w-fit"
                 type="danger"
-                onclick={() => {
+                onclick={(ev) => {
+                  ev.preventDefault();
+                  ev.stopPropagation();
                   selectedMemberId = user.id;
                   showModal = 'remove';
                 }}
@@ -92,16 +97,16 @@
               </Button>
             </div>
           {/if}
-        </div>
-        <Divider />
+        </a>
       {/each}
     {:else if params.section === 'pending'}
       {#if data.members.length <= 0}
         <p class="empty-noti-text">No pending members.</p>
       {:else}
         {#each members as user}
-          <div
-            class="flex flex-col gap-2 p-4 hover:bg-zinc-300/40 md:flex-row dark:hover:bg-zinc-900/40"
+          <a
+            class="flex flex-col gap-4 rounded-lg bg-zinc-50 p-4 box-drop-shadow hover:bg-zinc-100 md:flex-row dark:hover:bg-zinc-900/40"
+            href="/user/{user.username}"
           >
             <div class="flex items-center gap-4">
               <img
@@ -110,10 +115,10 @@
                 alt="profile"
               />
               <div class="flex flex-col gap-2">
-                <a class="flex items-baseline gap-2" href="/user/{user.username}">
+                <div class="flex items-baseline gap-2">
                   <span class="text-xl font-semibold">{user.displayName}</span>
                   <span class="text-gray-500">@{user.username}</span>
-                </a>
+                </div>
                 <p>Requested at {new Date(user.dateRequested).toDateString()}</p>
               </div>
             </div>
@@ -143,6 +148,7 @@
                   type="danger"
                   onclick={(ev) => {
                     ev.preventDefault();
+                    ev.stopPropagation();
                     selectedMemberId = user.id;
                     showModal = 'remove';
                   }}
@@ -151,8 +157,7 @@
                 </Button>
               </form>
             {/if}
-          </div>
-          <Divider />
+          </a>
         {/each}
       {/if}
     {/if}
@@ -176,34 +181,6 @@
       />
     {/key}
   </div>
-
-  {#snippet right()}
-    <div class="flex w-fit flex-col py-20 text-xl">
-      {#each items as item, index}
-        <div class="flex">
-          <div
-            class={[
-              params.section === item
-                ? 'border-gray-700 dark:border-gray-300'
-                : 'border-gray-300 dark:border-gray-700',
-              index === 0 && 'rounded-t-md',
-              index === items.length - 1 && 'rounded-b-md',
-              'mr-4 w-0 border-l-6',
-            ]}
-          ></div>
-          <a
-            class={[
-              'py-2',
-              params.section === item ? 'font-semibold dark:text-gray-300' : 'text-gray-500',
-            ]}
-            href={item}
-          >
-            {capitalize(item)}
-          </a>
-        </div>
-      {/each}
-    </div>
-  {/snippet}
 
   <Modal show={showModal === 'owner'} backdropCallback={hideModal} center>
     <ModalHeader>Change ownership</ModalHeader>
@@ -252,11 +229,3 @@
     </ModalFooter>
   </Modal>
 </HomeLayout>
-
-<style lang="postcss">
-  @reference '@/app.css';
-
-  .input-group {
-    @apply flex flex-col items-start gap-2;
-  }
-</style>

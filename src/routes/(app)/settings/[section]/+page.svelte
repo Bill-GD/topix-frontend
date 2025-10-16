@@ -30,134 +30,96 @@
 <HomeLayout self={data.self}>
   <ReturnHeader>Settings</ReturnHeader>
 
-  <div
-    class="no-scrollbar flex justify-around overflow-x-scroll border-b border-gray-400 md:hidden dark:border-gray-700"
-  >
+  <div class="mb-4 flex gap-2 dark:bg-zinc-950">
     {#each items as item}
       <a
         class={[
-          'w-full py-2 text-center',
+          'flex-1 rounded-md px-4 py-2 text-center',
           params.section === item
-            ? 'bg-zinc-300/40 font-semibold dark:bg-zinc-800/40 dark:text-gray-300'
-            : 'text-gray-500',
+            ? 'bg-zinc-50 font-semibold box-drop-shadow dark:bg-zinc-800/40 dark:text-gray-300'
+            : 'bg-zinc-200 text-gray-500',
         ]}
         href={item}
+        data-sveltekit-replacestate
       >
         {capitalize(item)}
       </a>
     {/each}
   </div>
 
-  <div class="p-4 lg:p-12">
-    {#if params.section === 'account'}
-      <form
-        class="flex flex-col gap-6"
-        action="?/update-account"
-        method="post"
-        use:enhance={() => {
-          return async ({ result, update }) => {
-            await formResultToast(result, toaster);
-            await update();
-          };
-        }}
-      >
-        <Button class="ml-auto w-fit" type="success">Save</Button>
-        <div class="input-group">
-          <label class="text-xl" for="username">Username</label>
-          <Input class="w-min" id="username" name="username" value={data.self.username}></Input>
-        </div>
-      </form>
-    {:else if params.section === 'profile'}
-      <form
-        class="flex flex-col gap-6"
-        action="?/update-profile"
-        method="post"
-        use:enhance={() => {
-          return async ({ result, update }) => {
-            await formResultToast(result, toaster);
-            await update();
-          };
-        }}
-      >
-        <Button class="ml-auto w-fit" type="success">Save</Button>
-        <div class="input-group">
-          <label class="text-xl" for="display-name">Display name</label>
-          <Input
-            class="w-min"
-            id="display-name"
-            name="display-name"
-            value={data.self.displayName}
+  {#if params.section === 'account'}
+    <form
+      class="flex flex-col gap-6"
+      action="?/update-account"
+      method="post"
+      use:enhance={() => {
+        return async ({ result, update }) => {
+          await formResultToast(result, toaster);
+          await update();
+        };
+      }}
+    >
+      <Button class="ml-auto w-fit" type="success">Save</Button>
+      <div class="input-group">
+        <label class="text-xl" for="username">Username</label>
+        <Input class="w-min" id="username" name="username" value={data.self.username}></Input>
+      </div>
+    </form>
+  {:else if params.section === 'profile'}
+    <form
+      class="flex flex-col gap-6"
+      action="?/update-profile"
+      method="post"
+      use:enhance={() => {
+        return async ({ result, update }) => {
+          await formResultToast(result, toaster);
+          await update();
+        };
+      }}
+    >
+      <Button class="ml-auto w-fit" type="success">Save</Button>
+      <div class="input-group">
+        <label class="text-xl" for="display-name">Display name</label>
+        <Input class="w-min" id="display-name" name="display-name" value={data.self.displayName} />
+      </div>
+
+      <div class="input-group">
+        <label class="text-xl" for="description">Description</label>
+        <Input
+          class="w-min"
+          id="description"
+          name="description"
+          value={data.self.description ?? ''}
+          placeholder="No description"
+          textarea
+        />
+      </div>
+
+      <div class="input-group">
+        <label class="text-xl" for="description">Profile picture</label>
+        <div class="flex w-full items-stretch gap-8">
+          <img
+            class="profile-picture-lg"
+            src={profileValue
+              ? profileValue
+              : (data.self.profilePicture ?? '/images/default-user-profile-icon.jpg')}
+            alt="user-profile"
           />
-        </div>
 
-        <div class="input-group">
-          <label class="text-xl" for="description">Description</label>
-          <Input
-            class="w-min"
-            id="description"
-            name="description"
-            value={data.self.description ?? ''}
-            placeholder="No description"
-            textarea
-          />
+          <FileDropzone contentInputName="profile-picture" bind:contentValue={profileValue} />
         </div>
-
-        <div class="input-group">
-          <label class="text-xl" for="description">Profile picture</label>
-          <div class="flex w-full items-stretch gap-8">
-            <img
-              class="profile-picture-lg"
-              src={profileValue
-                ? profileValue
-                : (data.self.profilePicture ?? '/images/default-user-profile-icon.jpg')}
-              alt="user-profile"
-            />
-
-            <FileDropzone contentInputName="profile-picture" bind:contentValue={profileValue} />
-          </div>
+      </div>
+    </form>
+  {:else if params.section === 'display'}{:else if params.section === 'danger'}
+    {#if data.self.role !== 'admin'}
+      <div class="flex flex-col gap-2">
+        <p class="text-xl">Delete account</p>
+        <div class="flex gap-4">
+          <Button type="danger" onclick={() => (showModal = 'delete')}>Delete</Button>
         </div>
-      </form>
-    {:else if params.section === 'display'}{:else if params.section === 'danger'}
-      {#if data.self.role !== 'admin'}
-        <div class="flex flex-col gap-2">
-          <p class="text-xl">Delete account</p>
-          <div class="flex gap-4">
-            <Button type="danger" onclick={() => (showModal = 'delete')}>Delete</Button>
-          </div>
-        </div>
-      {/if}
+      </div>
     {/if}
-  </div>
-
-  {#snippet right()}
-    <div class="flex w-fit flex-col py-20 text-xl">
-      {#each items as item, index}
-        <div class="flex">
-          <div
-            class={[
-              params.section === item
-                ? 'border-gray-700 dark:border-gray-300'
-                : 'border-gray-300 dark:border-gray-700',
-              index === 0 && 'rounded-t-md',
-              index === items.length - 1 && 'rounded-b-md',
-              'mr-4 w-0 border-l-6',
-            ]}
-          ></div>
-          <a
-            class={[
-              'py-2',
-              params.section === item
-                ? `font-semibold ${item.includes('danger') ? 'text-red-600' : 'dark:text-gray-300'}`
-                : `${item.includes('danger') ? 'text-red-800' : 'text-gray-500'}`,
-            ]}
-            href={item}
-          >
-            {capitalize(item)}
-          </a>
-        </div>
-      {/each}
-    </div>
-  {/snippet}
+  {/if}
 
   <Modal show={showModal === 'delete'} backdropCallback={hideModal} center>
     <ModalHeader>Delete account</ModalHeader>

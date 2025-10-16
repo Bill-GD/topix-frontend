@@ -99,7 +99,7 @@
         {/if}
       </div>
 
-      <div class="flex w-fit items-baseline gap-2 text-gray-500">
+      <div class="flex w-fit items-center gap-2 text-gray-500">
         <a
           class="z-1 font-semibold text-black hover:underline dark:text-white dark:decoration-white"
           href="/user/{post.owner.username}"

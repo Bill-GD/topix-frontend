@@ -18,32 +18,30 @@
 <HomeLayout self={data.self}>
   <ReturnHeader>Hidden items</ReturnHeader>
 
-  <div
-    class="no-scrollbar flex justify-around overflow-x-scroll border-b border-gray-400 md:hidden dark:border-gray-700"
-  >
-    {#each items as item}
-      <a
-        class={[
-          'w-full py-2 text-center',
-          params.section === item
-            ? 'bg-zinc-300/40 font-semibold dark:bg-zinc-800/40 dark:text-gray-300'
-            : 'text-gray-500',
-        ]}
-        href={item}
-      >
-        {capitalize(item)}
-      </a>
-    {/each}
-  </div>
+  <div class="flex flex-col gap-4">
+    <div class="flex gap-2 dark:bg-zinc-950">
+      {#each items as item}
+        <a
+          class={[
+            'flex-1 rounded-md px-4 py-2 text-center',
+            params.section === item
+              ? 'bg-zinc-50 font-semibold box-drop-shadow dark:bg-zinc-800/40 dark:text-gray-300'
+              : 'bg-zinc-200 text-gray-500',
+          ]}
+          href={item}
+          data-sveltekit-replacestate
+        >
+          {capitalize(item)}
+        </a>
+      {/each}
+    </div>
 
-  <div>
     {#if params.section === 'post'}
       {#if data.posts!.length <= 0}
         <p class="empty-noti-text">No hidden post.</p>
       {/if}
       {#each data.posts! as post (post.id)}
-        <Post self={data.self} {post} compact />
-        <Divider />
+        <Post self={data.self} {post} />
       {/each}
     {:else if params.section === 'thread'}
       {#if data.threads!.length <= 0}
@@ -51,7 +49,6 @@
       {/if}
       {#each data.threads! as thread (thread.id)}
         <ThreadOverview {thread} />
-        <Divider />
       {/each}
     {:else if params.section === 'group'}
       {#if data.groups!.length <= 0}

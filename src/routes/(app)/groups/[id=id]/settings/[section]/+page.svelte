@@ -35,126 +35,96 @@
 <HomeLayout self={data.self}>
   <ReturnHeader>Settings</ReturnHeader>
 
-  <div
-    class="no-scrollbar flex justify-around overflow-x-scroll border-b border-gray-400 md:hidden dark:border-gray-700"
-  >
+  <div class="mb-4 flex gap-2 dark:bg-zinc-950">
     {#each items as item}
       <a
         class={[
-          'w-full py-2 text-center',
+          'flex-1 rounded-md px-4 py-2 text-center',
           params.section === item
-            ? 'bg-zinc-300/40 font-semibold dark:bg-zinc-800/40 dark:text-gray-300'
-            : 'text-gray-500',
+            ? 'bg-zinc-50 font-semibold box-drop-shadow dark:bg-zinc-800/40 dark:text-gray-300'
+            : 'bg-zinc-200 text-gray-500',
         ]}
         href={item}
+        data-sveltekit-replacestate
       >
         {capitalize(item)}
       </a>
     {/each}
   </div>
 
-  <div class="w-full p-4 lg:p-12">
-    {#if params.section === 'general'}
-      <form
-        class="flex flex-col gap-4"
-        action="?/update-group"
-        method="post"
-        onsubmit={() => (saving = true)}
-        use:enhance={() => {
-          return async ({ result, update }) => {
-            await formResultToast(result, toaster);
-            await update();
-            saving = false;
-            filenameValue = '';
-            bannerValue = '';
-          };
-        }}
-      >
-        <Button class="ml-auto w-fit" type="success" disabled={saving}>Save</Button>
-        <div class="input-group">
-          <label class="text-xl" for="group-name">Name</label>
-          <Input class="w-min" id="group-name" name="group-name" value={data.group.name}></Input>
-        </div>
-
-        <div class="input-group">
-          <label class="text-xl" for="description">Description</label>
-          <Input
-            class="w-min"
-            id="description"
-            name="description"
-            value={data.group.description ?? ''}
-            placeholder="No description"
-            textarea
-          />
-        </div>
-
-        <div class="input-group">
-          <label class="text-xl" for="group-visibility">Visibility</label>
-          <VisibilitySelector name="group-visibility" visibility={data.group.visibility} />
-        </div>
-
-        <div class="input-group">
-          <label class="text-xl" for="description">Banner picture</label>
-          <img
-            class="rounded-md"
-            src={bannerValue ? bannerValue : (data.group.bannerPicture ?? '/images/no-image.jpg')}
-            alt="user-profile"
-          />
-
-          <FileDropzone contentInputName="group-banner" bind:contentValue={bannerValue} />
-        </div>
-      </form>
-    {:else if params.section === 'tags'}
-      <div class="flex flex-col gap-4">
-        <Button class="ml-auto" type="success" onclick={() => (showModal = 'add')}>Add tag</Button>
-
-        <p class="text-lg font-semibold">Current tags</p>
-        <div class="flex flex-wrap gap-4">
-          {#each data.tags as tag (tag.id)}
-            <div class="flex w-min items-center">
-              <Flair {tag} />
-              <IconButton
-                onclick={() => {
-                  showModal = 'delete';
-                  selectedTag = tag;
-                }}
-              >
-                <Icon type="delete" class="text-red-500" size="sm" />
-              </IconButton>
-            </div>
-          {/each}
-        </div>
+  {#if params.section === 'general'}
+    <form
+      class="flex flex-col gap-4"
+      action="?/update-group"
+      method="post"
+      onsubmit={() => (saving = true)}
+      use:enhance={() => {
+        return async ({ result, update }) => {
+          await formResultToast(result, toaster);
+          await update();
+          saving = false;
+          filenameValue = '';
+          bannerValue = '';
+        };
+      }}
+    >
+      <Button class="ml-auto w-fit" type="success" disabled={saving}>Save</Button>
+      <div class="input-group">
+        <label class="text-xl" for="group-name">Name</label>
+        <Input class="w-min" id="group-name" name="group-name" value={data.group.name}></Input>
       </div>
-    {/if}
-  </div>
 
-  {#snippet right()}
-    <div class="flex w-fit flex-col py-20 text-xl">
-      {#each items as item, index}
-        <div class="flex">
-          <div
-            class={[
-              params.section === item
-                ? 'border-gray-700 dark:border-gray-300'
-                : 'border-gray-300 dark:border-gray-700',
-              index === 0 && 'rounded-t-md',
-              index === items.length - 1 && 'rounded-b-md',
-              'mr-4 w-0 border-l-6',
-            ]}
-          ></div>
-          <a
-            class={[
-              'py-2',
-              params.section === item ? 'font-semibold dark:text-gray-300' : 'text-gray-500',
-            ]}
-            href={item}
-          >
-            {capitalize(item)}
-          </a>
-        </div>
-      {/each}
+      <div class="input-group">
+        <label class="text-xl" for="description">Description</label>
+        <Input
+          class="w-min"
+          id="description"
+          name="description"
+          value={data.group.description ?? ''}
+          placeholder="No description"
+          textarea
+        />
+      </div>
+
+      <div class="input-group">
+        <label class="text-xl" for="group-visibility">Visibility</label>
+        <VisibilitySelector name="group-visibility" visibility={data.group.visibility} />
+      </div>
+
+      <div class="input-group">
+        <label class="text-xl" for="description">Banner picture</label>
+        <img
+          class="rounded-md"
+          src={bannerValue ? bannerValue : (data.group.bannerPicture ?? '/images/no-image.jpg')}
+          alt="user-profile"
+        />
+
+        <FileDropzone contentInputName="group-banner" bind:contentValue={bannerValue} />
+      </div>
+    </form>
+  {:else if params.section === 'tags'}
+    <div class="flex flex-col gap-4">
+      <Button class="ml-auto" type="success" onclick={() => (showModal = 'add')}>Add tag</Button>
+
+      <p class="text-lg font-semibold">Current tags</p>
+      <div class="flex flex-wrap gap-4">
+        {#each data.tags as tag (tag.id)}
+          <div class="flex w-min items-center">
+            <Flair {tag} />
+            <IconButton
+              class="p-2 hover:bg-zinc-300"
+              onclick={() => {
+                showModal = 'delete';
+                selectedTag = tag;
+              }}
+            >
+              <Icon type="delete" class="text-red-500" size="sm" />
+            </IconButton>
+          </div>
+        {/each}
+      </div>
     </div>
-  {/snippet}
+  {/if}
 
   <Modal show={showModal === 'add'} backdropCallback={hideModal} center>
     <ModalHeader>Add new tag</ModalHeader>
