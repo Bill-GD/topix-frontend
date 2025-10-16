@@ -27,25 +27,26 @@
   }
 </script>
 
-<div class={['flex items-center gap-2 p-4', className]}>
-  <img
-    class="profile-picture-sm"
-    src={post.owner.profilePicture ?? '/images/default-user-profile-icon.jpg'}
-    alt="profile"
-  />
-
+<div class={['flex items-center gap-2 rounded-lg bg-zinc-50 p-4 box-drop-shadow', className]}>
   <div class="flex flex-col gap-3">
-    <div class="flex flex-col">
-      <div class="flex items-baseline gap-2 text-gray-500">
-        <Link class="flex items-baseline gap-2" href="/user/{post.owner.username}">
-          <span class="text-xl text-white decoration-white hover:underline">
+    <div class="flex items-center gap-3">
+      <img
+        class="profile-picture-sm"
+        src={post.owner.profilePicture ?? '/images/default-user-profile-icon.jpg'}
+        alt="profile"
+      />
+      <div class="flex flex-col">
+        <div class="flex items-baseline gap-2 text-gray-500">
+          <a
+            class="z-[2] font-semibold text-black hover:underline dark:text-white dark:decoration-white"
+            href="/user/{post.owner.username}"
+          >
             {post.owner.displayName}
-          </span>
-          <span class="text-gray-500">@{post.owner.username}</span>
-        </Link>
+          </a>
 
-        <span>•</span>
-        <span>{getTimeAgo(Date.parse(post.dateCreated))}</span>
+          <span>•</span>
+          <span>{getTimeAgo(Date.parse(post.dateCreated))}</span>
+        </div>
       </div>
     </div>
 

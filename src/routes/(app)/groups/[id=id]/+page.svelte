@@ -83,7 +83,7 @@
 
           <DropdownMenu class="ml-auto" position="bottom" align="right">
             {#snippet trigger()}
-              <IconButton round>
+              <IconButton class="p-2" round>
                 <Icon type="menu" size="sm" />
               </IconButton>
             {/snippet}

@@ -16,23 +16,21 @@ export const load: LayoutServerLoad = async ({ locals, cookies, route, url }) =>
       undefined,
       cookies.get(CookieName.refreshToken),
     );
-    if (res.success) {
-      const resObject = res.data as Record<string, string>;
-      cookies.set(CookieName.accessToken, `${resObject['token']}`, {
-        path: '/',
-        httpOnly: false,
-        maxAge: Number(resObject['time']),
-      });
-      locals.hasAT = true;
-      if (!route.id?.includes('(app)')) redirect(303, '/home');
-    }
+    if (!res.success) error(res.status, res.message);
 
     if (res.message.toLowerCase().includes('invalid signature')) {
       deleteCookies(cookies);
       redirect(303, '/login');
     }
 
-    error(res.status, res.message);
+    const resObject = res.data as Record<string, string>;
+    cookies.set(CookieName.accessToken, `${resObject['token']}`, {
+      path: '/',
+      httpOnly: false,
+      maxAge: Number(resObject['time']),
+    });
+    locals.hasAT = true;
+    if (!route.id?.includes('(app)')) redirect(303, '/home');
   }
 
   if (locals.hasAT && (url.pathname === '/' || route.id?.includes('(auth)'))) {

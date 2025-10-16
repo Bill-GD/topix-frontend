@@ -47,7 +47,7 @@ input[type='checkbox']:focus {
 }
 
 @utility box-drop-shadow {
-  @apply drop-shadow-md drop-shadow-zinc-500/40;
+  @apply shadow-md shadow-zinc-700/40;
 }
 
 .scrollbar::-webkit-scrollbar {
