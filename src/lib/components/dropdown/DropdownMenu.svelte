@@ -57,7 +57,7 @@
         in:scale={{ start: 0.75, duration: 100 }}
         out:scale={{ start: 1, duration: 200 }}
       >
-        <ul class={['p-1 dark:text-white', horizontal && 'flex']}>
+        <ul class={['p-2 dark:text-white', horizontal && 'flex']}>
           {@render children()}
         </ul>
       </div>

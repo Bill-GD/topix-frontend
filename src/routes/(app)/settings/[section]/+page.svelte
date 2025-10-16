@@ -8,14 +8,12 @@
   import { getToaster } from '$lib/components/toast';
   import { FileDropzone } from '$lib/components/upload';
   import { capitalize, formResultToast } from '$lib/utils/helpers';
-  import { getTheme } from '$lib/utils/theme.svelte';
   import type { PageProps } from './$types';
 
   let { data, params }: PageProps = $props();
 
   const toaster = getToaster();
-  const theme = getTheme();
-  const items = ['account', 'profile', 'display', 'danger'];
+  const items = ['account', 'profile', 'danger'];
   let passwordValue = $state<string>('');
   let profileValue = $state<string>('');
   let showModal = $state<'delete' | null>(null);
@@ -119,41 +117,7 @@
           </div>
         </div>
       </form>
-    {:else if params.section === 'display'}
-      <div class="input-group">
-        <span class="text-xl">Theme</span>
-        <div class="flex w-full justify-center gap-4">
-          <label
-            class="theme-input flex w-full items-center rounded-lg border border-gray-400 bg-zinc-50 p-6 text-black md:w-fit md:gap-4"
-            for="light-theme"
-          >
-            <input
-              class="bg-zinc-50 hover:not-checked:bg-zinc-300"
-              type="radio"
-              id="light-theme"
-              name="theme"
-              checked={!theme.isDark}
-              oninput={() => theme.toggle('light')}
-            />
-            <span class="mx-auto font-bold">Light</span>
-          </label>
-          <label
-            class="theme-input flex w-full items-center rounded-lg border border-gray-700 bg-zinc-950 p-6 text-white md:w-fit md:gap-4"
-            for="dark-theme"
-          >
-            <input
-              class="bg-zinc-950 hover:not-checked:bg-zinc-700"
-              type="radio"
-              id="dark-theme"
-              name="theme"
-              checked={theme.isDark}
-              oninput={() => theme.toggle('dark')}
-            />
-            <span class="mx-auto font-bold">Dark</span>
-          </label>
-        </div>
-      </div>
-    {:else if params.section === 'danger'}
+    {:else if params.section === 'display'}{:else if params.section === 'danger'}
       {#if data.self.role !== 'admin'}
         <div class="flex flex-col gap-2">
           <p class="text-xl">Delete account</p>
@@ -234,16 +198,5 @@
 
   .input-group {
     @apply flex flex-col items-start gap-2;
-  }
-
-  .theme-input {
-    input {
-      @apply rounded-md transition-all duration-150 checked:border-2 checked:border-sky-500 checked:bg-sky-500;
-    }
-
-    &,
-    * {
-      @apply cursor-pointer;
-    }
   }
 </style>

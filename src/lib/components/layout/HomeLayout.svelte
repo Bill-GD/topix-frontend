@@ -1,10 +1,13 @@
 <script lang="ts">
-  import { DropdownItem, DropdownMenu } from '$lib/components/dropdown';
-  import { NavigationItem } from '$lib/components/link';
-  import { Icon } from '$lib/components/misc';
-  import { Icons, type HomeLayoutProps } from '$lib/components/types';
+  import { getTheme } from '$lib/utils/theme.svelte';
   import { fade, slide } from 'svelte/transition';
   import IconButton from '../button/IconButton.svelte';
+  import DropdownItem from '../dropdown/DropdownItem.svelte';
+  import DropdownMenu from '../dropdown/DropdownMenu.svelte';
+  import Switch from '../input/Switch.svelte';
+  import NavigationItem from '../link/NavigationItem.svelte';
+  import Icon from '../misc/Icon.svelte';
+  import type { HomeLayoutProps, Icons } from '../types';
 
   let { self, children, right }: HomeLayoutProps = $props();
 
@@ -19,6 +22,7 @@
     { title: 'Groups', href: '/groups', icon: 'group' },
   ];
 
+  const theme = getTheme();
   let showNav = $state<boolean>(false);
 </script>
 
@@ -49,18 +53,11 @@
 
     <DropdownMenu class="ml-auto" position="bottom" align="right">
       {#snippet trigger()}
-        <!-- <div
-          class="w-full cursor-pointer items-center rounded-full hover:bg-zinc-300 dark:hover:bg-zinc-900"
-        > -->
         <img
-          class="profile-picture-sm"
+          class="profile-picture-sm cursor-pointer hover:bg-zinc-200"
           src={self.profilePicture ?? '/images/default-user-profile-icon.jpg'}
           alt="profile"
         />
-
-        <!-- <div class="hidden flex-col text-right lg:flex">
-          </div> -->
-        <!-- </div> -->
       {/snippet}
 
       <DropdownItem class="flex items-center gap-3" href="/user/{self.username}">
@@ -78,6 +75,10 @@
         </div>
       </DropdownItem>
       <DropdownItem href="/settings/account">Settings</DropdownItem>
+      <DropdownItem class="flex items-center justify-between" onclick={() => theme.toggle()}>
+        Dark mode
+        <Switch class="w-1/3" checked={theme.isDark} onchange={() => theme.toggle()} />
+      </DropdownItem>
       <DropdownItem class="text-red-500" href="/logout" rel="external">Log out</DropdownItem>
     </DropdownMenu>
   </header>

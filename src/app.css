@@ -8,13 +8,15 @@
 }
 
 input[type='color'],
+input[type='checkbox'],
 input[type='radio'] {
   appearance: none;
   -moz-appearance: none;
   -webkit-appearance: none;
 }
 
-input[type='radio']:focus {
+input[type='radio']:focus,
+input[type='checkbox']:focus {
   outline: none;
   box-shadow: none;
 }
@@ -33,19 +35,19 @@ input[type='radio']:focus {
 }
 
 @utility profile-picture-lg {
-  @apply h-30 w-30 aspect-square rounded-full;
+  @apply aspect-square h-30 w-30 rounded-full object-contain;
 }
 
 @utility profile-picture-md {
-  @apply aspect-square h-20 w-20 rounded-full;
+  @apply aspect-square h-20 w-20 rounded-full object-contain;
 }
 
 @utility profile-picture-sm {
-  @apply aspect-square h-10 w-10 rounded-full;
+  @apply aspect-square h-10 w-10 rounded-full object-contain;
 }
 
 @utility box-drop-shadow {
-  @apply drop-shadow-zinc-500/40 drop-shadow-md;
+  @apply drop-shadow-md drop-shadow-zinc-500/40;
 }
 
 .scrollbar::-webkit-scrollbar {
