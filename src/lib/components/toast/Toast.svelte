@@ -22,8 +22,7 @@
 {#if mounted}
   <div
     class={[
-      'flex w-fit items-center gap-2 rounded-md border-2 bg-zinc-50 p-3 dark:bg-zinc-950',
-      types[toast.type][0],
+      'flex w-fit items-center gap-2 rounded-lg bg-zinc-50 p-3 box-drop-shadow dark:bg-zinc-950',
       className,
     ]}
     in:slide={{ duration: 200 }}

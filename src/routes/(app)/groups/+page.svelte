@@ -32,26 +32,24 @@
 <HomeLayout self={data.self}>
   <ReturnHeader>Groups</ReturnHeader>
 
-  <!-- svelte-ignore a11y_click_events_have_key_events -->
-  <!-- svelte-ignore a11y_no_static_element_interactions -->
-  <div
-    class="flex w-full cursor-pointer items-center justify-center gap-2 py-4 hover:bg-zinc-300/40 dark:hover:bg-zinc-800/40"
-    onclick={() => (showModal = 'create')}
-  >
-    <span class="font-semibold">Create group</span>
-    <Icon type="add" size="sm" />
-  </div>
+  <div class="flex flex-col gap-4">
+    <Button
+      class="flex w-fit items-center gap-2 self-end"
+      type="success"
+      onclick={() => (showModal = 'create')}
+    >
+      Create group
+      <Icon type="add" size="sm" />
+    </Button>
 
-  <div class="flex flex-col">
     {#if data.groups.length <= 0}
       <p class="p-4 text-center text-xl font-semibold">
         There are no group available in topix yet.
       </p>
     {:else}
-      <Divider />
       {#each groups as group}
         <a
-          class="flex items-center gap-4 p-4 hover:bg-zinc-300/40 dark:hover:bg-zinc-900/40"
+          class="flex items-center gap-4 rounded-lg bg-zinc-50 p-4 box-drop-shadow hover:bg-zinc-100 dark:hover:bg-zinc-900/40"
           href="/groups/{group.id}"
         >
           <div class="w-30 overflow-hidden rounded-md">
@@ -81,7 +79,6 @@
             </div>
           {/if}
         </a>
-        <Divider />
       {/each}
 
       <Scroller
