@@ -1,7 +1,6 @@
 <script lang="ts">
-  import { capitalize, getTimeAgo } from '$lib/utils/helpers';
+  import { capitalize } from '$lib/utils/helpers';
   import type { Group } from '$lib/utils/types';
-  import Flair from '../misc/Flair.svelte';
   import Icon from '../misc/Icon.svelte';
 
   let { group, showOwner = false }: { group: Group; showOwner?: boolean } = $props();
@@ -11,6 +10,10 @@
   class="flex cursor-pointer items-center gap-4 rounded-lg bg-zinc-50 px-4 py-2 box-drop-shadow hover:bg-zinc-200 dark:hover:bg-zinc-900/40"
   href="/groups/{group.id}"
 >
+  <div class="w-30 overflow-hidden rounded-md">
+    <img src={group.bannerPicture ?? '/images/no-image.jpg'} alt="group-banner" />
+  </div>
+
   <div class="flex flex-col gap-2">
     <span class="text-xl font-semibold">{group.name}</span>
     <div class="flex items-baseline gap-2 text-gray-500">
@@ -23,6 +26,9 @@
       •
       {group.memberCount} member{group.memberCount > 1 ? 's' : ''}
     </div>
+    {#if showOwner}
+      <p>Owner: {group.owner.displayName}</p>
+    {/if}
   </div>
 
   {#if group.status !== null}

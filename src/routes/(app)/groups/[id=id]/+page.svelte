@@ -7,11 +7,11 @@
   import { Scroller } from '$lib/components/layout';
   import { Icon, ReturnHeader } from '$lib/components/misc';
   import { Modal, ModalBody, ModalFooter, ModalHeader } from '$lib/components/modal';
+  import { ThreadOverview } from '$lib/components/overview';
   import { Post } from '$lib/components/post';
   import { getToaster } from '$lib/components/toast';
   import { PostUpload } from '$lib/components/upload';
   import { capitalize, formResultToast } from '$lib/utils/helpers';
-  import { ThreadOverview } from '@/lib/components/overview';
   import type { PageProps } from './$types';
 
   let { data }: PageProps = $props();
