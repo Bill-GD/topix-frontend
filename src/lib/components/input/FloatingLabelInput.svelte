@@ -8,13 +8,20 @@
     peekable = false,
     type,
     class: className,
-    labelClass = 'bg-zinc-950',
+    labelClass,
     name: inputName,
     required = false,
     value = $bindable(''),
   }: FloatingLabelInputProps = $props();
 
   const id = $props.id();
+
+  if (labelClass)
+    labelClass = labelClass
+      .toString()
+      .split(' ')
+      .map((e) => `peer-focus:${e}`)
+      .join(' ');
 </script>
 
 <div class={['relative w-fit', className]}>
@@ -38,10 +45,10 @@
   @reference '@/app.css';
 
   .floating-label {
-    @apply absolute left-3 z-1 truncate text-left text-gray-500 duration-200 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-focus:top-2 peer-focus:left-1 peer-focus:-translate-y-5 peer-focus:scale-90 peer-focus:px-2;
+    @apply absolute left-3 z-1 cursor-text truncate text-left text-gray-500 duration-200 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-focus:top-2 peer-focus:left-1 peer-focus:-translate-y-5 peer-focus:scale-90 peer-focus:px-2;
   }
 
   .input-not-focus {
-    @apply not-peer-focus:top-2 not-peer-focus:left-1 not-peer-focus:-translate-y-5 not-peer-focus:scale-90 not-peer-focus:px-2;
+    @apply not-peer-focus:top-2 not-peer-focus:left-1 not-peer-focus:-translate-y-5 not-peer-focus:scale-90 not-peer-focus:bg-transparent not-peer-focus:px-2;
   }
 </style>

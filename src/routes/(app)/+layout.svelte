@@ -40,7 +40,7 @@
   {/if}
 {/snippet}
 
-<main class="min-h-screen bg-zinc-200 dark:bg-zinc-950">
+<main class="min-h-screen">
   <header
     class="fixed top-0 z-4 flex h-(--header-height) w-full items-center bg-zinc-50 px-2 box-shadow md:px-4 dark:border-b dark:border-zinc-700 dark:bg-zinc-900"
   >

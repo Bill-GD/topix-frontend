@@ -19,7 +19,7 @@
   });
 </script>
 
-<div class={['dark:text-zinc-200', theme.isDark && 'dark']}>
+<div class={['relative bg-zinc-200 dark:bg-zinc-950 dark:text-zinc-200', theme.isDark && 'dark']}>
   {@render children()}
 
   {#if toaster.toasts.length > 0}

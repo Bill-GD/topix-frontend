@@ -47,10 +47,11 @@
 
 {#if clearable && value.length > 0}
   <IconButton
-    class="absolute top-1/2 {peekable && initType === 'password'
+    class="absolute top-1/2 p-1 {peekable && initType === 'password'
       ? 'right-8'
       : 'right-1'} -translate-y-1/2"
     buttonType="button"
+    round
     onclick={() => (value = '')}
   >
     <Icon
@@ -64,8 +65,9 @@
 {#if peekable && initType === 'password'}
   {#key peeking}
     <IconButton
-      class="absolute top-1/2 right-1 -translate-y-1/2"
+      class="absolute top-1/2 right-1 -translate-y-1/2 p-1"
       buttonType="button"
+      round
       onclick={() => (peeking = !peeking)}
     >
       {#if peeking}

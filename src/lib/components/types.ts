@@ -18,9 +18,11 @@ import { faImage } from '@fortawesome/free-solid-svg-icons/faImage';
 import { faLock } from '@fortawesome/free-solid-svg-icons/faLock';
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons/faMagnifyingGlass';
 import { faMessage } from '@fortawesome/free-solid-svg-icons/faMessage';
+import { faMoon } from '@fortawesome/free-solid-svg-icons/faMoon';
 import { faPen } from '@fortawesome/free-solid-svg-icons/faPen';
 import { faPlus } from '@fortawesome/free-solid-svg-icons/faPlus';
 import { faReply } from '@fortawesome/free-solid-svg-icons/faReply';
+import { faSun } from '@fortawesome/free-solid-svg-icons/faSun';
 import { faThumbsUp } from '@fortawesome/free-solid-svg-icons/faThumbsUp';
 import { faTrashCan } from '@fortawesome/free-solid-svg-icons/faTrashCan';
 import { faTriangleExclamation } from '@fortawesome/free-solid-svg-icons/faTriangleExclamation';
@@ -48,6 +50,8 @@ export const IconSize = {
 };
 
 export const Icons = {
+  sun: faSun,
+  moon: faMoon,
   lock: faLock,
   edit: faPen,
   delete: faTrashCan,
