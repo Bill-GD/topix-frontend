@@ -2,8 +2,8 @@
   import { enhance } from '$app/forms';
   import { Button } from '$lib/components/button';
   import { FloatingLabelInput } from '$lib/components/input';
-  import { HomeLayout, Scroller } from '$lib/components/layout';
-  import { Divider, Icon, ReturnHeader, VisibilitySelector } from '$lib/components/misc';
+  import { Scroller } from '$lib/components/layout';
+  import { Icon, ReturnHeader, VisibilitySelector } from '$lib/components/misc';
   import { Modal, ModalBody, ModalFooter, ModalHeader } from '$lib/components/modal';
   import { getToaster } from '$lib/components/toast';
   import { FileDropzone } from '$lib/components/upload';
@@ -29,121 +29,115 @@
   <title>Groups - topix</title>
 </svelte:head>
 
-<HomeLayout self={data.self}>
-  <ReturnHeader>Groups</ReturnHeader>
+<ReturnHeader>Groups</ReturnHeader>
 
-  <div class="flex flex-col gap-4">
-    <Button
-      class="flex w-fit items-center gap-2 self-end"
-      type="success"
-      onclick={() => (showModal = 'create')}
-    >
-      Create group
-      <Icon type="add" size="sm" />
-    </Button>
+<div class="flex flex-col gap-4">
+  <Button
+    class="flex w-fit items-center gap-2 self-end"
+    type="success"
+    onclick={() => (showModal = 'create')}
+  >
+    Create group
+    <Icon type="add" size="sm" />
+  </Button>
 
-    {#if data.groups.length <= 0}
-      <p class="p-4 text-center text-xl font-semibold">
-        There are no group available in topix yet.
-      </p>
-    {:else}
-      {#each groups as group}
-        <a
-          class="flex items-center gap-4 rounded-lg bg-zinc-50 p-4 box-drop-shadow hover:bg-zinc-100 dark:hover:bg-zinc-900/40"
-          href="/groups/{group.id}"
-        >
-          <div class="w-30 overflow-hidden rounded-md">
-            <img src={group.bannerPicture ?? '/images/no-image.jpg'} alt="group-banner" />
-          </div>
-
-          <div class="flex flex-col gap-2">
-            <span class="text-xl font-semibold">{group.name}</span>
-            <div class="flex items-baseline gap-2 text-gray-500">
-              {#if group.visibility === 'private'}
-                <Icon type="lock" size="xs" />
-              {:else if group.visibility === 'hidden'}
-                <Icon type="eyeSlash" size="xs" />
-              {/if}
-              {capitalize(group.visibility)}
-              -
-              {group.memberCount} member{group.memberCount > 1 ? 's' : ''}
-            </div>
-            <p>Owner: {group.owner.displayName}</p>
-          </div>
-
-          {#if group.status !== null}
-            <div
-              class={['ml-auto font-semibold', group.status ? 'text-green-700' : 'text-sky-500']}
-            >
-              {group.status ? 'Joined' : 'Pending'}
-            </div>
-          {/if}
-        </a>
-      {/each}
-
-      <Scroller
-        disabled={disableScroller}
-        attachmentCallback={async () => {
-          const res = await fetch(`/api/groups?page=${++pageIndex}`);
-          const newData = await res.json();
-          if (newData.length <= 0) disableScroller = true;
-          groups = [...groups, ...newData];
-        }}
-        detachCleanup={() => {
-          pageIndex = 1;
-          disableScroller = false;
-        }}
-      />
-    {/if}
-  </div>
-
-  <Modal show={showModal === 'create'} backdropCallback={hideModal} center>
-    <ModalHeader>Create new group</ModalHeader>
-    <ModalBody>
-      <form
-        class="flex w-full flex-col items-center gap-4"
-        action="?/create-group"
-        method="post"
-        use:enhance={() => {
-          return async ({ result, update }) => {
-            await formResultToast(result, toaster);
-            await update();
-          };
-        }}
+  {#if data.groups.length <= 0}
+    <p class="p-4 text-center text-xl font-semibold">There are no group available in topix yet.</p>
+  {:else}
+    {#each groups as group}
+      <a
+        class="flex items-center gap-4 rounded-lg bg-zinc-50 p-4 box-drop-shadow hover:bg-zinc-100 dark:hover:bg-zinc-900/40"
+        href="/groups/{group.id}"
       >
-        <FloatingLabelInput
-          class="w-full"
-          labelClass="bg-zinc-200 dark:bg-zinc-900"
-          name="group-name"
-          bind:value={groupName}
-          required
-        >
-          Name
-        </FloatingLabelInput>
-        <VisibilitySelector class="w-full" />
+        <div class="w-30 overflow-hidden rounded-md">
+          <img src={group.bannerPicture ?? '/images/no-image.jpg'} alt="group-banner" />
+        </div>
 
-        {#if bannerValue !== ''}
-          <img class="rounded-md" src={bannerValue} alt="user-profile" />
+        <div class="flex flex-col gap-2">
+          <span class="text-xl font-semibold">{group.name}</span>
+          <div class="flex items-baseline gap-2 text-gray-500">
+            {#if group.visibility === 'private'}
+              <Icon type="lock" size="xs" />
+            {:else if group.visibility === 'hidden'}
+              <Icon type="eyeSlash" size="xs" />
+            {/if}
+            {capitalize(group.visibility)}
+            -
+            {group.memberCount} member{group.memberCount > 1 ? 's' : ''}
+          </div>
+          <p>Owner: {group.owner.displayName}</p>
+        </div>
+
+        {#if group.status !== null}
+          <div class={['ml-auto font-semibold', group.status ? 'text-green-700' : 'text-sky-500']}>
+            {group.status ? 'Joined' : 'Pending'}
+          </div>
         {/if}
+      </a>
+    {/each}
 
-        <FileDropzone contentInputName="group-banner" bind:contentValue={bannerValue} />
+    <Scroller
+      disabled={disableScroller}
+      attachmentCallback={async () => {
+        const res = await fetch(`/api/groups?page=${++pageIndex}`);
+        const newData = await res.json();
+        if (newData.length <= 0) disableScroller = true;
+        groups = [...groups, ...newData];
+      }}
+      detachCleanup={() => {
+        pageIndex = 1;
+        disableScroller = false;
+      }}
+    />
+  {/if}
+</div>
 
-        <ModalFooter>
-          <Button class="w-full" type="success" onclick={hideModal} disabled={groupName === ''}>
-            Create
-          </Button>
-          <Button
-            class="w-full"
-            type="dark"
-            onclick={(ev) => {
-              ev.preventDefault();
-              hideModal();
-            }}
-          >
-            Cancel
-          </Button>
-        </ModalFooter>
-      </form>
-    </ModalBody>
-  </Modal>
-</HomeLayout>
+<Modal show={showModal === 'create'} backdropCallback={hideModal} center>
+  <ModalHeader>Create new group</ModalHeader>
+  <ModalBody>
+    <form
+      class="flex w-full flex-col items-center gap-4"
+      action="?/create-group"
+      method="post"
+      use:enhance={() => {
+        return async ({ result, update }) => {
+          await formResultToast(result, toaster);
+          await update();
+        };
+      }}
+    >
+      <FloatingLabelInput
+        class="w-full"
+        labelClass="bg-zinc-200 dark:bg-zinc-900"
+        name="group-name"
+        bind:value={groupName}
+        required
+      >
+        Name
+      </FloatingLabelInput>
+      <VisibilitySelector class="w-full" />
+
+      {#if bannerValue !== ''}
+        <img class="rounded-md" src={bannerValue} alt="user-profile" />
+      {/if}
+
+      <FileDropzone contentInputName="group-banner" bind:contentValue={bannerValue} />
+
+      <ModalFooter>
+        <Button class="w-full" type="success" onclick={hideModal} disabled={groupName === ''}>
+          Create
+        </Button>
+        <Button
+          class="w-full"
+          type="dark"
+          onclick={(ev) => {
+            ev.preventDefault();
+            hideModal();
+          }}
+        >
+          Cancel
+        </Button>
+      </ModalFooter>
+    </form>
+  </ModalBody>
+</Modal>

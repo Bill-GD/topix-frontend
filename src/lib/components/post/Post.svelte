@@ -266,7 +266,7 @@
 
       <a
         class="z-1 flex items-center gap-2 rounded-md bg-zinc-200 p-2 hover:bg-zinc-300"
-        href={detail ? '' : `/post/${post.id}`}
+        href={detail ? null : `/post/${post.id}`}
       >
         <Icon type="reply" size="sm" />
         {post.replyCount}

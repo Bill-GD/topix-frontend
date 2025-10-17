@@ -1,15 +1,15 @@
 <script lang="ts">
+  import { IconButton } from '$lib/components/button';
+  import { DropdownItem, DropdownMenu } from '$lib/components/dropdown';
+  import { Switch } from '$lib/components/input';
+  import { NavigationItem } from '$lib/components/link';
+  import { Icon } from '$lib/components/misc';
+  import type { Icons } from '$lib/components/types';
   import { getTheme } from '$lib/utils/theme.svelte';
   import { fade, slide } from 'svelte/transition';
-  import IconButton from '../button/IconButton.svelte';
-  import DropdownItem from '../dropdown/DropdownItem.svelte';
-  import DropdownMenu from '../dropdown/DropdownMenu.svelte';
-  import Switch from '../input/Switch.svelte';
-  import NavigationItem from '../link/NavigationItem.svelte';
-  import Icon from '../misc/Icon.svelte';
-  import type { HomeLayoutProps, Icons } from '../types';
+  import type { LayoutProps } from './$types';
 
-  let { self, children, right }: HomeLayoutProps = $props();
+  let { data, children }: LayoutProps = $props();
 
   const navItems: {
     title: string;
@@ -33,14 +33,14 @@
     </NavigationItem>
   {/each}
 
-  {#if self.role === 'admin'}
+  {#if data.self.role === 'admin'}
     <NavigationItem title="Users" href="/users">
       <Icon type="user" />
     </NavigationItem>
   {/if}
 {/snippet}
 
-<main class="min-h-screen bg-zinc-200 pb-16 md:pb-0 dark:bg-zinc-950 dark:text-white">
+<main class="min-h-screen bg-zinc-200 dark:bg-zinc-950 dark:text-white">
   <header
     class="fixed top-0 z-4 flex h-(--header-height) w-full items-center bg-zinc-50 px-2 box-drop-shadow md:px-4"
   >
@@ -55,22 +55,22 @@
       {#snippet trigger()}
         <img
           class="profile-picture-sm cursor-pointer hover:bg-zinc-200"
-          src={self.profilePicture ?? '/images/default-user-profile-icon.jpg'}
+          src={data.self.profilePicture ?? '/images/default-user-profile-icon.jpg'}
           alt="profile"
         />
       {/snippet}
 
-      <DropdownItem class="flex items-center gap-3" href="/user/{self.username}">
+      <DropdownItem class="flex items-center gap-3" href="/user/{data.self.username}">
         <img
           class="profile-picture-sm"
-          src={self.profilePicture ?? '/images/default-user-profile-icon.jpg'}
+          src={data.self.profilePicture ?? '/images/default-user-profile-icon.jpg'}
           alt="profile"
         />
         <div class="flex flex-col">
           <span>View profile</span>
           <div class="flex items-center gap-2 text-sm">
-            <span class="dark:text-white">{self.displayName}</span>
-            <span class="text-gray-500">@{self.username}</span>
+            <span class="dark:text-white">{data.self.displayName}</span>
+            <span class="text-gray-500">@{data.self.username}</span>
           </div>
         </div>
       </DropdownItem>
@@ -83,9 +83,9 @@
     </DropdownMenu>
   </header>
 
-  <div class="mt-(--header-height) flex gap-4">
+  <div class="relative mt-(--header-height) flex gap-4">
     <aside
-      class="sticky top-(--header-height) hidden h-dvh w-full max-w-1/4 flex-col items-center gap-4 p-3 px-1 lg:flex"
+      class="sticky top-0 hidden h-dvh w-full max-w-1/4 flex-col items-center gap-4 p-3 px-1 lg:flex"
     >
       {@render sidebar()}
     </aside>
@@ -106,12 +106,8 @@
       </aside>
     {/if}
 
-    <section class="mx-2 flex w-full flex-col md:mx-8 lg:mx-0 lg:w-[734px]">
+    <section class="mx-2 flex w-full flex-col md:mx-8 lg:w-[734px]">
       {@render children?.()}
     </section>
-
-    <aside class="sticky top-(--header-height) hidden h-dvh max-w-1/4 p-3 lg:block">
-      {@render right?.()}
-    </aside>
   </div>
 </main>
