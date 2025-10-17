@@ -16,7 +16,7 @@
     href: string;
     icon: keyof typeof Icons;
   }[] = [
-    { title: 'Home', href: '/', icon: 'home' },
+    { title: 'Home', href: '/home', icon: 'home' },
     { title: 'Search', href: '/search', icon: 'search' },
     { title: 'Chat', href: '/chat', icon: 'message' },
     { title: 'Groups', href: '/groups', icon: 'group' },
@@ -84,7 +84,7 @@
   </header>
 
   <div class="relative mt-(--header-height) flex gap-4">
-    <aside class="sticky top-0 hidden h-dvh flex-col items-center gap-4 p-3 px-1 lg:flex">
+    <aside class="sticky top-0 hidden h-dvh flex-col items-center gap-4 p-3 lg:flex">
       {@render sidebar()}
     </aside>
 
@@ -105,7 +105,7 @@
     {/if}
 
     <section class="mx-4 flex w-full flex-col md:mx-8">
-      <div class="md:w-2/3 md:self-center lg:max-w-1/2">
+      <div class="md:w-3/4 md:self-center xl:w-2/3 2xl:w-1/2">
         {@render children?.()}
       </div>
     </section>

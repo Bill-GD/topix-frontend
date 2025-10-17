@@ -5,6 +5,7 @@
   import { DropdownItem, DropdownMenu } from '$lib/components/dropdown';
   import { FloatingLabelInput } from '$lib/components/input';
   import { Scroller } from '$lib/components/layout';
+  import { Tab, TabBar } from '$lib/components/link';
   import { Icon, ReturnHeader, VisibilitySelector } from '$lib/components/misc';
   import { Modal, ModalFooter, ModalHeader } from '$lib/components/modal';
   import { GroupOverview, ThreadOverview } from '$lib/components/overview';
@@ -36,113 +37,101 @@
 
 <ReturnHeader>{data.user.displayName}</ReturnHeader>
 
-<div class="mb-4 flex flex-col gap-4 rounded-lg bg-zinc-50 p-4 box-drop-shadow">
-  <div class="flex items-start gap-4">
-    <img
-      class="profile-picture-sm md:profile-picture-md"
-      src={data.user.profilePicture ?? '/images/default-user-profile-icon.jpg'}
-      alt="user-profile"
-    />
-
-    <div class="flex flex-col justify-start gap-2">
-      <div class="flex items-baseline gap-4">
-        <span class="text-2xl font-semibold">{data.user.displayName}</span>
-        <span class="text-base text-gray-500">@{data.user.username}</span>
-      </div>
-      <p class="text-wrap overflow-ellipsis">
-        {data.user.description ?? 'No description.'}
-      </p>
-    </div>
-  </div>
-
-  <div class="flex items-baseline gap-4 font-semibold md:gap-6 md:px-4">
-    <p>Following: {data.user.followingCount}</p>
-    <p>Follower: {data.user.followerCount}</p>
-
-    <div class="ml-auto flex gap-2 md:gap-4">
-      {#if data.self.id === data.user.id}
-        <DropdownMenu class="ml-auto h-fit" position="bottom" align="right">
-          {#snippet trigger()}
-            <IconButton round>
-              <Icon type="bar" size="sm" />
-            </IconButton>
-          {/snippet}
-
-          <DropdownItem href="/user/{data.self.username}/hidden/post">
-            View hidden items
-          </DropdownItem>
-        </DropdownMenu>
-      {:else}
-        <IconButton type="dark" class="w-full">
-          <Icon type="message" size="sm" />
-        </IconButton>
-        {#if data.user.followed}
-          <form
-            action="?/unfollow"
-            method="post"
-            use:enhance={() => {
-              return async ({ result, update }) => {
-                await formResultToast(result, toaster);
-                await update();
-              };
-            }}
-          >
-            <IconButton type="danger" class="w-full">
-              <Icon type="unfollow" size="sm" />
-            </IconButton>
-            <input type="number" name="user-id" value={data.user.id} hidden readonly />
-          </form>
-        {:else}
-          <form
-            action="?/follow"
-            method="post"
-            use:enhance={() => {
-              return async ({ result, update }) => {
-                await formResultToast(result, toaster);
-                await update();
-              };
-            }}
-          >
-            <IconButton type="dark" class="w-full">
-              <Icon type="follow" size="sm" />
-            </IconButton>
-            <input type="number" name="user-id" value={data.user.id} hidden readonly />
-          </form>
-        {/if}
-      {/if}
-    </div>
-  </div>
-</div>
-
-<div class="mb-4 flex gap-2 dark:bg-zinc-950">
-  {#each items as item}
-    <a
-      class={[
-        'flex-1 rounded-md px-4 py-2 text-center',
-        tab === item
-          ? 'bg-zinc-50 font-semibold box-drop-shadow dark:bg-zinc-800/40 dark:text-gray-300'
-          : 'bg-zinc-200 text-gray-500',
-      ]}
-      href="?tab={item}"
-      data-sveltekit-replacestate
-    >
-      {capitalize(item)}
-    </a>
-  {/each}
-</div>
-
-{#if tab === 'posts'}
-  {#if data.self.id === data.user.id}
-    <PostUpload
-      class="mb-4"
-      userPicture={data.self.profilePicture}
-      formaction="?/post-upload"
-      showVisibilitySelector
-    />
-  {/if}
-{/if}
-
 <div class="flex flex-col gap-4">
+  <div class="\flex flex-col gap-4 rounded-lg bg-zinc-50 p-4 box-drop-shadow">
+    <div class="flex items-start gap-4">
+      <img
+        class="profile-picture-sm md:profile-picture-md"
+        src={data.user.profilePicture ?? '/images/default-user-profile-icon.jpg'}
+        alt="user-profile"
+      />
+
+      <div class="flex flex-col justify-start gap-2">
+        <div class="flex items-baseline gap-4">
+          <span class="text-2xl font-semibold">{data.user.displayName}</span>
+          <span class="text-base text-gray-500">@{data.user.username}</span>
+        </div>
+        <p class="text-wrap overflow-ellipsis">
+          {data.user.description ?? 'No description.'}
+        </p>
+      </div>
+    </div>
+
+    <div class="flex items-baseline gap-4 font-semibold md:gap-6 md:px-4">
+      <p>Following: {data.user.followingCount}</p>
+      <p>Follower: {data.user.followerCount}</p>
+
+      <div class="ml-auto flex gap-2 md:gap-4">
+        {#if data.self.id === data.user.id}
+          <DropdownMenu class="ml-auto h-fit" position="bottom" align="right">
+            {#snippet trigger()}
+              <IconButton round>
+                <Icon type="bar" size="sm" />
+              </IconButton>
+            {/snippet}
+
+            <DropdownItem href="/user/{data.self.username}/hidden/post">
+              View hidden items
+            </DropdownItem>
+          </DropdownMenu>
+        {:else}
+          <IconButton type="dark" class="w-full">
+            <Icon type="message" size="sm" />
+          </IconButton>
+          {#if data.user.followed}
+            <form
+              action="?/unfollow"
+              method="post"
+              use:enhance={() => {
+                return async ({ result, update }) => {
+                  await formResultToast(result, toaster);
+                  await update();
+                };
+              }}
+            >
+              <IconButton type="danger" class="w-full">
+                <Icon type="unfollow" size="sm" />
+              </IconButton>
+              <input type="number" name="user-id" value={data.user.id} hidden readonly />
+            </form>
+          {:else}
+            <form
+              action="?/follow"
+              method="post"
+              use:enhance={() => {
+                return async ({ result, update }) => {
+                  await formResultToast(result, toaster);
+                  await update();
+                };
+              }}
+            >
+              <IconButton type="dark" class="w-full">
+                <Icon type="follow" size="sm" />
+              </IconButton>
+              <input type="number" name="user-id" value={data.user.id} hidden readonly />
+            </form>
+          {/if}
+        {/if}
+      </div>
+    </div>
+  </div>
+
+  <TabBar>
+    {#each items as item}
+      <Tab href="?tab={item}" selected={tab === item}>{capitalize(item)}</Tab>
+    {/each}
+  </TabBar>
+
+  {#if tab === 'posts'}
+    {#if data.self.id === data.user.id}
+      <PostUpload
+        userPicture={data.self.profilePicture}
+        formaction="?/post-upload"
+        showVisibilitySelector
+      />
+    {/if}
+  {/if}
+
   {#if tab === 'posts'}
     {#each posts as post (post.id)}
       <Post self={data.self} {post} />
@@ -171,76 +160,6 @@
     {/each}
   {/if}
 </div>
-
-<!-- {#snippet right()}
-    <div class="flex flex-col gap-4">
-      <div class="rounded-md border border-gray-700 2xl:max-w-1/2">
-        <div class="flex items-baseline p-4">
-          <p class="text-xl font-semibold">Threads</p>
-          {#if data.self.id === data.user.id}
-            <IconButton type="success" class="ml-auto" onclick={() => (showModal = 'thread')}>
-              <Icon type="add" size="xs" />
-            </IconButton>
-          {/if}
-        </div>
-
-        {#if data.threads.length <= 0}
-          <Divider />
-          <p class="w-full px-4 py-2">This user has no thread.</p>
-        {:else}
-          {#each data.threads as thread}
-            <Divider />
-            <ThreadOverview {thread} />
-          {/each}
-        {/if}
-      </div>
-
-      <div class="rounded-md border border-gray-700 2xl:max-w-1/2">
-        <div class="flex items-baseline p-4">
-          <p class="text-xl font-semibold">Groups</p>
-        </div>
-
-        {#if data.groups.length <= 0}
-          <Divider />
-          <p class="w-full px-4 py-2">This user has no thread.</p>
-        {:else}
-          {#each data.groups as group}
-            <Divider />
-
-            <a
-              class="flex items-center gap-4 px-4 py-2 hover:bg-zinc-300/40 dark:hover:bg-zinc-900/40"
-              href="/groups/{group.id}"
-            >
-              <div class="flex flex-col gap-2">
-                <span class="text-xl font-semibold">{group.name}</span>
-                <div class="flex items-baseline gap-2 text-gray-500">
-                  {#if group.visibility === 'private'}
-                    <Icon type="lock" size="xs" />
-                  {:else if group.visibility === 'hidden'}
-                    <Icon type="eyeSlash" size="xs" />
-                  {/if}
-                  {capitalize(group.visibility)}
-                  -
-                  {group.memberCount} member{group.memberCount > 1 ? 's' : ''}
-                </div>
-              </div>
-
-              {#if group.status !== null}
-                <div
-                  class={[
-                    'ml-auto font-semibold',
-                    group.status ? 'text-green-700' : 'text-sky-500',
-                  ]}
-                >
-                  {group.status ? 'Joined' : 'Pending'}
-                </div>
-              {/if}
-            </a>
-          {/each}
-        {/if}
-      </div>
-    </div>
-  {/snippet} -->
 
 <Modal show={showModal === 'thread'} backdropCallback={hideModal} center>
   <ModalHeader>Create thread</ModalHeader>

@@ -66,8 +66,10 @@ input[type='checkbox']:focus {
   @apply bg-zinc-300;
 }
 
-.no-scrollbar::-webkit-scrollbar {
-  display: none;
+@utility no-scrollbar {
+  &::-webkit-scrollbar {
+    @apply hidden;
+  }
 }
 
 .empty-noti-text {

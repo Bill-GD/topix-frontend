@@ -2,6 +2,7 @@
   import { enhance } from '$app/forms';
   import { Button } from '$lib/components/button';
   import { Input } from '$lib/components/input';
+  import { Tab, TabBar } from '$lib/components/link';
   import { ReturnHeader } from '$lib/components/misc';
   import { Modal, ModalBody, ModalHeader } from '$lib/components/modal';
   import { getToaster } from '$lib/components/toast';
@@ -28,22 +29,13 @@
 
 <ReturnHeader>Settings</ReturnHeader>
 
-<div class="mb-4 flex gap-2 dark:bg-zinc-950">
+<TabBar class="mb-4">
   {#each items as item}
-    <a
-      class={[
-        'flex-1 rounded-md px-4 py-2 text-center',
-        params.section === item
-          ? 'bg-zinc-50 font-semibold box-drop-shadow dark:bg-zinc-800/40 dark:text-gray-300'
-          : 'bg-zinc-200 text-gray-500',
-      ]}
-      href={item}
-      data-sveltekit-replacestate
-    >
+    <Tab href={item} selected={params.section === item}>
       {capitalize(item)}
-    </a>
+    </Tab>
   {/each}
-</div>
+</TabBar>
 
 {#if params.section === 'account'}
   <form
