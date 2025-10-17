@@ -14,6 +14,7 @@
   import ModalBody from '../modal/ModalBody.svelte';
   import ModalFooter from '../modal/ModalFooter.svelte';
   import ModalHeader from '../modal/ModalHeader.svelte';
+  import ImageCarousel from './ImageCarousel.svelte';
 
   let {
     class: className,
@@ -160,48 +161,7 @@
 
       {#if post.mediaPaths.length > 0}
         {#if isImages}
-          <div class="relative min-w-1/2">
-            {#if imageIndex > 0}
-              <IconButton
-                class="absolute top-1/2 left-0 h-full -translate-y-1/2 px-2 hover:bg-zinc-400/50 dark:hover:bg-zinc-900/20"
-                round={false}
-                onclick={() => (imageIndex = Math.max(0, imageIndex - 1))}
-              >
-                <Icon type="back" size="sm" />
-              </IconButton>
-            {/if}
-
-            <img
-              class="aspect-square w-full rounded-lg bg-zinc-200 object-contain"
-              src={post.mediaPaths[imageIndex]}
-              alt="post-{post.id}-image-{imageIndex}"
-            />
-
-            {#if post.mediaPaths.length > 1}
-              <div
-                class="absolute bottom-1 left-1/2 z-2 flex -translate-x-1/2 gap-1 rounded-full bg-zinc-700/60 p-2"
-              >
-                {#each post.mediaPaths as _, index}
-                  <span
-                    class={[
-                      'h-2 w-2 rounded-full border border-white',
-                      index === imageIndex && 'bg-white',
-                    ]}
-                  ></span>
-                {/each}
-              </div>
-            {/if}
-
-            {#if imageIndex < post.mediaPaths.length - 1}
-              <IconButton
-                class="absolute top-1/2 right-0 h-full -translate-y-1/2 px-2 hover:bg-zinc-400/50 dark:hover:bg-zinc-900/20"
-                round={false}
-                onclick={() => (imageIndex = Math.min(post.mediaPaths.length - 1, imageIndex + 1))}
-              >
-                <Icon type="next" size="sm" />
-              </IconButton>
-            {/if}
-          </div>
+          <ImageCarousel images={post.mediaPaths} />
         {/if}
 
         {#if isVideo}
