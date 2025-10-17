@@ -48,7 +48,7 @@
       <Icon type="bar" />
     </IconButton>
     <span class="text-3xl">
-      <img class="aspect-square h-8 w-8" src="/favicon.svg" alt="logo" />
+      <img class="aspect-square h-10 w-10" src="/favicon.svg" alt="logo" />
     </span>
 
     <DropdownMenu class="ml-auto" position="bottom" align="right">
