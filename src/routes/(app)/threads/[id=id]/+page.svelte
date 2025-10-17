@@ -127,21 +127,21 @@
       {#each posts as post}
         <Post self={data.self} {post} />
       {/each}
-    </div>
 
-    <Scroller
-      disabled={disableScroller}
-      attachmentCallback={async () => {
-        const res = await fetch(`/api/posts?threadId=${data.thread.id}&page=${++pageIndex}`);
-        const newData = await res.json();
-        if (newData.length <= 0) disableScroller = true;
-        posts = [...posts, ...newData];
-      }}
-      detachCleanup={() => {
-        pageIndex = 1;
-        disableScroller = false;
-      }}
-    />
+      <Scroller
+        disabled={disableScroller}
+        attachmentCallback={async () => {
+          const res = await fetch(`/api/posts?threadId=${data.thread.id}&page=${++pageIndex}`);
+          const newData = await res.json();
+          if (newData.length <= 0) disableScroller = true;
+          posts = [...posts, ...newData];
+        }}
+        detachCleanup={() => {
+          pageIndex = 1;
+          disableScroller = false;
+        }}
+      />
+    </div>
   {/if}
 {/if}
 

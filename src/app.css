@@ -71,11 +71,11 @@ input[type='checkbox']:focus {
 }
 
 @utility box-shadow {
-  @apply shadow-md shadow-zinc-700/40;
+  @apply shadow-md shadow-zinc-700/40 dark:shadow-zinc-950;
 }
 
 @utility box {
-  @apply rounded-lg bg-zinc-50 p-4 box-shadow;
+  @apply rounded-lg bg-zinc-50 p-4 box-shadow dark:border dark:border-zinc-700 dark:bg-zinc-900;
 }
 
 @utility empty-noti-text {

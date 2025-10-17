@@ -47,7 +47,6 @@
 
   let reaction = $derived(post.reaction);
   let reactionCount = $derived(post.reactionCount);
-  let imageIndex = $state<number>(0);
   let showModal = $state<'delete' | 'visibility' | null>(null);
 
   function hideModal() {
@@ -58,7 +57,7 @@
 <article
   class={[
     'relative flex flex-col gap-4 box',
-    canClickPost && 'cursor-pointer hover:bg-zinc-100 dark:hover:bg-zinc-900/40',
+    canClickPost && 'cursor-pointer hover:bg-zinc-100 dark:hover:bg-zinc-800/80',
     className,
   ]}
 >
@@ -125,7 +124,7 @@
     {#if !hideOptions && (self.id === post.owner.id || self.role === 'admin')}
       <DropdownMenu class="ml-auto" position="bottom" align="right">
         {#snippet trigger()}
-          <IconButton class="p-2 hover:bg-zinc-200 dark:hover:bg-zinc-800" round>
+          <IconButton class="p-2" round>
             <Icon type="menu" size="xs" />
           </IconButton>
         {/snippet}
@@ -193,7 +192,8 @@
         <DropdownMenu position="top" align="left" horizontal>
           {#snippet trigger()}
             <div
-              class="z-1 flex cursor-pointer items-center gap-2 rounded-md bg-zinc-200 p-2 hover:bg-zinc-300"
+              class="z-1 flex cursor-pointer items-center gap-2 rounded-md bg-zinc-200 p-2 hover:bg-zinc-300 dark:bg-zinc-600
+dark:hover:bg-zinc-500"
             >
               <Icon
                 type={(reaction ?? 'noReaction') as keyof typeof reactions}
@@ -225,7 +225,8 @@
       </form>
 
       <a
-        class="z-1 flex items-center gap-2 rounded-md bg-zinc-200 p-2 hover:bg-zinc-300"
+        class="z-1 flex items-center gap-2 rounded-md bg-zinc-200 p-2 hover:bg-zinc-300 dark:bg-zinc-600
+dark:hover:bg-zinc-500"
         href={detail ? null : `/post/${post.id}`}
       >
         <Icon type="reply" size="sm" />

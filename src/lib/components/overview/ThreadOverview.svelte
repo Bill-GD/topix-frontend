@@ -8,12 +8,12 @@
 </script>
 
 <a
-  class="flex cursor-pointer items-center gap-2 box hover:bg-zinc-200 dark:hover:bg-zinc-900/60"
+  class="flex cursor-pointer items-center gap-2 box hover:bg-zinc-200 dark:hover:bg-zinc-800/80"
   href="/threads/{thread.id}"
 >
   <div class="flex flex-col items-start">
     <div class="flex items-center gap-2">
-      <span class="line-clamp-1">{thread.title}</span>
+      <span class="line-clamp-1 text-lg font-semibold">{thread.title}</span>
 
       {#if thread.visibility === 'private'}
         <Icon type="lock" size="xs" />

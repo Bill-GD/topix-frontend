@@ -42,7 +42,7 @@
   {#if params.section === 'all'}
     {#each members as user}
       <a
-        class="flex flex-col gap-4 box hover:bg-zinc-100 md:flex-row dark:hover:bg-zinc-900/40"
+        class="flex flex-col gap-4 box hover:bg-zinc-100 md:flex-row dark:hover:bg-zinc-800/80"
         href="/user/{user.username}"
       >
         <div class="flex items-center gap-4">

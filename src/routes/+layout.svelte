@@ -19,7 +19,7 @@
   });
 </script>
 
-<div class={[theme.isDark && 'dark']}>
+<div class={['dark:text-zinc-200', theme.isDark && 'dark']}>
   {@render children()}
 
   {#if toaster.toasts.length > 0}

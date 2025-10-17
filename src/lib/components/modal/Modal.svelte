@@ -16,7 +16,7 @@
   <!-- svelte-ignore a11y_no_static_element_interactions -->
   <!-- svelte-ignore a11y_click_events_have_key_events -->
   <div
-    class="fixed inset-0 z-10 bg-zinc-700/40"
+    class="fixed inset-0 z-10 bg-zinc-700/40 dark:bg-zinc-800/40"
     onclick={backdropCallback}
     out:fade={{ duration: 300 }}
   ></div>

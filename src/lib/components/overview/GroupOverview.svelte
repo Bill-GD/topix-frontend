@@ -7,7 +7,7 @@
 </script>
 
 <a
-  class="flex cursor-pointer items-center gap-4 box hover:bg-zinc-200 dark:hover:bg-zinc-900/40"
+  class="flex cursor-pointer items-center gap-4 box hover:bg-zinc-200 dark:hover:bg-zinc-800/80"
   href="/groups/{group.id}"
 >
   <div class="w-30 overflow-hidden rounded-md">
@@ -15,7 +15,7 @@
   </div>
 
   <div class="flex flex-col gap-2">
-    <span class="text-xl font-semibold">{group.name}</span>
+    <span class="text-lg font-semibold">{group.name}</span>
     <div class="flex items-baseline gap-2 text-gray-500">
       {#if group.visibility === 'private'}
         <Icon type="lock" size="xs" />

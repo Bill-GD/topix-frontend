@@ -11,7 +11,7 @@
     round = false,
   }: IconButtonProps = $props();
 
-  const buttonClass = type ? `btn-${type}` : 'hover:bg-zinc-200 dark:hover:bg-zinc-900';
+  const buttonClass = type ? `btn-${type}` : 'hover:bg-zinc-200 dark:hover:bg-zinc-700';
 </script>
 
 <button

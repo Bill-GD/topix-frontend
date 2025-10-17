@@ -1,6 +1,6 @@
 <script lang="ts">
   import { Scroller } from '$lib/components/layout';
-  import { Divider, ReturnHeader } from '$lib/components/misc';
+  import { ReturnHeader } from '$lib/components/misc';
   import { PendingPost } from '$lib/components/post';
   import type { PageProps } from './$types';
 
@@ -16,13 +16,12 @@
 
 <ReturnHeader>Pending posts</ReturnHeader>
 
-<div class="flex flex-col">
+<div class="flex flex-col gap-4">
   {#if data.posts.length <= 0}
     <p class="empty-noti-text">No pending posts.</p>
   {:else}
     {#each posts as post}
       <PendingPost {post} />
-      <Divider />
     {/each}
 
     <Scroller

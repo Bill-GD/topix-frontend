@@ -6,7 +6,7 @@
 
 <a
   class={[
-    'flex h-fit w-full cursor-pointer items-center gap-3 rounded-md p-3 py-2 hover:bg-zinc-300 dark:hover:bg-zinc-900',
+    'flex h-fit w-full cursor-pointer items-center gap-3 rounded-md p-3 py-2 hover:bg-zinc-300 dark:hover:bg-zinc-800/80',
     props.class,
   ]}
   href={props.href}

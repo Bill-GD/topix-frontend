@@ -24,7 +24,10 @@
     </IconButton>
   {/if}
 
-  <div class="flex w-full overflow-x-hidden rounded-lg bg-zinc-200" bind:this={carousel}>
+  <div
+    class="flex w-full overflow-x-hidden rounded-lg bg-zinc-200 dark:bg-zinc-600"
+    bind:this={carousel}
+  >
     {#each images as imagePath}
       <div class="my-auto w-full flex-shrink-0">
         <img class="w-full object-contain align-middle" src={imagePath} alt="post-media" />
