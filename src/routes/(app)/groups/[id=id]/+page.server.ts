@@ -1,13 +1,10 @@
 import { AxiosHandler, handleReaction } from '$lib/utils/axios-handler';
 import { getPostUploadForm } from '$lib/utils/helpers';
 import { CookieName, type Post, type Tag, type Thread } from '$lib/utils/types';
-import {
-  type Actions, error, fail, isActionFailure,
-  redirect,
-} from '@sveltejs/kit';
+import { type Actions, error, fail, isActionFailure, redirect } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
-export const load: PageServerLoad = async ({ cookies, params, parent }) => {
+export const load: PageServerLoad = async ({ cookies, params, url, parent, fetch }) => {
   const group = (await parent()).group;
   if (group.visibility !== 'public' && group.status !== true) {
     return {
@@ -16,30 +13,35 @@ export const load: PageServerLoad = async ({ cookies, params, parent }) => {
       tags: [] as Tag[],
     };
   }
+  const tab = url.searchParams.get('tab') ?? 'posts';
 
-  const postsRes = await AxiosHandler.get(
-    `/post?groupId=${params.id}&accepted=true`,
-    cookies.get(CookieName.accessToken),
-  );
-  if (!postsRes.success) error(postsRes.status, postsRes.message);
+  switch (tab) {
+    case 'posts': {
+      const postsRes = await fetch(`/api/posts?groupId=${params.id}&accepted=true`);
+      const tagsRes = await AxiosHandler.get(
+        `/group/${params.id}/tags`,
+        cookies.get(CookieName.accessToken),
+      );
+      if (!tagsRes.success) error(tagsRes.status, tagsRes.message);
 
-  const threadsRes = await AxiosHandler.get(
-    `/thread?groupId=${params.id}&size=5`,
-    cookies.get(CookieName.accessToken),
-  );
-  if (!threadsRes.success) error(threadsRes.status, threadsRes.message);
+      return {
+        posts: (await postsRes.json()) as unknown as Post[],
+        tags: tagsRes.data as unknown as Tag[],
+      };
+    }
+    case 'threads': {
+      const res = await AxiosHandler.get(
+        `/thread?groupId=${params.id}`,
+        cookies.get(CookieName.accessToken),
+      );
+      if (!res.success) error(res.status, res.message);
 
-  const tagsRes = await AxiosHandler.get(
-    `/group/${params.id}/tags`,
-    cookies.get(CookieName.accessToken),
-  );
-  if (!tagsRes.success) error(tagsRes.status, tagsRes.message);
-
-  return {
-    posts: postsRes.data as unknown as Post[],
-    threads: threadsRes.data as unknown as Thread[],
-    tags: tagsRes.data as unknown as Tag[],
-  };
+      return { threads: res.data as unknown as Thread[] };
+    }
+    default: {
+      error(400, 'Unknown tab');
+    }
+  }
 };
 
 export const actions: Actions = {

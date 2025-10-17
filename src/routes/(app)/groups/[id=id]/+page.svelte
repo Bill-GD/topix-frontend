@@ -1,5 +1,6 @@
 <script lang="ts">
   import { enhance } from '$app/forms';
+  import { page } from '$app/state';
   import { Button, IconButton } from '$lib/components/button';
   import { DropdownItem, DropdownMenu } from '$lib/components/dropdown';
   import { FloatingLabelInput } from '$lib/components/input';
@@ -10,11 +11,14 @@
   import { getToaster } from '$lib/components/toast';
   import { PostUpload } from '$lib/components/upload';
   import { capitalize, formResultToast } from '$lib/utils/helpers';
+  import { ThreadOverview } from '@/lib/components/overview';
   import type { PageProps } from './$types';
 
   let { data }: PageProps = $props();
 
   const toaster = getToaster();
+  const items = $derived(['posts', 'threads']);
+  const tab = $derived(page.url.searchParams.get('tab') ?? 'posts');
   let showModal = $state<'thread' | 'leave' | 'delete' | null>(null);
   let threadTitle = $state<string>('');
   let pageIndex = 1;
@@ -104,7 +108,24 @@
   </div>
 </div>
 
-{#if data.group.status === true}
+<div class="mb-4 flex gap-2 dark:bg-zinc-950">
+  {#each items as item}
+    <a
+      class={[
+        'flex-1 rounded-md px-4 py-2 text-center',
+        tab === item
+          ? 'bg-zinc-50 font-semibold box-drop-shadow dark:bg-zinc-800/40 dark:text-gray-300'
+          : 'bg-zinc-200 text-gray-500',
+      ]}
+      href="?tab={item}"
+      data-sveltekit-replacestate
+    >
+      {capitalize(item)}
+    </a>
+  {/each}
+</div>
+
+{#if tab === 'posts' && data.group.status === true}
   <PostUpload
     class="mb-4"
     userPicture={data.self.profilePicture}
@@ -115,32 +136,40 @@
   />
 {/if}
 
-{#if data.group.visibility === 'private' && !data.group.status}
-  <p class="empty-noti-text">You have to join to see posts of this group.</p>
-{:else if data.posts.length <= 0}
-  <p class="empty-noti-text">This group has no post.</p>
-{:else}
+{#if tab === 'posts'}
+  {#if data.group.visibility === 'private' && !data.group.status}
+    <p class="empty-noti-text">You have to join to see posts of this group.</p>
+  {:else if data.posts!.length <= 0}
+    <p class="empty-noti-text">This group has no post.</p>
+  {:else}
+    <div class="flex flex-col gap-4">
+      {#each posts as post (post.id)}
+        <Post self={data.self} {post} />
+      {/each}
+    </div>
+
+    <Scroller
+      disabled={disableScroller}
+      attachmentCallback={async () => {
+        const res = await fetch(
+          `/api/posts?groupId=${data.group.id}&accepted=true&page=${++pageIndex}`,
+        );
+        const newData = await res.json();
+        if (newData.length <= 0) disableScroller = true;
+        posts = [...posts!, ...newData];
+      }}
+      detachCleanup={() => {
+        pageIndex = 1;
+        disableScroller = false;
+      }}
+    />
+  {/if}
+{:else if tab === 'threads'}
   <div class="flex flex-col gap-4">
-    {#each posts as post (post.id)}
-      <Post self={data.self} {post} />
+    {#each data.threads as thread}
+      <ThreadOverview {thread} />
     {/each}
   </div>
-
-  <Scroller
-    disabled={disableScroller}
-    attachmentCallback={async () => {
-      const res = await fetch(
-        `/api/posts?groupId=${data.group.id}&accepted=true&page=${++pageIndex}`,
-      );
-      const newData = await res.json();
-      if (newData.length <= 0) disableScroller = true;
-      posts = [...posts, ...newData];
-    }}
-    detachCleanup={() => {
-      pageIndex = 1;
-      disableScroller = false;
-    }}
-  />
 {/if}
 
 <!-- {#snippet right()}
