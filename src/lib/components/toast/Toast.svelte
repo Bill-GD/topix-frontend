@@ -21,10 +21,7 @@
 
 {#if mounted}
   <div
-    class={[
-      'flex w-fit items-center gap-2 rounded-lg bg-zinc-50 p-3 box-drop-shadow dark:bg-zinc-950',
-      className,
-    ]}
+    class={['flex w-fit items-center gap-2 box dark:bg-zinc-950', className]}
     in:slide={{ duration: 200 }}
     out:fade={{ duration: 300 }}
   >

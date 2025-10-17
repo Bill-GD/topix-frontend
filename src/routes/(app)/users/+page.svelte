@@ -31,7 +31,7 @@
 <div class="flex flex-col gap-4">
   {#each users as user}
     <a
-      class="flex items-center gap-4 rounded-lg bg-zinc-50 p-4 box-drop-shadow hover:bg-zinc-100 dark:hover:bg-zinc-900/40"
+      class="flex items-center gap-4 box hover:bg-zinc-100 dark:hover:bg-zinc-900/40"
       href="/user/{user.username}"
     >
       <img

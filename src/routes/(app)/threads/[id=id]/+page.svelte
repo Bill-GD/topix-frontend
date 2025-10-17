@@ -35,7 +35,7 @@
 {#if data.thread.visibility !== 'public' && data.self.id !== data.thread.owner.id}
   <p class="empty-noti-text">This thread is privated by the author.</p>
 {:else}
-  <div class="mb-4 flex flex-col gap-4 rounded-lg bg-zinc-50 p-4 box-drop-shadow">
+  <div class="mb-4 flex flex-col gap-4 box">
     <div class="flex">
       <div class="flex flex-col gap-2">
         <p class="text-4xl font-semibold">{data.thread.title}</p>

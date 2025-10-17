@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { Tab, TabBar } from '$lib/components/link';
   import { Icon, ReturnHeader } from '$lib/components/misc';
   import { ThreadOverview } from '$lib/components/overview';
   import { Post } from '$lib/components/post';
@@ -17,22 +18,11 @@
 <ReturnHeader>Hidden items</ReturnHeader>
 
 <div class="flex flex-col gap-4">
-  <div class="flex gap-2 dark:bg-zinc-950">
+  <TabBar>
     {#each items as item}
-      <a
-        class={[
-          'flex-1 rounded-md px-4 py-2 text-center',
-          params.section === item
-            ? 'bg-zinc-50 font-semibold box-drop-shadow dark:bg-zinc-800/40 dark:text-gray-300'
-            : 'bg-zinc-200 text-gray-500',
-        ]}
-        href={item}
-        data-sveltekit-replacestate
-      >
-        {capitalize(item)}
-      </a>
+      <Tab href={item} selected={params.section === item}>{capitalize(item)}</Tab>
     {/each}
-  </div>
+  </TabBar>
 
   {#if params.section === 'post'}
     {#if data.posts!.length <= 0}

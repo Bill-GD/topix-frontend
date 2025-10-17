@@ -1,6 +1,7 @@
 <script lang="ts">
   import { page } from '$app/state';
   import { Scroller } from '$lib/components/layout';
+  import { Tab, TabBar } from '$lib/components/link';
   import { Post } from '$lib/components/post';
   import { capitalize } from '$lib/utils/helpers';
   import type { PageProps } from './$types';
@@ -18,22 +19,11 @@
 </svelte:head>
 
 <div class="mx-2 mt-4 flex flex-col gap-4 md:mx-0">
-  <div class="flex gap-2 dark:bg-zinc-950">
+  <TabBar>
     {#each items as item}
-      <a
-        class={[
-          'flex-1 rounded-md px-4 py-2 text-center',
-          tab === item
-            ? 'bg-zinc-50 font-semibold box-drop-shadow dark:bg-zinc-800/40 dark:text-gray-300'
-            : 'bg-zinc-200 text-gray-500',
-        ]}
-        href="?tab={item}"
-        data-sveltekit-replacestate
-      >
-        {capitalize(item)}
-      </a>
+      <Tab href="?tab={item}" selected={tab === item}>{capitalize(item)}</Tab>
     {/each}
-  </div>
+  </TabBar>
 
   {#if tab === 'new'}
     {#each posts as post (post.id)}

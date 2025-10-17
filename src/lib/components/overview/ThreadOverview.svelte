@@ -8,7 +8,7 @@
 </script>
 
 <a
-  class="flex cursor-pointer items-center gap-2 rounded-lg bg-zinc-50 px-4 py-2 box-drop-shadow hover:bg-zinc-200 dark:hover:bg-zinc-900/60"
+  class="flex cursor-pointer items-center gap-2 box hover:bg-zinc-200 dark:hover:bg-zinc-900/60"
   href="/threads/{thread.id}"
 >
   <div class="flex flex-col items-start">

@@ -5,7 +5,6 @@
   import { formResultToast, getTimeAgo } from '$lib/utils/helpers';
   import Button from '../button/Button.svelte';
   import IconButton from '../button/IconButton.svelte';
-  import Link from '../link/Link.svelte';
   import Flair from '../misc/Flair.svelte';
   import Icon from '../misc/Icon.svelte';
   import Modal from '../modal/Modal.svelte';
@@ -28,7 +27,7 @@
   }
 </script>
 
-<div class={['flex items-center gap-2 rounded-lg bg-zinc-50 p-4 box-drop-shadow', className]}>
+<div class={['flex items-center gap-2 box', className]}>
   <div class="flex flex-col gap-3">
     <div class="flex items-center gap-3">
       <img

@@ -38,7 +38,7 @@
 <ReturnHeader>{data.user.displayName}</ReturnHeader>
 
 <div class="flex flex-col gap-4">
-  <div class="\flex flex-col gap-4 rounded-lg bg-zinc-50 p-4 box-drop-shadow">
+  <div class="\flex flex-col gap-4 box">
     <div class="flex items-start gap-4">
       <img
         class="profile-picture-sm md:profile-picture-md"

@@ -38,7 +38,7 @@
 <ReturnHeader>Group</ReturnHeader>
 
 <div class="flex flex-col gap-4">
-  <div class="rounded-lg bg-zinc-50 box-drop-shadow">
+  <div class="box p-0">
     <img
       class="object-fit rounded-t-lg"
       src={data.group.bannerPicture ?? '/images/no-image.jpg'}

@@ -7,7 +7,7 @@
 </script>
 
 <a
-  class="flex cursor-pointer items-center gap-4 rounded-lg bg-zinc-50 px-4 py-2 box-drop-shadow hover:bg-zinc-200 dark:hover:bg-zinc-900/40"
+  class="flex cursor-pointer items-center gap-4 box hover:bg-zinc-200 dark:hover:bg-zinc-900/40"
   href="/groups/{group.id}"
 >
   <div class="w-30 overflow-hidden rounded-md">

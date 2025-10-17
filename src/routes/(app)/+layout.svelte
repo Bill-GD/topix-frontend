@@ -42,7 +42,7 @@
 
 <main class="min-h-screen bg-zinc-200 dark:bg-zinc-950 dark:text-white">
   <header
-    class="fixed top-0 z-4 flex h-(--header-height) w-full items-center bg-zinc-50 px-2 box-drop-shadow md:px-4"
+    class="fixed top-0 z-4 flex h-(--header-height) w-full items-center bg-zinc-50 px-2 box-shadow md:px-4"
   >
     <IconButton class="mr-2 inline p-2 lg:hidden" onclick={() => (showNav = !showNav)} round>
       <Icon type="bar" />
@@ -97,7 +97,7 @@
         transition:fade={{ duration: 200 }}
       ></div>
       <aside
-        class="fixed top-0 left-0 z-7 flex h-screen w-80 flex-col flex-nowrap items-center gap-4 rounded-r-lg border-gray-400 bg-zinc-200 p-3 box-drop-shadow dark:border-gray-700 dark:bg-zinc-950"
+        class="fixed top-0 left-0 z-7 flex h-screen w-80 flex-col flex-nowrap items-center gap-4 rounded-r-lg border-gray-400 bg-zinc-200 p-3 box-shadow dark:border-gray-700 dark:bg-zinc-950"
         transition:slide={{ duration: 200, axis: 'x' }}
       >
         {@render sidebar()}

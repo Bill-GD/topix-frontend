@@ -2,11 +2,11 @@
   import { enhance } from '$app/forms';
   import { Button } from '$lib/components/button';
   import { Scroller } from '$lib/components/layout';
+  import { Tab, TabBar } from '$lib/components/link';
   import { ReturnHeader } from '$lib/components/misc';
   import { Modal, ModalBody, ModalFooter, ModalHeader } from '$lib/components/modal';
   import { getToaster } from '$lib/components/toast';
   import { capitalize, formResultToast } from '$lib/utils/helpers';
-  import { Tab, TabBar } from '@/lib/components/link';
   import type { PageProps } from './$types';
 
   let { data, params }: PageProps = $props();
@@ -42,7 +42,7 @@
   {#if params.section === 'all'}
     {#each members as user}
       <a
-        class="flex flex-col gap-4 rounded-lg bg-zinc-50 p-4 box-drop-shadow hover:bg-zinc-100 md:flex-row dark:hover:bg-zinc-900/40"
+        class="flex flex-col gap-4 box hover:bg-zinc-100 md:flex-row dark:hover:bg-zinc-900/40"
         href="/user/{user.username}"
       >
         <div class="flex items-center gap-4">
@@ -96,7 +96,7 @@
     {:else}
       {#each members as user}
         <a
-          class="flex flex-col gap-4 rounded-lg bg-zinc-50 p-4 box-drop-shadow hover:bg-zinc-100 md:flex-row dark:hover:bg-zinc-900/40"
+          class="flex flex-col gap-4 box hover:bg-zinc-100 md:flex-row dark:hover:bg-zinc-900/40"
           href="/user/{user.username}"
         >
           <div class="flex items-center gap-4">

@@ -99,7 +99,7 @@
     <p class="text-lg font-semibold">Current tags</p>
     <div class="flex flex-wrap gap-4">
       {#each data.tags as tag (tag.id)}
-        <div class="flex w-min items-center gap-2 rounded-md bg-zinc-50 p-2 box-drop-shadow">
+        <div class="flex w-min items-center gap-2 box p-2">
           <Flair {tag} />
           <IconButton
             class="p-2 hover:bg-zinc-300"

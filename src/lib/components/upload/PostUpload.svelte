@@ -92,7 +92,7 @@
 </script>
 
 <form
-  class={['flex gap-2 p-4', !hideBox && 'rounded-lg bg-zinc-50 box-drop-shadow', className]}
+  class={['flex gap-2', !hideBox && 'box', className]}
   method="post"
   enctype="multipart/form-data"
   onsubmit={() => (disablePost = true)}
