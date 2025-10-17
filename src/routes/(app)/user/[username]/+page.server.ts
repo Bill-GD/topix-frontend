@@ -1,14 +1,12 @@
 import { AxiosHandler, handleReaction } from '$lib/utils/axios-handler';
 import { getPostUploadForm } from '$lib/utils/helpers';
-import {
-  CookieName, type Group, type Post, type Thread,
-  type User,
-} from '$lib/utils/types';
+import { CookieName, type Group, type Post, type Thread, type User } from '$lib/utils/types';
 import { type Actions, error, fail, isActionFailure } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
-export const load: PageServerLoad = async ({ parent, params, cookies }) => {
+export const load: PageServerLoad = async ({ parent, params, cookies, url, fetch }) => {
   const self = (await parent()).self;
+  const tab = url.searchParams.get('tab') ?? 'posts';
 
   const userRes = await AxiosHandler.get(
     `/user/${params.username}`,
@@ -17,27 +15,34 @@ export const load: PageServerLoad = async ({ parent, params, cookies }) => {
   if (!userRes.success) return error(userRes.status, userRes.message);
   const user = userRes.data as User;
 
-  const postsRes = await AxiosHandler.get(
-    `/post?username=${params.username}${self.username === params.username ? '&visibility=private' : ''}`,
-    cookies.get(CookieName.accessToken),
-  );
+  switch (tab) {
+    case 'posts': {
+      const res = await fetch(
+        `/api/posts?username=${params.username}${self.username === params.username ? '&visibility=private' : ''}`,
+      );
 
-  const threadsRes = await AxiosHandler.get(
-    `/thread?username=${user.username}&size=5${self.username === params.username ? '&visibility=private' : ''}`,
-    cookies.get(CookieName.accessToken),
-  );
+      return { user, posts: (await res.json()) as unknown as Post[] };
+    }
+    case 'threads': {
+      const res = await AxiosHandler.get(
+        `/thread?username=${user.username}${self.username === params.username ? '&visibility=private' : ''}`,
+        cookies.get(CookieName.accessToken),
+      );
 
-  const groupsRes = await AxiosHandler.get(
-    `/group?ownerId=${user.id}&size=5`,
-    cookies.get(CookieName.accessToken),
-  );
+      return { user, threads: res.data as unknown as Thread[] };
+    }
+    case 'groups': {
+      const res = await AxiosHandler.get(
+        `/group?ownerId=${user.id}`,
+        cookies.get(CookieName.accessToken),
+      );
 
-  return {
-    user,
-    posts: postsRes.data as unknown as Post[],
-    threads: threadsRes.data as unknown as Thread[],
-    groups: groupsRes.data as unknown as Group[],
-  };
+      return { user, groups: res.data as unknown as Group[] };
+    }
+    default: {
+      error(400, 'Unknown tab');
+    }
+  }
 };
 
 export const actions: Actions = {

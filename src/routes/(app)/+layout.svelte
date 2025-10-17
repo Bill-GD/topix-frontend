@@ -84,9 +84,7 @@
   </header>
 
   <div class="relative mt-(--header-height) flex gap-4">
-    <aside
-      class="sticky top-0 hidden h-dvh w-full max-w-1/4 flex-col items-center gap-4 p-3 px-1 lg:flex"
-    >
+    <aside class="sticky top-0 hidden h-dvh flex-col items-center gap-4 p-3 px-1 lg:flex">
       {@render sidebar()}
     </aside>
 
@@ -106,8 +104,10 @@
       </aside>
     {/if}
 
-    <section class="mx-2 flex w-full flex-col md:mx-8 lg:w-[734px]">
-      {@render children?.()}
+    <section class="mx-4 flex w-full flex-col md:mx-8">
+      <div class="md:w-2/3 md:self-center lg:max-w-1/2">
+        {@render children?.()}
+      </div>
     </section>
   </div>
 </main>

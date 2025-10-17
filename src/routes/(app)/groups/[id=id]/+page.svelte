@@ -4,10 +4,9 @@
   import { DropdownItem, DropdownMenu } from '$lib/components/dropdown';
   import { FloatingLabelInput } from '$lib/components/input';
   import { Scroller } from '$lib/components/layout';
-  import { Divider, Icon, ReturnHeader } from '$lib/components/misc';
+  import { Icon, ReturnHeader } from '$lib/components/misc';
   import { Modal, ModalBody, ModalFooter, ModalHeader } from '$lib/components/modal';
   import { Post } from '$lib/components/post';
-  import { ThreadOverview } from '$lib/components/thread';
   import { getToaster } from '$lib/components/toast';
   import { PostUpload } from '$lib/components/upload';
   import { capitalize, formResultToast } from '$lib/utils/helpers';

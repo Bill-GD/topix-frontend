@@ -1,9 +1,7 @@
 <script lang="ts">
   import { page } from '$app/state';
   import { Scroller } from '$lib/components/layout';
-  import { Divider } from '$lib/components/misc';
   import { Post } from '$lib/components/post';
-  import { ThreadOverview } from '$lib/components/thread';
   import { capitalize } from '$lib/utils/helpers';
   import type { PageProps } from './$types';
 

@@ -1,7 +1,7 @@
 <script lang="ts">
   import { Icon, ReturnHeader } from '$lib/components/misc';
+  import { ThreadOverview } from '$lib/components/overview';
   import { Post } from '$lib/components/post';
-  import { ThreadOverview } from '$lib/components/thread';
   import { capitalize } from '$lib/utils/helpers';
   import type { PageProps } from './$types';
 
@@ -85,33 +85,3 @@
     {/each}
   {/if}
 </div>
-
-<!-- {#snippet right()}
-  <div class="flex w-fit flex-col py-20 text-xl">
-    {#each items as item, index}
-      <div class="flex">
-        <div
-          class={[
-            params.section === item
-              ? 'border-gray-700 dark:border-gray-300'
-              : 'border-gray-300 dark:border-gray-700',
-            index === 0 && 'rounded-t-md',
-            index === items.length - 1 && 'rounded-b-md',
-            'mr-4 w-0 border-l-6',
-          ]}
-        ></div>
-        <a
-          class={[
-            'py-2',
-            params.section === item
-              ? `font-semibold ${item.includes('danger') ? 'text-red-600' : 'dark:text-gray-300'}`
-              : `${item.includes('danger') ? 'text-red-800' : 'text-gray-500'}`,
-          ]}
-          href={item}
-        >
-          {capitalize(item)}
-        </a>
-      </div>
-    {/each}
-  </div>
-{/snippet} -->

@@ -1,0 +1,33 @@
+<script lang="ts">
+  import { capitalize, getTimeAgo } from '$lib/utils/helpers';
+  import type { Group } from '$lib/utils/types';
+  import Flair from '../misc/Flair.svelte';
+  import Icon from '../misc/Icon.svelte';
+
+  let { group, showOwner = false }: { group: Group; showOwner?: boolean } = $props();
+</script>
+
+<a
+  class="flex cursor-pointer items-center gap-4 rounded-lg bg-zinc-50 px-4 py-2 box-drop-shadow hover:bg-zinc-200 dark:hover:bg-zinc-900/40"
+  href="/groups/{group.id}"
+>
+  <div class="flex flex-col gap-2">
+    <span class="text-xl font-semibold">{group.name}</span>
+    <div class="flex items-baseline gap-2 text-gray-500">
+      {#if group.visibility === 'private'}
+        <Icon type="lock" size="xs" />
+      {:else if group.visibility === 'hidden'}
+        <Icon type="eyeSlash" size="xs" />
+      {/if}
+      {capitalize(group.visibility)}
+      •
+      {group.memberCount} member{group.memberCount > 1 ? 's' : ''}
+    </div>
+  </div>
+
+  {#if group.status !== null}
+    <div class={['ml-auto font-semibold', group.status ? 'text-green-700' : 'text-sky-500']}>
+      {group.status ? 'Joined' : 'Pending'}
+    </div>
+  {/if}
+</a>

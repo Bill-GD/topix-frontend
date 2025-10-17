@@ -1,20 +1,24 @@
 <script lang="ts">
   import { enhance } from '$app/forms';
+  import { page } from '$app/state';
   import { Button, IconButton } from '$lib/components/button';
   import { DropdownItem, DropdownMenu } from '$lib/components/dropdown';
   import { FloatingLabelInput } from '$lib/components/input';
   import { Scroller } from '$lib/components/layout';
   import { Icon, ReturnHeader, VisibilitySelector } from '$lib/components/misc';
   import { Modal, ModalFooter, ModalHeader } from '$lib/components/modal';
+  import { GroupOverview, ThreadOverview } from '$lib/components/overview';
   import { Post } from '$lib/components/post';
   import { getToaster } from '$lib/components/toast';
   import { PostUpload } from '$lib/components/upload';
-  import { formResultToast } from '$lib/utils/helpers';
+  import { capitalize, formResultToast } from '$lib/utils/helpers';
   import type { PageProps } from './$types';
 
   let { data }: PageProps = $props();
 
   const toaster = getToaster();
+  const items = $derived(['posts', 'threads', 'groups']);
+  const tab = $derived(page.url.searchParams.get('tab') ?? 'posts');
   let showModal = $state<'thread' | null>(null);
   let threadTitle = $state<string>('');
   let pageIndex = 1;
@@ -32,7 +36,7 @@
 
 <ReturnHeader>{data.user.displayName}</ReturnHeader>
 
-<div class="mb-4 flex flex-col gap-2 rounded-lg bg-zinc-50 p-4 box-drop-shadow">
+<div class="mb-4 flex flex-col gap-4 rounded-lg bg-zinc-50 p-4 box-drop-shadow">
   <div class="flex items-start gap-4">
     <img
       class="profile-picture-sm md:profile-picture-md"
@@ -51,7 +55,7 @@
     </div>
   </div>
 
-  <div class="flex items-baseline gap-4 px-2 py-2 font-semibold md:gap-6 md:px-4">
+  <div class="flex items-baseline gap-4 font-semibold md:gap-6 md:px-4">
     <p>Following: {data.user.followingCount}</p>
     <p>Follower: {data.user.followerCount}</p>
 
@@ -110,34 +114,63 @@
   </div>
 </div>
 
-{#if data.self.id === data.user.id}
-  <PostUpload
-    class="mb-4"
-    userPicture={data.self.profilePicture}
-    formaction="?/post-upload"
-    showVisibilitySelector
-  />
-{/if}
-
-<div class="flex flex-col gap-4">
-  {#each posts as post (post.id)}
-    <Post self={data.self} {post} />
+<div class="mb-4 flex gap-2 dark:bg-zinc-950">
+  {#each items as item}
+    <a
+      class={[
+        'flex-1 rounded-md px-4 py-2 text-center',
+        tab === item
+          ? 'bg-zinc-50 font-semibold box-drop-shadow dark:bg-zinc-800/40 dark:text-gray-300'
+          : 'bg-zinc-200 text-gray-500',
+      ]}
+      href="?tab={item}"
+      data-sveltekit-replacestate
+    >
+      {capitalize(item)}
+    </a>
   {/each}
 </div>
 
-<Scroller
-  disabled={disableScroller}
-  attachmentCallback={async () => {
-    const res = await fetch(`/api/posts?username=${data.user.username}&page=${++pageIndex}`);
-    const newData = await res.json();
-    if (newData.length <= 0) disableScroller = true;
-    posts = [...posts, ...newData];
-  }}
-  detachCleanup={() => {
-    pageIndex = 1;
-    disableScroller = false;
-  }}
-/>
+{#if tab === 'posts'}
+  {#if data.self.id === data.user.id}
+    <PostUpload
+      class="mb-4"
+      userPicture={data.self.profilePicture}
+      formaction="?/post-upload"
+      showVisibilitySelector
+    />
+  {/if}
+{/if}
+
+<div class="flex flex-col gap-4">
+  {#if tab === 'posts'}
+    {#each posts as post (post.id)}
+      <Post self={data.self} {post} />
+    {/each}
+
+    <Scroller
+      disabled={disableScroller}
+      attachmentCallback={async () => {
+        const res = await fetch(`/api/posts?username=${data.user.username}&page=${++pageIndex}`);
+        const newData = await res.json();
+        if (newData.length <= 0) disableScroller = true;
+        posts = [...posts!, ...newData];
+      }}
+      detachCleanup={() => {
+        pageIndex = 1;
+        disableScroller = false;
+      }}
+    />
+  {:else if tab === 'threads'}
+    {#each data.threads as thread}
+      <ThreadOverview {thread} />
+    {/each}
+  {:else if tab === 'groups'}
+    {#each data.groups as group}
+      <GroupOverview {group} />
+    {/each}
+  {/if}
+</div>
 
 <!-- {#snippet right()}
     <div class="flex flex-col gap-4">
