@@ -38,7 +38,7 @@
 <ReturnHeader>{data.user.displayName}</ReturnHeader>
 
 <div class="flex flex-col gap-4">
-  <div class="\flex flex-col gap-4 box">
+  <div class="flex flex-col gap-4 box">
     <div class="flex items-start gap-4">
       <img
         class="profile-picture-sm md:profile-picture-md"
@@ -149,6 +149,16 @@
       }}
     />
   {:else if tab === 'threads'}
+    {#if data.self.id === data.user.id}
+      <Button
+        class="flex w-fit items-center gap-2 self-end"
+        type="success"
+        onclick={() => (showModal = 'thread')}
+      >
+        Create thread
+        <Icon type="add" size="sm" />
+      </Button>
+    {/if}
     {#each data.threads as thread}
       <ThreadOverview {thread} />
     {/each}

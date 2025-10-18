@@ -8,6 +8,7 @@
     children,
     show = false,
     center = false,
+    upper = false,
     backdropCallback,
   }: ModalProps = $props();
 </script>
@@ -16,14 +17,15 @@
   <!-- svelte-ignore a11y_no_static_element_interactions -->
   <!-- svelte-ignore a11y_click_events_have_key_events -->
   <div
-    class="fixed inset-0 z-10 bg-zinc-700/40 dark:bg-zinc-800/40"
+    class={['fixed inset-0 bg-zinc-700/40 dark:bg-zinc-800/40', upper ? 'z-12' : 'z-10']}
     onclick={backdropCallback}
     out:fade={{ duration: 300 }}
   ></div>
   <div in:fade={{ duration: 200 }} out:fade={{ duration: 300 }}>
     <div
       class={[
-        'fixed top-1/2 left-1/2 z-11 flex w-11/12 -translate-1/2 flex-col gap-4 box transition-all md:max-w-1/2 md:p-6 dark:border-gray-700 dark:bg-zinc-900',
+        'fixed top-1/2 left-1/2 flex w-11/12 -translate-1/2 flex-col gap-4 box transition-all md:max-w-1/2 md:p-6 dark:border-gray-700 dark:bg-zinc-900',
+        upper ? 'z-13' : 'z-11',
         center && 'text-center',
         className,
       ]}

@@ -14,15 +14,15 @@ export const load: PageServerLoad = async ({ cookies, params, url, parent, fetch
     };
   }
   const tab = url.searchParams.get('tab') ?? 'posts';
+  const tagsRes = await AxiosHandler.get(
+    `/group/${params.id}/tags`,
+    cookies.get(CookieName.accessToken),
+  );
+  if (!tagsRes.success) error(tagsRes.status, tagsRes.message);
 
   switch (tab) {
     case 'posts': {
       const postsRes = await fetch(`/api/posts?groupId=${params.id}&accepted=true`);
-      const tagsRes = await AxiosHandler.get(
-        `/group/${params.id}/tags`,
-        cookies.get(CookieName.accessToken),
-      );
-      if (!tagsRes.success) error(tagsRes.status, tagsRes.message);
 
       return {
         posts: (await postsRes.json()) as unknown as Post[],
@@ -36,7 +36,10 @@ export const load: PageServerLoad = async ({ cookies, params, url, parent, fetch
       );
       if (!res.success) error(res.status, res.message);
 
-      return { threads: res.data as unknown as Thread[] };
+      return {
+        threads: res.data as unknown as Thread[],
+        tags: tagsRes.data as unknown as Tag[],
+      };
     }
     default: {
       error(404, 'Unknown tab');

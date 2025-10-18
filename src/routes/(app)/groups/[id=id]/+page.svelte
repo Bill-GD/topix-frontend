@@ -6,13 +6,14 @@
   import { FloatingLabelInput } from '$lib/components/input';
   import { Scroller } from '$lib/components/layout';
   import { Tab, TabBar } from '$lib/components/link';
-  import { Icon, ReturnHeader } from '$lib/components/misc';
+  import { Flair, Icon, ReturnHeader } from '$lib/components/misc';
   import { Modal, ModalBody, ModalFooter, ModalHeader } from '$lib/components/modal';
   import { ThreadOverview } from '$lib/components/overview';
   import { Post } from '$lib/components/post';
   import { getToaster } from '$lib/components/toast';
   import { PostUpload } from '$lib/components/upload';
   import { capitalize, formResultToast } from '$lib/utils/helpers';
+  import type { Tag } from '$lib/utils/types';
   import type { PageProps } from './$types';
 
   let { data }: PageProps = $props();
@@ -20,11 +21,14 @@
   const toaster = getToaster();
   const tab = $derived(page.url.searchParams.get('tab') ?? 'posts');
   const items = ['posts', 'threads'];
-  let showModal = $state<'thread' | 'leave' | 'delete' | null>(null);
+  let showModal = $state<'thread' | 'leave' | 'delete' | 'tag' | null>(null);
+  let showTagModal = $state<boolean>(false);
   let threadTitle = $state<string>('');
   let pageIndex = 1;
   let disableScroller = $state<boolean>(false);
   let posts = $derived(data.posts);
+  let chosenTag = $state<Tag | null>(null);
+  let selectedTag = $state<Tag | null>(null);
 
   function hideModal() {
     showModal = null;
@@ -160,6 +164,16 @@
     {:else if data.threads!.length <= 0}
       <p class="empty-noti-text">This group has no thread.</p>
     {:else}
+      {#if data.group.status === true}
+        <Button
+          class="flex w-fit items-center gap-2 self-end"
+          type="success"
+          onclick={() => (showModal = 'thread')}
+        >
+          Create thread
+          <Icon type="add" size="sm" />
+        </Button>
+      {/if}
       {#each data.threads as thread}
         <ThreadOverview {thread} />
       {/each}
@@ -234,17 +248,30 @@
         Title
       </FloatingLabelInput>
 
-      {#if data.tags && data.tags.length > 0}
-        <select
-          class="rounded-md border-gray-700 bg-zinc-200 dark:bg-zinc-900"
-          name="tag-id"
-          id="post-tag-select"
+      {#if chosenTag}
+        <button
+          class="flex w-fit cursor-pointer items-center gap-2 text-zinc-500 hover:text-zinc-200"
+          onclick={(ev) => {
+            ev.preventDefault();
+            showTagModal = true;
+          }}
         >
-          {#each data.tags as tag}
-            <option disabled selected value hidden> -- choose tag -- </option>
-            <option value={tag.id}>{tag.name}</option>
-          {/each}
-        </select>
+          <input name="tag-id" type="number" value={chosenTag.id} hidden readonly />
+          <Flair tag={chosenTag} />
+          <Icon type="edit" size="sm" />
+        </button>
+      {:else if data.tags && data.tags.length > 0}
+        <Button
+          class="w-fit"
+          type="dark"
+          outline
+          onclick={(ev) => {
+            ev.preventDefault();
+            showTagModal = true;
+          }}
+        >
+          Choose tag
+        </Button>
       {/if}
 
       <div class="flex w-full flex-col gap-2 md:flex-row">
@@ -262,4 +289,50 @@
       </div>
     </form>
   </ModalBody>
+</Modal>
+
+<Modal class="md:w-fit" show={showTagModal} backdropCallback={() => (showTagModal = false)} upper>
+  <ModalHeader class="text-center">Select tag</ModalHeader>
+  <ModalBody>
+    <div class="flex flex-col gap-4">
+      {#each data.tags! as tag}
+        <div class="tag-input flex items-center gap-4">
+          <input type="radio" id={`${tag.id}`} name="tag" oninput={() => (selectedTag = tag)} />
+          <label for={`${tag.id}`}><Flair {tag} /></label>
+        </div>
+      {/each}
+    </div>
+  </ModalBody>
+  <ModalFooter>
+    <Button
+      class="w-full"
+      type="success"
+      onclick={() => {
+        showTagModal = false;
+        chosenTag = selectedTag;
+      }}
+    >
+      Confirm
+    </Button>
+    <Button
+      class="w-full"
+      type="dark"
+      onclick={() => {
+        showTagModal = false;
+        selectedTag = null;
+      }}
+    >
+      Cancel
+    </Button>
+    <Button
+      class="w-full"
+      type="dark"
+      onclick={() => {
+        showTagModal = false;
+        selectedTag = chosenTag = null;
+      }}
+    >
+      Remove
+    </Button>
+  </ModalFooter>
 </Modal>
