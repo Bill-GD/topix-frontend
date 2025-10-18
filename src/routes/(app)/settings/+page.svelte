@@ -1,5 +1,6 @@
 <script lang="ts">
   import { enhance } from '$app/forms';
+  import { page } from '$app/state';
   import { Button } from '$lib/components/button';
   import { Input } from '$lib/components/input';
   import { Tab, TabBar } from '$lib/components/link';
@@ -10,9 +11,10 @@
   import { capitalize, formResultToast } from '$lib/utils/helpers';
   import type { PageProps } from './$types';
 
-  let { data, params }: PageProps = $props();
+  let { data }: PageProps = $props();
 
   const toaster = getToaster();
+  const tab = $derived(page.url.searchParams.get('tab') ?? 'account');
   const items = ['account', 'profile', 'danger'];
   let passwordValue = $state<string>('');
   let profileValue = $state<string>('');
@@ -31,13 +33,13 @@
 
 <TabBar class="mb-4">
   {#each items as item}
-    <Tab href={item} selected={params.section === item}>
+    <Tab href="?tab={item}" selected={tab === item}>
       {capitalize(item)}
     </Tab>
   {/each}
 </TabBar>
 
-{#if params.section === 'account'}
+{#if tab === 'account'}
   <form
     class="flex flex-col gap-6"
     action="?/update-account"
@@ -55,7 +57,7 @@
       <Input class="w-min" id="username" name="username" value={data.self.username}></Input>
     </div>
   </form>
-{:else if params.section === 'profile'}
+{:else if tab === 'profile'}
   <form
     class="flex flex-col gap-6"
     action="?/update-profile"
@@ -100,7 +102,7 @@
       </div>
     </div>
   </form>
-{:else if params.section === 'display'}{:else if params.section === 'danger'}
+{:else if tab === 'display'}{:else if tab === 'danger'}
   {#if data.self.role !== 'admin'}
     <div class="flex flex-col gap-2">
       <p class="text-xl">Delete account</p>

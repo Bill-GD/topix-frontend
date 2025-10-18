@@ -39,7 +39,7 @@ export const load: PageServerLoad = async ({ cookies, params, url, parent, fetch
       return { threads: res.data as unknown as Thread[] };
     }
     default: {
-      error(400, 'Unknown tab');
+      error(404, 'Unknown tab');
     }
   }
 };

@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { page } from '$app/state';
   import { Tab, TabBar } from '$lib/components/link';
   import { Icon, ReturnHeader } from '$lib/components/misc';
   import { ThreadOverview } from '$lib/components/overview';
@@ -6,9 +7,10 @@
   import { capitalize } from '$lib/utils/helpers';
   import type { PageProps } from './$types';
 
-  let { data, params }: PageProps = $props();
+  let { data }: PageProps = $props();
 
-  const items = ['post', 'thread', 'group'];
+  const tab = $derived(page.url.searchParams.get('tab') ?? 'posts');
+  const items = ['posts', 'threads', 'groups'];
 </script>
 
 <svelte:head>
@@ -20,25 +22,25 @@
 <div class="flex flex-col gap-4">
   <TabBar>
     {#each items as item}
-      <Tab href={item} selected={params.section === item}>{capitalize(item)}</Tab>
+      <Tab href="?tab={item}" selected={tab === item}>{capitalize(item)}</Tab>
     {/each}
   </TabBar>
 
-  {#if params.section === 'post'}
+  {#if tab === 'posts'}
     {#if data.posts!.length <= 0}
       <p class="empty-noti-text">No hidden post.</p>
     {/if}
     {#each data.posts! as post (post.id)}
       <Post self={data.self} {post} />
     {/each}
-  {:else if params.section === 'thread'}
+  {:else if tab === 'threads'}
     {#if data.threads!.length <= 0}
       <p class="empty-noti-text">No hidden thread.</p>
     {/if}
     {#each data.threads! as thread (thread.id)}
       <ThreadOverview {thread} />
     {/each}
-  {:else if params.section === 'group'}
+  {:else if tab === 'groups'}
     {#if data.groups!.length <= 0}
       <p class="empty-noti-text">No hidden group.</p>
     {/if}

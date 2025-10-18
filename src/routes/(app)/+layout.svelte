@@ -74,7 +74,7 @@
           </div>
         </div>
       </DropdownItem>
-      <DropdownItem href="/settings/account">Settings</DropdownItem>
+      <DropdownItem href="/settings">Settings</DropdownItem>
       <DropdownItem class="flex items-center justify-between" onclick={() => theme.toggle()}>
         Dark mode
         <Switch class="w-1/3" checked={theme.isDark} onchange={() => theme.toggle()} />

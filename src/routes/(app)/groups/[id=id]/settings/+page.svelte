@@ -1,5 +1,6 @@
 <script lang="ts">
   import { enhance } from '$app/forms';
+  import { page } from '$app/state';
   import { Button, IconButton } from '$lib/components/button';
   import { FloatingLabelInput, Input } from '$lib/components/input';
   import { Tab, TabBar } from '$lib/components/link';
@@ -11,9 +12,10 @@
   import type { Tag } from '$lib/utils/types';
   import type { PageProps } from './$types';
 
-  let { data, params }: PageProps = $props();
+  let { data }: PageProps = $props();
 
   const toaster = getToaster();
+  const tab = $derived(page.url.searchParams.get('tab') ?? 'general');
   const items = ['general', 'tags'];
   let saving = $state<boolean>(false);
   let showModal = $state<'add' | 'delete' | null>(null);
@@ -36,13 +38,13 @@
 
 <TabBar class="mb-4">
   {#each items as item}
-    <Tab href={item} selected={params.section === item}>
+    <Tab href="?tab={item}" selected={tab === item}>
       {capitalize(item)}
     </Tab>
   {/each}
 </TabBar>
 
-{#if params.section === 'general'}
+{#if tab === 'general'}
   <form
     class="flex flex-col gap-4"
     action="?/update-group"
@@ -92,7 +94,7 @@
       <FileDropzone contentInputName="group-banner" bind:contentValue={bannerValue} />
     </div>
   </form>
-{:else if params.section === 'tags'}
+{:else if tab === 'tags'}
   <div class="flex flex-col gap-4">
     <Button class="ml-auto" type="success" onclick={() => (showModal = 'add')}>Add tag</Button>
 

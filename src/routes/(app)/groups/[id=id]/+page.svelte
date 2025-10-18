@@ -18,8 +18,8 @@
   let { data }: PageProps = $props();
 
   const toaster = getToaster();
-  const items = $derived(['posts', 'threads']);
   const tab = $derived(page.url.searchParams.get('tab') ?? 'posts');
+  const items = ['posts', 'threads'];
   let showModal = $state<'thread' | 'leave' | 'delete' | null>(null);
   let threadTitle = $state<string>('');
   let pageIndex = 1;
@@ -92,10 +92,10 @@
               </IconButton>
             {/snippet}
 
-            <DropdownItem href="/groups/{data.group.id}/members/all">Members</DropdownItem>
+            <DropdownItem href="/groups/{data.group.id}/members">Members</DropdownItem>
             {#if data.self.id === data.group.owner.id}
               <DropdownItem href="/groups/{data.group.id}/pending">Pending posts</DropdownItem>
-              <DropdownItem href="/groups/{data.group.id}/settings/general">Settings</DropdownItem>
+              <DropdownItem href="/groups/{data.group.id}/settings">Settings</DropdownItem>
               <DropdownItem class="text-red-500" onclick={() => (showModal = 'delete')}>
                 Delete
               </DropdownItem>

@@ -1,5 +1,6 @@
 <script lang="ts">
   import { enhance } from '$app/forms';
+  import { page } from '$app/state';
   import { Button } from '$lib/components/button';
   import { Scroller } from '$lib/components/layout';
   import { Tab, TabBar } from '$lib/components/link';
@@ -9,9 +10,10 @@
   import { capitalize, formResultToast } from '$lib/utils/helpers';
   import type { PageProps } from './$types';
 
-  let { data, params }: PageProps = $props();
+  let { data }: PageProps = $props();
 
   const toaster = getToaster();
+  const tab = $derived(page.url.searchParams.get('tab') ?? 'all');
   const items = ['all', 'pending'];
   let showModal = $state<'remove' | 'owner' | null>(null);
   let selectedMemberId = $state<number>(0);
@@ -33,13 +35,13 @@
 <div class="flex flex-col gap-4">
   <TabBar>
     {#each items as item}
-      <Tab href={item} selected={params.section === item}>
+      <Tab href="?tab={item}" selected={tab === item}>
         {capitalize(item)}
       </Tab>
     {/each}
   </TabBar>
 
-  {#if params.section === 'all'}
+  {#if tab === 'all'}
     {#each members as user}
       <a
         class="flex flex-col gap-4 box hover:bg-zinc-100 md:flex-row dark:hover:bg-zinc-800/80"
@@ -90,7 +92,7 @@
         {/if}
       </a>
     {/each}
-  {:else if params.section === 'pending'}
+  {:else if tab === 'pending'}
     {#if data.members.length <= 0}
       <p class="empty-noti-text">No pending members.</p>
     {:else}
@@ -153,13 +155,13 @@
     {/if}
   {/if}
 
-  {#key params.section}
+  {#key tab}
     <Scroller
       hideText
       disabled={disableScroller}
       attachmentCallback={async () => {
         const res = await fetch(
-          `/api/groups?id=${data.group.id}&members&accepted=${params.section === 'all'}&page=${++pageIndex}`,
+          `/api/groups?id=${data.group.id}&members&accepted=${tab === 'all'}&page=${++pageIndex}`,
         );
         const newData = await res.json();
         if (newData.length <= 0) disableScroller = true;

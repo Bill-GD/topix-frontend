@@ -4,7 +4,11 @@ import { CookieName, type Tag } from '$lib/utils/types';
 import { type Actions, error, fail } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
-export const load: PageServerLoad = async ({ cookies, params }) => {
+export const load: PageServerLoad = async ({ cookies, params, url }) => {
+  if (!['general', 'tags'].includes(url.searchParams.get('tab') ?? 'general')) {
+    error(404, 'Unknown tab');
+  }
+
   const tagsRes = await AxiosHandler.get(
     `/group/${params.id}/tags`,
     cookies.get(CookieName.accessToken),

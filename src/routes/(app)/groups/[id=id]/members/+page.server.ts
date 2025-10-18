@@ -3,8 +3,13 @@ import { CookieName } from '$lib/utils/types';
 import { type Actions, error, fail } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
-export const load: PageServerLoad = async ({ params, cookies }) => {
-  const accepted = params.section === 'all';
+export const load: PageServerLoad = async ({ params, cookies, url }) => {
+  const tab = url.searchParams.get('tab') ?? 'all';
+  if (!['all', 'pending'].includes(tab)) {
+    error(404, 'Unknown tab');
+  }
+
+  const accepted = tab === 'all';
   const res = await AxiosHandler.get(
     `/group/${params.id}/members?accepted=${accepted}`,
     cookies.get(CookieName.accessToken),

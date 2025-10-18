@@ -23,7 +23,7 @@ export const load: PageServerLoad = async ({ cookies, url, fetch }) => {
       return { posts: (await res.json()) as unknown as Post[] };
     }
     default: {
-      error(404, "Tab should only be either 'new' or 'following'");
+      error(404, 'Unknown tab');
     }
   }
 };

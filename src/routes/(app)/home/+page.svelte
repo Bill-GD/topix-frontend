@@ -8,7 +8,7 @@
 
   let { data }: PageProps = $props();
   const tab = $derived(page.url.searchParams.get('tab') ?? 'new');
-  const items = $derived(['new', 'following']);
+  const items = ['new', 'following'];
   let pageIndex = 1;
   let disableScroller = $state<boolean>(false);
   let posts = $derived(data.posts);
