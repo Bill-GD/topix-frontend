@@ -14,6 +14,7 @@
     hover = false,
     size = 'md',
     class: className,
+    ...otherProps
   }: {
     type: keyof typeof Icons;
     hover?: boolean;
@@ -30,6 +31,7 @@
     class={['transition-transform', hover && 'hover:scale-150', ...IconSize[size], className]}
     viewBox="0 0 {icon[0]} {icon[1]}"
     role="img"
+    {...otherProps}
   >
     <g>
       {#if typeof icon[4] == 'string'}

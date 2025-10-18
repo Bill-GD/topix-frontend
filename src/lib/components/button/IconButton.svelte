@@ -12,6 +12,7 @@
     buttonType,
     type,
     round = false,
+    ...otherProps
   }: {
     children: Snippet;
     onclick?: VoidFunction | UnaryVoidFunction<Event>;
@@ -41,6 +42,7 @@
     : null}
   type={buttonType}
   {disabled}
+  {...otherProps}
 >
   {@render children()}
 </button>

@@ -12,7 +12,7 @@
   import { Post } from '$lib/components/post';
   import { getToaster } from '$lib/components/toast';
   import { PostUpload } from '$lib/components/upload';
-  import { capitalize, formResultToast } from '$lib/utils/helpers';
+  import { capitalize, formResultToast, tooltip } from '$lib/utils/helpers';
   import type { PageProps } from './$types';
 
   let { data }: PageProps = $props();
@@ -57,7 +57,7 @@
       </div>
     </div>
 
-    <div class="flex items-baseline gap-4 font-semibold md:gap-6 md:px-4">
+    <div class="flex items-center gap-4 font-semibold md:gap-6 md:px-4">
       <p>Following: {data.user.followingCount}</p>
       <p>Follower: {data.user.followerCount}</p>
 
@@ -65,7 +65,7 @@
         {#if data.self.id === data.user.id}
           <DropdownMenu class="ml-auto h-fit" position="bottom" align="right">
             {#snippet trigger()}
-              <IconButton round>
+              <IconButton class="p-2" {@attach tooltip('Options')} round>
                 <Icon type="bar" size="sm" />
               </IconButton>
             {/snippet}
@@ -73,7 +73,7 @@
             <DropdownItem href="/user/{data.self.username}/hidden">View hidden items</DropdownItem>
           </DropdownMenu>
         {:else}
-          <IconButton type="dark" class="w-full">
+          <IconButton type="dark" class="w-full" {@attach tooltip('Message')}>
             <Icon type="message" size="sm" />
           </IconButton>
           {#if data.user.followed}
@@ -87,7 +87,7 @@
                 };
               }}
             >
-              <IconButton type="danger" class="w-full">
+              <IconButton type="danger" class="w-full" {@attach tooltip('Unfollow')}>
                 <Icon type="unfollow" size="sm" />
               </IconButton>
               <input type="number" name="user-id" value={data.user.id} hidden readonly />
@@ -103,7 +103,7 @@
                 };
               }}
             >
-              <IconButton type="dark" class="w-full">
+              <IconButton type="dark" class="w-full" {@attach tooltip('Follow')}>
                 <Icon type="follow" size="sm" />
               </IconButton>
               <input type="number" name="user-id" value={data.user.id} hidden readonly />

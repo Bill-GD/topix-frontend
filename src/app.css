@@ -30,10 +30,6 @@ input[type='checkbox']:focus {
   border-radius: 0;
 }
 
-@utility tippy-box {
-  @apply rounded-md p-1;
-}
-
 @utility profile-picture-lg {
   @apply aspect-square h-30 w-30 rounded-full object-contain;
 }

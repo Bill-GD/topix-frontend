@@ -1,7 +1,7 @@
 <script lang="ts">
   import { enhance } from '$app/forms';
   import { getToaster } from '$lib/components/toast';
-  import { formResultToast, getTimeAgo } from '$lib/utils/helpers';
+  import { formResultToast, getTimeAgo, tooltip } from '$lib/utils/helpers';
   import type { CurrentUser, Post } from '$lib/utils/types';
   import type { ClassValue } from 'svelte/elements';
   import Button from '../button/Button.svelte';
@@ -59,6 +59,9 @@
   let reaction = $derived(post.reaction);
   let reactionCount = $derived(post.reactionCount);
   let showModal = $state<'delete' | 'visibility' | null>(null);
+  let hasExtraInfo = $derived(
+    isReply || (showThreadAndGroupName && (post.groupName || post.threadTitle)),
+  );
 
   function hideModal() {
     showModal = null;
@@ -117,19 +120,41 @@
         >
           {post.owner.displayName}
         </a>
-
-        <span>•</span>
-        <span>{getTimeAgo(Date.parse(post.dateCreated))}</span>
-        {#if post.dateUpdated}
-          <span>•</span>
-          <span>edited {getTimeAgo(Date.parse(post.dateUpdated))}</span>
-        {/if}
-        {#if post.visibility === 'private'}
-          <Icon type="lock" size="xs" />
-        {:else if post.visibility === 'hidden'}
-          <Icon type="eyeSlash" size="xs" />
+        {#if hasExtraInfo}
+          •
+          <span>{getTimeAgo(Date.parse(post.dateCreated))}</span>
+          {#if post.dateUpdated}
+            •
+            <span>edited {getTimeAgo(Date.parse(post.dateUpdated))}</span>
+          {/if}
+          {#if post.visibility !== 'public'}
+            •
+            {#if post.visibility === 'private'}
+              <Icon class="z-1" {@attach tooltip('Private')} type="lock" size="xs" />
+            {:else if post.visibility === 'hidden'}
+              <Icon class="z-1" {@attach tooltip('Hidden')} type="eyeSlash" size="xs" />
+            {/if}
+          {/if}
         {/if}
       </div>
+
+      {#if !hasExtraInfo}
+        <div class="flex w-fit items-center gap-2 text-gray-500">
+          <span>{getTimeAgo(Date.parse(post.dateCreated))}</span>
+          {#if post.dateUpdated}
+            •
+            <span>edited {getTimeAgo(Date.parse(post.dateUpdated))}</span>
+          {/if}
+          {#if post.visibility !== 'public'}
+            •
+            {#if post.visibility === 'private'}
+              <Icon class="z-1" {@attach tooltip('Private')} type="lock" size="xs" />
+            {:else if post.visibility === 'hidden'}
+              <Icon class="z-1" {@attach tooltip('Hidden')} type="eyeSlash" size="xs" />
+            {/if}
+          {/if}
+        </div>
+      {/if}
     </div>
 
     {#if !hideOptions && (self.id === post.owner.id || self.role === 'admin')}
