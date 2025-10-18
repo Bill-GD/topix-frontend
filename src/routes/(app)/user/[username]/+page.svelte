@@ -25,6 +25,8 @@
   let pageIndex = 1;
   let disableScroller = $state<boolean>(false);
   let posts = $derived(data.posts);
+  let threads = $derived(data.threads);
+  let groups = $derived(data.groups);
 
   function hideModal() {
     showModal = null;
@@ -159,13 +161,43 @@
         <Icon type="add" size="sm" />
       </Button>
     {/if}
-    {#each data.threads as thread}
+    {#each threads as thread}
       <ThreadOverview {thread} />
     {/each}
+
+    <Scroller
+      disabled={disableScroller}
+      attachmentCallback={async () => {
+        const res = await fetch(
+          `/api/threads?username=${data.user.username}${data.self.username === data.user.username ? '&visibility=private' : ''}&page=${++pageIndex}`,
+        );
+        const newData = await res.json();
+        if (newData.length <= 0) disableScroller = true;
+        threads = [...threads!, ...newData];
+      }}
+      detachCleanup={() => {
+        pageIndex = 1;
+        disableScroller = false;
+      }}
+    />
   {:else if tab === 'groups'}
-    {#each data.groups as group}
+    {#each groups as group}
       <GroupOverview {group} />
     {/each}
+
+    <Scroller
+      disabled={disableScroller}
+      attachmentCallback={async () => {
+        const res = await fetch(`/api/groups?ownerId=${data.user.id}&page=${++pageIndex}`);
+        const newData = await res.json();
+        if (newData.length <= 0) disableScroller = true;
+        groups = [...groups!, ...newData];
+      }}
+      detachCleanup={() => {
+        pageIndex = 1;
+        disableScroller = false;
+      }}
+    />
   {/if}
 </div>
 

@@ -27,6 +27,7 @@
   let pageIndex = 1;
   let disableScroller = $state<boolean>(false);
   let posts = $derived(data.posts);
+  let threads = $derived(data.threads);
   let chosenTag = $state<Tag | null>(null);
   let selectedTag = $state<Tag | null>(null);
 
@@ -174,9 +175,23 @@
           <Icon type="add" size="sm" />
         </Button>
       {/if}
-      {#each data.threads as thread}
+      {#each threads as thread}
         <ThreadOverview {thread} />
       {/each}
+
+      <Scroller
+        disabled={disableScroller}
+        attachmentCallback={async () => {
+          const res = await fetch(`/api/threads?groupId=${data.group.id}&page=${++pageIndex}`);
+          const newData = await res.json();
+          if (newData.length <= 0) disableScroller = true;
+          threads = [...threads!, ...newData];
+        }}
+        detachCleanup={() => {
+          pageIndex = 1;
+          disableScroller = false;
+        }}
+      />
     {/if}
   {/if}
 </div>

@@ -157,7 +157,7 @@
 
   {#key tab}
     <Scroller
-      hideText
+      hideText={members.length <= 0}
       disabled={disableScroller}
       attachmentCallback={async () => {
         const res = await fetch(

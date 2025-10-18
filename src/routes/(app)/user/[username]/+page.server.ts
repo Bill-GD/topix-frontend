@@ -20,24 +20,17 @@ export const load: PageServerLoad = async ({ parent, params, cookies, url, fetch
       const res = await fetch(
         `/api/posts?username=${params.username}${self.username === params.username ? '&visibility=private' : ''}`,
       );
-
       return { user, posts: (await res.json()) as unknown as Post[] };
     }
     case 'threads': {
-      const res = await AxiosHandler.get(
-        `/thread?username=${user.username}${self.username === params.username ? '&visibility=private' : ''}`,
-        cookies.get(CookieName.accessToken),
+      const res = await fetch(
+        `/api/threads?username=${user.username}${self.username === params.username ? '&visibility=private' : ''}`,
       );
-
-      return { user, threads: res.data as unknown as Thread[] };
+      return { user, threads: (await res.json()) as unknown as Thread[] };
     }
     case 'groups': {
-      const res = await AxiosHandler.get(
-        `/group?ownerId=${user.id}`,
-        cookies.get(CookieName.accessToken),
-      );
-
-      return { user, groups: res.data as unknown as Group[] };
+      const res = await fetch(`/api/groups?ownerId=${user.id}`);
+      return { user, groups: (await res.json()) as unknown as Group[] };
     }
     default: {
       error(400, 'Unknown tab');
