@@ -25,7 +25,10 @@
   let showTagModal = $state<boolean>(false);
   let threadTitle = $state<string>('');
   let pageIndex = 1;
-  let disableScroller = $state<boolean>(false);
+  let disableScroller = $derived({
+    posts: data.endOfList,
+    threads: data.endOfList,
+  });
   let posts = $derived(data.posts);
   let threads = $derived(data.threads);
   let chosenTag = $state<Tag | null>(null);
@@ -144,18 +147,18 @@
       {/each}
 
       <Scroller
-        disabled={disableScroller}
+        disabled={disableScroller[tab]}
         attachmentCallback={async () => {
           const res = await fetch(
             `/api/posts?groupId=${data.group.id}&accepted=true&page=${++pageIndex}`,
           );
           const newData = await res.json();
-          if (newData.length <= 0) disableScroller = true;
+          disableScroller[tab] = res.headers.get('x-end-of-list') === 'true';
           posts = [...posts!, ...newData];
         }}
         detachCleanup={() => {
           pageIndex = 1;
-          disableScroller = false;
+          disableScroller[tab] = false;
         }}
       />
     {/if}
@@ -180,16 +183,16 @@
       {/each}
 
       <Scroller
-        disabled={disableScroller}
+        disabled={disableScroller[tab]}
         attachmentCallback={async () => {
           const res = await fetch(`/api/threads?groupId=${data.group.id}&page=${++pageIndex}`);
           const newData = await res.json();
-          if (newData.length <= 0) disableScroller = true;
+          disableScroller[tab] = res.headers.get('x-end-of-list') === 'true';
           threads = [...threads!, ...newData];
         }}
         detachCleanup={() => {
           pageIndex = 1;
-          disableScroller = false;
+          disableScroller[tab] = false;
         }}
       />
     {/if}

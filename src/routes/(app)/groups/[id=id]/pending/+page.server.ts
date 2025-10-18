@@ -1,17 +1,14 @@
 import { AxiosHandler } from '$lib/utils/axios-handler';
 import { CookieName, type Post } from '$lib/utils/types';
-import { type Actions, error, fail } from '@sveltejs/kit';
+import { type Actions, fail } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
-export const load: PageServerLoad = async ({ params, cookies }) => {
-  const res = await AxiosHandler.get(
-    `/post?groupId=${params.id}&accepted=false`,
-    cookies.get(CookieName.accessToken),
-  );
-  if (!res.success) error(res.status, res.message);
+export const load: PageServerLoad = async ({ params, fetch }) => {
+  const res = await fetch(`/api/posts?groupId=${params.id}&accepted=false`);
 
   return {
-    posts: res.data as unknown as Post[],
+    posts: (await res.json()) as unknown as Post[],
+    endOfList: res.headers.get('x-end-of-list') === 'true',
   };
 };
 

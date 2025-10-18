@@ -13,12 +13,15 @@
   let { data }: PageProps = $props();
 
   const toaster = getToaster();
-  const tab = $derived(page.url.searchParams.get('tab') ?? 'all');
+  const tab = $derived(page.url.searchParams.get('tab') ?? 'all') as 'all' | 'pending';
   const items = ['all', 'pending'];
   let showModal = $state<'remove' | 'owner' | null>(null);
   let selectedMemberId = $state<number>(0);
   let pageIndex = 1;
-  let disableScroller = $state<boolean>(false);
+  let disableScroller = $derived({
+    all: data.endOfList,
+    pending: data.endOfList,
+  });
   let members = $derived(data.members);
 
   function hideModal() {
@@ -158,18 +161,18 @@
   {#key tab}
     <Scroller
       hideText={members.length <= 0}
-      disabled={disableScroller}
+      disabled={disableScroller[tab]}
       attachmentCallback={async () => {
         const res = await fetch(
           `/api/groups?id=${data.group.id}&members&accepted=${tab === 'all'}&page=${++pageIndex}`,
         );
         const newData = await res.json();
-        if (newData.length <= 0) disableScroller = true;
+        disableScroller[tab] = res.headers.get('x-end-of-list') === 'true';
         members = [...members, ...newData];
       }}
       detachCleanup={() => {
         pageIndex = 1;
-        disableScroller = false;
+        disableScroller[tab] = false;
       }}
     />
   {/key}

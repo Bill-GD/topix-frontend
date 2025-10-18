@@ -23,7 +23,11 @@
   let showModal = $state<'thread' | null>(null);
   let threadTitle = $state<string>('');
   let pageIndex = 1;
-  let disableScroller = $state<boolean>(false);
+  let disableScroller = $derived({
+    posts: data.endOfList,
+    threads: data.endOfList,
+    groups: data.endOfList,
+  });
   let posts = $derived(data.posts);
   let threads = $derived(data.threads);
   let groups = $derived(data.groups);
@@ -138,16 +142,16 @@
     {/each}
 
     <Scroller
-      disabled={disableScroller}
+      disabled={disableScroller[tab]}
       attachmentCallback={async () => {
         const res = await fetch(`/api/posts?username=${data.user.username}&page=${++pageIndex}`);
         const newData = await res.json();
-        if (newData.length <= 0) disableScroller = true;
+        disableScroller[tab] = res.headers.get('x-end-of-list') === 'true';
         posts = [...posts!, ...newData];
       }}
       detachCleanup={() => {
         pageIndex = 1;
-        disableScroller = false;
+        disableScroller[tab] = false;
       }}
     />
   {:else if tab === 'threads'}
@@ -166,18 +170,18 @@
     {/each}
 
     <Scroller
-      disabled={disableScroller}
+      disabled={disableScroller[tab]}
       attachmentCallback={async () => {
         const res = await fetch(
           `/api/threads?username=${data.user.username}${data.self.username === data.user.username ? '&visibility=private' : ''}&page=${++pageIndex}`,
         );
         const newData = await res.json();
-        if (newData.length <= 0) disableScroller = true;
+        if (newData.length <= 0) disableScroller[tab] = true;
         threads = [...threads!, ...newData];
       }}
       detachCleanup={() => {
         pageIndex = 1;
-        disableScroller = false;
+        disableScroller[tab] = false;
       }}
     />
   {:else if tab === 'groups'}
@@ -186,16 +190,16 @@
     {/each}
 
     <Scroller
-      disabled={disableScroller}
+      disabled={disableScroller[tab]}
       attachmentCallback={async () => {
         const res = await fetch(`/api/groups?ownerId=${data.user.id}&page=${++pageIndex}`);
         const newData = await res.json();
-        if (newData.length <= 0) disableScroller = true;
+        if (newData.length <= 0) disableScroller[tab] = true;
         groups = [...groups!, ...newData];
       }}
       detachCleanup={() => {
         pageIndex = 1;
-        disableScroller = false;
+        disableScroller[tab] = false;
       }}
     />
   {/if}

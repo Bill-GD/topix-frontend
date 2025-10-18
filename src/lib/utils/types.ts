@@ -1,5 +1,7 @@
 // general types
 
+import type { AxiosResponseHeaders } from 'axios';
+
 export type ToastMessage = {
   id: number;
   message: string;
@@ -7,6 +9,7 @@ export type ToastMessage = {
 };
 
 export type ApiResponse = {
+  readonly headers: AxiosResponseHeaders;
   readonly success: boolean;
   readonly message: string;
   readonly status: number;

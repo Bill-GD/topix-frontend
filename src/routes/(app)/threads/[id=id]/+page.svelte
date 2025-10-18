@@ -18,7 +18,7 @@
   let showModal = $state<'post' | 'delete' | 'update' | null>(null);
   let title = $derived<string>(data.thread.title);
   let pageIndex = 1;
-  let disableScroller = $state<boolean>(false);
+  let disableScroller = $derived<boolean>(data.endOfList);
   let posts = $derived(data.posts);
 
   function hideModal() {
@@ -133,12 +133,11 @@
         attachmentCallback={async () => {
           const res = await fetch(`/api/posts?threadId=${data.thread.id}&page=${++pageIndex}`);
           const newData = await res.json();
-          if (newData.length <= 0) disableScroller = true;
+          disableScroller = res.headers.get('x-end-of-list') === 'true';
           posts = [...posts, ...newData];
         }}
         detachCleanup={() => {
           pageIndex = 1;
-          disableScroller = false;
         }}
       />
     </div>

@@ -22,23 +22,21 @@ export const load: PageServerLoad = async ({ cookies, params, url, parent, fetch
 
   switch (tab) {
     case 'posts': {
-      const postsRes = await fetch(`/api/posts?groupId=${params.id}&accepted=true`);
+      const res = await fetch(`/api/posts?groupId=${params.id}&accepted=true`);
 
       return {
-        posts: (await postsRes.json()) as unknown as Post[],
+        posts: (await res.json()) as unknown as Post[],
         tags: tagsRes.data as unknown as Tag[],
+        endOfList: res.headers.get('x-end-of-list') === 'true',
       };
     }
     case 'threads': {
-      const res = await AxiosHandler.get(
-        `/thread?groupId=${params.id}`,
-        cookies.get(CookieName.accessToken),
-      );
-      if (!res.success) error(res.status, res.message);
+      const res = await fetch(`/api/threads?groupId=${params.id}`);
 
       return {
-        threads: res.data as unknown as Thread[],
+        threads: (await res.json()) as unknown as Thread[],
         tags: tagsRes.data as unknown as Tag[],
+        endOfList: res.headers.get('x-end-of-list') === 'true',
       };
     }
     default: {

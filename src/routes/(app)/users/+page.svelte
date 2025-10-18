@@ -14,7 +14,7 @@
   let showModal = $state<'delete' | null>(null);
   let username = $state<string>('');
   let pageIndex = 1;
-  let disableScroller = $state<boolean>(false);
+  let disableScroller = $state<boolean>(data.endOfList);
   let users = $derived(data.users);
 
   function hideModal() {
@@ -67,7 +67,7 @@
     attachmentCallback={async () => {
       const res = await fetch(`/api/users?page=${++pageIndex}`);
       const newData = await res.json();
-      if (newData.length <= 0) disableScroller = true;
+      disableScroller = res.headers.get('x-end-of-list') === 'true';
       users = [...users, ...newData];
     }}
     detachCleanup={() => {

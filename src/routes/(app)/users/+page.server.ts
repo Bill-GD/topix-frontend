@@ -1,14 +1,14 @@
 import { AxiosHandler } from '$lib/utils/axios-handler';
 import { CookieName, type User } from '$lib/utils/types';
-import { type Actions, error, fail } from '@sveltejs/kit';
+import { type Actions, fail } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
-export const load: PageServerLoad = async ({ cookies }) => {
-  const res = await AxiosHandler.get(`/user`, cookies.get(CookieName.accessToken));
-
-  if (!res.success) return error(res.status, res.message);
-
-  return { users: res.data as unknown as User[] };
+export const load: PageServerLoad = async ({ fetch }) => {
+  const res = await fetch(`/api/users`);
+  return {
+    users: (await res.json()) as unknown as User[],
+    endOfList: res.headers.get('x-end-of-list') === 'true',
+  };
 };
 
 export const actions: Actions = {

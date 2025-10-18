@@ -6,7 +6,7 @@
 
   let { data }: PageProps = $props();
   let pageIndex = 1;
-  let disableScroller = $state<boolean>(false);
+  let disableScroller = $derived<boolean>(data.endOfList);
   let posts = $derived(data.posts);
 </script>
 
@@ -31,12 +31,11 @@
           `/api/posts?groupId=${data.group.id}&accepted=false&page=${++pageIndex}`,
         );
         const newData = await res.json();
-        if (newData.length <= 0) disableScroller = true;
+        disableScroller = res.headers.get('x-end-of-list') === 'true';
         posts = [...posts, ...newData];
       }}
       detachCleanup={() => {
         pageIndex = 1;
-        disableScroller = false;
       }}
     />
   {/if}

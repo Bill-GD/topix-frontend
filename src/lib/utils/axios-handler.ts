@@ -1,5 +1,5 @@
-import axios, { AxiosError, type AxiosResponse, type RawAxiosRequestHeaders } from 'axios';
 import { fail, redirect, type RequestEvent } from '@sveltejs/kit';
+import axios, { AxiosError, type AxiosResponse, type RawAxiosRequestHeaders } from 'axios';
 import { getApiUrl } from './helpers';
 import { type ApiResponse, CookieName } from './types';
 
@@ -72,14 +72,14 @@ export class AxiosHandler {
     return res;
   }
 
-  private static request(
+  private static async request(
     method: string,
     url: string,
     dto: object | null,
     token?: string,
     headers?: RawAxiosRequestHeaders,
   ) {
-    return axios(url, {
+    const res = await axios(url, {
       method,
       data: dto ?? undefined,
       baseURL: this.API_URL,
@@ -91,6 +91,7 @@ export class AxiosHandler {
       },
       withCredentials: true,
     });
+    return res;
   }
 
   private static handleError(err: unknown): ApiResponse {
@@ -124,7 +125,10 @@ export class AxiosHandler {
   }
 
   private static getResponse(res: AxiosResponse): ApiResponse {
-    return res.data as ApiResponse;
+    return {
+      ...res.data,
+      headers: res.headers,
+    };
   }
 }
 

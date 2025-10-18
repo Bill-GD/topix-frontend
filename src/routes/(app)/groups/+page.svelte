@@ -18,7 +18,7 @@
   let groupName = $state<string>('');
   let bannerValue = $state<string>('');
   let pageIndex = 1;
-  let disableScroller = $state<boolean>(false);
+  let disableScroller = $derived<boolean>(data.endOfList);
   let groups = $derived(data.groups);
 
   function hideModal() {
@@ -54,7 +54,7 @@
       attachmentCallback={async () => {
         const res = await fetch(`/api/groups?page=${++pageIndex}`);
         const newData = await res.json();
-        if (newData.length <= 0) disableScroller = true;
+        disableScroller = res.headers.get('x-end-of-list') === 'true';
         groups = [...groups, ...newData];
       }}
       detachCleanup={() => {

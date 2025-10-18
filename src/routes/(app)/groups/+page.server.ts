@@ -1,14 +1,14 @@
 import { AxiosHandler } from '$lib/utils/axios-handler';
 import { dataUrlToFile } from '$lib/utils/helpers';
 import { CookieName, type Group } from '$lib/utils/types';
-import { type Actions, error, fail } from '@sveltejs/kit';
+import { type Actions, fail } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
-export const load: PageServerLoad = async ({ cookies }) => {
-  const res = await AxiosHandler.get('/group', cookies.get(CookieName.accessToken));
-  if (!res.success) error(res.status, res.message);
+export const load: PageServerLoad = async ({ fetch }) => {
+  const res = await fetch('/api/groups');
   return {
-    groups: res.data as unknown as Group[],
+    groups: (await res.json()) as unknown as Group[],
+    endOfList: res.headers.get('x-end-of-list') === 'true',
   };
 };
 

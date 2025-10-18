@@ -20,17 +20,29 @@ export const load: PageServerLoad = async ({ parent, params, cookies, url, fetch
       const res = await fetch(
         `/api/posts?username=${params.username}${self.username === params.username ? '&visibility=private' : ''}`,
       );
-      return { user, posts: (await res.json()) as unknown as Post[] };
+      return {
+        user,
+        posts: (await res.json()) as unknown as Post[],
+        endOfList: res.headers.get('x-end-of-list') === 'true',
+      };
     }
     case 'threads': {
       const res = await fetch(
         `/api/threads?username=${user.username}${self.username === params.username ? '&visibility=private' : ''}`,
       );
-      return { user, threads: (await res.json()) as unknown as Thread[] };
+      return {
+        user,
+        threads: (await res.json()) as unknown as Thread[],
+        endOfList: res.headers.get('x-end-of-list') === 'true',
+      };
     }
     case 'groups': {
       const res = await fetch(`/api/groups?ownerId=${user.id}`);
-      return { user, groups: (await res.json()) as unknown as Group[] };
+      return {
+        user,
+        groups: (await res.json()) as unknown as Group[],
+        endOfList: res.headers.get('x-end-of-list') === 'true',
+      };
     }
     default: {
       error(400, 'Unknown tab');

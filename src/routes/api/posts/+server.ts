@@ -12,5 +12,9 @@ export async function GET({ cookies, url }) {
   );
   if (!res.success) error(res.status, res.message);
 
-  return json(res.data);
+  return json(res.data, {
+    headers: {
+      'x-end-of-list': res.headers['x-end-of-list'],
+    },
+  });
 }

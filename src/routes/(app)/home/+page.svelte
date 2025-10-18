@@ -7,10 +7,13 @@
   import type { PageProps } from './$types';
 
   let { data }: PageProps = $props();
-  const tab = $derived(page.url.searchParams.get('tab') ?? 'new');
   const items = ['new', 'following'];
+  const tab = $derived(page.url.searchParams.get('tab') ?? 'new') as 'new' | 'following';
   let pageIndex = 1;
-  let disableScroller = $state<boolean>(false);
+  let disableScroller = $derived({
+    new: data.endOfList,
+    following: data.endOfList,
+  });
   let posts = $derived(data.posts);
 </script>
 
@@ -42,18 +45,18 @@
 
 {#key tab}
   <Scroller
-    disabled={disableScroller}
+    disabled={disableScroller[tab]}
     attachmentCallback={async () => {
       const res = await fetch(
         `/api/posts?page=${++pageIndex}${tab === 'following' ? '&following' : ''}`,
       );
       const newData = await res.json();
-      if (newData.length <= 0) disableScroller = true;
+      disableScroller[tab] = res.headers.get('x-end-of-list') === 'true';
       posts = [...posts, ...newData];
     }}
     detachCleanup={() => {
       pageIndex = 1;
-      disableScroller = false;
+      disableScroller[tab] = data.endOfList;
     }}
   />
 {/key}

@@ -21,6 +21,7 @@ export const load: PageServerLoad = async ({ params, url, fetch }) => {
       dateRequested: string;
       dateJoined: string | null;
     }[],
+    endOfList: res.headers.get('x-end-of-list') === 'true',
   };
 };
 

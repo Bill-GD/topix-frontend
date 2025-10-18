@@ -5,9 +5,10 @@ import { type Actions, error, fail, isActionFailure, redirect } from '@sveltejs/
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ cookies, params }) => {
-  const data: { thread: Thread; posts: Post[] } = {
+  const data: { thread: Thread; posts: Post[]; endOfList: boolean } = {
     thread: {} as Thread,
     posts: [],
+    endOfList: false,
   };
 
   const threadRes = await AxiosHandler.get(
@@ -29,6 +30,7 @@ export const load: PageServerLoad = async ({ cookies, params }) => {
   if (!postRes.success) error(postRes.status, postRes.message);
 
   data.posts = postRes.data as unknown as Post[];
+  data.endOfList = postRes.headers.get('x-end-of-list') === 'true';
 
   return data;
 };
