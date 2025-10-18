@@ -1,6 +1,6 @@
-import { AxiosHandler, handleReaction } from '$lib/utils/axios-handler';
+import { AxiosHandler, handlePostDeletion, handleReaction } from '$lib/utils/axios-handler';
 import { CookieName, type Post, type Thread } from '$lib/utils/types';
-import { type Actions, error, fail } from '@sveltejs/kit';
+import { type Actions, error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ cookies, url, fetch }) => {
@@ -30,13 +30,5 @@ export const load: PageServerLoad = async ({ cookies, url, fetch }) => {
 
 export const actions: Actions = {
   react: handleReaction,
-  'delete-post': async ({ request, cookies }) => {
-    const formData = await request.formData();
-    const postId = formData.get('post-id');
-
-    const res = await AxiosHandler.delete(`/post/${postId}`, cookies.get(CookieName.accessToken));
-
-    if (!res.success) return fail(res.status, { success: false, message: res.message });
-    return { success: true, message: res.message };
-  },
+  'delete-post': handlePostDeletion,
 };

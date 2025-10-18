@@ -8,7 +8,7 @@
   import type { PageProps } from './$types';
 
   let { data }: PageProps = $props();
-  const isReply = data.post.parentPost !== undefined;
+  const isReply = $derived(data.post.parentPost !== undefined);
   const viewImage = $derived(page.url.searchParams.has('view-image'));
 </script>
 
@@ -29,17 +29,26 @@
       showThreadAndGroupName
     />
 
-    <div class="h-4 w-fit self-center border-2 border-zinc-500"></div>
+    <div class="ml-4 h-4 w-fit border-1 border-zinc-500"></div>
   {/if}
 
-  <Post
-    class="mb-4 w-full"
-    self={data.self}
-    post={data.post}
-    detail
-    showThreadAndGroupName={!isReply}
-    allowEditVisibility={data.post.threadId === null && data.post.groupId === null}
-  />
+  <div class="flex">
+    {#if isReply}
+      <div
+        class="ml-4 h-1/2 w-[6%] rounded-bl-lg border-b-2 border-l-2 border-zinc-500 text-transparent md:w-[4%]"
+      >
+        '
+      </div>
+    {/if}
+    <Post
+      class={['mb-4 w-full', isReply && 'w-5/6']}
+      self={data.self}
+      post={data.post}
+      detail
+      showThreadAndGroupName={!isReply}
+      allowEditVisibility={data.post.threadId === null && data.post.groupId === null}
+    />
+  </div>
 </div>
 
 <PostUpload

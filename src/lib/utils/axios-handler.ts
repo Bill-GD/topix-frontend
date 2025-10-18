@@ -1,5 +1,5 @@
 import axios, { AxiosError, type AxiosResponse, type RawAxiosRequestHeaders } from 'axios';
-import { fail, type RequestEvent } from '@sveltejs/kit';
+import { fail, redirect, type RequestEvent } from '@sveltejs/kit';
 import { getApiUrl } from './helpers';
 import { type ApiResponse, CookieName } from './types';
 
@@ -148,6 +148,23 @@ export async function handleReaction(event: RequestEvent) {
     );
   }
 
-  if (!res.success) return fail(res.status, { success: false, message: res.message });
+  if (!res.success) fail(res.status, { success: false, message: res.message });
+  return { success: true, message: res.message };
+}
+
+export async function handlePostDeletion(event: RequestEvent) {
+  const formData = await event.request.formData();
+  const postId = formData.get('post-id');
+
+  const res = await AxiosHandler.delete(
+    `/post/${postId}`,
+    event.cookies.get(CookieName.accessToken),
+  );
+
+  if (!res.success) fail(res.status, { success: false, message: res.message });
+
+  if (event.route.id?.includes('(app)/post/[id=id]') && postId === event.params.id) {
+    redirect(303, '/home');
+  }
   return { success: true, message: res.message };
 }

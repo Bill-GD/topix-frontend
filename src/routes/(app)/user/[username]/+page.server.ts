@@ -1,4 +1,4 @@
-import { AxiosHandler, handleReaction } from '$lib/utils/axios-handler';
+import { AxiosHandler, handlePostDeletion, handleReaction } from '$lib/utils/axios-handler';
 import { getPostUploadForm } from '$lib/utils/helpers';
 import { CookieName, type Group, type Post, type Thread, type User } from '$lib/utils/types';
 import { type Actions, error, fail, isActionFailure } from '@sveltejs/kit';
@@ -50,15 +50,7 @@ export const actions: Actions = {
     return { success: true, message: res.message };
   },
   react: handleReaction,
-  'delete-post': async ({ request, cookies }) => {
-    const formData = await request.formData();
-    const postId = formData.get('post-id');
-
-    const res = await AxiosHandler.delete(`/post/${postId}`, cookies.get(CookieName.accessToken));
-
-    if (!res.success) return fail(res.status, { success: false, message: res.message });
-    return { success: true, message: res.message };
-  },
+  'delete-post': handlePostDeletion,
   'create-thread': async ({ request, cookies }) => {
     const formData = await request.formData();
     const title = `${formData.get('thread-title')}`;
