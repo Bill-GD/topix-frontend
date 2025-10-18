@@ -15,13 +15,6 @@
   }: FloatingLabelInputProps = $props();
 
   const id = $props.id();
-
-  if (labelClass)
-    labelClass = labelClass
-      .toString()
-      .split(' ')
-      .map((e) => `peer-focus:${e}`)
-      .join(' ');
 </script>
 
 <div class={['relative w-fit', className]}>

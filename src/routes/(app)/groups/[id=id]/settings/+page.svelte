@@ -147,7 +147,7 @@
       <div class="flex items-center gap-4">
         <FloatingLabelInput
           name="name"
-          labelClass="bg-zinc-200 dark:bg-zinc-900"
+          labelClass="peer-focus:bg-zinc-200 peer-focus:dark:bg-zinc-900"
           bind:value={tagName}
           clearable
         >

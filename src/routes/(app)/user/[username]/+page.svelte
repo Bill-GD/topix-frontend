@@ -175,7 +175,7 @@
     <FloatingLabelInput
       class="w-full"
       name="thread-title"
-      labelClass="bg-zinc-200 dark:bg-zinc-900"
+      labelClass="peer-focus:bg-zinc-200 peer-focus:dark:bg-zinc-900"
       bind:value={threadTitle}
     >
       Title
