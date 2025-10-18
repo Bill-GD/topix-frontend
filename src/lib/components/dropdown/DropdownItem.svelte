@@ -1,5 +1,6 @@
 <script lang="ts">
-  import type { DropdownItemProps } from '$lib/components/types';
+  import type { Snippet } from 'svelte';
+  import type { ClassValue } from 'svelte/elements';
 
   let {
     href,
@@ -8,7 +9,14 @@
     noHover = false,
     onclick,
     class: className,
-  }: DropdownItemProps = $props();
+  }: {
+    children: Snippet;
+    href?: string;
+    rel?: string;
+    class?: ClassValue;
+    noHover?: boolean;
+    onclick?: VoidFunction;
+  } = $props();
 </script>
 
 <li>

@@ -1,13 +1,19 @@
 <script lang="ts">
-  import type { ToastProps } from '$lib/components/types';
+  import type { ToastMessage } from '$lib/utils/types';
   import { onMount } from 'svelte';
   import type { ClassValue } from 'svelte/elements';
   import { fade, slide } from 'svelte/transition';
   import Icon from '../misc/Icon.svelte';
 
-  let { class: className, toast }: ToastProps = $props();
+  let {
+    class: className,
+    toast,
+  }: {
+    class?: ClassValue;
+    toast: ToastMessage;
+  } = $props();
 
-  const types: { [toast.type]: [ClassValue, ClassValue, string] } = {
+  const types: { [toast.type]: [ClassValue, ClassValue, 'success' | 'error'] } = {
     success: ['border-green-500', 'text-green-500', 'success'],
     error: ['border-red-500', 'text-red-700', 'error'],
   };

@@ -1,8 +1,17 @@
 <script lang="ts">
-  import type { FlairProps } from '$lib/components/types';
   import { getContrastColor } from '$lib/utils/helpers';
+  import type { Tag } from '$lib/utils/types';
+  import type { ClassValue } from 'svelte/elements';
 
-  let { tag, class: className, compact = false }: FlairProps = $props();
+  let {
+    tag,
+    class: className,
+    compact = false,
+  }: {
+    tag: Tag;
+    class?: ClassValue;
+    compact?: boolean;
+  } = $props();
   let textColor = $derived(getContrastColor(tag.color));
 </script>
 

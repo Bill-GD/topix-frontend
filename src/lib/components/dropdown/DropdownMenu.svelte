@@ -1,6 +1,6 @@
 <script lang="ts">
-  import type { DropdownMenuProps } from '$lib/components/types';
-  import { tick } from 'svelte';
+  import { tick, type Snippet } from 'svelte';
+  import type { ClassValue } from 'svelte/elements';
   import { scale } from 'svelte/transition';
 
   let {
@@ -10,7 +10,14 @@
     horizontal = false,
     align,
     position,
-  }: DropdownMenuProps = $props();
+  }: {
+    children: Snippet;
+    trigger: Snippet;
+    class?: ClassValue;
+    horizontal?: boolean;
+    align: 'left' | 'right';
+    position: 'top' | 'bottom';
+  } = $props();
 
   const id = $props.id();
   let showMenu = $state<boolean>(false);

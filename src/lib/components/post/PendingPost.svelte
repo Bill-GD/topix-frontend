@@ -1,8 +1,9 @@
 <script lang="ts">
   import { enhance } from '$app/forms';
   import { getToaster } from '$lib/components/toast';
-  import type { PendingPostProps } from '$lib/components/types';
   import { formResultToast, getTimeAgo } from '$lib/utils/helpers';
+  import type { Post } from '$lib/utils/types';
+  import type { ClassValue } from 'svelte/elements';
   import Button from '../button/Button.svelte';
   import IconButton from '../button/IconButton.svelte';
   import Flair from '../misc/Flair.svelte';
@@ -13,13 +14,17 @@
   import ModalHeader from '../modal/ModalHeader.svelte';
   import ImageCarousel from './ImageCarousel.svelte';
 
-  let { class: className, post }: PendingPostProps = $props();
+  let {
+    class: className,
+    post,
+  }: {
+    class?: ClassValue;
+    post: Post;
+  } = $props();
 
   const toaster = getToaster();
   const isImages = $derived(post.mediaPaths.every((m) => m.includes('image')));
   const isVideo = $derived(post.mediaPaths.every((m) => m.includes('video')));
-
-  let imageIndex = $state<number>(0);
   let showModal = $state<'approve' | 'remove' | null>(null);
 
   function hideModal() {

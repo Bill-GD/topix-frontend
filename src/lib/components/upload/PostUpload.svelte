@@ -1,11 +1,11 @@
 <script lang="ts">
   import { enhance } from '$app/forms';
   import { getToaster } from '$lib/components/toast';
-  import type { PostUploadProps } from '$lib/components/types';
   import { ImageSizeLimit, VideoSizeLimit } from '$lib/utils/constants';
   import { formResultToast, getReadableSize } from '$lib/utils/helpers';
   import { type Tag } from '$lib/utils/types';
   import { onMount } from 'svelte';
+  import type { ClassValue } from 'svelte/elements';
   import Button from '../button/Button.svelte';
   import IconButton from '../button/IconButton.svelte';
   import Flair from '../misc/Flair.svelte';
@@ -28,7 +28,19 @@
     showVisibilitySelector = false,
     hideBox = false,
     postCallback,
-  }: PostUploadProps = $props();
+  }: {
+    class?: ClassValue;
+    userPicture: string | null;
+    formaction?: string;
+    placeholder?: string;
+    tags?: Tag[];
+    hideBox?: boolean;
+    groupApproved?: boolean;
+    showVisibilitySelector?: boolean;
+    threadId?: number;
+    groupId?: number;
+    postCallback?: VoidFunction;
+  } = $props();
 
   const toaster = getToaster();
 

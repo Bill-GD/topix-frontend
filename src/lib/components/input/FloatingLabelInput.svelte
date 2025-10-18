@@ -1,5 +1,6 @@
 <script lang="ts">
-  import type { FloatingLabelInputProps } from '$lib/components/types';
+  import type { Snippet } from 'svelte';
+  import type { ClassValue, HTMLInputTypeAttribute } from 'svelte/elements';
   import Input from './Input.svelte';
 
   let {
@@ -12,7 +13,17 @@
     name: inputName,
     required = false,
     value = $bindable(''),
-  }: FloatingLabelInputProps = $props();
+  }: {
+    clearable?: boolean;
+    peekable?: boolean;
+    children: Snippet;
+    value?: string;
+    type?: HTMLInputTypeAttribute | null;
+    class?: ClassValue;
+    labelClass?: ClassValue;
+    required?: boolean | null;
+    name?: string | null;
+  } = $props();
 
   const id = $props.id();
 </script>

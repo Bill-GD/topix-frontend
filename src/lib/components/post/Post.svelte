@@ -1,8 +1,9 @@
 <script lang="ts">
   import { enhance } from '$app/forms';
   import { getToaster } from '$lib/components/toast';
-  import type { PostProps } from '$lib/components/types';
   import { formResultToast, getTimeAgo } from '$lib/utils/helpers';
+  import type { CurrentUser, Post } from '$lib/utils/types';
+  import type { ClassValue } from 'svelte/elements';
   import Button from '../button/Button.svelte';
   import IconButton from '../button/IconButton.svelte';
   import DropdownItem from '../dropdown/DropdownItem.svelte';
@@ -26,7 +27,17 @@
     hideReplyMark = false,
     showThreadAndGroupName = false,
     allowEditVisibility = false,
-  }: PostProps = $props();
+  }: {
+    class?: ClassValue;
+    self: CurrentUser;
+    post: Post;
+    detail?: boolean;
+    hideReaction?: boolean;
+    hideOptions?: boolean;
+    hideReplyMark?: boolean;
+    showThreadAndGroupName?: boolean;
+    allowEditVisibility?: boolean;
+  } = $props();
 
   const toaster = getToaster();
   const isImages = $derived(post.mediaPaths.every((m) => m.includes('image')));

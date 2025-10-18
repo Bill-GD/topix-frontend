@@ -1,11 +1,5 @@
 // component-related types
 
-import type { Snippet } from 'svelte';
-import type {
-  ClassValue,
-  HTMLAttributeAnchorTarget,
-  HTMLInputTypeAttribute,
-} from 'svelte/elements';
 import { faThumbsUp as faRegularThumbsUp } from '@fortawesome/free-regular-svg-icons/faThumbsUp';
 import { faBars } from '@fortawesome/free-solid-svg-icons/faBars';
 import { faCheck } from '@fortawesome/free-solid-svg-icons/faCheck';
@@ -38,16 +32,8 @@ import { faUserMinus } from '@fortawesome/free-solid-svg-icons/faUserMinus';
 import { faUserPlus } from '@fortawesome/free-solid-svg-icons/faUserPlus';
 import { faVideo } from '@fortawesome/free-solid-svg-icons/faVideo';
 import { faXmark } from '@fortawesome/free-solid-svg-icons/faXmark';
-import type { CurrentUser, Post, Tag, ToastMessage, UnaryVoidFunction } from '../utils/types';
 
 export type ButtonType = 'primary' | 'danger' | 'dark' | 'success';
-
-export const IconSize = {
-  xs: ['h-4', 'w-4'],
-  sm: ['h-5', 'w-5'],
-  md: ['h-6', 'w-6'],
-  lg: ['h-8', 'w-8'],
-};
 
 export const Icons = {
   sun: faSun,
@@ -83,149 +69,3 @@ export const Icons = {
   sad: faFaceFrownOpen,
   angry: faFaceAngry,
 } as const;
-
-export interface ButtonProps {
-  id?: string;
-  type: ButtonType;
-  outline?: boolean;
-  href?: string;
-  formaction?: string;
-  onclick?: VoidFunction | UnaryVoidFunction<Event>;
-  disabled?: boolean;
-  children?: Snippet;
-  class?: ClassValue;
-}
-
-export interface DropdownMenuProps {
-  children: Snippet;
-  trigger: Snippet;
-  class?: ClassValue;
-  horizontal?: boolean;
-  align: 'left' | 'right';
-  position: 'top' | 'bottom';
-}
-
-export interface DropdownItemProps {
-  children: Snippet;
-  href?: string;
-  rel?: string;
-  class?: ClassValue;
-  noHover?: boolean;
-  onclick?: VoidFunction;
-}
-
-export interface ToastProps {
-  class?: ClassValue;
-  toast: ToastMessage;
-}
-
-export interface FileDropzoneProps {
-  contentInputName: string;
-  contentValue: string;
-  class?: ClassValue;
-}
-
-export interface FlairProps {
-  tag: Tag;
-  class?: ClassValue;
-  compact?: boolean;
-}
-
-export interface FloatingLabelInputProps {
-  clearable?: boolean;
-  peekable?: boolean;
-  children: Snippet;
-  value?: string;
-  type?: HTMLInputTypeAttribute | null;
-  class?: ClassValue;
-  labelClass?: ClassValue;
-  required?: boolean | null;
-  name?: string | null;
-}
-
-export interface IconProps {
-  type: keyof typeof Icons;
-  hover?: boolean;
-  size?: keyof typeof IconSize;
-  color?: string;
-  class?: ClassValue;
-}
-
-export interface IconButtonProps {
-  children: Snippet;
-  onclick?: VoidFunction | UnaryVoidFunction<Event>;
-  disabled?: boolean | null;
-  buttonType?: 'submit' | 'reset' | 'button' | null;
-  type?: ButtonType;
-  class?: ClassValue;
-  round?: boolean;
-}
-
-export interface InputProps {
-  clearable?: boolean;
-  peekable?: boolean;
-  textarea?: boolean;
-  id?: string | null;
-  value?: string;
-  type?: HTMLInputTypeAttribute | null;
-  class?: ClassValue;
-  required?: boolean | null;
-  name?: string | null;
-  placeholder?: string | null;
-}
-
-export interface LinkProps {
-  href?: string | null;
-  class?: ClassValue;
-  target?: HTMLAttributeAnchorTarget | null;
-  children: Snippet;
-}
-
-export interface ModalProps {
-  class?: ClassValue;
-  id?: string;
-  children: Snippet;
-  icon?: Snippet;
-  show: boolean;
-  center?: boolean;
-  upper?: boolean;
-  backdropCallback: VoidFunction;
-}
-
-export interface NavItemProps {
-  title: string;
-  href: string;
-  children: Snippet;
-  class?: ClassValue;
-}
-
-export interface PendingPostProps {
-  class?: ClassValue;
-  post: Post;
-}
-
-export interface PostProps {
-  class?: ClassValue;
-  self: CurrentUser;
-  post: Post;
-  detail?: boolean;
-  hideReaction?: boolean;
-  hideOptions?: boolean;
-  hideReplyMark?: boolean;
-  showThreadAndGroupName?: boolean;
-  allowEditVisibility?: boolean;
-}
-
-export interface PostUploadProps {
-  class?: ClassValue;
-  userPicture: string | null;
-  formaction?: string;
-  placeholder?: string;
-  tags?: Tag[];
-  hideBox?: boolean;
-  groupApproved?: boolean;
-  showVisibilitySelector?: boolean;
-  threadId?: number;
-  groupId?: number;
-  postCallback?: VoidFunction;
-}

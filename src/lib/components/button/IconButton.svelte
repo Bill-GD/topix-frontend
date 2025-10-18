@@ -1,5 +1,8 @@
 <script lang="ts">
-  import type { IconButtonProps } from '$lib/components/types';
+  import type { ButtonType } from '$lib/components/types';
+  import type { UnaryVoidFunction } from '$lib/utils/types';
+  import type { Snippet } from 'svelte';
+  import type { ClassValue } from 'svelte/elements';
 
   let {
     children,
@@ -9,7 +12,15 @@
     buttonType,
     type,
     round = false,
-  }: IconButtonProps = $props();
+  }: {
+    children: Snippet;
+    onclick?: VoidFunction | UnaryVoidFunction<Event>;
+    disabled?: boolean | null;
+    buttonType?: 'submit' | 'reset' | 'button' | null;
+    type?: ButtonType;
+    class?: ClassValue;
+    round?: boolean;
+  } = $props();
 
   const buttonClass = type ? `btn-${type}` : 'hover:bg-zinc-200 dark:hover:bg-zinc-700';
 </script>

@@ -1,7 +1,18 @@
 <script lang="ts">
-  import type { LinkProps } from '$lib/components/types';
+  import type { Snippet } from 'svelte';
+  import type { ClassValue, HTMLAttributeAnchorTarget } from 'svelte/elements';
 
-  let { children, href, target, class: className }: LinkProps = $props();
+  let {
+    children,
+    href,
+    target,
+    class: className,
+  }: {
+    href?: string | null;
+    class?: ClassValue;
+    target?: HTMLAttributeAnchorTarget | null;
+    children: Snippet;
+  } = $props();
 </script>
 
 <a

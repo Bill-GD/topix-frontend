@@ -1,8 +1,8 @@
 <script lang="ts">
-  import type { InputProps } from '$lib/components/types';
   import { generateId } from '$lib/utils/helpers';
-  import Icon from '../misc/Icon.svelte';
+  import type { ClassValue, HTMLInputTypeAttribute } from 'svelte/elements';
   import IconButton from '../button/IconButton.svelte';
+  import Icon from '../misc/Icon.svelte';
 
   let {
     class: className,
@@ -15,7 +15,18 @@
     peekable = false,
     value = $bindable(''),
     name: inputName,
-  }: InputProps = $props();
+  }: {
+    clearable?: boolean;
+    peekable?: boolean;
+    textarea?: boolean;
+    id?: string | null;
+    value?: string;
+    type?: HTMLInputTypeAttribute | null;
+    class?: ClassValue;
+    required?: boolean | null;
+    name?: string | null;
+    placeholder?: string | null;
+  } = $props();
 
   const initType = type;
 

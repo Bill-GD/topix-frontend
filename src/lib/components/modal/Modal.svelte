@@ -1,5 +1,6 @@
 <script lang="ts">
-  import type { ModalProps } from '$lib/components/types';
+  import type { Snippet } from 'svelte';
+  import type { ClassValue } from 'svelte/elements';
   import { fade, scale } from 'svelte/transition';
 
   let {
@@ -10,7 +11,16 @@
     center = false,
     upper = false,
     backdropCallback,
-  }: ModalProps = $props();
+  }: {
+    class?: ClassValue;
+    id?: string;
+    children: Snippet;
+    icon?: Snippet;
+    show: boolean;
+    center?: boolean;
+    upper?: boolean;
+    backdropCallback: VoidFunction;
+  } = $props();
 </script>
 
 {#if show}

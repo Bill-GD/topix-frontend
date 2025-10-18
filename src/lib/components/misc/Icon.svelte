@@ -1,7 +1,25 @@
 <script lang="ts">
-  import { Icons, IconSize, type IconProps } from '$lib/components/types';
+  import { Icons } from '$lib/components/types';
+  import type { ClassValue } from 'svelte/elements';
 
-  let { type, hover = false, size = 'md', class: className }: IconProps = $props();
+  const IconSize = {
+    xs: ['h-4', 'w-4'],
+    sm: ['h-5', 'w-5'],
+    md: ['h-6', 'w-6'],
+    lg: ['h-8', 'w-8'],
+  };
+
+  let {
+    type,
+    hover = false,
+    size = 'md',
+    class: className,
+  }: {
+    type: keyof typeof Icons;
+    hover?: boolean;
+    size?: keyof typeof IconSize;
+    class?: ClassValue;
+  } = $props();
 
   const icon = $derived(Icons[type].icon);
 </script>
