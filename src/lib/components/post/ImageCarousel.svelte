@@ -1,10 +1,23 @@
 <script lang="ts">
+  import { page } from '$app/state';
+  import type { ClassValue } from 'svelte/elements';
   import { IconButton } from '../button';
   import { Icon } from '../misc';
 
-  let { images }: { images: string[] } = $props();
+  let {
+    images,
+    allowClickingImage = false,
+    transparentBackground = false,
+    imageClass,
+  }: {
+    images: string[];
+    allowClickingImage?: boolean;
+    transparentBackground?: boolean;
+    imageClass?: ClassValue;
+  } = $props();
 
   let imageIndex = $state<number>(0);
+  // svelte-ignore non_reactive_update
   let carousel: Element;
 
   $effect(() => {
@@ -12,10 +25,22 @@
   });
 </script>
 
+{#snippet carouselImages()}
+  {#each images as imagePath}
+    <div class="my-auto w-full flex-shrink-0">
+      <img
+        class={['w-full object-contain align-middle', imageClass]}
+        src={imagePath}
+        alt="post-media"
+      />
+    </div>
+  {/each}
+{/snippet}
+
 <div class="relative min-w-1/2">
   {#if imageIndex > 0}
     <IconButton
-      class="absolute top-0 left-0 z-1 h-full bg-zinc-700/20 px-2 hover:bg-zinc-500/40 dark:hover:bg-zinc-900/20"
+      class="absolute top-1/2 left-2 z-1 -translate-y-1/2 bg-zinc-800/60 p-3 hover:bg-zinc-700/60"
       onclick={() => {
         imageIndex = Math.max(0, imageIndex - 1);
       }}
@@ -24,16 +49,26 @@
     </IconButton>
   {/if}
 
-  <div
-    class="flex w-full overflow-x-hidden rounded-lg bg-zinc-200 dark:bg-zinc-600"
-    bind:this={carousel}
-  >
-    {#each images as imagePath}
-      <div class="my-auto w-full flex-shrink-0">
-        <img class="w-full object-contain align-middle" src={imagePath} alt="post-media" />
-      </div>
-    {/each}
-  </div>
+  {#if allowClickingImage}
+    <a
+      class="flex h-full w-full overflow-x-hidden rounded-lg bg-zinc-200 dark:bg-zinc-600"
+      bind:this={carousel}
+      href={page.url + (page.url.searchParams.size <= 0 ? '?' : '&') + 'view-image'}
+      data-sveltekit-replacestate
+    >
+      {@render carouselImages()}
+    </a>
+  {:else}
+    <div
+      class={[
+        'flex h-full w-full overflow-x-hidden rounded-lg',
+        transparentBackground ? 'bg-transparent' : 'bg-zinc-200 dark:bg-zinc-600',
+      ]}
+      bind:this={carousel}
+    >
+      {@render carouselImages()}
+    </div>
+  {/if}
 
   {#if images.length > 1}
     <div
@@ -54,7 +89,7 @@
 
   {#if imageIndex < images.length - 1}
     <IconButton
-      class="absolute top-0 right-0 z-1 h-full bg-zinc-700/20 px-2 hover:bg-zinc-500/40 dark:hover:bg-zinc-900/20"
+      class="absolute top-1/2 right-2 z-1 -translate-y-1/2 bg-zinc-800/60 p-3 hover:bg-zinc-700/60"
       onclick={() => {
         imageIndex = Math.min(images.length - 1, imageIndex + 1);
       }}

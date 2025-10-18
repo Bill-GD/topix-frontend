@@ -1,11 +1,15 @@
 <script lang="ts">
-  import { ReturnHeader } from '$lib/components/misc';
-  import { Post } from '$lib/components/post';
+  import { page } from '$app/state';
+  import { IconButton } from '$lib/components/button';
+  import { Icon, ReturnHeader } from '$lib/components/misc';
+  import { ImageCarousel, Post } from '$lib/components/post';
   import { PostUpload } from '$lib/components/upload';
+  import { fade } from 'svelte/transition';
   import type { PageProps } from './$types';
 
   let { data }: PageProps = $props();
   const isReply = data.post.parentPost !== undefined;
+  const viewImage = $derived(page.url.searchParams.has('view-image'));
 </script>
 
 <svelte:head>
@@ -53,3 +57,18 @@
     <Post self={data.self} post={reply} hideReplyMark />
   {/each}
 </div>
+
+{#if viewImage}
+  <div class={['fixed inset-0 z-8 flex backdrop-blur-xl']} transition:fade={{ duration: 250 }}>
+    <a class="z-9 h-screen" href="/post/{data.post.id}" data-sveltekit-replacestate>
+      <IconButton class="absolute top-4 right-4 z-9 p-2">
+        <Icon type="close" />
+      </IconButton>
+    </a>
+    <ImageCarousel
+      images={data.post.mediaPaths}
+      imageClass="max-h-screen px-4 rounded-md"
+      transparentBackground
+    />
+  </div>
+{/if}

@@ -196,7 +196,7 @@
 
       {#if post.mediaPaths.length > 0}
         {#if isImages}
-          <ImageCarousel images={post.mediaPaths} />
+          <ImageCarousel images={post.mediaPaths} allowClickingImage={detail} />
         {/if}
 
         {#if isVideo}
