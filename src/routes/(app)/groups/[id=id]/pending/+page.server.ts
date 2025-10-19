@@ -4,7 +4,7 @@ import { type Actions, fail } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ params, fetch }) => {
-  const res = await fetch(`/api/posts?groupId=${params.id}&accepted=false`);
+  const res = await fetch(`/api/posts?groupId=${params.id}&threadId=null&accepted=false`);
 
   return {
     posts: (await res.json()) as unknown as Post[],

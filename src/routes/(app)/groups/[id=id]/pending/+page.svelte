@@ -28,7 +28,7 @@
       disabled={disableScroller}
       attachmentCallback={async () => {
         const res = await fetch(
-          `/api/posts?groupId=${data.group.id}&accepted=false&page=${++pageIndex}`,
+          `/api/posts?groupId=${data.group.id}&threadId=null&accepted=false&page=${++pageIndex}`,
         );
         const newData = await res.json();
         disableScroller = res.headers.get('x-end-of-list') === 'true';

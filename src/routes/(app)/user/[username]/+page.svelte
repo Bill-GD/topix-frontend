@@ -144,7 +144,9 @@
     <Scroller
       disabled={disableScroller[tab]}
       attachmentCallback={async () => {
-        const res = await fetch(`/api/posts?username=${data.user.username}&page=${++pageIndex}`);
+        const res = await fetch(
+          `/api/posts?username=${data.user.username}&threadId=null&page=${++pageIndex}`,
+        );
         const newData = await res.json();
         disableScroller[tab] = res.headers.get('x-end-of-list') === 'true';
         posts = [...posts!, ...newData];

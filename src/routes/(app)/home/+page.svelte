@@ -30,7 +30,7 @@
 
   {#if tab === 'new'}
     {#each posts as post (post.id)}
-      <Post self={data.self} {post} />
+      <Post self={data.self} {post} showThreadAndGroupName />
     {/each}
   {:else if tab === 'following'}
     {#if data.posts!.length <= 0}

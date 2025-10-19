@@ -18,7 +18,7 @@ export const load: PageServerLoad = async ({ parent, params, cookies, url, fetch
   switch (tab) {
     case 'posts': {
       const res = await fetch(
-        `/api/posts?username=${params.username}${self.username === params.username ? '&visibility=private' : ''}`,
+        `/api/posts?username=${params.username}${self.username === params.username ? '&visibility=private' : ''}&threadId=null`,
       );
       return {
         user,

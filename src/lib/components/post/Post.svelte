@@ -59,7 +59,7 @@
   let reaction = $derived(post.reaction);
   let reactionCount = $derived(post.reactionCount);
   let showModal = $state<'delete' | 'visibility' | null>(null);
-  let hasExtraInfo = $derived(
+  let showExtraInfo = $derived(
     isReply || (showThreadAndGroupName && (post.groupName || post.threadTitle)),
   );
 
@@ -92,6 +92,9 @@
           <span class="line-clamp-1 w-max text-gray-500">
             replied to {post.parentPost?.owner.displayName}
           </span>
+          {#if showThreadAndGroupName && (post.threadTitle || post.groupName)}
+            <span class="text-gray-500">|</span>
+          {/if}
         {/if}
 
         {#if showThreadAndGroupName}
@@ -120,7 +123,7 @@
         >
           {post.owner.displayName}
         </a>
-        {#if hasExtraInfo}
+        {#if showExtraInfo}
           •
           <span>{getTimeAgo(Date.parse(post.dateCreated))}</span>
           {#if post.dateUpdated}
@@ -138,7 +141,7 @@
         {/if}
       </div>
 
-      {#if !hasExtraInfo}
+      {#if !showExtraInfo}
         <div class="flex w-fit items-center gap-2 text-gray-500">
           <span>{getTimeAgo(Date.parse(post.dateCreated))}</span>
           {#if post.dateUpdated}
