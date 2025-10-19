@@ -130,8 +130,8 @@
       }}
     >
       <p>
-        Are you sure you want to delete your account? This action is irreversible and all data can
-        not be recovered.
+        Are you sure you want to delete your account? This action is irreversible and any post,
+        thread and owned group can not be recovered.
       </p>
       <div class="flex flex-col gap-4 md:flex-row">
         <Input

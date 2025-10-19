@@ -80,8 +80,8 @@
 <Modal show={showModal === 'delete'} backdropCallback={hideModal} center>
   <ModalHeader>Delete account</ModalHeader>
   <ModalBody>
-    Are you sure you want to delete this account? This action is irreversible and all data can not
-    be recovered. This user will no longer be able to login.
+    Are you sure you want to delete this account? This action is irreversible and all data of this
+    user can not be recovered. This user will no longer be able to login.
   </ModalBody>
   <ModalFooter>
     <form
