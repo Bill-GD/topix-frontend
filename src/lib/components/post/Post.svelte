@@ -100,14 +100,14 @@
         {#if showThreadAndGroupName}
           {#if post.threadTitle}
             <a
-              class="line-clamp-1 w-fit font-semibold overflow-ellipsis hover:underline"
+              class="z-1 line-clamp-1 w-fit font-semibold overflow-ellipsis hover:underline"
               href="/threads/{post.threadId}"
             >
               {post.threadTitle}
             </a>
           {:else if post.groupName}
             <a
-              class="line-clamp-1 w-fit font-semibold overflow-ellipsis hover:underline"
+              class="z-1 line-clamp-1 w-fit font-semibold overflow-ellipsis hover:underline"
               href="/groups/{post.groupId}"
             >
               {post.groupName}

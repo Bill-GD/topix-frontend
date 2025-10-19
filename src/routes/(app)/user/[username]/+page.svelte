@@ -145,7 +145,7 @@
       disabled={disableScroller[tab]}
       attachmentCallback={async () => {
         const res = await fetch(
-          `/api/posts?username=${data.user.username}&threadId=null&page=${++pageIndex}`,
+          `/api/posts?userId=${data.user.id}${data.self.id === data.user.id ? '&visibility=private' : ''}&threadId=null&groupId=null&page=${++pageIndex}`,
         );
         const newData = await res.json();
         disableScroller[tab] = res.headers.get('x-end-of-list') === 'true';
@@ -167,25 +167,30 @@
         <Icon type="add" size="sm" />
       </Button>
     {/if}
-    {#each threads as thread}
-      <ThreadOverview {thread} />
-    {/each}
 
-    <Scroller
-      disabled={disableScroller[tab]}
-      attachmentCallback={async () => {
-        const res = await fetch(
-          `/api/threads?username=${data.user.username}${data.self.username === data.user.username ? '&visibility=private' : ''}&page=${++pageIndex}`,
-        );
-        const newData = await res.json();
-        if (newData.length <= 0) disableScroller[tab] = true;
-        threads = [...threads!, ...newData];
-      }}
-      detachCleanup={() => {
-        pageIndex = 1;
-        disableScroller[tab] = false;
-      }}
-    />
+    {#if data.threads!.length <= 0}
+      <p class="empty-noti-text">This user has no thread.</p>
+    {:else}
+      {#each threads as thread}
+        <ThreadOverview {thread} />
+      {/each}
+
+      <Scroller
+        disabled={disableScroller[tab]}
+        attachmentCallback={async () => {
+          const res = await fetch(
+            `/api/threads?userId=${data.user.id}${data.self.id === data.user.id ? '&visibility=private' : ''}&page=${++pageIndex}`,
+          );
+          const newData = await res.json();
+          if (newData.length <= 0) disableScroller[tab] = true;
+          threads = [...threads!, ...newData];
+        }}
+        detachCleanup={() => {
+          pageIndex = 1;
+          disableScroller[tab] = false;
+        }}
+      />
+    {/if}
   {:else if tab === 'groups'}
     {#each groups as group}
       <GroupOverview {group} />
@@ -194,7 +199,7 @@
     <Scroller
       disabled={disableScroller[tab]}
       attachmentCallback={async () => {
-        const res = await fetch(`/api/groups?ownerId=${data.user.id}&page=${++pageIndex}`);
+        const res = await fetch(`/api/groups?userId=${data.user.id}&page=${++pageIndex}`);
         const newData = await res.json();
         if (newData.length <= 0) disableScroller[tab] = true;
         groups = [...groups!, ...newData];

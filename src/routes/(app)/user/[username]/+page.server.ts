@@ -18,7 +18,7 @@ export const load: PageServerLoad = async ({ parent, params, cookies, url, fetch
   switch (tab) {
     case 'posts': {
       const res = await fetch(
-        `/api/posts?username=${params.username}${self.username === params.username ? '&visibility=private' : ''}&threadId=null`,
+        `/api/posts?userId=${user.id}${self.id === user.id ? '&visibility=private' : ''}&threadId=null&groupId=null`,
       );
       return {
         user,
@@ -28,7 +28,7 @@ export const load: PageServerLoad = async ({ parent, params, cookies, url, fetch
     }
     case 'threads': {
       const res = await fetch(
-        `/api/threads?username=${user.username}${self.username === params.username ? '&visibility=private' : ''}`,
+        `/api/threads?userId=${user.id}${self.id === user.id ? '&visibility=private' : ''}`,
       );
       return {
         user,
@@ -37,7 +37,7 @@ export const load: PageServerLoad = async ({ parent, params, cookies, url, fetch
       };
     }
     case 'groups': {
-      const res = await fetch(`/api/groups?ownerId=${user.id}`);
+      const res = await fetch(`/api/groups?userId=${user.id}`);
       return {
         user,
         groups: (await res.json()) as unknown as Group[],

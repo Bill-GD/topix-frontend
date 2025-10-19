@@ -54,7 +54,7 @@
     <DropdownMenu class="ml-auto" position="bottom" align="right">
       {#snippet trigger()}
         <img
-          class="profile-picture-sm cursor-pointer hover:bg-zinc-200"
+          class="profile-picture-sm cursor-pointer hover:bg-zinc-700/60"
           src={data.self.profilePicture ?? '/images/default-user-profile-icon.jpg'}
           alt="profile"
         />

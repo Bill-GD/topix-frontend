@@ -22,7 +22,7 @@ export const load: PageServerLoad = async ({ cookies, params, url, parent, fetch
 
   switch (tab) {
     case 'posts': {
-      const res = await fetch(`/api/posts?groupId=${params.id}&threadId=null&accepted=true`);
+      const res = await fetch(`/api/posts?groupId=${params.id}&accepted=true`);
 
       return {
         posts: (await res.json()) as unknown as Post[],

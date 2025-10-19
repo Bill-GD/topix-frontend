@@ -41,37 +41,22 @@
       {/each}
     {/if}
   {/if}
+
+  {#key tab}
+    <Scroller
+      disabled={disableScroller[tab]}
+      attachmentCallback={async () => {
+        const res = await fetch(
+          `/api/posts?page=${++pageIndex}${tab === 'following' ? '&following' : ''}`,
+        );
+        const newData = await res.json();
+        disableScroller[tab] = res.headers.get('x-end-of-list') === 'true';
+        posts = [...posts, ...newData];
+      }}
+      detachCleanup={() => {
+        pageIndex = 1;
+        disableScroller[tab] = data.endOfList;
+      }}
+    />
+  {/key}
 </div>
-
-{#key tab}
-  <Scroller
-    disabled={disableScroller[tab]}
-    attachmentCallback={async () => {
-      const res = await fetch(
-        `/api/posts?page=${++pageIndex}${tab === 'following' ? '&following' : ''}`,
-      );
-      const newData = await res.json();
-      disableScroller[tab] = res.headers.get('x-end-of-list') === 'true';
-      posts = [...posts, ...newData];
-    }}
-    detachCleanup={() => {
-      pageIndex = 1;
-      disableScroller[tab] = data.endOfList;
-    }}
-  />
-{/key}
-
-<!-- {#snippet right()}
-  {#if tab === 'new'}
-    <div class="rounded-md border border-gray-700">
-      <div class="flex items-baseline p-4">
-        <p class="text-xl font-semibold">Newly updated threads</p>
-      </div>
-
-      {#each data.threads as thread}
-        <Divider />
-        <ThreadOverview {thread} showOwner />
-      {/each}
-    </div>
-  {/if}
-{/snippet} -->

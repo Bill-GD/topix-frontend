@@ -24,7 +24,7 @@ export const load: PageServerLoad = async ({ cookies, params }) => {
   }
 
   const postRes = await AxiosHandler.get(
-    `/post?threadId=${params.id}${data.thread.groupId ? `&groupId=${data.thread.groupId}` : ''}`,
+    `/post?threadId=${params.id}`,
     cookies.get(CookieName.accessToken),
   );
   if (!postRes.success) error(postRes.status, postRes.message);
