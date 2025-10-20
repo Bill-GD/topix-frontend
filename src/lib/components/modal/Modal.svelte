@@ -1,5 +1,6 @@
 <script lang="ts">
-  import type { ModalProps } from '$lib/components/types';
+  import type { Snippet } from 'svelte';
+  import type { ClassValue } from 'svelte/elements';
   import { fade, scale } from 'svelte/transition';
 
   let {
@@ -8,22 +9,33 @@
     children,
     show = false,
     center = false,
+    upper = false,
     backdropCallback,
-  }: ModalProps = $props();
+  }: {
+    class?: ClassValue;
+    id?: string;
+    children: Snippet;
+    icon?: Snippet;
+    show: boolean;
+    center?: boolean;
+    upper?: boolean;
+    backdropCallback: VoidFunction;
+  } = $props();
 </script>
 
 {#if show}
   <!-- svelte-ignore a11y_no_static_element_interactions -->
   <!-- svelte-ignore a11y_click_events_have_key_events -->
   <div
-    class="fixed inset-0 z-40 bg-gray-900/40"
+    class={['fixed inset-0 bg-zinc-700/40 dark:bg-zinc-800/40', upper ? 'z-12' : 'z-10']}
     onclick={backdropCallback}
     out:fade={{ duration: 300 }}
   ></div>
   <div in:fade={{ duration: 200 }} out:fade={{ duration: 300 }}>
     <div
       class={[
-        'fixed top-1/2 left-1/2 z-50 flex w-11/12 -translate-1/2 flex-col gap-4 rounded-md border border-gray-400 bg-gray-200 p-4 drop-shadow-xl drop-shadow-black/30 transition-all md:max-w-1/2 md:p-6 dark:border-gray-700 dark:bg-gray-900 dark:drop-shadow-black/90',
+        'fixed top-1/2 left-1/2 flex w-11/12 -translate-1/2 flex-col gap-4 box transition-all md:max-w-1/2 md:p-6 dark:border-gray-700 dark:bg-zinc-900',
+        upper ? 'z-13' : 'z-11',
         center && 'text-center',
         className,
       ]}

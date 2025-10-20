@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" name="fallback-error" />
-    <title>%sveltekit.error.message%</title>
+    <title>%sveltekit.status% - %sveltekit.error.message%</title>
   </head>
   <style>
     * {
@@ -20,14 +20,14 @@
     }
 
     .status {
-      font-size: 800%;
+      font-size: 600%;
       margin: 0;
       color: red;
     }
 
     .message {
       font-weight: bold;
-      font-size: x-large;
+      font-size: large;
     }
 
     a {

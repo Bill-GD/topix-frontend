@@ -3,14 +3,20 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+* {
+  --header-height: 56px;
+}
+
 input[type='color'],
+input[type='checkbox'],
 input[type='radio'] {
   appearance: none;
   -moz-appearance: none;
   -webkit-appearance: none;
 }
 
-input[type='radio']:focus {
+input[type='radio']:focus,
+input[type='checkbox']:focus {
   outline: none;
   box-shadow: none;
 }
@@ -24,43 +30,51 @@ input[type='radio']:focus {
   border-radius: 0;
 }
 
-.tippy-box {
-  @apply rounded-md p-1;
-}
-
 @utility profile-picture-lg {
-  @apply aspect-square h-30 w-30 rounded-full;
+  @apply aspect-square h-30 w-30 rounded-full object-contain;
 }
 
 @utility profile-picture-md {
-  @apply aspect-square h-20 w-20 rounded-full;
+  @apply aspect-square h-20 w-20 rounded-full object-contain;
 }
 
 @utility profile-picture-sm {
-  @apply aspect-square h-10 w-10 rounded-full;
+  @apply aspect-square h-10 w-10 rounded-full object-contain;
 }
 
-.scrollbar::-webkit-scrollbar {
-  @apply h-3;
+@utility scrollbar {
+  &::-webkit-scrollbar {
+    @apply h-3;
+  }
+
+  &::-webkit-scrollbar-track {
+    @apply rounded-md bg-zinc-800;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    @apply rounded-md bg-zinc-500;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    @apply bg-zinc-300;
+  }
 }
 
-.scrollbar::-webkit-scrollbar-track {
-  @apply rounded-md bg-gray-800;
+@utility no-scrollbar {
+  &::-webkit-scrollbar {
+    @apply hidden;
+  }
 }
 
-.scrollbar::-webkit-scrollbar-thumb {
-  @apply rounded-md bg-gray-500;
+@utility box-shadow {
+  @apply shadow-md shadow-zinc-700/40 dark:shadow-zinc-950;
 }
 
-.scrollbar::-webkit-scrollbar-thumb:hover {
-  @apply bg-gray-300;
+@utility box {
+  @apply rounded-lg bg-zinc-50 p-4 box-shadow dark:border dark:border-zinc-700 dark:bg-zinc-900;
 }
 
-.no-scrollbar::-webkit-scrollbar {
-  display: none;
-}
-
-.empty-noti-text {
+@utility empty-noti-text {
   @apply w-full p-4 text-center text-2xl font-semibold;
 }
 
@@ -73,7 +87,7 @@ input[type='radio']:focus {
 }
 
 .btn-dark {
-  @apply btn bg-gray-700 hover:bg-gray-600 active:bg-gray-500;
+  @apply btn bg-zinc-700 hover:bg-zinc-600 active:bg-zinc-500;
 }
 
 .btn-primary {
@@ -89,7 +103,7 @@ input[type='radio']:focus {
 }
 
 .btn-dark-outline {
-  @apply btn outlined text-gray-400 outline-gray-700 hover:bg-gray-700 active:bg-gray-500 active:outline-gray-500;
+  @apply btn outlined text-gray-400 outline-gray-700 hover:bg-zinc-700 active:bg-zinc-500 active:outline-gray-500;
 }
 
 .btn-primary-outline {

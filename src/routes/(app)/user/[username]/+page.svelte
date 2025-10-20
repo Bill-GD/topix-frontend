@@ -1,26 +1,36 @@
 <script lang="ts">
   import { enhance } from '$app/forms';
+  import { page } from '$app/state';
   import { Button, IconButton } from '$lib/components/button';
   import { DropdownItem, DropdownMenu } from '$lib/components/dropdown';
   import { FloatingLabelInput } from '$lib/components/input';
-  import { HomeLayout, Scroller } from '$lib/components/layout';
-  import { Divider, Icon, ReturnHeader, VisibilitySelector } from '$lib/components/misc';
+  import { Scroller } from '$lib/components/layout';
+  import { Tab, TabBar } from '$lib/components/link';
+  import { Icon, ReturnHeader, VisibilitySelector } from '$lib/components/misc';
   import { Modal, ModalFooter, ModalHeader } from '$lib/components/modal';
+  import { GroupOverview, ThreadOverview } from '$lib/components/overview';
   import { Post } from '$lib/components/post';
-  import { ThreadOverview } from '$lib/components/thread';
   import { getToaster } from '$lib/components/toast';
   import { PostUpload } from '$lib/components/upload';
-  import { capitalize, formResultToast } from '$lib/utils/helpers';
+  import { capitalize, formResultToast, tooltip } from '$lib/utils/helpers';
   import type { PageProps } from './$types';
 
   let { data }: PageProps = $props();
 
   const toaster = getToaster();
+  const items = $derived(['posts', 'threads', 'groups']);
+  const tab = $derived(page.url.searchParams.get('tab') ?? 'posts');
   let showModal = $state<'thread' | null>(null);
   let threadTitle = $state<string>('');
   let pageIndex = 1;
-  let disableScroller = $state<boolean>(false);
+  let disableScroller = $derived({
+    posts: data.endOfList,
+    threads: data.endOfList,
+    groups: data.endOfList,
+  });
   let posts = $derived(data.posts);
+  let threads = $derived(data.threads);
+  let groups = $derived(data.groups);
 
   function hideModal() {
     showModal = null;
@@ -31,10 +41,10 @@
   <title>{data.user.displayName} - topix</title>
 </svelte:head>
 
-<HomeLayout self={data.self}>
-  <ReturnHeader>{data.user.displayName}</ReturnHeader>
+<ReturnHeader>{data.user.displayName}</ReturnHeader>
 
-  <div class="flex flex-col gap-2 border-b border-gray-700 p-4">
+<div class="flex flex-col gap-4">
+  <div class="flex flex-col gap-4 box">
     <div class="flex items-start gap-4">
       <img
         class="profile-picture-sm md:profile-picture-md"
@@ -53,7 +63,7 @@
       </div>
     </div>
 
-    <div class="flex items-baseline gap-4 px-2 py-2 font-semibold md:gap-6 md:px-4">
+    <div class="flex items-center gap-4 font-semibold md:gap-6 md:px-4">
       <p>Following: {data.user.followingCount}</p>
       <p>Follower: {data.user.followerCount}</p>
 
@@ -61,17 +71,15 @@
         {#if data.self.id === data.user.id}
           <DropdownMenu class="ml-auto h-fit" position="bottom" align="right">
             {#snippet trigger()}
-              <IconButton round>
+              <IconButton class="p-2" {@attach tooltip('Options')} round>
                 <Icon type="bar" size="sm" />
               </IconButton>
             {/snippet}
 
-            <DropdownItem href="/user/{data.self.username}/hidden/post">
-              View hidden items
-            </DropdownItem>
+            <DropdownItem href="/user/{data.self.username}/hidden">View hidden items</DropdownItem>
           </DropdownMenu>
         {:else}
-          <IconButton type="dark" class="w-full">
+          <IconButton type="dark" class="w-full" {@attach tooltip('Message')}>
             <Icon type="message" size="sm" />
           </IconButton>
           {#if data.user.followed}
@@ -85,7 +93,7 @@
                 };
               }}
             >
-              <IconButton type="danger" class="w-full">
+              <IconButton type="danger" class="w-full" {@attach tooltip('Unfollow')}>
                 <Icon type="unfollow" size="sm" />
               </IconButton>
               <input type="number" name="user-id" value={data.user.id} hidden readonly />
@@ -101,7 +109,7 @@
                 };
               }}
             >
-              <IconButton type="dark" class="w-full">
+              <IconButton type="dark" class="w-full" {@attach tooltip('Follow')}>
                 <Icon type="follow" size="sm" />
               </IconButton>
               <input type="number" name="user-id" value={data.user.id} hidden readonly />
@@ -112,139 +120,134 @@
     </div>
   </div>
 
-  {#if data.self.id === data.user.id}
-    <PostUpload
-      userPicture={data.self.profilePicture}
-      formaction="?/post-upload"
-      showVisibilitySelector
-    />
-    <Divider />
+  <TabBar>
+    {#each items as item}
+      <Tab href="?tab={item}" selected={tab === item}>{capitalize(item)}</Tab>
+    {/each}
+  </TabBar>
+
+  {#if tab === 'posts'}
+    {#if data.self.id === data.user.id}
+      <PostUpload
+        userPicture={data.self.profilePicture}
+        formaction="?/post-upload"
+        showVisibilitySelector
+      />
+    {/if}
   {/if}
 
-  {#each posts as post (post.id)}
-    <Post self={data.self} {post} />
-    <Divider />
-  {/each}
+  {#if tab === 'posts'}
+    {#each posts as post (post.id)}
+      <Post self={data.self} {post} />
+    {/each}
 
-  <Scroller
-    disabled={disableScroller}
-    attachmentCallback={async () => {
-      const res = await fetch(`/api/posts?username=${data.user.username}&page=${++pageIndex}`);
-      const newData = await res.json();
-      if (newData.length <= 0) disableScroller = true;
-      posts = [...posts, ...newData];
-    }}
-    detachCleanup={() => {
-      pageIndex = 1;
-      disableScroller = false;
-    }}
-  />
-
-  {#snippet right()}
-    <div class="flex flex-col gap-4">
-      <div class="rounded-md border border-gray-700 2xl:max-w-1/2">
-        <div class="flex items-baseline p-4">
-          <p class="text-xl font-semibold">Threads</p>
-          {#if data.self.id === data.user.id}
-            <IconButton type="success" class="ml-auto" onclick={() => (showModal = 'thread')}>
-              <Icon type="add" size="xs" />
-            </IconButton>
-          {/if}
-        </div>
-
-        {#if data.threads.length <= 0}
-          <Divider />
-          <p class="w-full px-4 py-2">This user has no thread.</p>
-        {:else}
-          {#each data.threads as thread}
-            <Divider />
-            <ThreadOverview {thread} />
-          {/each}
-        {/if}
-      </div>
-
-      <div class="rounded-md border border-gray-700 2xl:max-w-1/2">
-        <div class="flex items-baseline p-4">
-          <p class="text-xl font-semibold">Groups</p>
-        </div>
-
-        {#if data.groups.length <= 0}
-          <Divider />
-          <p class="w-full px-4 py-2">This user has no thread.</p>
-        {:else}
-          {#each data.groups as group}
-            <Divider /><a
-              class="flex items-center gap-4 px-4 py-2 hover:bg-gray-300/40 dark:hover:bg-gray-900/40"
-              href="/groups/{group.id}"
-            >
-              <div class="flex flex-col gap-2">
-                <span class="text-xl font-semibold">{group.name}</span>
-                <div class="flex items-baseline gap-2 text-gray-500">
-                  {#if group.visibility === 'private'}
-                    <Icon type="lock" size="xs" />
-                  {:else if group.visibility === 'hidden'}
-                    <Icon type="eyeSlash" size="xs" />
-                  {/if}
-                  {capitalize(group.visibility)}
-                  -
-                  {group.memberCount} member{group.memberCount > 1 ? 's' : ''}
-                </div>
-              </div>
-
-              {#if group.status !== null}
-                <div
-                  class={[
-                    'ml-auto font-semibold',
-                    group.status ? 'text-green-700' : 'text-sky-500',
-                  ]}
-                >
-                  {group.status ? 'Joined' : 'Pending'}
-                </div>
-              {/if}
-            </a>
-          {/each}
-        {/if}
-      </div>
-    </div>
-  {/snippet}
-
-  <Modal show={showModal === 'thread'} backdropCallback={hideModal} center>
-    <ModalHeader>Create thread</ModalHeader>
-    <form
-      class="flex w-full flex-col gap-4"
-      action="?/create-thread"
-      method="post"
-      use:enhance={() => {
-        return async ({ result, update }) => {
-          await formResultToast(result, toaster);
-          await update();
-        };
+    <Scroller
+      disabled={disableScroller[tab]}
+      attachmentCallback={async () => {
+        const res = await fetch(
+          `/api/posts?userId=${data.user.id}${data.self.id === data.user.id ? '&visibility=private' : ''}&threadId=null&groupId=null&page=${++pageIndex}`,
+        );
+        const newData = await res.json();
+        disableScroller[tab] = res.headers.get('x-end-of-list') === 'true';
+        posts = [...posts!, ...newData];
       }}
-    >
-      <FloatingLabelInput
-        class="w-full"
-        name="thread-title"
-        labelClass="bg-gray-200 dark:bg-gray-900"
-        bind:value={threadTitle}
+      detachCleanup={() => {
+        pageIndex = 1;
+        disableScroller[tab] = false;
+      }}
+    />
+  {:else if tab === 'threads'}
+    {#if data.self.id === data.user.id}
+      <Button
+        class="flex w-fit items-center gap-2 self-end"
+        type="success"
+        onclick={() => (showModal = 'thread')}
       >
-        Title
-      </FloatingLabelInput>
+        Create thread
+        <Icon type="add" size="sm" />
+      </Button>
+    {/if}
 
-      <VisibilitySelector />
+    {#if data.threads!.length <= 0}
+      <p class="empty-noti-text">This user has no thread.</p>
+    {:else}
+      {#each threads as thread}
+        <ThreadOverview {thread} />
+      {/each}
 
-      <ModalFooter>
-        <Button class="w-full" type="success" onclick={hideModal}>Create</Button>
-        <Button
-          class="w-full"
-          type="dark"
-          onclick={(ev) => {
-            ev.preventDefault();
-            hideModal();
-          }}
-        >
-          Cancel
-        </Button>
-      </ModalFooter>
-    </form>
-  </Modal>
-</HomeLayout>
+      <Scroller
+        disabled={disableScroller[tab]}
+        attachmentCallback={async () => {
+          const res = await fetch(
+            `/api/threads?userId=${data.user.id}${data.self.id === data.user.id ? '&visibility=private' : ''}&page=${++pageIndex}`,
+          );
+          const newData = await res.json();
+          if (newData.length <= 0) disableScroller[tab] = true;
+          threads = [...threads!, ...newData];
+        }}
+        detachCleanup={() => {
+          pageIndex = 1;
+          disableScroller[tab] = false;
+        }}
+      />
+    {/if}
+  {:else if tab === 'groups'}
+    {#each groups as group}
+      <GroupOverview {group} />
+    {/each}
+
+    <Scroller
+      disabled={disableScroller[tab]}
+      attachmentCallback={async () => {
+        const res = await fetch(`/api/groups?userId=${data.user.id}&page=${++pageIndex}`);
+        const newData = await res.json();
+        if (newData.length <= 0) disableScroller[tab] = true;
+        groups = [...groups!, ...newData];
+      }}
+      detachCleanup={() => {
+        pageIndex = 1;
+        disableScroller[tab] = false;
+      }}
+    />
+  {/if}
+</div>
+
+<Modal show={showModal === 'thread'} backdropCallback={hideModal} center>
+  <ModalHeader>Create thread</ModalHeader>
+  <form
+    class="flex w-full flex-col gap-4"
+    action="?/create-thread"
+    method="post"
+    use:enhance={() => {
+      return async ({ result, update }) => {
+        await formResultToast(result, toaster);
+        await update();
+      };
+    }}
+  >
+    <FloatingLabelInput
+      class="w-full"
+      name="thread-title"
+      labelClass="peer-focus:bg-zinc-200 peer-focus:dark:bg-zinc-900"
+      bind:value={threadTitle}
+    >
+      Title
+    </FloatingLabelInput>
+
+    <VisibilitySelector />
+
+    <ModalFooter>
+      <Button class="w-full" type="success" onclick={hideModal}>Create</Button>
+      <Button
+        class="w-full"
+        type="dark"
+        onclick={(ev) => {
+          ev.preventDefault();
+          hideModal();
+        }}
+      >
+        Cancel
+      </Button>
+    </ModalFooter>
+  </form>
+</Modal>

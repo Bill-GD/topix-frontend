@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { tick } from 'svelte';
-  import type { DropdownMenuProps } from '$lib/components/types';
+  import { tick, type Snippet } from 'svelte';
+  import type { ClassValue } from 'svelte/elements';
   import { scale } from 'svelte/transition';
 
   let {
@@ -10,7 +10,14 @@
     horizontal = false,
     align,
     position,
-  }: DropdownMenuProps = $props();
+  }: {
+    children: Snippet;
+    trigger: Snippet;
+    class?: ClassValue;
+    horizontal?: boolean;
+    align: 'left' | 'right';
+    position: 'top' | 'bottom';
+  } = $props();
 
   const id = $props.id();
   let showMenu = $state<boolean>(false);
@@ -49,15 +56,14 @@
     {#if showMenu}
       <div
         class={[
-          'dropdown-menu',
-          'absolute z-20 rounded-lg bg-gray-300 transition-all dark:bg-gray-800',
+          'dropdown-menu absolute z-5 box p-2 transition-all dark:bg-zinc-800',
           showMenu ? 'scale-100 opacity-100 duration-100' : 'scale-50 opacity-0 duration-200',
         ]}
         id="dropdown-menu-{id}"
         in:scale={{ start: 0.75, duration: 100 }}
         out:scale={{ start: 1, duration: 200 }}
       >
-        <ul class={['py-2 dark:text-white', horizontal && 'flex']}>
+        <ul class={['dark:text-white', horizontal && 'flex']}>
           {@render children()}
         </ul>
       </div>

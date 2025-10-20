@@ -2,7 +2,7 @@ import { browser } from '$app/environment';
 import { getContext, setContext } from 'svelte';
 
 export class Theme {
-  #mode = $state<'dark' | 'light'>('dark');
+  #mode = $state<'dark' | 'light'>('light');
 
   constructor() {
     if (browser) {
@@ -15,8 +15,8 @@ export class Theme {
     return this.#mode === 'dark';
   }
 
-  toggle = (mode: 'dark' | 'light') => {
-    this.#mode = mode;
+  toggle = () => {
+    this.#mode = this.#mode === 'dark' ? 'light' : 'dark';
     if (browser) {
       localStorage.setItem('theme', this.#mode);
     }

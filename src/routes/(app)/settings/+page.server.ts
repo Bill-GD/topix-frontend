@@ -4,7 +4,11 @@ import { CookieName, type CurrentUser, type User } from '$lib/utils/types';
 import { type Actions, error, fail, redirect } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
-export const load: PageServerLoad = async ({ parent, cookies }) => {
+export const load: PageServerLoad = async ({ parent, cookies, url }) => {
+  if (!['account', 'profile', 'danger'].includes(url.searchParams.get('tab') ?? 'account')) {
+    error(404, 'Unknown tab');
+  }
+
   let currentUsername: string;
 
   const currentUserCookie = cookies.get(CookieName.currentUser);
@@ -20,7 +24,7 @@ export const load: PageServerLoad = async ({ parent, cookies }) => {
   );
 
   if (res.success) return { self: res.data as User };
-  error(res.status, { status: res.status, message: res.message });
+  error(res.status, res.message);
 };
 
 export const actions: Actions = {

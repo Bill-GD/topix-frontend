@@ -1,9 +1,9 @@
 <script lang="ts">
   import { enhance } from '$app/forms';
   import { getToaster } from '$lib/components/toast';
-  import type { PostProps } from '$lib/components/types';
-  import { formResultToast, getTimeAgo } from '$lib/utils/helpers';
-  import { onMount } from 'svelte';
+  import { formResultToast, getTimeAgo, tooltip } from '$lib/utils/helpers';
+  import type { CurrentUser, Post } from '$lib/utils/types';
+  import type { ClassValue } from 'svelte/elements';
   import Button from '../button/Button.svelte';
   import IconButton from '../button/IconButton.svelte';
   import DropdownItem from '../dropdown/DropdownItem.svelte';
@@ -15,18 +15,29 @@
   import ModalBody from '../modal/ModalBody.svelte';
   import ModalFooter from '../modal/ModalFooter.svelte';
   import ModalHeader from '../modal/ModalHeader.svelte';
+  import ImageCarousel from './ImageCarousel.svelte';
 
   let {
     class: className,
     self,
     post,
     detail = false,
-    compact = false,
-    parent = false,
+    hideReaction = false,
+    hideOptions = false,
     hideReplyMark = false,
     showThreadAndGroupName = false,
     allowEditVisibility = false,
-  }: PostProps = $props();
+  }: {
+    class?: ClassValue;
+    self: CurrentUser;
+    post: Post;
+    detail?: boolean;
+    hideReaction?: boolean;
+    hideOptions?: boolean;
+    hideReplyMark?: boolean;
+    showThreadAndGroupName?: boolean;
+    allowEditVisibility?: boolean;
+  } = $props();
 
   const toaster = getToaster();
   const isImages = $derived(post.mediaPaths.every((m) => m.includes('image')));
@@ -47,61 +58,56 @@
 
   let reaction = $derived(post.reaction);
   let reactionCount = $derived(post.reactionCount);
-  let imageIndex = $state<number>(0);
   let showModal = $state<'delete' | 'visibility' | null>(null);
-
-  onMount(() => {
-    const main = document.getElementById(`post-${post.id}`) as HTMLElement;
-    if (canClickPost) {
-      main.addEventListener('click', (ev) => {
-        const target = ev.target as HTMLElement;
-        if (target.closest('.ignore-click')) return;
-        ev.preventDefault();
-        window.location.href = `/post/${post.id}`;
-      });
-    }
-  });
+  let showExtraInfo = $derived(
+    isReply || (showThreadAndGroupName && (post.groupName || post.threadTitle)),
+  );
 
   function hideModal() {
     showModal = null;
   }
 </script>
 
-<div
+<article
   class={[
-    'flex p-4',
-    compact ? 'gap-2' : 'gap-4',
-    canClickPost && 'cursor-pointer hover:bg-gray-300/40 dark:hover:bg-gray-900/40',
+    'relative flex flex-col gap-4 box',
+    canClickPost && 'cursor-pointer hover:bg-zinc-100 dark:hover:bg-zinc-800/80',
     className,
   ]}
-  id="post-{post.id}"
 >
-  <img
-    class="ignore-click profile-picture-sm"
-    src={post.owner.profilePicture ?? '/images/default-user-profile-icon.jpg'}
-    alt="profile"
-  />
+  {#if !detail}
+    <!-- svelte-ignore a11y_consider_explicit_label -->
+    <a class="absolute inset-0" href="/post/{post.id}"></a>
+  {/if}
 
-  <div class={['flex flex-col', compact ? 'gap-3' : 'gap-4']}>
+  <div class="flex items-center gap-3">
+    <img
+      class="profile-picture-sm"
+      src={post.owner.profilePicture ?? '/images/default-user-profile-icon.jpg'}
+      alt="profile"
+    />
     <div class="flex flex-col">
-      <div class="flex items-center gap-2 text-xs">
+      <div class="flex items-center gap-2 text-sm">
         {#if !detail && !hideReplyMark && isReply}
-          <span class="line-clamp-1 w-fit max-w-1/2 text-gray-500">
+          <span class="line-clamp-1 w-max text-gray-500">
             replied to {post.parentPost?.owner.displayName}
           </span>
+          {#if showThreadAndGroupName && (post.threadTitle || post.groupName)}
+            <span class="text-gray-500">|</span>
+          {/if}
         {/if}
 
         {#if showThreadAndGroupName}
           {#if post.threadTitle}
-            > <a
-              class="line-clamp-1 w-fit max-w-1/2 overflow-ellipsis hover:underline"
+            <a
+              class="z-1 line-clamp-1 w-fit font-semibold overflow-ellipsis hover:underline"
               href="/threads/{post.threadId}"
             >
               {post.threadTitle}
             </a>
           {:else if post.groupName}
-            > <a
-              class="line-clamp-1 w-fit max-w-1/2 overflow-ellipsis hover:underline"
+            <a
+              class="z-1 line-clamp-1 w-fit font-semibold overflow-ellipsis hover:underline"
               href="/groups/{post.groupId}"
             >
               {post.groupName}
@@ -110,175 +116,164 @@
         {/if}
       </div>
 
-      <div class="ignore-click flex w-fit items-baseline gap-2 text-gray-500">
+      <div class="flex w-fit items-center gap-2 text-gray-500">
         <a
-          class="text-xl text-black hover:underline dark:text-white dark:decoration-white"
+          class="z-1 font-semibold text-black hover:underline dark:text-white dark:decoration-white"
           href="/user/{post.owner.username}"
         >
           {post.owner.displayName}
         </a>
-        <span class="text-gray-500">@{post.owner.username}</span>
-
-        <span>•</span>
-        <span>{getTimeAgo(Date.parse(post.dateCreated))}</span>
-        {#if post.dateUpdated}
-          <span>•</span>
-          <span>edited {getTimeAgo(Date.parse(post.dateUpdated))}</span>
-        {/if}
-        {#if post.visibility === 'private'}
-          <Icon type="lock" size="xs" />
-        {:else if post.visibility === 'hidden'}
-          <Icon type="eyeSlash" size="xs" />
+        {#if showExtraInfo}
+          •
+          <span>{getTimeAgo(Date.parse(post.dateCreated))}</span>
+          {#if post.dateUpdated}
+            •
+            <span>edited {getTimeAgo(Date.parse(post.dateUpdated))}</span>
+          {/if}
+          {#if post.visibility !== 'public'}
+            •
+            {#if post.visibility === 'private'}
+              <Icon class="z-1" {@attach tooltip('Private')} type="lock" size="xs" />
+            {:else if post.visibility === 'hidden'}
+              <Icon class="z-1" {@attach tooltip('Hidden')} type="eyeSlash" size="xs" />
+            {/if}
+          {/if}
         {/if}
       </div>
+
+      {#if !showExtraInfo}
+        <div class="flex w-fit items-center gap-2 text-gray-500">
+          <span>{getTimeAgo(Date.parse(post.dateCreated))}</span>
+          {#if post.dateUpdated}
+            •
+            <span>edited {getTimeAgo(Date.parse(post.dateUpdated))}</span>
+          {/if}
+          {#if post.visibility !== 'public'}
+            •
+            {#if post.visibility === 'private'}
+              <Icon class="z-1" {@attach tooltip('Private')} type="lock" size="xs" />
+            {:else if post.visibility === 'hidden'}
+              <Icon class="z-1" {@attach tooltip('Hidden')} type="eyeSlash" size="xs" />
+            {/if}
+          {/if}
+        </div>
+      {/if}
     </div>
 
+    {#if !hideOptions && (self.id === post.owner.id || self.role === 'admin')}
+      <DropdownMenu class="ml-auto" position="bottom" align="right">
+        {#snippet trigger()}
+          <IconButton class="p-2" round>
+            <Icon type="menu" size="xs" />
+          </IconButton>
+        {/snippet}
+
+        {#if detail && self.id === post.owner.id && allowEditVisibility}
+          <DropdownItem onclick={() => (showModal = 'visibility')}>Edit</DropdownItem>
+        {/if}
+        {#if self.role === 'admin' || self.id === post.owner.id}
+          <DropdownItem class="text-red-500" onclick={() => (showModal = 'delete')}>
+            Delete
+          </DropdownItem>
+        {/if}
+      </DropdownMenu>
+    {/if}
+  </div>
+
+  <!-- post content -->
+  <div class="flex flex-col gap-4">
     {#if post.tag}
-      <Flair class="ignore-click" tag={post.tag} compact />
+      <Flair tag={post.tag} compact />
     {/if}
 
-    {#if parent && post.visibility !== 'public' && self.id !== post.owner.id}
-      <span class="ignore-click">Post is privated or hidden.</span>
+    {#if post.visibility !== 'public' && self.id !== post.owner.id}
+      <span>Post is privated or hidden.</span>
     {:else}
       {#if post.content.length > 0}
-        {#if compact}
-          <p class="ignore-click line-clamp-2 whitespace-pre-line">{post.content}</p>
+        {#if detail}
+          <span class="whitespace-pre-line">{post.content}</span>
         {:else}
-          <span class="ignore-click whitespace-pre-line">{post.content}</span>
+          <p class="line-clamp-2 whitespace-pre-line">{post.content}</p>
         {/if}
       {/if}
 
       {#if post.mediaPaths.length > 0}
         {#if isImages}
-          <div class="ignore-click relative min-w-1/2">
-            {#if imageIndex > 0}
-              <IconButton
-                class="absolute top-1/2 left-0 h-full -translate-y-1/2 hover:bg-gray-200 dark:hover:bg-gray-900/20"
-                round={false}
-                onclick={() => (imageIndex = Math.max(0, imageIndex - 1))}
-              >
-                <Icon type="back" size="sm" />
-              </IconButton>
-            {/if}
-
-            <img
-              class="w-full rounded-lg"
-              src={post.mediaPaths[imageIndex]}
-              alt="post-{post.id}-image-{imageIndex}"
-            />
-
-            {#if post.mediaPaths.length > 1}
-              <div class="absolute bottom-1 left-1/2 z-2 flex -translate-x-1/2 gap-1">
-                {#each post.mediaPaths as _, index}
-                  <span
-                    class={[
-                      'h-2 w-2 rounded-full border border-white',
-                      index === imageIndex && 'bg-white',
-                    ]}
-                  ></span>
-                {/each}
-              </div>
-            {/if}
-
-            {#if imageIndex < post.mediaPaths.length - 1}
-              <IconButton
-                class="absolute top-1/2 right-0 h-full -translate-y-1/2 hover:bg-gray-200 dark:hover:bg-gray-900/20"
-                round={false}
-                onclick={() => (imageIndex = Math.min(post.mediaPaths.length - 1, imageIndex + 1))}
-              >
-                <Icon type="next" size="sm" />
-              </IconButton>
-            {/if}
-          </div>
+          <ImageCarousel images={post.mediaPaths} allowClickingImage={detail} />
         {/if}
 
         {#if isVideo}
           <!-- svelte-ignore a11y_media_has_caption -->
-          <video class="ignore-click w-full min-w-1/2 rounded-lg" controls>
+          <video class="w-full min-w-1/2 rounded-lg" controls>
             <source src={post.mediaPaths[0]} type="video/mp4" />
           </video>
         {/if}
       {/if}
     {/if}
-
-    <!-- reactions -->
-    {#if !parent}
-      <div class="flex w-fit gap-6">
-        <form
-          action="?/react"
-          method="post"
-          use:enhance={() => {
-            return async ({ result, update }) => {
-              await formResultToast(result, toaster, undefined, false);
-              await update({ reset: false });
-            };
-          }}
-        >
-          <input type="text" name="reaction" value={reaction} hidden readonly />
-          <input type="number" name="post-id" value={post.id} hidden readonly />
-
-          <DropdownMenu class="ignore-click" position="top" align="left" horizontal>
-            {#snippet trigger()}
-              <div
-                class="react-button flex items-center gap-2 rounded-md p-2 hover:bg-gray-300 dark:hover:bg-gray-800/60"
-              >
-                <Icon
-                  type={(reaction ?? 'noReaction') as keyof typeof reactions}
-                  class={[reaction !== null && reactions[reaction as keyof typeof reactions]]}
-                  size="sm"
-                />
-                {reactionCount}
-              </div>
-            {/snippet}
-
-            {#each Object.entries(reactions) as [type, color]}
-              <DropdownItem
-                class="reaction-button"
-                noHover
-                onclick={() => {
-                  if (reaction === type) {
-                    reaction = null;
-                    reactionCount--;
-                  } else {
-                    if (!reaction) reactionCount++;
-                    reaction = type;
-                  }
-                }}
-              >
-                <Icon type={type as keyof typeof reactions} class={color} size="sm" hover />
-              </DropdownItem>
-            {/each}
-          </DropdownMenu>
-        </form>
-
-        <div class="flex items-center gap-2">
-          <Icon type="reply" size="sm" />
-          {post.replyCount}
-        </div>
-      </div>
-    {/if}
   </div>
 
-  <!-- option menu -->
-  {#if !parent}
-    <DropdownMenu class="ignore-click ml-auto h-fit" position="bottom" align="right">
-      {#snippet trigger()}
-        <IconButton class="hover:bg-gray-300 dark:hover:bg-gray-800" round>
-          <Icon type="menu" size="sm" />
-        </IconButton>
-      {/snippet}
+  <!-- reactions -->
+  {#if !hideReaction}
+    <div class="flex gap-4">
+      <form
+        action="?/react"
+        method="post"
+        use:enhance={() => {
+          return async ({ result, update }) => {
+            await formResultToast(result, toaster, undefined, false);
+            await update({ reset: false });
+          };
+        }}
+      >
+        <input type="text" name="reaction" value={reaction} hidden readonly />
+        <input type="number" name="post-id" value={post.id} hidden readonly />
 
-      {#if detail && self.id === post.owner.id && allowEditVisibility}
-        <DropdownItem onclick={() => (showModal = 'visibility')}>Edit</DropdownItem>
-      {/if}
-      {#if self.role === 'admin' || self.id === post.owner.id}
-        <DropdownItem class="text-red-500" onclick={() => (showModal = 'delete')}>
-          Delete
-        </DropdownItem>
-      {/if}
-    </DropdownMenu>
+        <DropdownMenu position="top" align="left" horizontal>
+          {#snippet trigger()}
+            <div
+              class="z-1 flex cursor-pointer items-center gap-2 rounded-md bg-zinc-200 p-2 hover:bg-zinc-300 dark:bg-zinc-600
+dark:hover:bg-zinc-500"
+            >
+              <Icon
+                type={(reaction ?? 'noReaction') as keyof typeof reactions}
+                class={[reaction !== null && reactions[reaction as keyof typeof reactions]]}
+                size="sm"
+              />
+              {reactionCount}
+            </div>
+          {/snippet}
+
+          {#each Object.entries(reactions) as [type, color]}
+            <DropdownItem
+              class="reaction-button"
+              noHover
+              onclick={() => {
+                if (reaction === type) {
+                  reaction = null;
+                  reactionCount--;
+                } else {
+                  if (!reaction) reactionCount++;
+                  reaction = type;
+                }
+              }}
+            >
+              <Icon type={type as keyof typeof reactions} class={color} size="sm" hover />
+            </DropdownItem>
+          {/each}
+        </DropdownMenu>
+      </form>
+
+      <a
+        class="z-1 flex items-center gap-2 rounded-md bg-zinc-200 p-2 hover:bg-zinc-300 dark:bg-zinc-600
+dark:hover:bg-zinc-500"
+        href={detail ? null : `/post/${post.id}`}
+      >
+        <Icon type="reply" size="sm" />
+        {post.replyCount}
+      </a>
+    </div>
   {/if}
-</div>
+</article>
 
 <Modal show={showModal === 'delete'} backdropCallback={hideModal} center>
   <ModalHeader>Delete post</ModalHeader>
@@ -338,11 +333,3 @@
 Post component: shows OP, content, interaction counts...  
 Reaction requires `?/react` formaction
 -->
-
-<style lang="postcss">
-  @reference '@/app.css';
-
-  .ignore-click {
-    cursor: initial;
-  }
-</style>

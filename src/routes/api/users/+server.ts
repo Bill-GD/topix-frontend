@@ -4,8 +4,11 @@ import { error, json } from '@sveltejs/kit';
 
 export async function GET({ cookies, url }) {
   const res = await AxiosHandler.get(`/user${url.search}`, cookies.get(CookieName.accessToken));
-  if (!res.success) {
-    error(res.status, { status: res.status, message: res.message });
-  }
-  return json(res.data);
+  if (!res.success) error(res.status, res.message);
+
+  return json(res.data, {
+    headers: {
+      'x-end-of-list': res.headers['x-end-of-list'],
+    },
+  });
 }

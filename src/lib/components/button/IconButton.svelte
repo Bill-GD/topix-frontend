@@ -1,5 +1,8 @@
 <script lang="ts">
-  import type { IconButtonProps } from '$lib/components/types';
+  import type { ButtonType } from '$lib/components/types';
+  import type { UnaryVoidFunction } from '$lib/utils/types';
+  import type { Snippet } from 'svelte';
+  import type { ClassValue } from 'svelte/elements';
 
   let {
     children,
@@ -8,39 +11,38 @@
     class: className,
     buttonType,
     type,
-    round = true,
-  }: IconButtonProps = $props();
+    round = false,
+    ...otherProps
+  }: {
+    children: Snippet;
+    onclick?: VoidFunction | UnaryVoidFunction<Event>;
+    disabled?: boolean | null;
+    buttonType?: 'submit' | 'reset' | 'button' | null;
+    type?: ButtonType;
+    class?: ClassValue;
+    round?: boolean;
+  } = $props();
 
-  const buttonClass = type ? `btn-${type}` : 'hover:bg-gray-200 dark:hover:bg-gray-900 p-3';
+  const buttonClass = type ? `btn-${type}` : 'hover:bg-zinc-200 dark:hover:bg-zinc-700';
 </script>
 
-{#if onclick}
-  <button
-    class={['main-button', buttonClass, round && 'rounded-full', className]}
-    onclick={(ev) => {
-      ev.stopPropagation();
-      ev.preventDefault();
-      onclick?.(ev);
-    }}
-    type={buttonType}
-    {disabled}
-  >
-    {@render children()}
-  </button>
-{:else}
-  <button
-    class={['main-button', buttonClass, round && 'rounded-full', className]}
-    type={buttonType}
-    {disabled}
-  >
-    {@render children()}
-  </button>
-{/if}
-
-<style lang="postcss">
-  @reference '@/app.css';
-
-  .main-button {
-    @apply flex w-fit cursor-pointer items-center p-2;
-  }
-</style>
+<button
+  class={[
+    'w-fit cursor-pointer items-center',
+    buttonClass,
+    round ? 'rounded-full' : 'rounded-md',
+    className,
+  ]}
+  onclick={onclick
+    ? (ev) => {
+        ev.stopPropagation();
+        ev.preventDefault();
+        onclick(ev);
+      }
+    : null}
+  type={buttonType}
+  {disabled}
+  {...otherProps}
+>
+  {@render children()}
+</button>

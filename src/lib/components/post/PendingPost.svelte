@@ -1,25 +1,30 @@
 <script lang="ts">
   import { enhance } from '$app/forms';
   import { getToaster } from '$lib/components/toast';
-  import type { PendingPostProps } from '$lib/components/types';
   import { formResultToast, getTimeAgo } from '$lib/utils/helpers';
+  import type { Post } from '$lib/utils/types';
+  import type { ClassValue } from 'svelte/elements';
   import Button from '../button/Button.svelte';
   import IconButton from '../button/IconButton.svelte';
-  import Link from '../link/Link.svelte';
   import Flair from '../misc/Flair.svelte';
   import Icon from '../misc/Icon.svelte';
   import Modal from '../modal/Modal.svelte';
   import ModalBody from '../modal/ModalBody.svelte';
   import ModalFooter from '../modal/ModalFooter.svelte';
   import ModalHeader from '../modal/ModalHeader.svelte';
+  import ImageCarousel from './ImageCarousel.svelte';
 
-  let { class: className, post }: PendingPostProps = $props();
+  let {
+    class: className,
+    post,
+  }: {
+    class?: ClassValue;
+    post: Post;
+  } = $props();
 
   const toaster = getToaster();
   const isImages = $derived(post.mediaPaths.every((m) => m.includes('image')));
   const isVideo = $derived(post.mediaPaths.every((m) => m.includes('video')));
-
-  let imageIndex = $state<number>(0);
   let showModal = $state<'approve' | 'remove' | null>(null);
 
   function hideModal() {
@@ -27,25 +32,26 @@
   }
 </script>
 
-<div class={['flex items-center gap-2 p-4', className]}>
-  <img
-    class="profile-picture-sm"
-    src={post.owner.profilePicture ?? '/images/default-user-profile-icon.jpg'}
-    alt="profile"
-  />
-
+<div class={['flex items-center gap-2 box', className]}>
   <div class="flex flex-col gap-3">
-    <div class="flex flex-col">
-      <div class="flex items-baseline gap-2 text-gray-500">
-        <Link class="flex items-baseline gap-2" href="/user/{post.owner.username}">
-          <span class="text-xl text-white decoration-white hover:underline">
+    <div class="flex items-center gap-3">
+      <img
+        class="profile-picture-sm"
+        src={post.owner.profilePicture ?? '/images/default-user-profile-icon.jpg'}
+        alt="profile"
+      />
+      <div class="flex flex-col">
+        <div class="flex items-baseline gap-2 text-gray-500">
+          <a
+            class="font-semibold text-black hover:underline dark:text-white dark:decoration-white"
+            href="/user/{post.owner.username}"
+          >
             {post.owner.displayName}
-          </span>
-          <span class="text-gray-500">@{post.owner.username}</span>
-        </Link>
+          </a>
 
-        <span>•</span>
-        <span>{getTimeAgo(Date.parse(post.dateCreated))}</span>
+          <span>•</span>
+          <span>{getTimeAgo(Date.parse(post.dateCreated))}</span>
+        </div>
       </div>
     </div>
 
@@ -57,46 +63,7 @@
 
     {#if post.mediaPaths.length > 0}
       {#if isImages}
-        <div class="relative min-w-1/2">
-          {#if imageIndex > 0}
-            <IconButton
-              class="absolute top-1/2 left-0 h-full -translate-y-1/2 hover:bg-gray-300/40 dark:hover:bg-gray-900/40"
-              round={false}
-              onclick={() => (imageIndex = Math.max(0, imageIndex - 1))}
-            >
-              <Icon type="back" size="sm" />
-            </IconButton>
-          {/if}
-
-          <img
-            class="w-full rounded-lg"
-            src={post.mediaPaths[imageIndex]}
-            alt="post-image-{imageIndex}"
-          />
-
-          {#if post.mediaPaths.length > 1}
-            <div class="absolute bottom-1 left-1/2 z-2 flex -translate-x-1/2 gap-1">
-              {#each post.mediaPaths as _, index}
-                <span
-                  class={[
-                    'h-2 w-2 rounded-full border border-white',
-                    index === imageIndex && 'bg-white',
-                  ]}
-                ></span>
-              {/each}
-            </div>
-          {/if}
-
-          {#if imageIndex < post.mediaPaths.length - 1}
-            <IconButton
-              class="absolute top-1/2 right-0 h-full -translate-y-1/2 hover:bg-gray-300/40 dark:hover:bg-gray-900/40"
-              round={false}
-              onclick={() => (imageIndex = Math.min(post.mediaPaths.length - 1, imageIndex + 1))}
-            >
-              <Icon type="next" size="sm" />
-            </IconButton>
-          {/if}
-        </div>
+        <ImageCarousel images={post.mediaPaths} />
       {/if}
 
       {#if isVideo}

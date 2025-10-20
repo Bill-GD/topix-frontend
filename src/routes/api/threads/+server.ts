@@ -3,14 +3,12 @@ import { CookieName } from '$lib/utils/types';
 import { error, json } from '@sveltejs/kit';
 
 export async function GET({ cookies, url }) {
-  const groupId = url.searchParams.get('id') ?? '';
-  const members = url.searchParams.has('members') ? '/members' : '';
+  const threadId = url.searchParams.get('id') ?? '';
 
   url.searchParams.delete('id');
-  url.searchParams.delete('members');
 
   const res = await AxiosHandler.get(
-    `/group/${groupId}${members}${url.search}`,
+    `/thread/${threadId}${url.search}`,
     cookies.get(CookieName.accessToken),
   );
   if (!res.success) error(res.status, res.message);

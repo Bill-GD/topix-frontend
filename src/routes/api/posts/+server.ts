@@ -10,8 +10,11 @@ export async function GET({ cookies, url }) {
     `/post${following}${url.search}`,
     cookies.get(CookieName.accessToken),
   );
-  if (!res.success) {
-    error(res.status, { status: res.status, message: res.message });
-  }
-  return json(res.data);
+  if (!res.success) error(res.status, res.message);
+
+  return json(res.data, {
+    headers: {
+      'x-end-of-list': res.headers['x-end-of-list'],
+    },
+  });
 }

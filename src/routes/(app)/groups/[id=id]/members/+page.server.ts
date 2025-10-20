@@ -1,20 +1,19 @@
 import { AxiosHandler } from '$lib/utils/axios-handler';
 import { CookieName } from '$lib/utils/types';
-import { error, fail, type Actions } from '@sveltejs/kit';
+import { type Actions, error, fail } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
-export const load: PageServerLoad = async ({ params, cookies }) => {
-  const accepted = params.section === 'all';
-  const res = await AxiosHandler.get(
-    `/group/${params.id}/members?accepted=${accepted}`,
-    cookies.get(CookieName.accessToken),
-  );
-  if (!res.success) {
-    error(res.status, { status: res.status, message: res.message });
+export const load: PageServerLoad = async ({ params, url, fetch }) => {
+  const tab = url.searchParams.get('tab') ?? 'all';
+  if (!['all', 'pending'].includes(tab)) {
+    error(404, 'Unknown tab');
   }
 
+  const accepted = tab === 'all';
+  const res = await fetch(`/api/groups?id=${params.id}&members&accepted=${accepted}`);
+
   return {
-    members: res.data as unknown as {
+    members: (await res.json()) as unknown as {
       id: number;
       username: string;
       displayName: string;
@@ -22,6 +21,7 @@ export const load: PageServerLoad = async ({ params, cookies }) => {
       dateRequested: string;
       dateJoined: string | null;
     }[],
+    endOfList: res.headers.get('x-end-of-list') === 'true',
   };
 };
 

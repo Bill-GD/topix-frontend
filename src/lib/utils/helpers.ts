@@ -1,5 +1,7 @@
 import { API_PORT, API_SERVER } from '$env/static/public';
 import { Toaster } from '$lib/components/toast';
+import type { Attachment } from 'svelte/attachments';
+import tippy from 'tippy.js';
 import { type ActionResult, type Cookies, fail } from '@sveltejs/kit';
 import { CookieName } from './types';
 
@@ -157,4 +159,14 @@ export async function getPostUploadForm(request: Request) {
   if (files.length > 0) files.forEach((f) => form.append('files', f));
 
   return form;
+}
+
+export function tooltip(content: string): Attachment {
+  return (node: Element) => {
+    const t = tippy(node, {
+      content,
+      arrow: true,
+    });
+    return t.destroy;
+  };
 }

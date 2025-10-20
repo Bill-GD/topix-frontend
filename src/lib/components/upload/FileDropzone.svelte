@@ -1,12 +1,16 @@
 <script lang="ts">
-  import type { FileDropzoneProps } from '$lib/components/types';
   import { onMount } from 'svelte';
+  import type { ClassValue } from 'svelte/elements';
 
   let {
     contentInputName,
     contentValue = $bindable(''),
     class: className,
-  }: FileDropzoneProps = $props();
+  }: {
+    contentInputName: string;
+    contentValue: string;
+    class?: ClassValue;
+  } = $props();
 
   let hasDroppedFile = $state<boolean>(false);
   let dropzoneText = $state<string>('Drop image here');

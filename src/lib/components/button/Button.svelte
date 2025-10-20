@@ -1,5 +1,8 @@
 <script lang="ts">
-  import type { ButtonProps } from '$lib/components/types';
+  import type { UnaryVoidFunction } from '$lib/utils/types';
+  import type { Snippet } from 'svelte';
+  import type { ClassValue } from 'svelte/elements';
+  import type { ButtonType } from '../types';
 
   let {
     type,
@@ -11,7 +14,17 @@
     class: className,
     formaction,
     ...otherProps
-  }: ButtonProps = $props();
+  }: {
+    id?: string;
+    type: ButtonType;
+    outline?: boolean;
+    href?: string;
+    formaction?: string;
+    onclick?: VoidFunction | UnaryVoidFunction<Event>;
+    disabled?: boolean;
+    children?: Snippet;
+    class?: ClassValue;
+  } = $props();
 
   const buttonClass = `btn-${type}${outline ? '-outline' : ''}`;
   const textColor = buttonClass !== 'btn' && !buttonClass.includes('outline') ? 'text-white' : '';

@@ -1,8 +1,8 @@
 <script lang="ts">
-  import type { InputProps } from '$lib/components/types';
   import { generateId } from '$lib/utils/helpers';
-  import Icon from '../misc/Icon.svelte';
+  import type { ClassValue, HTMLInputTypeAttribute } from 'svelte/elements';
   import IconButton from '../button/IconButton.svelte';
+  import Icon from '../misc/Icon.svelte';
 
   let {
     class: className,
@@ -15,7 +15,18 @@
     peekable = false,
     value = $bindable(''),
     name: inputName,
-  }: InputProps = $props();
+  }: {
+    clearable?: boolean;
+    peekable?: boolean;
+    textarea?: boolean;
+    id?: string | null;
+    value?: string;
+    type?: HTMLInputTypeAttribute | null;
+    class?: ClassValue;
+    required?: boolean | null;
+    name?: string | null;
+    placeholder?: string | null;
+  } = $props();
 
   const initType = type;
 
@@ -47,10 +58,11 @@
 
 {#if clearable && value.length > 0}
   <IconButton
-    class="absolute top-1/2 {peekable && initType === 'password'
+    class="absolute top-1/2 p-1 {peekable && initType === 'password'
       ? 'right-8'
       : 'right-1'} -translate-y-1/2"
     buttonType="button"
+    round
     onclick={() => (value = '')}
   >
     <Icon
@@ -64,8 +76,9 @@
 {#if peekable && initType === 'password'}
   {#key peeking}
     <IconButton
-      class="absolute top-1/2 right-1 -translate-y-1/2"
+      class="absolute top-1/2 right-1 -translate-y-1/2 p-1"
       buttonType="button"
+      round
       onclick={() => (peeking = !peeking)}
     >
       {#if peeking}

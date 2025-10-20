@@ -1,10 +1,10 @@
-import { AxiosHandler, handleReaction } from '$lib/utils/axios-handler';
+import { AxiosHandler, handlePostDeletion, handleReaction } from '$lib/utils/axios-handler';
 import { getPostUploadForm } from '$lib/utils/helpers';
 import { CookieName, type Post, type Tag, type Thread } from '$lib/utils/types';
 import { type Actions, error, fail, isActionFailure, redirect } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
-export const load: PageServerLoad = async ({ cookies, params, parent }) => {
+export const load: PageServerLoad = async ({ cookies, params, url, parent, fetch }) => {
   const group = (await parent()).group;
   if (group.visibility !== 'public' && group.status !== true) {
     return {
@@ -13,36 +13,36 @@ export const load: PageServerLoad = async ({ cookies, params, parent }) => {
       tags: [] as Tag[],
     };
   }
-
-  const postsRes = await AxiosHandler.get(
-    `/post?groupId=${params.id}&accepted=true`,
-    cookies.get(CookieName.accessToken),
-  );
-  if (!postsRes.success) {
-    error(postsRes.status, { status: postsRes.status, message: postsRes.message });
-  }
-
-  const threadsRes = await AxiosHandler.get(
-    `/thread?groupId=${params.id}&size=5`,
-    cookies.get(CookieName.accessToken),
-  );
-  if (!threadsRes.success) {
-    error(threadsRes.status, { status: threadsRes.status, message: threadsRes.message });
-  }
-
+  const tab = url.searchParams.get('tab') ?? 'posts';
   const tagsRes = await AxiosHandler.get(
     `/group/${params.id}/tags`,
     cookies.get(CookieName.accessToken),
   );
-  if (!tagsRes.success) {
-    error(tagsRes.status, { status: tagsRes.status, message: tagsRes.message });
-  }
+  if (!tagsRes.success) error(tagsRes.status, tagsRes.message);
 
-  return {
-    posts: postsRes.data as unknown as Post[],
-    threads: threadsRes.data as unknown as Thread[],
-    tags: tagsRes.data as unknown as Tag[],
-  };
+  switch (tab) {
+    case 'posts': {
+      const res = await fetch(`/api/posts?groupId=${params.id}&accepted=true`);
+
+      return {
+        posts: (await res.json()) as unknown as Post[],
+        tags: tagsRes.data as unknown as Tag[],
+        endOfList: res.headers.get('x-end-of-list') === 'true',
+      };
+    }
+    case 'threads': {
+      const res = await fetch(`/api/threads?groupId=${params.id}`);
+
+      return {
+        threads: (await res.json()) as unknown as Thread[],
+        tags: tagsRes.data as unknown as Tag[],
+        endOfList: res.headers.get('x-end-of-list') === 'true',
+      };
+    }
+    default: {
+      error(404, 'Unknown tab');
+    }
+  }
 };
 
 export const actions: Actions = {
@@ -107,16 +107,5 @@ export const actions: Actions = {
     if (!res.success) return fail(res.status, { success: false, message: res.message });
     return { success: true, message: res.message };
   },
-  'delete-post': async (event) => {
-    const formData = await event.request.formData();
-    const postId = formData.get('post-id');
-
-    const res = await AxiosHandler.delete(
-      `/post/${postId}`,
-      event.cookies.get(CookieName.accessToken),
-    );
-
-    if (!res.success) return fail(res.status, { success: false, message: res.message });
-    return { success: true, message: res.message };
-  },
+  'delete-post': handlePostDeletion,
 };

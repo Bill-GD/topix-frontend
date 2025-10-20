@@ -1,4 +1,4 @@
-import { AxiosHandler, handleReaction } from '$lib/utils/axios-handler';
+import { AxiosHandler, handlePostDeletion, handleReaction } from '$lib/utils/axios-handler';
 import { getPostUploadForm } from '$lib/utils/helpers';
 import { CookieName, type Post } from '$lib/utils/types';
 import { type Actions, error, fail, isActionFailure, redirect } from '@sveltejs/kit';
@@ -12,9 +12,8 @@ export const load: PageServerLoad = async ({ parent, cookies, params }) => {
   };
 
   const postRes = await AxiosHandler.get(`/post/${params.id}`, cookies.get(CookieName.accessToken));
-  if (!postRes.success) {
-    error(postRes.status, { message: postRes.message, status: postRes.status });
-  }
+  if (!postRes.success) error(postRes.status, postRes.message);
+
   data.post = postRes.data as unknown as Post;
 
   if (data.post.groupId && data.post.groupVisibility !== 'public' && !data.post.joinedGroup) {
@@ -33,9 +32,8 @@ export const load: PageServerLoad = async ({ parent, cookies, params }) => {
     `/post?parentId=${params.id}${data.post.groupId ? `&groupId=${data.post.groupId}` : ''}${data.post.threadId ? `&threadId=${data.post.threadId}` : ''}`,
     cookies.get(CookieName.accessToken),
   );
-  if (!repliesRes.success) {
-    error(repliesRes.status, { message: repliesRes.message, status: repliesRes.status });
-  }
+  if (!repliesRes.success) error(repliesRes.status, repliesRes.message);
+
   data.replies = repliesRes.data as unknown as Post[];
 
   return data;
@@ -43,19 +41,7 @@ export const load: PageServerLoad = async ({ parent, cookies, params }) => {
 
 export const actions: Actions = {
   react: handleReaction,
-  'delete-post': async (event) => {
-    const formData = await event.request.formData();
-    const postId = formData.get('post-id');
-
-    const res = await AxiosHandler.delete(
-      `/post/${postId}`,
-      event.cookies.get(CookieName.accessToken),
-    );
-
-    if (!res.success) return fail(res.status, { success: false, message: res.message });
-    if (postId === event.params.id) redirect(303, '/home');
-    return { success: true, message: res.message };
-  },
+  'delete-post': handlePostDeletion,
   reply: async ({ request, cookies, params }) => {
     const form = await getPostUploadForm(request);
     if (isActionFailure(form)) return form;

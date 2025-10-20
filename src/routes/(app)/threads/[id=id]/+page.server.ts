@@ -1,22 +1,22 @@
-import { AxiosHandler, handleReaction } from '$lib/utils/axios-handler';
+import { AxiosHandler, handlePostDeletion, handleReaction } from '$lib/utils/axios-handler';
 import { getPostUploadForm } from '$lib/utils/helpers';
 import { CookieName, type CurrentUser, type Post, type Thread } from '$lib/utils/types';
 import { type Actions, error, fail, isActionFailure, redirect } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ cookies, params }) => {
-  const data: { thread: Thread; posts: Post[] } = {
+  const data: { thread: Thread; posts: Post[]; endOfList: boolean } = {
     thread: {} as Thread,
     posts: [],
+    endOfList: false,
   };
 
   const threadRes = await AxiosHandler.get(
     `/thread/${params.id}`,
     cookies.get(CookieName.accessToken),
   );
-  if (!threadRes.success) {
-    error(threadRes.status, { message: threadRes.message, status: threadRes.status });
-  }
+  if (!threadRes.success) error(threadRes.status, threadRes.message);
+
   data.thread = threadRes.data as unknown as Thread;
 
   if (data.thread.groupId && data.thread.groupVisibility !== 'public' && !data.thread.joinedGroup) {
@@ -24,13 +24,13 @@ export const load: PageServerLoad = async ({ cookies, params }) => {
   }
 
   const postRes = await AxiosHandler.get(
-    `/post?threadId=${params.id}${data.thread.groupId ? `&groupId=${data.thread.groupId}` : ''}`,
+    `/post?threadId=${params.id}`,
     cookies.get(CookieName.accessToken),
   );
-  if (!postRes.success) {
-    error(postRes.status, { message: postRes.message, status: postRes.status });
-  }
+  if (!postRes.success) error(postRes.status, postRes.message);
+
   data.posts = postRes.data as unknown as Post[];
+  data.endOfList = postRes.headers.get('x-end-of-list') === 'true';
 
   return data;
 };
@@ -84,18 +84,7 @@ export const actions: Actions = {
     if (!res.success) return fail(res.status, { success: false, message: res.message });
     return { success: true, message: res.message };
   },
-  'delete-post': async (event) => {
-    const formData = await event.request.formData();
-    const postId = formData.get('post-id');
-
-    const res = await AxiosHandler.delete(
-      `/post/${postId}`,
-      event.cookies.get(CookieName.accessToken),
-    );
-
-    if (!res.success) return fail(res.status, { success: false, message: res.message });
-    return { success: true, message: res.message };
-  },
+  'delete-post': handlePostDeletion,
   follow: async ({ params, cookies }) => {
     const res = await AxiosHandler.post(
       `/thread/${params.id}/follow`,

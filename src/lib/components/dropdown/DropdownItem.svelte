@@ -1,5 +1,6 @@
 <script lang="ts">
-  import type { DropdownItemProps } from '$lib/components/types';
+  import type { Snippet } from 'svelte';
+  import type { ClassValue } from 'svelte/elements';
 
   let {
     href,
@@ -8,15 +9,22 @@
     noHover = false,
     onclick,
     class: className,
-  }: DropdownItemProps = $props();
+  }: {
+    children: Snippet;
+    href?: string;
+    rel?: string;
+    class?: ClassValue;
+    noHover?: boolean;
+    onclick?: VoidFunction;
+  } = $props();
 </script>
 
 <li>
   {#if href}
     <a
       class={[
-        'block w-max min-w-full px-4 py-2',
-        !noHover && 'hover:bg-gray-400/50 dark:hover:bg-gray-700',
+        'block w-max min-w-full rounded-md px-3 py-2',
+        !noHover && 'hover:bg-zinc-200 dark:hover:bg-zinc-700',
         className,
       ]}
       {href}
@@ -28,8 +36,8 @@
   {:else}
     <button
       class={[
-        'block w-full cursor-pointer px-4 py-2 text-left',
-        !noHover && 'hover:bg-gray-400/50 dark:hover:bg-gray-700',
+        'block w-full cursor-pointer rounded-md px-3 py-2 text-left',
+        !noHover && 'hover:bg-zinc-200 dark:hover:bg-zinc-700',
         className,
       ]}
       {onclick}

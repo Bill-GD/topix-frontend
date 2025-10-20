@@ -31,7 +31,7 @@
   }
 </script>
 
-<div class="py-3 text-center text-gray-200" {@attach scrollerAttachment}>
+<div class="py-2 text-center text-zinc-500 dark:text-gray-200" {@attach scrollerAttachment}>
   {#if !hideText}
     {#if isFetching}
       Loading more...

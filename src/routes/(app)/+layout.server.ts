@@ -18,5 +18,5 @@ export const load: LayoutServerLoad = async ({ cookies }) => {
     return { self: res.data as CurrentUser };
   }
 
-  error(res.status, { status: res.status, message: res.message });
+  error(res.status, res.message);
 };

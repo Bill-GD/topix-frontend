@@ -1,22 +1,23 @@
 <script lang="ts">
   import { enhance } from '$app/forms';
   import { getToaster } from '$lib/components/toast';
-  import type { PostUploadProps } from '$lib/components/types';
   import { ImageSizeLimit, VideoSizeLimit } from '$lib/utils/constants';
   import { formResultToast, getReadableSize } from '$lib/utils/helpers';
   import { type Tag } from '$lib/utils/types';
   import { onMount } from 'svelte';
+  import type { ClassValue } from 'svelte/elements';
   import Button from '../button/Button.svelte';
   import IconButton from '../button/IconButton.svelte';
   import Flair from '../misc/Flair.svelte';
   import Icon from '../misc/Icon.svelte';
+  import VisibilitySelector from '../misc/VisibilitySelector.svelte';
   import Modal from '../modal/Modal.svelte';
   import ModalBody from '../modal/ModalBody.svelte';
   import ModalFooter from '../modal/ModalFooter.svelte';
   import ModalHeader from '../modal/ModalHeader.svelte';
-  import VisibilitySelector from '../misc/VisibilitySelector.svelte';
 
   let {
+    class: className,
     userPicture = '/images/default-user-profile-icon.jpg',
     formaction,
     placeholder = `What's happening?`,
@@ -25,8 +26,21 @@
     groupId,
     groupApproved = false,
     showVisibilitySelector = false,
+    hideBox = false,
     postCallback,
-  }: PostUploadProps = $props();
+  }: {
+    class?: ClassValue;
+    userPicture: string | null;
+    formaction?: string;
+    placeholder?: string;
+    tags?: Tag[];
+    hideBox?: boolean;
+    groupApproved?: boolean;
+    showVisibilitySelector?: boolean;
+    threadId?: number;
+    groupId?: number;
+    postCallback?: VoidFunction;
+  } = $props();
 
   const toaster = getToaster();
 
@@ -90,7 +104,7 @@
 </script>
 
 <form
-  class="flex gap-2 p-4"
+  class={['flex gap-2', !hideBox && 'box', className]}
   method="post"
   enctype="multipart/form-data"
   onsubmit={() => (disablePost = true)}
@@ -111,7 +125,7 @@
   }}
 >
   <img
-    class="profile-picture-sm hidden md:block"
+    class="hidden profile-picture-sm md:block"
     src={userPicture ?? '/images/default-user-profile-icon.jpg'}
     alt="profile"
   />
@@ -327,7 +341,7 @@
 
   .tag-input {
     input {
-      @apply rounded-md bg-gray-100 transition-all duration-150 checked:border-2 checked:border-sky-500 checked:bg-sky-500 dark:bg-gray-950;
+      @apply rounded-md bg-zinc-50 transition-all duration-150 checked:border-2 checked:border-sky-500 checked:bg-sky-500 dark:bg-zinc-950;
     }
 
     * {
@@ -336,7 +350,7 @@
 
     &:hover {
       input {
-        @apply not-checked:bg-gray-300 dark:not-checked:bg-gray-700;
+        @apply not-checked:bg-zinc-300 dark:not-checked:bg-zinc-700;
       }
     }
   }
