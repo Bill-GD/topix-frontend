@@ -21,13 +21,19 @@ input[type='checkbox']:focus {
   box-shadow: none;
 }
 
-::-webkit-color-swatch-wrapper {
-  padding: 0;
+input[type='color'] {
+  &::-webkit-color-swatch-wrapper {
+    padding: 0;
+  }
+
+  &::-webkit-color-swatch {
+    border: 0;
+    border-radius: 0;
+  }
 }
 
-::-webkit-color-swatch {
-  border: 0;
-  border-radius: 0;
+input::-webkit-calendar-picker-indicator {
+  display: none !important;
 }
 
 @utility profile-picture-lg {
@@ -74,7 +80,7 @@ input[type='checkbox']:focus {
   @apply rounded-lg bg-zinc-50 p-4 box-shadow dark:border dark:border-zinc-700 dark:bg-zinc-900;
 }
 
-@utility empty-noti-text {
+@utility notice-text {
   @apply w-full p-4 text-center text-2xl font-semibold;
 }
 

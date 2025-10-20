@@ -33,7 +33,7 @@
 <ReturnHeader>Thread</ReturnHeader>
 
 {#if data.thread.visibility !== 'public' && data.self.id !== data.thread.owner.id}
-  <p class="empty-noti-text">This thread is privated by the author.</p>
+  <p class="notice-text">This thread is privated by the author.</p>
 {:else}
   <div class="mb-4 flex flex-col gap-4 box">
     <div class="flex">
@@ -121,7 +121,7 @@
   </div>
 
   {#if data.posts.length <= 0}
-    <p class="empty-noti-text">This thread has no post.</p>
+    <p class="notice-text">This thread has no post.</p>
   {:else}
     <div class="flex flex-col gap-4">
       {#each posts as post}

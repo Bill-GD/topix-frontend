@@ -170,3 +170,21 @@ export function tooltip(content: string): Attachment {
     return t.destroy;
   };
 }
+
+export function getFeedSearchParams(searchString: string): [URLSearchParams, string] {
+  let parts = searchString.split(' ');
+  const postBy = parts
+    .find((e) => e.startsWith('from:'))
+    ?.split(':')
+    .at(1);
+
+  parts = parts.filter((e) => !e.startsWith('from:'));
+  const finalSearchString = `${postBy ? `from:${postBy} ` : ''}${parts.join(' ')}`;
+
+  const params = new URLSearchParams();
+  if (postBy) params.set('username', postBy);
+  const content = parts.join(' ');
+  if (content) params.set('content', content);
+
+  return [params, finalSearchString];
+}

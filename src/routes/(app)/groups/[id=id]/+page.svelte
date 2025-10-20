@@ -138,9 +138,9 @@
 
   {#if tab === 'posts'}
     {#if data.group.visibility === 'private' && !data.group.status}
-      <p class="empty-noti-text">You have to join to see posts of this group.</p>
+      <p class="notice-text">You have to join to see posts of this group.</p>
     {:else if data.posts!.length <= 0}
-      <p class="empty-noti-text">This group has no post.</p>
+      <p class="notice-text">This group has no post.</p>
     {:else}
       {#each posts as post (post.id)}
         <Post self={data.self} {post} />
@@ -164,9 +164,9 @@
     {/if}
   {:else if tab === 'threads'}
     {#if data.group.visibility === 'private' && !data.group.status}
-      <p class="empty-noti-text">You have to join to see threads of this group.</p>
+      <p class="notice-text">You have to join to see threads of this group.</p>
     {:else if data.threads!.length <= 0}
-      <p class="empty-noti-text">This group has no thread.</p>
+      <p class="notice-text">This group has no thread.</p>
     {:else}
       {#if data.group.status === true}
         <Button

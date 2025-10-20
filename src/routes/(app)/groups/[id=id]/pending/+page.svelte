@@ -18,7 +18,7 @@
 
 <div class="flex flex-col gap-4">
   {#if data.posts.length <= 0}
-    <p class="empty-noti-text">No pending posts.</p>
+    <p class="notice-text">No pending posts.</p>
   {:else}
     {#each posts as post}
       <PendingPost {post} />

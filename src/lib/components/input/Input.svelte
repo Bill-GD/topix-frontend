@@ -1,5 +1,6 @@
 <script lang="ts">
   import { generateId } from '$lib/utils/helpers';
+  import type { Snippet } from 'svelte';
   import type { ClassValue, HTMLInputTypeAttribute } from 'svelte/elements';
   import IconButton from '../button/IconButton.svelte';
   import Icon from '../misc/Icon.svelte';
@@ -15,6 +16,8 @@
     peekable = false,
     value = $bindable(''),
     name: inputName,
+    prefixIcon,
+    list,
   }: {
     clearable?: boolean;
     peekable?: boolean;
@@ -26,12 +29,20 @@
     required?: boolean | null;
     name?: string | null;
     placeholder?: string | null;
+    prefixIcon?: Snippet;
+    list?: string;
   } = $props();
 
   const initType = type;
 
   let peeking = $state<boolean>(false);
 </script>
+
+{#if prefixIcon && !textarea}
+  <div class="absolute top-1/2 left-2 -translate-y-1/2 p-1">
+    {@render prefixIcon()}
+  </div>
+{/if}
 
 {#if textarea}
   <textarea
@@ -45,7 +56,7 @@
   ></textarea>
 {:else}
   <input
-    class={['main-input', className]}
+    class={['main-input', prefixIcon && 'pl-10', className]}
     type={peeking ? 'text' : type}
     {id}
     {required}
@@ -53,6 +64,7 @@
     name={inputName ?? id}
     bind:value
     autocomplete="off"
+    {list}
   />
 {/if}
 
@@ -97,6 +109,14 @@
     </IconButton>
   {/key}
 {/if}
+
+<!--
+@component
+The input component.
+
+To have `clearable`, `peekable` icons & `prefixIcon` rendered correctly, wrap
+the input in a relative positioned element.
+-->
 
 <style lang="postcss">
   @reference '@/app.css';
