@@ -81,13 +81,13 @@
   </div>
 
   {#if groups.length <= 0}
-    {#if searched}
-      <p class="p-4 text-center text-xl font-semibold">No result found.</p>
-    {:else}
-      <p class="p-4 text-center text-xl font-semibold">
+    <p class="p-4 text-center text-xl font-semibold">
+      {#if searched}
+        No result found.
+      {:else}
         There are no group available in topix yet.
-      </p>
-    {/if}
+      {/if}
+    </p>
   {:else}
     {#each groups as group}
       <GroupOverview {group} showOwner />

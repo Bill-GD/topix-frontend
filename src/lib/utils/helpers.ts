@@ -171,7 +171,7 @@ export function tooltip(content: string): Attachment {
   };
 }
 
-export function getFeedSearchParams(searchString: string) {
+export function getFeedSearchParams(searchString: string, extra?: Map<string, string>) {
   let parts = searchString.split(' ');
   const postBy = parts
     .find((e) => e.startsWith('from:'))
@@ -190,6 +190,10 @@ export function getFeedSearchParams(searchString: string) {
   if (postBy) params.set('username', postBy);
   if (content) params.set('content', content);
   if (hasMedia) params.set('hasMedia', hasMedia);
+
+  if (extra) {
+    extra.forEach((v, k) => params.set(k, v));
+  }
 
   return params;
 }
