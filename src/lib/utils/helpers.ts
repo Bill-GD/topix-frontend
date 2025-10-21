@@ -171,20 +171,34 @@ export function tooltip(content: string): Attachment {
   };
 }
 
-export function getFeedSearchParams(searchString: string): [URLSearchParams, string] {
+export function getFeedSearchParams(searchString: string): {
+  success: boolean;
+  data?: [URLSearchParams, string];
+  message?: string;
+} {
   let parts = searchString.split(' ');
   const postBy = parts
     .find((e) => e.startsWith('from:'))
     ?.split(':')
     .at(1);
+  const hasMedia = parts
+    .find((e) => e.startsWith('media:'))
+    ?.split(':')
+    .at(1);
+  if (hasMedia && !['true', 'false'].includes(hasMedia)) {
+    return { success: false, message: 'Invalid query' };
+  }
 
-  parts = parts.filter((e) => !e.startsWith('from:'));
-  const finalSearchString = `${postBy ? `from:${postBy} ` : ''}${parts.join(' ')}`;
+  parts = parts.filter((e) => !e.startsWith('from:') && !e.startsWith('media:'));
+  const content = parts.join(' ');
 
   const params = new URLSearchParams();
   if (postBy) params.set('username', postBy);
-  const content = parts.join(' ');
   if (content) params.set('content', content);
+  if (hasMedia) params.set('hasMedia', hasMedia);
 
-  return [params, finalSearchString];
+  const finalSearchString = `${postBy ? `from:${postBy} ` : ''}${hasMedia ? `media:${hasMedia}` : ''}${parts.join(' ')}`;
+  if (finalSearchString.length <= 0) return { success: false, message: 'No search query found' };
+
+  return { success: true, data: [params, finalSearchString] };
 }

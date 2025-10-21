@@ -59,8 +59,10 @@
     </Input>
 
     <datalist id="search-options">
-      <option value="from:">Search by post owner.</option>
-      <!-- <option value="in:"></option> -->
+      <option value="from:">Search by post owner name.</option>
+      <option value="media:">
+        Search by inclusion of image or video. Accepts true or false.
+      </option>
     </datalist>
   </form>
 
@@ -76,12 +78,14 @@
     <Scroller
       disabled={disableScroller}
       attachmentCallback={async () => {
-        const [params, finalSearchString] = getFeedSearchParams(inputValue);
-        if (finalSearchString.length <= 0) {
+        const paramRes = getFeedSearchParams(inputValue);
+        if (!paramRes.success) {
           disableScroller = true;
           posts = [];
           return;
         }
+
+        const [params] = paramRes.data!;
 
         const res = await fetch(`/api/posts?${params}&page=${++pageIndex}`);
         const newData = await res.json();

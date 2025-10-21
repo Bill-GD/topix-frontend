@@ -7,11 +7,12 @@ export const actions: Actions = {
     const formData = await request.formData();
     const searchString = `${formData.get('search-string')}`;
 
-    const [params, finalSearchString] = getFeedSearchParams(searchString);
+    const paramRes = getFeedSearchParams(searchString);
 
-    if (finalSearchString.length <= 0) {
-      return fail(400, { success: false, message: 'No search query found' });
+    if (!paramRes.success) {
+      return fail(400, { success: false, message: paramRes.message });
     }
+    const [params, finalSearchString] = paramRes.data!;
 
     const res = await fetch(`/api/posts?${params}`);
     return {
