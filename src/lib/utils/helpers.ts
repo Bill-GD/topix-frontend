@@ -182,14 +182,21 @@ export function getFeedSearchParams(searchString: string, extra?: Map<string, st
     ?.split(':')
     .at(1);
   if (hasMedia && !['true', 'false'].includes(hasMedia)) hasMedia = undefined;
+  const tagName = parts
+    .find((e) => e.startsWith('tag:'))
+    ?.split(':')
+    .at(1);
 
-  parts = parts.filter((e) => !e.startsWith('from:') && !e.startsWith('media:'));
+  parts = parts.filter(
+    (e) => !e.startsWith('from:') && !e.startsWith('media:') && !e.startsWith('tag:'),
+  );
   const content = parts.join(' ');
 
   const params = new URLSearchParams();
   if (postBy) params.set('username', postBy);
   if (content) params.set('content', content);
   if (hasMedia) params.set('hasMedia', hasMedia);
+  if (tagName) params.set('tagName', tagName);
 
   if (extra) {
     extra.forEach((v, k) => params.set(k, v));

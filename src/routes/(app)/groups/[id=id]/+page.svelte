@@ -402,6 +402,7 @@
         <option value="media:">
           Search by inclusion of image or video. Accepts true or false.
         </option>
+        <option value="tag:">Search by tag name.</option>
       </datalist>
     </form>
   </ModalBody>
