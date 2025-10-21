@@ -1,21 +1,19 @@
 <script lang="ts">
-  import { enhance } from '$app/forms';
+  import { goto } from '$app/navigation';
+  import { page } from '$app/state';
   import { Input } from '$lib/components/input';
   import { Scroller } from '$lib/components/layout';
   import { Icon } from '$lib/components/misc';
   import { Post } from '$lib/components/post';
-  import { getToaster } from '$lib/components/toast';
-  import { formResultToast, getFeedSearchParams } from '$lib/utils/helpers';
-  import type { Post as PostType } from '$lib/utils/types';
+  import { getFeedSearchParams } from '$lib/utils/helpers';
   import type { PageProps } from './$types';
 
-  let { data, form }: PageProps = $props();
+  let { data }: PageProps = $props();
 
-  const toaster = getToaster();
-  let inputValue = $state<string>('');
-  let posts = $derived(form?.posts ?? []);
-  let searched = $state<boolean>(false);
-  let disableScroller = $derived(form?.endOfList ?? false);
+  let searchString = $derived<string>(decodeURIComponent(page.url.searchParams.get('q') ?? ''));
+  let posts = $derived(data.posts);
+  let searched = $derived<boolean>(page.url.searchParams.has('q'));
+  let disableScroller = $derived(data.endOfList);
   let pageIndex = 1;
 </script>
 
@@ -27,28 +25,14 @@
   <form
     class="relative"
     method="post"
-    use:enhance={() => {
-      return async ({ result, update }) => {
-        await update();
-
-        if (result.type === 'success') {
-          const formResult = result.data as {
-            posts: PostType[];
-            endOfList: boolean;
-            searchString: string;
-          };
-          posts = formResult.posts;
-          inputValue = formResult.searchString;
-          searched = true;
-        } else {
-          await formResultToast(result, toaster);
-        }
-      };
+    onsubmit={(ev) => {
+      ev.preventDefault();
+      goto(`?q=${encodeURIComponent(searchString)}`, { replaceState: true });
     }}
   >
     <Input
       name="search-string"
-      bind:value={inputValue}
+      bind:value={searchString}
       list="search-options"
       clearable
       placeholder="Search topix"
@@ -78,16 +62,9 @@
     <Scroller
       disabled={disableScroller}
       attachmentCallback={async () => {
-        const paramRes = getFeedSearchParams(inputValue);
-        if (!paramRes.success) {
-          disableScroller = true;
-          posts = [];
-          return;
-        }
-
-        const [params] = paramRes.data!;
-
-        const res = await fetch(`/api/posts?${params}&page=${++pageIndex}`);
+        const res = await fetch(
+          `/api/posts?${getFeedSearchParams(searchString)}&page=${++pageIndex}`,
+        );
         const newData = await res.json();
         disableScroller = res.headers.get('x-end-of-list') === 'true';
         posts = [...posts, ...newData];

@@ -171,23 +171,17 @@ export function tooltip(content: string): Attachment {
   };
 }
 
-export function getFeedSearchParams(searchString: string): {
-  success: boolean;
-  data?: [URLSearchParams, string];
-  message?: string;
-} {
+export function getFeedSearchParams(searchString: string) {
   let parts = searchString.split(' ');
   const postBy = parts
     .find((e) => e.startsWith('from:'))
     ?.split(':')
     .at(1);
-  const hasMedia = parts
+  let hasMedia = parts
     .find((e) => e.startsWith('media:'))
     ?.split(':')
     .at(1);
-  if (hasMedia && !['true', 'false'].includes(hasMedia)) {
-    return { success: false, message: 'Invalid query' };
-  }
+  if (hasMedia && !['true', 'false'].includes(hasMedia)) hasMedia = undefined;
 
   parts = parts.filter((e) => !e.startsWith('from:') && !e.startsWith('media:'));
   const content = parts.join(' ');
@@ -197,8 +191,5 @@ export function getFeedSearchParams(searchString: string): {
   if (content) params.set('content', content);
   if (hasMedia) params.set('hasMedia', hasMedia);
 
-  const finalSearchString = `${postBy ? `from:${postBy} ` : ''}${hasMedia ? `media:${hasMedia}` : ''}${parts.join(' ')}`;
-  if (finalSearchString.length <= 0) return { success: false, message: 'No search query found' };
-
-  return { success: true, data: [params, finalSearchString] };
+  return params;
 }
