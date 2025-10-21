@@ -3,7 +3,7 @@
   import { page } from '$app/state';
   import { Input } from '$lib/components/input';
   import { Scroller } from '$lib/components/layout';
-  import { Icon } from '$lib/components/misc';
+  import { Icon, ReturnHeader } from '$lib/components/misc';
   import { Post } from '$lib/components/post';
   import { getFeedSearchParams } from '$lib/utils/helpers';
   import type { PageProps } from './$types';
@@ -21,7 +21,8 @@
   <title>Search - topix</title>
 </svelte:head>
 
-<div class="mt-4 flex flex-col gap-4">
+<ReturnHeader>Search</ReturnHeader>
+<div class="flex flex-col gap-4">
   <form
     class="relative"
     method="post"
@@ -35,7 +36,7 @@
       bind:value={searchString}
       list="search-options"
       clearable
-      placeholder="Search topix"
+      placeholder="Search posts"
     >
       {#snippet prefixIcon()}
         <Icon class="text-zinc-500" type="search" size="sm" />

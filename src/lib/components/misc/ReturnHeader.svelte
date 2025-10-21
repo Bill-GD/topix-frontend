@@ -7,7 +7,7 @@
 </script>
 
 <!-- <div class="sticky top-0 border-r border-b border-gray-700 bg-zinc-950 py-4 text-center text-2xl"> -->
-<div class="flex items-center gap-4 p-2">
+<div class="flex items-center gap-4 py-2">
   <IconButton class="p-2" onclick={() => window.history.back()} round>
     <Icon type="back" size="sm" />
   </IconButton>
