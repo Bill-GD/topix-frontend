@@ -97,7 +97,7 @@
     {/each}
   {:else if tab === 'pending'}
     {#if data.members.length <= 0}
-      <p class="empty-noti-text">No pending members.</p>
+      <p class="notice-text">No pending members.</p>
     {:else}
       {#each members as user}
         <a

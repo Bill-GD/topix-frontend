@@ -4,8 +4,10 @@ import { CookieName, type Group } from '$lib/utils/types';
 import { type Actions, fail } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
-export const load: PageServerLoad = async ({ fetch }) => {
-  const res = await fetch('/api/groups');
+export const load: PageServerLoad = async ({ fetch, url }) => {
+  const searchString = url.searchParams.get('q');
+  const res = await fetch(`/api/groups${searchString ? `?name=${searchString}` : ''}`);
+
   return {
     groups: (await res.json()) as unknown as Group[],
     endOfList: res.headers.get('x-end-of-list') === 'true',

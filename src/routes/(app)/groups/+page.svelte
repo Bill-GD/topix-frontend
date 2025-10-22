@@ -1,7 +1,9 @@
 <script lang="ts">
   import { enhance } from '$app/forms';
+  import { goto } from '$app/navigation';
+  import { page } from '$app/state';
   import { Button } from '$lib/components/button';
-  import { FloatingLabelInput } from '$lib/components/input';
+  import { FloatingLabelInput, Input } from '$lib/components/input';
   import { Scroller } from '$lib/components/layout';
   import { Icon, ReturnHeader, VisibilitySelector } from '$lib/components/misc';
   import { Modal, ModalBody, ModalFooter, ModalHeader } from '$lib/components/modal';
@@ -17,6 +19,8 @@
   let showModal = $state<'create' | null>(null);
   let groupName = $state<string>('');
   let bannerValue = $state<string>('');
+  let searchString = $derived<string>(decodeURIComponent(page.url.searchParams.get('q') ?? ''));
+  let searched = $derived<boolean>(page.url.searchParams.has('q'));
   let pageIndex = 1;
   let disableScroller = $derived<boolean>(data.endOfList);
   let groups = $derived(data.groups);
@@ -33,17 +37,57 @@
 <ReturnHeader>Groups</ReturnHeader>
 
 <div class="flex flex-col gap-4">
-  <Button
-    class="flex w-fit items-center gap-2 self-end"
-    type="success"
-    onclick={() => (showModal = 'create')}
+  <form
+    class="relative"
+    method="post"
+    onsubmit={(ev) => {
+      ev.preventDefault();
+      goto(`?q=${encodeURIComponent(searchString)}`, { replaceState: true });
+    }}
   >
-    Create group
-    <Icon type="add" size="sm" />
-  </Button>
+    <Input
+      name="search-string"
+      bind:value={searchString}
+      clearable
+      placeholder="Search by group name"
+    >
+      {#snippet prefixIcon()}
+        <Icon class="text-zinc-500" type="search" size="sm" />
+      {/snippet}
+    </Input>
+  </form>
 
-  {#if data.groups.length <= 0}
-    <p class="p-4 text-center text-xl font-semibold">There are no group available in topix yet.</p>
+  <div class="flex justify-end">
+    {#if searched}
+      <Button
+        class="mr-auto"
+        type="dark"
+        outline
+        onclick={() => {
+          goto(`/groups`, { replaceState: true });
+        }}
+      >
+        Clear result
+      </Button>
+    {/if}
+    <Button
+      class="flex w-fit items-center gap-2"
+      type="success"
+      onclick={() => (showModal = 'create')}
+    >
+      Create group
+      <Icon type="add" size="sm" />
+    </Button>
+  </div>
+
+  {#if groups.length <= 0}
+    <p class="p-4 text-center text-xl font-semibold">
+      {#if searched}
+        No result found.
+      {:else}
+        There are no group available in topix yet.
+      {/if}
+    </p>
   {:else}
     {#each groups as group}
       <GroupOverview {group} showOwner />
@@ -52,14 +96,16 @@
     <Scroller
       disabled={disableScroller}
       attachmentCallback={async () => {
-        const res = await fetch(`/api/groups?page=${++pageIndex}`);
+        const res = await fetch(
+          `/api/groups?page=${++pageIndex}${searched ? `&name=${searchString}` : ''}`,
+        );
         const newData = await res.json();
         disableScroller = res.headers.get('x-end-of-list') === 'true';
         groups = [...groups, ...newData];
       }}
       detachCleanup={() => {
         pageIndex = 1;
-        disableScroller = false;
+        disableScroller = data.endOfList;
       }}
     />
   {/if}

@@ -28,21 +28,21 @@
 
   {#if tab === 'posts'}
     {#if data.posts!.length <= 0}
-      <p class="empty-noti-text">No hidden post.</p>
+      <p class="notice-text">No hidden post.</p>
     {/if}
     {#each data.posts! as post (post.id)}
       <Post self={data.self} {post} />
     {/each}
   {:else if tab === 'threads'}
     {#if data.threads!.length <= 0}
-      <p class="empty-noti-text">No hidden thread.</p>
+      <p class="notice-text">No hidden thread.</p>
     {/if}
     {#each data.threads! as thread (thread.id)}
       <ThreadOverview {thread} />
     {/each}
   {:else if tab === 'groups'}
     {#if data.groups!.length <= 0}
-      <p class="empty-noti-text">No hidden group.</p>
+      <p class="notice-text">No hidden group.</p>
     {/if}
     {#each data.groups! as group (group.id)}
       <a

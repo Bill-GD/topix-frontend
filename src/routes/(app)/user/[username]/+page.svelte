@@ -169,7 +169,7 @@
     {/if}
 
     {#if data.threads!.length <= 0}
-      <p class="empty-noti-text">This user has no thread.</p>
+      <p class="notice-text">This user has no thread.</p>
     {:else}
       {#each threads as thread}
         <ThreadOverview {thread} />

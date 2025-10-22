@@ -1,9 +1,10 @@
 <script lang="ts">
   import { enhance } from '$app/forms';
+  import { goto } from '$app/navigation';
   import { page } from '$app/state';
   import { Button, IconButton } from '$lib/components/button';
   import { DropdownItem, DropdownMenu } from '$lib/components/dropdown';
-  import { FloatingLabelInput } from '$lib/components/input';
+  import { FloatingLabelInput, Input } from '$lib/components/input';
   import { Scroller } from '$lib/components/layout';
   import { Tab, TabBar } from '$lib/components/link';
   import { Flair, Icon, ReturnHeader } from '$lib/components/misc';
@@ -12,7 +13,7 @@
   import { Post } from '$lib/components/post';
   import { getToaster } from '$lib/components/toast';
   import { PostUpload } from '$lib/components/upload';
-  import { capitalize, formResultToast } from '$lib/utils/helpers';
+  import { capitalize, formResultToast, tooltip } from '$lib/utils/helpers';
   import type { Tag } from '$lib/utils/types';
   import type { PageProps } from './$types';
 
@@ -21,8 +22,10 @@
   const toaster = getToaster();
   const tab = $derived(page.url.searchParams.get('tab') ?? 'posts');
   const items = ['posts', 'threads'];
-  let showModal = $state<'thread' | 'leave' | 'delete' | 'tag' | null>(null);
+  let showModal = $state<'thread' | 'leave' | 'delete' | 'tag' | 'search' | null>(null);
   let showTagModal = $state<boolean>(false);
+  let searchString = $derived<string>(decodeURIComponent(page.url.searchParams.get('q') ?? ''));
+  let searched = $derived<boolean>(page.url.searchParams.has('q'));
   let threadTitle = $state<string>('');
   let pageIndex = 1;
   let disableScroller = $derived({
@@ -73,6 +76,15 @@
         </div>
 
         <div class="ml-auto flex items-center gap-2">
+          {#if data.group.status === true}
+            <IconButton
+              class="p-2"
+              onclick={() => (showModal = 'search')}
+              {@attach tooltip('Search posts')}
+            >
+              <Icon type="search" size="sm" />
+            </IconButton>
+          {/if}
           {#if data.group.status !== null}
             <Button class="hover:bg-zinc-800" type="primary" disabled>
               {data.group.status ? 'Joined' : 'Pending'}
@@ -138,9 +150,15 @@
 
   {#if tab === 'posts'}
     {#if data.group.visibility === 'private' && !data.group.status}
-      <p class="empty-noti-text">You have to join to see posts of this group.</p>
-    {:else if data.posts!.length <= 0}
-      <p class="empty-noti-text">This group has no post.</p>
+      <p class="notice-text">You have to join to see posts of this group.</p>
+    {:else if posts!.length <= 0}
+      <p class="notice-text">
+        {#if searched}
+          No result found.
+        {:else}
+          This group has no post.
+        {/if}
+      </p>
     {:else}
       {#each posts as post (post.id)}
         <Post self={data.self} {post} />
@@ -164,9 +182,9 @@
     {/if}
   {:else if tab === 'threads'}
     {#if data.group.visibility === 'private' && !data.group.status}
-      <p class="empty-noti-text">You have to join to see threads of this group.</p>
+      <p class="notice-text">You have to join to see threads of this group.</p>
     {:else if data.threads!.length <= 0}
-      <p class="empty-noti-text">This group has no thread.</p>
+      <p class="notice-text">This group has no thread.</p>
     {:else}
       {#if data.group.status === true}
         <Button
@@ -309,7 +327,7 @@
   </ModalBody>
 </Modal>
 
-<Modal class="md:w-fit" show={showTagModal} backdropCallback={() => (showTagModal = false)} upper>
+<Modal show={showTagModal} backdropCallback={() => (showTagModal = false)} upper>
   <ModalHeader class="text-center">Select tag</ModalHeader>
   <ModalBody>
     <div class="flex flex-col gap-4">
@@ -353,4 +371,39 @@
       Remove
     </Button>
   </ModalFooter>
+</Modal>
+
+<Modal show={showModal === 'search'} backdropCallback={hideModal} center>
+  <ModalHeader>Search</ModalHeader>
+  <ModalBody>
+    <form
+      class="relative"
+      method="post"
+      onsubmit={(ev) => {
+        ev.preventDefault();
+        goto(`?q=${encodeURIComponent(searchString)}`, { replaceState: true });
+        showModal = null;
+      }}
+    >
+      <Input
+        name="search-string"
+        bind:value={searchString}
+        list="search-options"
+        clearable
+        placeholder="Search posts"
+      >
+        {#snippet prefixIcon()}
+          <Icon class="text-zinc-500" type="search" size="sm" />
+        {/snippet}
+      </Input>
+
+      <datalist id="search-options">
+        <option value="from:">Search by post owner name.</option>
+        <option value="media:">
+          Search by inclusion of image or video. Accepts true or false.
+        </option>
+        <option value="tag:">Search by tag name.</option>
+      </datalist>
+    </form>
+  </ModalBody>
 </Modal>

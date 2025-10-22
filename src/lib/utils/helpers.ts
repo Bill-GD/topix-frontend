@@ -170,3 +170,37 @@ export function tooltip(content: string): Attachment {
     return t.destroy;
   };
 }
+
+export function getFeedSearchParams(searchString: string, extra?: Map<string, string>) {
+  let parts = searchString.split(' ');
+  const postBy = parts
+    .find((e) => e.startsWith('from:'))
+    ?.split(':')
+    .at(1);
+  let hasMedia = parts
+    .find((e) => e.startsWith('media:'))
+    ?.split(':')
+    .at(1);
+  if (hasMedia && !['true', 'false'].includes(hasMedia)) hasMedia = undefined;
+  const tagName = parts
+    .find((e) => e.startsWith('tag:'))
+    ?.split(':')
+    .at(1);
+
+  parts = parts.filter(
+    (e) => !e.startsWith('from:') && !e.startsWith('media:') && !e.startsWith('tag:'),
+  );
+  const content = parts.join(' ');
+
+  const params = new URLSearchParams();
+  if (postBy) params.set('username', postBy);
+  if (content) params.set('content', content);
+  if (hasMedia) params.set('hasMedia', hasMedia);
+  if (tagName) params.set('tagName', tagName);
+
+  if (extra) {
+    extra.forEach((v, k) => params.set(k, v));
+  }
+
+  return params;
+}

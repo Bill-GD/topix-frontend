@@ -1,7 +1,10 @@
 import { AxiosHandler, handlePostDeletion, handleReaction } from '$lib/utils/axios-handler';
-import { getPostUploadForm } from '$lib/utils/helpers';
+import { getFeedSearchParams, getPostUploadForm } from '$lib/utils/helpers';
 import { CookieName, type Post, type Tag, type Thread } from '$lib/utils/types';
-import { type Actions, error, fail, isActionFailure, redirect } from '@sveltejs/kit';
+import {
+  type Actions, error, fail, isActionFailure,
+  redirect,
+} from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ cookies, params, url, parent, fetch }) => {
@@ -22,7 +25,21 @@ export const load: PageServerLoad = async ({ cookies, params, url, parent, fetch
 
   switch (tab) {
     case 'posts': {
-      const res = await fetch(`/api/posts?groupId=${params.id}&accepted=true`);
+      const searchString = url.searchParams.get('q');
+
+      const res = await fetch(
+        `/api/posts?${
+          searchString
+            ? getFeedSearchParams(
+                searchString,
+                new Map<string, string>([
+                  ['groupId', params.id],
+                  ['accepted', 'true'],
+                ]),
+              )
+            : `groupId=${params.id}&accepted=true`
+        }`,
+      );
 
       return {
         posts: (await res.json()) as unknown as Post[],

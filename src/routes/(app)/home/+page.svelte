@@ -34,7 +34,7 @@
     {/each}
   {:else if tab === 'following'}
     {#if data.posts!.length <= 0}
-      <p class="empty-noti-text">You haven't follow anyone or thread.</p>
+      <p class="notice-text">You haven't follow anyone or thread.</p>
     {:else}
       {#each posts as post (post.id)}
         <Post self={data.self} {post} showThreadAndGroupName />
