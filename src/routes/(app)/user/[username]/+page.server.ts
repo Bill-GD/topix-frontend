@@ -1,6 +1,9 @@
 import { AxiosHandler, handlePostDeletion, handleReaction } from '$lib/utils/axios-handler';
 import { getPostUploadForm } from '$lib/utils/helpers';
-import { CookieName, type Group, type Post, type Thread, type User } from '$lib/utils/types';
+import {
+  CookieName, type Group, type Post, type Thread,
+  type User,
+} from '$lib/utils/types';
 import { type Actions, error, fail, isActionFailure } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
@@ -22,7 +25,7 @@ export const load: PageServerLoad = async ({ parent, params, cookies, url, fetch
       );
       return {
         user,
-        posts: (await res.json()) as unknown as Post[],
+        posts: (await res.json()) as Post[],
         endOfList: res.headers.get('x-end-of-list') === 'true',
       };
     }
@@ -32,7 +35,7 @@ export const load: PageServerLoad = async ({ parent, params, cookies, url, fetch
       );
       return {
         user,
-        threads: (await res.json()) as unknown as Thread[],
+        threads: (await res.json()) as Thread[],
         endOfList: res.headers.get('x-end-of-list') === 'true',
       };
     }
@@ -40,7 +43,7 @@ export const load: PageServerLoad = async ({ parent, params, cookies, url, fetch
       const res = await fetch(`/api/groups?userId=${user.id}`);
       return {
         user,
-        groups: (await res.json()) as unknown as Group[],
+        groups: (await res.json()) as Group[],
         endOfList: res.headers.get('x-end-of-list') === 'true',
       };
     }
