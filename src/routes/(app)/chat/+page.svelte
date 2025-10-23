@@ -1,13 +1,19 @@
 <script lang="ts">
+  import { goto } from '$app/navigation';
+  import { page } from '$app/state';
+  import { Input } from '$lib/components/input';
   import { Scroller } from '$lib/components/layout';
-  import { ReturnHeader } from '$lib/components/misc';
-  import { getTimeAgo } from '@/lib/utils/helpers';
+  import { Icon, ReturnHeader } from '$lib/components/misc';
+  import { getTimeAgo } from '$lib/utils/helpers';
+  import { Button } from '@/lib/components/button';
   import type { PageProps } from './$types';
 
   let { data }: PageProps = $props();
   let channels = $derived(data.channels);
   let pageIndex = 1;
   let disableScroller = $derived(data.endOfList);
+  let searchString = $derived<string>(decodeURIComponent(page.url.searchParams.get('q') ?? ''));
+  let searched = $derived<boolean>(page.url.searchParams.has('q'));
   let others = $derived(
     data.channels.map((c) => {
       return data.self.id === c.firstUser.id ? c.secondUser : c.firstUser;
@@ -21,10 +27,44 @@
 
 <ReturnHeader>Chat</ReturnHeader>
 
-{#if channels.length <= 0}
-  <p class="notice-text">You have no chat channel yet.</p>
-{:else}
-  <div class="flex flex-col gap-4">
+<div class="flex flex-col gap-4">
+  <form
+    class="relative"
+    method="post"
+    onsubmit={(ev) => {
+      ev.preventDefault();
+      goto(`?q=${encodeURIComponent(searchString)}`, { replaceState: true });
+    }}
+  >
+    <Input name="search-string" bind:value={searchString} clearable placeholder="Search by name">
+      {#snippet prefixIcon()}
+        <Icon class="text-zinc-500" type="search" size="sm" />
+      {/snippet}
+    </Input>
+  </form>
+
+  {#if searched}
+    <Button
+      class="w-fit"
+      type="dark"
+      outline
+      onclick={() => {
+        goto(`/chat`, { replaceState: true });
+      }}
+    >
+      Clear result
+    </Button>
+  {/if}
+
+  {#if channels.length <= 0}
+    <p class="notice-text">
+      {#if searched}
+        No result found.
+      {:else}
+        You have no chat channel yet.
+      {/if}
+    </p>
+  {:else}
     {#each channels as channel, index (channel.id)}
       <!-- <p>{channel.id}: {channel.firstUser.username} - {channel.secondUser.username}</p> -->
       <a
@@ -49,7 +89,9 @@
     <Scroller
       disabled={disableScroller}
       attachmentCallback={async () => {
-        const res = await fetch(`/api/chat?page=${++pageIndex}`);
+        const res = await fetch(
+          `/api/chat?page=${++pageIndex}${searchString ? `&username=${searchString}` : ''}`,
+        );
         const newData = await res.json();
         if (newData.length <= 0) disableScroller = true;
         channels = [...channels!, ...newData];
@@ -59,5 +101,5 @@
         disableScroller = false;
       }}
     />
-  </div>
-{/if}
+  {/if}
+</div>
