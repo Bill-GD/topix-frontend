@@ -3,7 +3,7 @@
   import { Input } from '$lib/components/input';
   import { Scroller } from '$lib/components/layout';
   import { ReturnHeader } from '$lib/components/misc';
-  import { getApiUrl } from '$lib/utils/helpers';
+  import { getApiUrl, tooltip } from '$lib/utils/helpers';
   import type { ChatMessage } from '$lib/utils/types';
   import { io, Socket } from 'socket.io-client';
   import { onMount, tick } from 'svelte';
@@ -34,7 +34,7 @@
     });
 
     ws.on('send', async (data) => {
-      messages = [...messages, data];
+      messages = [data, ...messages];
       await tick();
       messageList.scrollTo({ top: messageList.scrollHeight });
     });
@@ -56,7 +56,10 @@
       src={message.sender.profilePicture ?? '/images/default-user-profile-icon.jpg'}
       alt="profile"
     />
-    <div class="rounded-md bg-zinc-100 px-3 py-2 dark:bg-zinc-800">
+    <div
+      class="rounded-md bg-zinc-100 px-3 py-2 dark:bg-zinc-800"
+      {@attach tooltip(new Date(message.sentAt).toLocaleString(), 'right')}
+    >
       {message.content}
     </div>
   </div>
@@ -75,7 +78,7 @@
     >
   </div>
 
-  <div class="flex h-full flex-col-reverse gap-4 overflow-y-scroll" bind:this={messageList}>
+  <div class="flex h-full flex-col-reverse overflow-y-scroll" bind:this={messageList}>
     {#each messages as message}
       {@render messageSnippet(message)}
     {/each}

@@ -1,7 +1,7 @@
 import { API_PORT, API_SERVER } from '$env/static/public';
 import { Toaster } from '$lib/components/toast';
 import type { Attachment } from 'svelte/attachments';
-import tippy from 'tippy.js';
+import tippy, { type Placement } from 'tippy.js';
 import { type ActionResult, type Cookies, fail } from '@sveltejs/kit';
 import { CookieName } from './types';
 
@@ -72,7 +72,7 @@ export function getReadableSize(byte: number): string {
 }
 
 export function getTimeAgo(ms: number, hasAgo: boolean = false): string {
-  const diffInSec = Math.trunc((Date.now() - ms + 25200000) / 1000);
+  const diffInSec = Math.trunc((Date.now() - ms) / 1000);
 
   // 2 weeks
   if (diffInSec > 1209600) {
@@ -161,10 +161,11 @@ export async function getPostUploadForm(request: Request) {
   return form;
 }
 
-export function tooltip(content: string): Attachment {
+export function tooltip(content: string, placement?: Placement): Attachment {
   return (node: Element) => {
     const t = tippy(node, {
       content,
+      placement,
       arrow: true,
     });
     return t.destroy;
