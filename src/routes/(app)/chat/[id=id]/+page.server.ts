@@ -7,6 +7,7 @@ export const load: PageServerLoad = async ({ cookies, params, fetch }) => {
   return {
     channel: (await channelRes.json()) as ChatChannel,
     messages: (await messagesRes.json()) as ChatMessage[],
+    endOfList: messagesRes.headers.get('x-end-of-list') === 'true',
     token: cookies.get(CookieName.accessToken),
   };
 };
