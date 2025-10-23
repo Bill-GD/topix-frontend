@@ -18,9 +18,23 @@
   let pageIndex = 1;
   let disableScroller = $derived(data.endOfList);
   let messages = $derived<ChatMessage[]>(data.messages);
+  let grouping = $derived(getMessagesGrouping(messages));
   let messageInput = $state<string>('');
   let event = $state<string>('');
   let messageList: Element;
+
+  function getMessagesGrouping(messages: ChatMessage[]) {
+    const merge = [];
+    let prevSender = -1;
+
+    for (let i = messages.length - 1; i >= 0; i--) {
+      const curSender = messages[i].sender.id;
+      merge.unshift(curSender === prevSender);
+      prevSender = curSender;
+    }
+
+    return merge;
+  }
 
   onMount(() => {
     ws.on('connect', () => {
@@ -49,22 +63,6 @@
 
 <ReturnHeader>Chat with {otherUser.displayName}</ReturnHeader>
 
-{#snippet messageSnippet(message: ChatMessage)}
-  <div class="flex max-w-3/4 items-center gap-2">
-    <img
-      class="profile-picture-sm"
-      src={message.sender.profilePicture ?? '/images/default-user-profile-icon.jpg'}
-      alt="profile"
-    />
-    <div
-      class="rounded-md bg-zinc-100 px-3 py-2 dark:bg-zinc-800"
-      {@attach tooltip(new Date(message.sentAt).toLocaleString(), 'right')}
-    >
-      {message.content}
-    </div>
-  </div>
-{/snippet}
-
 <div class="flex h-[calc(100dvh-(var(--header-height)*2.2))] flex-col box">
   <div class="flex items-center gap-2 pb-4">
     <img
@@ -79,11 +77,28 @@
   </div>
 
   <div class="flex h-full flex-col-reverse overflow-y-scroll" bind:this={messageList}>
-    {#each messages as message}
-      {@render messageSnippet(message)}
+    {#each messages as message, index}
+      <div class={['flex items-center gap-2 md:max-w-3/4', grouping[index] ? 'mt-1' : 'mt-3']}>
+        {#if grouping[index]}
+          <div class="w-10"></div>
+        {:else}
+          <img
+            class="profile-picture-sm"
+            src={message.sender.profilePicture ?? '/images/default-user-profile-icon.jpg'}
+            alt="profile"
+          />
+        {/if}
+        <div
+          class="rounded-md bg-zinc-100 px-3 py-2 dark:bg-zinc-800"
+          {@attach tooltip(new Date(message.sentAt).toLocaleString('en-GB'))}
+        >
+          {message.content}
+        </div>
+      </div>
     {/each}
 
     <Scroller
+      endedText="No more messages."
       disabled={disableScroller}
       attachmentCallback={async () => {
         const res = await fetch(`/api/chat?id=${params.id}&messages&page=${++pageIndex}`);
