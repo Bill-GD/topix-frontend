@@ -1,11 +1,11 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
   import { page } from '$app/state';
+  import { Button } from '$lib/components/button';
   import { Input } from '$lib/components/input';
   import { Scroller } from '$lib/components/layout';
   import { Icon, ReturnHeader } from '$lib/components/misc';
   import { getTimeAgo } from '$lib/utils/helpers';
-  import { Button } from '@/lib/components/button';
   import type { PageProps } from './$types';
 
   let { data }: PageProps = $props();
@@ -77,8 +77,12 @@
           alt="profile"
         />
         <div class="flex flex-col gap-2">
-          <span class="font-semibold">{others[index].displayName}</span>
-          <span class="text-zinc-400">{channel.lastMessage ?? 'No message'}</span>
+          <span class="line-clamp-1 font-semibold overflow-ellipsis">
+            {others[index].displayName}
+          </span>
+          <span class="line-clamp-1 overflow-ellipsis text-zinc-400">
+            {channel.lastMessage ?? 'No message'}
+          </span>
         </div>
         <span class="mr-2 ml-auto text-zinc-400">
           {getTimeAgo(Date.parse(channel.lastSentAt ?? channel.dateCreated))}

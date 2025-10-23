@@ -4,9 +4,10 @@ import { error, json } from '@sveltejs/kit';
 
 export async function GET({ cookies, url }) {
   const channelId = url.searchParams.get('id') ?? '';
+  const messages = url.searchParams.has('messages') && channelId !== '' ? '/messages' : '';
 
   const res = await AxiosHandler.get(
-    `/chat/${channelId}${url.search}`,
+    `/chat/${channelId}${messages}${url.search}`,
     cookies.get(CookieName.accessToken),
   );
   if (!res.success) error(res.status, res.message);

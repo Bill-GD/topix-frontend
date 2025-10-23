@@ -120,4 +120,11 @@ export type ChatChannel = {
   dateCreated: string;
 };
 
+export type ChatMessage = {
+  id: number;
+  sender: Owner;
+  content: string;
+  sentAt: string;
+};
+
 export type UnaryVoidFunction<T> = (arg: T) => void;
