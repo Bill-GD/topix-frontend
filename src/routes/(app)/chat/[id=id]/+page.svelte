@@ -1,8 +1,9 @@
 <script lang="ts">
-  import { Button } from '$lib/components/button';
+  import { Button, IconButton } from '$lib/components/button';
+  import { DropdownItem, DropdownMenu } from '$lib/components/dropdown';
   import { Input } from '$lib/components/input';
   import { Scroller } from '$lib/components/layout';
-  import { ReturnHeader } from '$lib/components/misc';
+  import { Icon, ReturnHeader } from '$lib/components/misc';
   import { getApiUrl, tooltip } from '$lib/utils/helpers';
   import type { ChatMessage } from '$lib/utils/types';
   import { io, Socket } from 'socket.io-client';
@@ -15,12 +16,11 @@
     data.self.id === data.channel.firstUser.id ? data.channel.secondUser : data.channel.firstUser,
   );
   let ws: Socket = io(`${getApiUrl()}/chatws`, { auth: { token: `Bearer ${data.token}` } });
-  let pageIndex = 1;
   let disableScroller = $derived(data.endOfList);
   let messages = $derived(processMessageList(data.messages));
   let messageInput = $state<string>('');
-  let event = $state<string>('');
-  let messageList: Element;
+  let hoverId = $state<number>(-1);
+  let messageContainer: Element;
 
   function processMessageList(messages: ChatMessage[]) {
     const res = [];
@@ -49,9 +49,7 @@
 
   onMount(() => {
     ws.on('connect', () => {
-      ws.emit('join', { channelId: params.id }, (data: any) => {
-        event = `${data}`;
-      });
+      ws.emit('join', { channelId: params.id });
     });
 
     ws.on('connect_error', (err) => {
@@ -61,10 +59,17 @@
     ws.on('send', async (data) => {
       messages = processMessageList([data, ...messages.map((e) => e.message)]);
       await tick();
-      messageList.scrollTo({ top: messageList.scrollHeight });
+      messageContainer.scrollTo({ top: messageContainer.scrollHeight });
     });
 
-    messageList.scrollTo({ top: messageList.scrollHeight });
+    ws.on('remove', async (data) => {
+      const msgIndex = messages.findIndex((e) => e.message.id === data);
+      messages = processMessageList(
+        [...messages.slice(0, msgIndex), ...messages.slice(msgIndex + 1)].map((e) => e.message),
+      );
+    });
+
+    messageContainer.scrollTo({ top: messageContainer.scrollHeight });
   });
 </script>
 
@@ -87,10 +92,17 @@
     >
   </div>
 
-  <div class="flex scrollbar h-full flex-col-reverse overflow-y-scroll" bind:this={messageList}>
+  <div
+    class="flex scrollbar h-full flex-col-reverse overflow-y-scroll"
+    bind:this={messageContainer}
+  >
     {#each messages as { message, hideSender, showTimeDivider }}
       <div
-        class={['flex max-w-11/12 items-center gap-2 md:max-w-3/4', hideSender ? 'mt-px' : 'mt-2']}
+        class={['flex items-center gap-2 ', hideSender ? 'mt-px' : 'mt-2']}
+        onmouseenter={() => (hoverId = message.id)}
+        onmouseleave={() => (hoverId = -1)}
+        tabindex="-1"
+        role="dialog"
       >
         {#if hideSender}
           <div class="profile-picture-xs sm:profile-picture-sm"></div>
@@ -102,11 +114,28 @@
           />
         {/if}
         <div
-          class="rounded-md bg-zinc-100 px-3 py-2 dark:bg-zinc-800"
+          class="max-w-5/6 rounded-md bg-zinc-100 px-3 py-2 md:max-w-3/4 dark:bg-zinc-800"
           {@attach tooltip(new Date(message.sentAt).toLocaleString('en-GB'))}
         >
           {message.content}
         </div>
+
+        {#if data.self.id === message.sender.id && message.id === hoverId}
+          <DropdownMenu class="h-fit" position="top" align="right">
+            {#snippet trigger()}
+              <IconButton class="p-1" round>
+                <Icon class="text-zinc-500" type="menu" size="sm" />
+              </IconButton>
+            {/snippet}
+
+            <DropdownItem
+              class="text-red-500"
+              onclick={() => ws.emit('remove', { channelId: params.id, messageId: message.id })}
+            >
+              Delete
+            </DropdownItem>
+          </DropdownMenu>
+        {/if}
       </div>
       {#if showTimeDivider}
         <p class="mt-4 mb-2 text-center text-sm font-semibold text-zinc-500">
@@ -127,7 +156,6 @@
         messages = processMessageList([...messages.map((e) => e.message), ...newData]);
       }}
       detachCleanup={() => {
-        pageIndex = 1;
         disableScroller = false;
       }}
     />
