@@ -382,7 +382,7 @@
       onsubmit={(ev) => {
         ev.preventDefault();
         goto(`?q=${encodeURIComponent(searchString)}`, { replaceState: true });
-        showModal = null;
+        hideModal();
       }}
     >
       <Input

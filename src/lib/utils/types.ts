@@ -113,8 +113,8 @@ export type Group = {
 
 export type ChatChannel = {
   id: number;
-  firstUser: Owner;
-  secondUser: Owner;
+  firstUser: Owner | null;
+  secondUser: Owner | null;
   lastMessage: string | null;
   newMessageCount: number;
   lastSentAt: string | null;

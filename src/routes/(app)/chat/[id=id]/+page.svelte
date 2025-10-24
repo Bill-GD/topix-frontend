@@ -1,10 +1,13 @@
 <script lang="ts">
+  import { enhance } from '$app/forms';
   import { Button, IconButton } from '$lib/components/button';
   import { DropdownItem, DropdownMenu } from '$lib/components/dropdown';
   import { Input } from '$lib/components/input';
   import { Scroller } from '$lib/components/layout';
   import { Icon, ReturnHeader } from '$lib/components/misc';
-  import { getApiUrl, tooltip } from '$lib/utils/helpers';
+  import { Modal, ModalBody, ModalFooter, ModalHeader } from '$lib/components/modal';
+  import { getToaster } from '$lib/components/toast';
+  import { formResultToast, getApiUrl, tooltip } from '$lib/utils/helpers';
   import type { ChatMessage } from '$lib/utils/types';
   import { io, Socket } from 'socket.io-client';
   import { onMount, tick } from 'svelte';
@@ -12,10 +15,12 @@
 
   let { data, params }: PageProps = $props();
 
+  const toaster = getToaster();
   const otherUser = $derived(
-    data.self.id === data.channel.firstUser.id ? data.channel.secondUser : data.channel.firstUser,
+    data.self.id === data.channel.firstUser?.id ? data.channel.secondUser : data.channel.firstUser,
   );
   let ws: Socket = io(`${getApiUrl()}/chatws`, { auth: { token: `Bearer ${data.token}` } });
+  let showModal = $state<'delete' | null>(null);
   let disableScroller = $derived(data.endOfList);
   let messages = $derived(processMessageList(data.messages));
   let messageInput = $state<string>('');
@@ -45,6 +50,10 @@
     }
 
     return res;
+  }
+
+  function hideModal() {
+    showModal = null;
   }
 
   onMount(() => {
@@ -79,19 +88,25 @@
   <title>Chat - topix</title>
 </svelte:head>
 
-<ReturnHeader>Chat with {otherUser.displayName}</ReturnHeader>
+<ReturnHeader>Chat with {otherUser?.displayName ?? '[Deleted user]'}</ReturnHeader>
 
 <div class="flex h-[calc(100dvh-(var(--header-height)*2.2))] flex-col box">
   <div class="flex items-center gap-2 pb-4">
     <img
       class="profile-picture-sm"
-      src={otherUser.profilePicture ?? '/images/default-user-profile-icon.jpg'}
+      src={otherUser?.profilePicture ?? '/images/default-user-profile-icon.jpg'}
       alt="profile"
     />
     <a
       class="z-1 font-semibold text-black hover:underline dark:text-white dark:decoration-white"
-      href="/user/{otherUser.username}">{otherUser.displayName}</a
+      href={otherUser ? '/user/{otherUser.username}' : ''}
     >
+      {otherUser?.displayName ?? '[Deleted user]'}
+    </a>
+
+    <IconButton class="ml-auto p-2 hover:bg-zinc-300" onclick={() => (showModal = 'delete')}>
+      <Icon type="delete" class="text-red-500" size="sm" />
+    </IconButton>
   </div>
 
   <div
@@ -122,7 +137,7 @@
           {message.content}
         </div>
 
-        {#if data.self.id === message.sender.id && message.id === hoverId}
+        {#if data.self.id === message.sender.id && message.id === hoverId && otherUser}
           <DropdownMenu class="h-fit" position="top" align="right">
             {#snippet trigger()}
               <IconButton class="p-1" round>
@@ -163,16 +178,43 @@
     />
   </div>
 
-  <form
-    class="flex gap-2 pt-4"
-    method="post"
-    onsubmit={(ev) => {
-      ev.preventDefault();
-      ws.emit('send', { channelId: params.id, content: messageInput });
-      messageInput = '';
-    }}
-  >
-    <Input bind:value={messageInput} placeholder="Send a message" />
-    <Button type="success">Send</Button>
-  </form>
+  {#if otherUser}
+    <form
+      class="flex gap-2 pt-4"
+      method="post"
+      onsubmit={(ev) => {
+        ev.preventDefault();
+        ws.emit('send', { channelId: params.id, content: messageInput });
+        messageInput = '';
+      }}
+    >
+      <Input bind:value={messageInput} placeholder="Send a message" />
+      <Button type="success">Send</Button>
+    </form>
+  {:else}
+    <p class="pt-4 text-center">You can no longer send message.</p>
+  {/if}
 </div>
+
+<Modal show={showModal === 'delete'} backdropCallback={hideModal} center>
+  <ModalHeader>Delete chat channel</ModalHeader>
+  <ModalBody>
+    Are you sure you want to delete this channel? All messages will be unrecoverable.
+  </ModalBody>
+  <ModalFooter>
+    <form
+      class="w-full"
+      action="?/delete-channel"
+      method="post"
+      use:enhance={() => {
+        return async ({ result, update }) => {
+          await formResultToast(result, toaster, 'Deleted chat successfully');
+          await update();
+        };
+      }}
+    >
+      <Button class="w-full" type="danger" onclick={hideModal}>Delete</Button>
+    </form>
+    <Button class="w-full" type="dark" onclick={hideModal}>Cancel</Button>
+  </ModalFooter>
+</Modal>

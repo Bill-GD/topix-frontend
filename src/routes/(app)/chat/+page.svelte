@@ -16,7 +16,7 @@
   let searched = $derived<boolean>(page.url.searchParams.has('q'));
   let others = $derived(
     data.channels.map((c) => {
-      return data.self.id === c.firstUser.id ? c.secondUser : c.firstUser;
+      return data.self.id === c.firstUser?.id ? c.secondUser : c.firstUser;
     }),
   );
 </script>
@@ -66,19 +66,18 @@
     </p>
   {:else}
     {#each channels as channel, index (channel.id)}
-      <!-- <p>{channel.id}: {channel.firstUser.username} - {channel.secondUser.username}</p> -->
       <a
         class="flex items-center gap-4 box p-2 hover:bg-zinc-100 dark:hover:bg-zinc-800/80"
         href="/chat/{channel.id}"
       >
         <img
           class="profile-picture-sm md:profile-picture-md md:p-2"
-          src={others[index].profilePicture ?? '/images/default-user-profile-icon.jpg'}
+          src={others[index]?.profilePicture ?? '/images/default-user-profile-icon.jpg'}
           alt="profile"
         />
         <div class="flex flex-col gap-2">
           <span class="line-clamp-1 font-semibold overflow-ellipsis">
-            {others[index].displayName}
+            {others[index]?.displayName ?? '[Deleted user]'}
           </span>
           <span class="line-clamp-1 overflow-ellipsis text-zinc-400">
             {channel.lastMessage ?? 'No message'}
