@@ -116,6 +116,7 @@ export type ChatChannel = {
   firstUser: Owner;
   secondUser: Owner;
   lastMessage: string | null;
+  newMessageCount: number;
   lastSentAt: string | null;
   dateCreated: string;
 };

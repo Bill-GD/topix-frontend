@@ -84,9 +84,16 @@
             {channel.lastMessage ?? 'No message'}
           </span>
         </div>
-        <span class="mr-2 ml-auto text-zinc-400">
-          {getTimeAgo(Date.parse(channel.lastSentAt ?? channel.dateCreated))}
-        </span>
+        <div class="mr-2 ml-auto flex items-center gap-2">
+          {#if channel.newMessageCount > 0}
+            <span class="rounded-full bg-red-500 px-2 font-semibold text-white">
+              {channel.newMessageCount}
+            </span>
+          {/if}
+          <span class="text-zinc-400">
+            {getTimeAgo(Date.parse(channel.lastSentAt ?? channel.dateCreated))}
+          </span>
+        </div>
       </a>
     {/each}
 
