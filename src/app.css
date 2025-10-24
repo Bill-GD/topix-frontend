@@ -48,13 +48,17 @@ input::-webkit-calendar-picker-indicator {
   @apply aspect-square h-10 w-10 rounded-full object-contain;
 }
 
+@utility profile-picture-xs {
+  @apply aspect-square h-5 w-5 rounded-full object-contain;
+}
+
 @utility scrollbar {
   &::-webkit-scrollbar {
-    @apply h-3;
+    @apply h-3 w-1;
   }
 
   &::-webkit-scrollbar-track {
-    @apply rounded-md bg-zinc-800;
+    @apply rounded-md bg-transparent;
   }
 
   &::-webkit-scrollbar-thumb {

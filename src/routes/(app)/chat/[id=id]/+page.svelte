@@ -17,23 +17,34 @@
   let ws: Socket = io(`${getApiUrl()}/chatws`, { auth: { token: `Bearer ${data.token}` } });
   let pageIndex = 1;
   let disableScroller = $derived(data.endOfList);
-  let messages = $derived<ChatMessage[]>(data.messages);
-  let grouping = $derived(getMessagesGrouping(messages));
+  let messages = $derived(processMessageList(data.messages));
   let messageInput = $state<string>('');
   let event = $state<string>('');
   let messageList: Element;
 
-  function getMessagesGrouping(messages: ChatMessage[]) {
-    const merge = [];
-    let prevSender = -1;
+  function processMessageList(messages: ChatMessage[]) {
+    const res = [];
+    let prevSender = -1,
+      prevTime = -1;
 
     for (let i = messages.length - 1; i >= 0; i--) {
-      const curSender = messages[i].sender.id;
-      merge.unshift(curSender === prevSender);
+      const curSender = messages[i].sender.id,
+        curTime = Date.parse(messages[i].sentAt);
+
+      const showTimeDivider = curTime - prevTime > 600000;
+      prevTime = curTime;
+
+      const hideSender = !showTimeDivider && curSender === prevSender;
       prevSender = curSender;
+
+      res.unshift({
+        message: messages[i],
+        hideSender,
+        showTimeDivider,
+      });
     }
 
-    return merge;
+    return res;
   }
 
   onMount(() => {
@@ -48,7 +59,7 @@
     });
 
     ws.on('send', async (data) => {
-      messages = [data, ...messages];
+      messages = processMessageList([data, ...messages.map((e) => e.message)]);
       await tick();
       messageList.scrollTo({ top: messageList.scrollHeight });
     });
@@ -76,14 +87,16 @@
     >
   </div>
 
-  <div class="flex h-full flex-col-reverse overflow-y-scroll" bind:this={messageList}>
-    {#each messages as message, index}
-      <div class={['flex items-center gap-2 md:max-w-3/4', grouping[index] ? 'mt-1' : 'mt-3']}>
-        {#if grouping[index]}
-          <div class="w-10"></div>
+  <div class="flex scrollbar h-full flex-col-reverse overflow-y-scroll" bind:this={messageList}>
+    {#each messages as { message, hideSender, showTimeDivider }}
+      <div
+        class={['flex max-w-11/12 items-center gap-2 md:max-w-3/4', hideSender ? 'mt-px' : 'mt-2']}
+      >
+        {#if hideSender}
+          <div class="profile-picture-xs sm:profile-picture-sm"></div>
         {:else}
           <img
-            class="profile-picture-sm"
+            class="profile-picture-xs sm:profile-picture-sm"
             src={message.sender.profilePicture ?? '/images/default-user-profile-icon.jpg'}
             alt="profile"
           />
@@ -95,16 +108,23 @@
           {message.content}
         </div>
       </div>
+      {#if showTimeDivider}
+        <p class="mt-4 mb-2 text-center text-sm font-semibold text-zinc-500">
+          {new Date(message.sentAt).toLocaleString('en-gb')}
+        </p>
+      {/if}
     {/each}
 
     <Scroller
       endedText="No more messages."
       disabled={disableScroller}
       attachmentCallback={async () => {
-        const res = await fetch(`/api/chat?id=${params.id}&messages&page=${++pageIndex}`);
+        const res = await fetch(
+          `/api/chat?id=${params.id}&messages&timestamp=${Date.parse(messages.at(-1)!.message.sentAt)}`,
+        );
         const newData = await res.json();
         disableScroller = res.headers.get('x-end-of-list') === 'true';
-        messages = [...messages!, ...newData];
+        messages = processMessageList([...messages.map((e) => e.message), ...newData]);
       }}
       detachCleanup={() => {
         pageIndex = 1;
