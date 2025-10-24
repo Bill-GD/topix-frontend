@@ -50,6 +50,7 @@
   onMount(() => {
     ws.on('connect', () => {
       ws.emit('join', { channelId: params.id });
+      ws.emit('seen', { channelId: params.id });
     });
 
     ws.on('connect_error', (err) => {
@@ -60,6 +61,7 @@
       messages = processMessageList([data, ...messages.map((e) => e.message)]);
       await tick();
       messageContainer.scrollTo({ top: messageContainer.scrollHeight });
+      ws.emit('seen', { channelId: params.id });
     });
 
     ws.on('remove', async (data) => {
