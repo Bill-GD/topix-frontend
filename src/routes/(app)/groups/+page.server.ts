@@ -9,7 +9,7 @@ export const load: PageServerLoad = async ({ fetch, url }) => {
   const res = await fetch(`/api/groups${searchString ? `?name=${searchString}` : ''}`);
 
   return {
-    groups: (await res.json()) as unknown as Group[],
+    groups: (await res.json()) as Group[],
     endOfList: res.headers.get('x-end-of-list') === 'true',
   };
 };

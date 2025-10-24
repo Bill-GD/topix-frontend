@@ -81,7 +81,7 @@
   </div>
 
   {#if groups.length <= 0}
-    <p class="p-4 text-center text-xl font-semibold">
+    <p class="notice-text">
       {#if searched}
         No result found.
       {:else}

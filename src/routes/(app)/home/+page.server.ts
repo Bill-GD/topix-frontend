@@ -10,14 +10,14 @@ export const load: PageServerLoad = async ({ url, fetch }) => {
     case 'new': {
       const res = await fetch('/api/posts');
       return {
-        posts: (await res.json()) as unknown as Post[],
+        posts: (await res.json()) as Post[],
         endOfList: res.headers.get('x-end-of-list') === 'true',
       };
     }
     case 'following': {
       const res = await fetch('/api/posts?following');
       return {
-        posts: (await res.json()) as unknown as Post[],
+        posts: (await res.json()) as Post[],
         endOfList: res.headers.get('x-end-of-list') === 'true',
       };
     }

@@ -7,7 +7,7 @@ export const load: PageServerLoad = async ({ params, fetch }) => {
   const res = await fetch(`/api/posts?groupId=${params.id}&threadId=null&accepted=false`);
 
   return {
-    posts: (await res.json()) as unknown as Post[],
+    posts: (await res.json()) as Post[],
     endOfList: res.headers.get('x-end-of-list') === 'true',
   };
 };

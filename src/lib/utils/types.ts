@@ -40,6 +40,7 @@ export type User = {
   followerCount: number;
   followingCount: number;
   followed: boolean;
+  chatChannelId: number | null;
   role: 'user' | 'admin';
 };
 
@@ -107,7 +108,24 @@ export type Group = {
   status: boolean | null;
   dateJoined: string | null;
   dateCreated: string;
-  dateUpdated: string;
+  dateUpdated: string | null;
+};
+
+export type ChatChannel = {
+  id: number;
+  firstUser: Owner | null;
+  secondUser: Owner | null;
+  lastMessage: string | null;
+  newMessageCount: number;
+  lastSentAt: string | null;
+  dateCreated: string;
+};
+
+export type ChatMessage = {
+  id: number;
+  sender: Owner;
+  content: string;
+  sentAt: string;
 };
 
 export type UnaryVoidFunction<T> = (arg: T) => void;

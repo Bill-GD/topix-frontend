@@ -13,7 +13,7 @@ export const load: PageServerLoad = async ({ params, url, fetch }) => {
   const res = await fetch(`/api/groups?id=${params.id}&members&accepted=${accepted}`);
 
   return {
-    members: (await res.json()) as unknown as {
+    members: (await res.json()) as {
       id: number;
       username: string;
       displayName: string;

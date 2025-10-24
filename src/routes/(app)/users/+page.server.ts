@@ -7,7 +7,7 @@ export const load: PageServerLoad = async ({ fetch, url }) => {
   const searchString = url.searchParams.get('q');
   const res = await fetch(`/api/users${searchString ? `?name=${searchString}` : ''}`);
   return {
-    users: (await res.json()) as unknown as User[],
+    users: (await res.json()) as User[],
     endOfList: res.headers.get('x-end-of-list') === 'true',
   };
 };

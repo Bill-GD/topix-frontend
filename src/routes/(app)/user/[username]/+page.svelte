@@ -1,5 +1,6 @@
 <script lang="ts">
   import { enhance } from '$app/forms';
+  import { goto } from '$app/navigation';
   import { page } from '$app/state';
   import { Button, IconButton } from '$lib/components/button';
   import { DropdownItem, DropdownMenu } from '$lib/components/dropdown';
@@ -79,9 +80,26 @@
             <DropdownItem href="/user/{data.self.username}/hidden">View hidden items</DropdownItem>
           </DropdownMenu>
         {:else}
-          <IconButton type="dark" class="w-full" {@attach tooltip('Message')}>
+          <IconButton
+            type="dark"
+            class="w-full"
+            {@attach tooltip('Message')}
+            onclick={async () => {
+              if (data.user.chatChannelId) goto(`/chat/${data.user.chatChannelId}`);
+              else {
+                const res = await fetch('/api/chat?channel', {
+                  method: 'post',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ targetId: data.user.id }),
+                });
+                data.user.chatChannelId = Number(await res.json());
+                goto(`/chat/${data.user.chatChannelId}`);
+              }
+            }}
+          >
             <Icon type="message" size="sm" />
           </IconButton>
+
           {#if data.user.followed}
             <form
               action="?/unfollow"

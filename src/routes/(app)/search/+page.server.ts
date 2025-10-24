@@ -8,7 +8,7 @@ export const load: PageServerLoad = async ({ url, fetch }) => {
 
   const res = await fetch(`/api/posts?${getFeedSearchParams(searchString)}`);
   return {
-    posts: (await res.json()) as unknown as Post[],
+    posts: (await res.json()) as Post[],
     endOfList: res.headers.get('x-end-of-list') === 'true',
   };
 };

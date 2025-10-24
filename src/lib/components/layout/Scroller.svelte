@@ -2,11 +2,13 @@
   let {
     disabled,
     hideText = false,
+    endedText = 'You reached the end.',
     attachmentCallback,
     detachCleanup,
   }: {
     disabled?: boolean;
     hideText?: boolean;
+    endedText?: string;
     attachmentCallback: () => Promise<void>;
     detachCleanup: VoidFunction;
   } = $props();
@@ -36,7 +38,7 @@
     {#if isFetching}
       Loading more...
     {:else if disabled}
-      You reached the end.
+      {endedText}
     {:else}
       Load more.
     {/if}

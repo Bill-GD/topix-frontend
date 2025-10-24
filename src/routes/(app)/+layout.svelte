@@ -83,8 +83,8 @@
     </DropdownMenu>
   </header>
 
-  <div class="relative mt-(--header-height) flex gap-4">
-    <aside class="sticky top-0 hidden h-dvh flex-col items-center gap-4 p-3 lg:flex">
+  <div class="relative flex gap-4 pt-(--header-height)">
+    <aside class="sticky top-0 hidden h-full flex-col items-center gap-4 p-3 lg:flex">
       {@render sidebar()}
     </aside>
 

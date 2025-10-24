@@ -42,7 +42,7 @@ export const load: PageServerLoad = async ({ cookies, params, url, parent, fetch
       );
 
       return {
-        posts: (await res.json()) as unknown as Post[],
+        posts: (await res.json()) as Post[],
         tags: tagsRes.data as unknown as Tag[],
         endOfList: res.headers.get('x-end-of-list') === 'true',
       };
@@ -51,7 +51,7 @@ export const load: PageServerLoad = async ({ cookies, params, url, parent, fetch
       const res = await fetch(`/api/threads?groupId=${params.id}`);
 
       return {
-        threads: (await res.json()) as unknown as Thread[],
+        threads: (await res.json()) as Thread[],
         tags: tagsRes.data as unknown as Tag[],
         endOfList: res.headers.get('x-end-of-list') === 'true',
       };
