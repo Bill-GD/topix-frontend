@@ -143,6 +143,8 @@ export type Notification = {
   type: NotificationTypes;
   objectId: number;
   dateCreated: string;
+  postContent: string | null;
+  threadTitle: string | null;
 };
 
 export type UnaryVoidFunction<T> = (arg: T) => void;

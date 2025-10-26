@@ -14,9 +14,9 @@
   function getAction(type: NotificationTypes) {
     switch (type) {
       case 'react':
-        return 'reacted to your <b>post</b>.';
+        return 'reacted to your <b>post</b>';
       case 'update_thread':
-        return 'updated their thread.';
+        return 'updated their thread';
       case 'follow':
         return 'followed you.';
     }
@@ -55,12 +55,21 @@
           alt="profile"
         />
         <div class="flex flex-col">
-          <div>
+          <div class="line-clamp-1 overflow-ellipsis">
             <span class="font-bold">{noti.actor.displayName}</span>
             {#if noti.actorCount > 1}
               <span>and {noti.actorCount - 1} other</span>
             {/if}
             {@html getAction(noti.type)}
+            {#if noti.type === 'react'}
+              {#if noti.postContent}
+                <span>: "{noti.postContent}"</span>
+              {:else}
+                .
+              {/if}
+            {:else if noti.type === 'update_thread'}
+              <span>: "{noti.threadTitle}"</span>
+            {/if}
           </div>
           {getTimeAgo(Date.parse(noti.dateCreated))}
         </div>
