@@ -139,8 +139,9 @@ export type ChatMessage = {
 export type Notification = {
   id: string;
   actor: Owner;
+  actorCount: number;
   type: NotificationTypes;
-  objectId: number | null;
+  objectId: number;
   dateCreated: string;
 };
 

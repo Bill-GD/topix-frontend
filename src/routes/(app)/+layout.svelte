@@ -36,10 +36,12 @@
   <NavigationItem title="Notifications" href="/notifications">
     <div class="relative">
       <Icon type="bell" />
-      <Badge
-        class="absolute -top-2 -right-3"
-        text={data.notificationCount > 99 ? '99+' : `${data.notificationCount}`}
-      />
+      {#if data.notificationCount > 0}
+        <Badge
+          class="absolute -top-2 -right-3"
+          text={data.notificationCount > 99 ? '99+' : `${data.notificationCount}`}
+        />
+      {/if}
     </div>
   </NavigationItem>
 
@@ -60,11 +62,12 @@
       round
     >
       <Icon type="bar" />
-
-      <Badge
-        class="absolute -top-1 -right-2"
-        text={data.notificationCount > 99 ? '99+' : `${data.notificationCount}`}
-      />
+      {#if data.notificationCount > 0}
+        <Badge
+          class="absolute -top-1 -right-2"
+          text={data.notificationCount > 99 ? '99+' : `${data.notificationCount}`}
+        />
+      {/if}
     </IconButton>
     <span class="text-3xl">
       <img class="aspect-square h-10 w-10" src="/favicon.svg" alt="logo" />

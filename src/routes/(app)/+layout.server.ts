@@ -4,7 +4,11 @@ import { error } from '@sveltejs/kit';
 import type { LayoutServerLoad } from './$types';
 
 export const load: LayoutServerLoad = async ({ cookies }) => {
-  const notificationCount = 19;
+  const notiRes = await AxiosHandler.get(
+    '/notification/count',
+    cookies.get(CookieName.accessToken),
+  );
+  const notificationCount = notiRes.data as unknown as number;
 
   const currentUserCookie = cookies.get(CookieName.currentUser);
   if (currentUserCookie && currentUserCookie.trim() !== '') {
