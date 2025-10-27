@@ -13,9 +13,10 @@
     toast: ToastMessage;
   } = $props();
 
-  const types: { [toast.type]: [ClassValue, ClassValue, 'success' | 'error'] } = {
-    success: ['border-green-500', 'text-green-500', 'success'],
-    error: ['border-red-500', 'text-red-700', 'error'],
+  const types: { [toast.type]: [ClassValue, 'success' | 'info' | 'error'] } = {
+    success: ['text-green-500', 'success'],
+    error: ['text-red-700', 'error'],
+    info: ['text-sky-600', 'info'],
   };
 
   let mounted = $state<boolean>(false);
@@ -31,9 +32,9 @@
     in:slide={{ duration: 200 }}
     out:fade={{ duration: 300 }}
   >
-    <Icon class={['mx-2 py-1', types[toast.type][1]]} size="lg" type={types[toast.type][2]} />
-    <p class={['font-semibold', types[toast.type][1]]}>
-      {toast.message}
+    <Icon class={['mx-2 py-1', types[toast.type][0]]} size="lg" type={types[toast.type][1]} />
+    <p class={['font-semibold', types[toast.type][0]]}>
+      {@html toast.message}
     </p>
   </div>
 {/if}

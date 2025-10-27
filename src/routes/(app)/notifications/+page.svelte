@@ -1,37 +1,14 @@
 <script lang="ts">
   import { Scroller } from '$lib/components/layout';
   import { ReturnHeader } from '$lib/components/misc';
-  import { getTimeAgo } from '$lib/utils/helpers';
-  import type { NotificationTypes } from '$lib/utils/types';
+  import { formatNotification, getTimeAgo } from '$lib/utils/helpers';
   import type { PageProps } from './$types';
 
   let { data }: PageProps = $props();
 
-  let notifications = $derived(data.notifications);
+  let notifications = $derived(data.notifications.map(formatNotification));
   let pageIndex = 1;
   let disableScroller = $state<boolean>(data.endOfList);
-
-  function getAction(type: NotificationTypes) {
-    switch (type) {
-      case 'react':
-        return 'reacted to your <b>post</b>';
-      case 'update_thread':
-        return 'updated their thread';
-      case 'follow':
-        return 'followed you.';
-    }
-  }
-
-  function getLink(type: NotificationTypes, actorUsername: string, objectId: number) {
-    switch (type) {
-      case 'react':
-        return `/post/${objectId}`;
-      case 'update_thread':
-        return `/threads/${objectId}`;
-      case 'follow':
-        return `/user/${actorUsername}`;
-    }
-  }
 </script>
 
 <svelte:head>
@@ -47,7 +24,7 @@
     {#each notifications as noti}
       <a
         class="flex items-center gap-4 box hover:bg-zinc-100 dark:hover:bg-zinc-800/80"
-        href={getLink(noti.type, noti.actor.username, noti.objectId)}
+        href={noti.url}
       >
         <img
           class="profile-picture-xs sm:profile-picture-sm"
@@ -60,14 +37,14 @@
             {#if noti.actorCount > 1}
               <span>and {noti.actorCount - 1} other</span>
             {/if}
-            {@html getAction(noti.type)}
-            {#if noti.type === 'react'}
+            {@html noti.action}
+            {#if noti.actionType === 'react'}
               {#if noti.postContent}
                 <span>: "{noti.postContent}"</span>
               {:else}
                 .
               {/if}
-            {:else if noti.type === 'update_thread'}
+            {:else if noti.actionType === 'update_thread'}
               <span>: "{noti.threadTitle}"</span>
             {/if}
           </div>
