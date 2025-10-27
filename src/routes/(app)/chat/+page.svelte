@@ -85,10 +85,7 @@
         </div>
         <div class="mr-2 ml-auto flex items-center gap-2">
           {#if channel.newMessageCount > 0}
-            <Badge
-              class="absolute -top-1 -right-2"
-              text={channel.newMessageCount > 99 ? '99+' : `${channel.newMessageCount}`}
-            />
+            <Badge text={channel.newMessageCount > 99 ? '99+' : `${channel.newMessageCount}`} />
           {/if}
           <span class="text-zinc-400">
             {getTimeAgo(Date.parse(channel.lastSentAt ?? channel.dateCreated))}
