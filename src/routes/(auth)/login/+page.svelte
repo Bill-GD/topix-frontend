@@ -31,7 +31,7 @@
   <div class="flex flex-col gap-4">
     <FloatingLabelInput
       class="w-full"
-      labelClass="peer-focus:bg-zinc-50 peer-focus:dark:bg-zinc-900"
+      labelClass="not-peer-placeholder-shown:bg-zinc-50 not-peer-placeholder-shown:dark:bg-zinc-900"
       name="username"
       type="text"
       required
@@ -41,7 +41,7 @@
 
     <FloatingLabelInput
       class="w-full"
-      labelClass="peer-focus:bg-zinc-50 peer-focus:dark:bg-zinc-900"
+      labelClass="not-peer-placeholder-shown:bg-zinc-50 not-peer-placeholder-shown:dark:bg-zinc-900"
       name="password"
       type="password"
       bind:value={password}

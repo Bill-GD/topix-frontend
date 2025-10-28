@@ -40,7 +40,7 @@
   <div class="flex flex-col gap-4">
     <FloatingLabelInput
       class="w-full"
-      labelClass="peer-focus:bg-zinc-50 peer-focus:dark:bg-zinc-900"
+      labelClass="not-peer-placeholder-shown:bg-zinc-50 not-peer-placeholder-shown:dark:bg-zinc-900"
       name="email"
       type="email"
       disabled={!emailVerificationEnabled}
@@ -51,7 +51,7 @@
 
     <FloatingLabelInput
       class="w-full"
-      labelClass="peer-focus:bg-zinc-50 peer-focus:dark:bg-zinc-900"
+      labelClass="not-peer-placeholder-shown:bg-zinc-50 not-peer-placeholder-shown:dark:bg-zinc-900"
       name="username"
       type="text"
       disabled={!emailVerificationEnabled}
@@ -62,7 +62,7 @@
 
     <FloatingLabelInput
       class="w-full"
-      labelClass="peer-focus:bg-zinc-50 peer-focus:dark:bg-zinc-900"
+      labelClass="not-peer-placeholder-shown:bg-zinc-50 not-peer-placeholder-shown:dark:bg-zinc-900"
       name="password"
       type="password"
       peekable
@@ -74,7 +74,7 @@
 
     <FloatingLabelInput
       class="w-full"
-      labelClass="peer-focus:bg-zinc-50 peer-focus:dark:bg-zinc-900"
+      labelClass="not-peer-placeholder-shown:bg-zinc-50 not-peer-placeholder-shown:dark:bg-zinc-900"
       name="confirm-password"
       type="password"
       peekable

@@ -28,7 +28,7 @@
 >
   <FloatingLabelInput
     class="w-full"
-    labelClass="peer-focus:bg-zinc-50 peer-focus:dark:bg-zinc-900"
+    labelClass="not-peer-placeholder-shown:bg-zinc-50 not-peer-placeholder-shown:dark:bg-zinc-900"
     name="otp"
     type="text"
   >

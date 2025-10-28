@@ -56,6 +56,6 @@
   }
 
   .input-not-focus {
-    @apply not-peer-focus:top-2 not-peer-focus:left-1 not-peer-focus:-translate-y-5 not-peer-focus:scale-90 not-peer-focus:bg-transparent not-peer-focus:px-2;
+    @apply not-peer-focus:top-2 not-peer-focus:left-1 not-peer-focus:-translate-y-5 not-peer-focus:scale-90 not-peer-focus:px-2;
   }
 </style>
