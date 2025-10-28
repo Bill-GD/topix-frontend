@@ -1,13 +1,15 @@
 <script lang="ts">
   import { enhance } from '$app/forms';
+  import { ENABLE_EMAIL_VERIFICATION } from '$env/static/public';
   import { Button } from '$lib/components/button';
   import { FloatingLabelInput } from '$lib/components/input';
   import { Link } from '$lib/components/link';
-  import { Divider } from '$lib/components/misc';
+  import { Divider, Icon } from '$lib/components/misc';
   import { getToaster } from '$lib/components/toast';
   import { formResultToast } from '$lib/utils/helpers';
 
   const toaster = getToaster();
+  const emailVerificationEnabled = $derived(ENABLE_EMAIL_VERIFICATION === 'true');
 </script>
 
 <svelte:head>
@@ -26,20 +28,33 @@
     };
   }}
 >
+  {#if !emailVerificationEnabled}
+    <div class="flex items-center gap-4 box">
+      <Icon class="text-red-600" type="error" size="xl" />
+      <span class="font-semibold">
+        Normal account registration is currently disabled. Please use the 'Sign in with Google'
+        option.
+      </span>
+    </div>
+  {/if}
   <div class="flex flex-col gap-4">
     <FloatingLabelInput
       class="w-full"
       labelClass="peer-focus:bg-zinc-50 peer-focus:dark:bg-zinc-900"
       name="email"
       type="email"
-      required>Email</FloatingLabelInput
+      disabled={!emailVerificationEnabled}
+      required
     >
+      Email
+    </FloatingLabelInput>
 
     <FloatingLabelInput
       class="w-full"
       labelClass="peer-focus:bg-zinc-50 peer-focus:dark:bg-zinc-900"
       name="username"
       type="text"
+      disabled={!emailVerificationEnabled}
       required
     >
       Username
@@ -51,6 +66,7 @@
       name="password"
       type="password"
       peekable
+      disabled={!emailVerificationEnabled}
       required
     >
       Password
@@ -62,12 +78,13 @@
       name="confirm-password"
       type="password"
       peekable
+      disabled={!emailVerificationEnabled}
       required
     >
       Confirm password
     </FloatingLabelInput>
 
-    <Button type="success">Register</Button>
+    <Button type="success" disabled={!emailVerificationEnabled}>Register</Button>
   </div>
 
   <Divider />

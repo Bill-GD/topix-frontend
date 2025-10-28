@@ -1,3 +1,4 @@
+import { ENABLE_EMAIL_VERIFICATION } from '$env/static/public';
 import { AxiosHandler } from '$lib/utils/axios-handler';
 import { capitalize } from '$lib/utils/helpers';
 import { fail, redirect } from '@sveltejs/kit';
@@ -5,6 +6,13 @@ import type { Actions } from './$types';
 
 export const actions: Actions = {
   default: async (event) => {
+    if (ENABLE_EMAIL_VERIFICATION !== 'true') {
+      return fail(410, {
+        success: false,
+        message: 'Normal email registration is currently disabled.',
+      });
+    }
+
     const formData = await event.request.formData();
 
     const dto = {
