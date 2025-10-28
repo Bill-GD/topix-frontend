@@ -14,6 +14,8 @@
     textarea = false,
     clearable = false,
     peekable = false,
+    disabled = false,
+    readonly = false,
     value = $bindable(''),
     name: inputName,
     prefixIcon,
@@ -22,6 +24,8 @@
     clearable?: boolean;
     peekable?: boolean;
     textarea?: boolean;
+    disabled?: boolean;
+    readonly?: boolean;
     id?: string | null;
     value?: string;
     type?: HTMLInputTypeAttribute | null;
@@ -53,6 +57,8 @@
     name={inputName ?? id}
     bind:value
     autocomplete="off"
+    {disabled}
+    {readonly}
   ></textarea>
 {:else}
   <input
@@ -65,6 +71,8 @@
     bind:value
     autocomplete="off"
     {list}
+    {disabled}
+    {readonly}
   />
 {/if}
 

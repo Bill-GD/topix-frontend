@@ -7,15 +7,19 @@
     children,
     clearable = false,
     peekable = false,
+    disabled = false,
     type,
     class: className,
     labelClass,
     name: inputName,
     required = false,
+    readonly = false,
     value = $bindable(''),
   }: {
     clearable?: boolean;
     peekable?: boolean;
+    disabled?: boolean;
+    readonly?: boolean;
     children: Snippet;
     value?: string;
     type?: HTMLInputTypeAttribute | null;
@@ -38,6 +42,8 @@
     name={inputName}
     bind:value
     placeholder=" "
+    {disabled}
+    {readonly}
     {required}
   />
   <label class={['floating-label', labelClass, value.length > 0 ? 'input-not-focus' : '']} for={id}>
@@ -53,6 +59,6 @@
   }
 
   .input-not-focus {
-    @apply not-peer-focus:top-2 not-peer-focus:left-1 not-peer-focus:-translate-y-5 not-peer-focus:scale-90 not-peer-focus:bg-transparent not-peer-focus:px-2;
+    @apply not-peer-focus:top-2 not-peer-focus:left-1 not-peer-focus:-translate-y-5 not-peer-focus:scale-90 not-peer-focus:px-2;
   }
 </style>
