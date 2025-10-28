@@ -6,6 +6,7 @@ export const CookieName = {
   accessToken: '_at',
   refreshToken: '_rt',
   currentUser: '_self',
+  oauthUserInfo: 'google_oauth_info',
 } as const;
 
 export const NotificationActions = {

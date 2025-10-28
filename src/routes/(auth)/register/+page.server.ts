@@ -1,6 +1,7 @@
 import { ENABLE_EMAIL_VERIFICATION } from '$env/static/public';
 import { AxiosHandler } from '$lib/utils/axios-handler';
 import { capitalize } from '$lib/utils/helpers';
+import { CookieName } from '$lib/utils/types';
 import { fail, redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 
@@ -8,8 +9,8 @@ export const load: PageServerLoad = async ({ url, cookies }) => {
   let email = '',
     username = '';
 
-  if (url.searchParams.has('oauth') && cookies.get('google_oauth_info') !== undefined) {
-    const userInfo = JSON.parse(cookies.get('google_oauth_info')!);
+  if (url.searchParams.has('oauth') && cookies.get(CookieName.oauthUserInfo) !== undefined) {
+    const userInfo = JSON.parse(cookies.get(CookieName.oauthUserInfo)!);
 
     email = userInfo.email;
     username = (userInfo.name as string).toLowerCase().replaceAll(' ', '_');
@@ -43,8 +44,8 @@ export const actions: Actions = {
     };
 
     // prevents client tampering
-    if (url.searchParams.has('oauth') && cookies.get('google_oauth_info') !== undefined) {
-      const userInfo = JSON.parse(cookies.get('google_oauth_info')!);
+    if (url.searchParams.has('oauth') && cookies.get(CookieName.oauthUserInfo) !== undefined) {
+      const userInfo = JSON.parse(cookies.get(CookieName.oauthUserInfo)!);
       dto.email = userInfo.email;
       dto.username = (userInfo.name as string).toLowerCase().replaceAll(' ', '_');
       dto.verified = `true`;
@@ -78,7 +79,7 @@ export const actions: Actions = {
     }
 
     if (url.searchParams.has('oauth')) {
-      cookies.delete('google_oauth_info', { path: '/' });
+      cookies.delete(CookieName.oauthUserInfo, { path: '/' });
       return redirect(303, '/login');
     }
     return redirect(303, `/verify/${(res.data as Record<string, string>)['id']}`);

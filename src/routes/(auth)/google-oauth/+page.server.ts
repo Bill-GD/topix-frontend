@@ -1,6 +1,7 @@
 import { _GOOGLE_CLIENT_ID, _GOOGLE_CLIENT_SECRET } from '$env/static/private';
-import { google } from 'googleapis';
+import { CookieName } from '$lib/utils/types';
 import { error, redirect } from '@sveltejs/kit';
+import { google } from 'googleapis';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ url, cookies }) => {
@@ -36,7 +37,7 @@ export const load: PageServerLoad = async ({ url, cookies }) => {
 
     const oauth2 = google.oauth2({ auth: oauth2Client, version: 'v2' });
     const userInfo = (await oauth2.userinfo.get()).data;
-    cookies.set('google_oauth_info', JSON.stringify(userInfo), {
+    cookies.set(CookieName.oauthUserInfo, JSON.stringify(userInfo), {
       path: '/',
       maxAge: 300,
     });
