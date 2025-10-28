@@ -13,11 +13,13 @@
     labelClass,
     name: inputName,
     required = false,
+    readonly = false,
     value = $bindable(''),
   }: {
     clearable?: boolean;
     peekable?: boolean;
     disabled?: boolean;
+    readonly?: boolean;
     children: Snippet;
     value?: string;
     type?: HTMLInputTypeAttribute | null;
@@ -41,6 +43,7 @@
     bind:value
     placeholder=" "
     {disabled}
+    {readonly}
     {required}
   />
   <label class={['floating-label', labelClass, value.length > 0 ? 'input-not-focus' : '']} for={id}>

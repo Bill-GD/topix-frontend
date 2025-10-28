@@ -1,5 +1,6 @@
 <script lang="ts">
   import { enhance } from '$app/forms';
+  import { page } from '$app/state';
   import { ENABLE_EMAIL_VERIFICATION } from '$env/static/public';
   import { Button } from '$lib/components/button';
   import { FloatingLabelInput } from '$lib/components/input';
@@ -7,9 +8,14 @@
   import { Divider, Icon } from '$lib/components/misc';
   import { getToaster } from '$lib/components/toast';
   import { formResultToast } from '$lib/utils/helpers';
+  import type { PageProps } from './$types';
+
+  let { data }: PageProps = $props();
 
   const toaster = getToaster();
-  const emailVerificationEnabled = $derived(ENABLE_EMAIL_VERIFICATION === 'true');
+  const emailVerificationDisabled = $derived(
+    !page.url.searchParams.has('oauth') && ENABLE_EMAIL_VERIFICATION !== 'true',
+  );
 </script>
 
 <svelte:head>
@@ -28,22 +34,25 @@
     };
   }}
 >
-  {#if !emailVerificationEnabled}
+  {#if emailVerificationDisabled}
     <div class="flex items-center gap-4 box">
       <Icon class="text-red-600" type="error" size="xl" />
       <span class="font-semibold">
-        Normal account registration is currently disabled. Please use the 'Sign in with Google'
+        Normal account registration is currently disabled. Please use the 'Sign up with Google'
         option.
       </span>
     </div>
   {/if}
+
   <div class="flex flex-col gap-4">
     <FloatingLabelInput
       class="w-full"
       labelClass="not-peer-placeholder-shown:bg-zinc-50 not-peer-placeholder-shown:dark:bg-zinc-900"
       name="email"
       type="email"
-      disabled={!emailVerificationEnabled}
+      value={data.email}
+      disabled={emailVerificationDisabled}
+      readonly={data.email.length > 0}
       required
     >
       Email
@@ -54,7 +63,9 @@
       labelClass="not-peer-placeholder-shown:bg-zinc-50 not-peer-placeholder-shown:dark:bg-zinc-900"
       name="username"
       type="text"
-      disabled={!emailVerificationEnabled}
+      value={data.username}
+      disabled={emailVerificationDisabled}
+      readonly={data.username.length > 0}
       required
     >
       Username
@@ -66,7 +77,7 @@
       name="password"
       type="password"
       peekable
-      disabled={!emailVerificationEnabled}
+      disabled={emailVerificationDisabled}
       required
     >
       Password
@@ -78,16 +89,26 @@
       name="confirm-password"
       type="password"
       peekable
-      disabled={!emailVerificationEnabled}
+      disabled={emailVerificationDisabled}
       required
     >
       Confirm password
     </FloatingLabelInput>
 
-    <Button type="success" disabled={!emailVerificationEnabled}>Register</Button>
+    <Button type="success" disabled={emailVerificationDisabled}>Register</Button>
   </div>
 
   <Divider />
+
+  <Button
+    class="flex items-center justify-center gap-4"
+    type="dark"
+    href={page.url.searchParams.has('oauth') ? '/google-oauth' : ''}
+    disabled={page.url.searchParams.has('oauth')}
+  >
+    <img class="profile-picture-xs" src="/images/google-logo.svg" alt="google-logo" />
+    Sign up with Google
+  </Button>
 
   <Link href="/login">Already have an account?</Link>
 </form>
