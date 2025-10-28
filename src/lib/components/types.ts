@@ -2,6 +2,7 @@
 
 import { faThumbsUp as faRegularThumbsUp } from '@fortawesome/free-regular-svg-icons/faThumbsUp';
 import { faBars } from '@fortawesome/free-solid-svg-icons/faBars';
+import { faBell } from '@fortawesome/free-solid-svg-icons/faBell';
 import { faCheck } from '@fortawesome/free-solid-svg-icons/faCheck';
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons/faChevronLeft';
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons/faChevronRight';
@@ -15,6 +16,7 @@ import { faFaceLaugh } from '@fortawesome/free-solid-svg-icons/faFaceLaugh';
 import { faHeart } from '@fortawesome/free-solid-svg-icons/faHeart';
 import { faHouse } from '@fortawesome/free-solid-svg-icons/faHouse';
 import { faImage } from '@fortawesome/free-solid-svg-icons/faImage';
+import { faInfoCircle } from '@fortawesome/free-solid-svg-icons/faInfoCircle';
 import { faLock } from '@fortawesome/free-solid-svg-icons/faLock';
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons/faMagnifyingGlass';
 import { faMessage } from '@fortawesome/free-solid-svg-icons/faMessage';
@@ -36,6 +38,8 @@ import { faXmark } from '@fortawesome/free-solid-svg-icons/faXmark';
 export type ButtonType = 'primary' | 'danger' | 'dark' | 'success';
 
 export const Icons = {
+  info: faInfoCircle,
+  bell: faBell,
   sun: faSun,
   moon: faMoon,
   lock: faLock,

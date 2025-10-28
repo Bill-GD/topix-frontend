@@ -3,9 +3,13 @@
   import { DropdownItem, DropdownMenu } from '$lib/components/dropdown';
   import { Switch } from '$lib/components/input';
   import { NavigationItem } from '$lib/components/link';
-  import { Icon } from '$lib/components/misc';
+  import { Badge, Icon } from '$lib/components/misc';
+  import { getToaster } from '$lib/components/toast';
   import type { Icons } from '$lib/components/types';
+  import { formatNotification, getApiUrl } from '$lib/utils/helpers';
   import { getTheme } from '$lib/utils/theme.svelte';
+  import type { Notification } from '$lib/utils/types';
+  import { onMount } from 'svelte';
   import { fade, slide } from 'svelte/transition';
   import type { LayoutProps } from './$types';
 
@@ -23,7 +27,33 @@
   ];
 
   const theme = getTheme();
+  const toaster = getToaster();
+  let notificationSource: EventSource;
   let showNav = $state<boolean>(false);
+
+  onMount(() => {
+    notificationSource = new EventSource(`${getApiUrl()}/notification/sse`);
+
+    notificationSource.onmessage = ({ data: msgData }) => {
+      const noti = formatNotification(JSON.parse(msgData) as Notification);
+      if (noti.receiverId !== data.self.id) return;
+      toaster.addToast(
+        `<b>${noti.actor.displayName}</b>` +
+          (noti.actorCount > 1 ? ` and ${noti.actorCount - 1} other` : '') +
+          ` ${noti.action}` +
+          (noti.actionType === 'react'
+            ? noti.postContent
+              ? `: "${noti.postContent}"`
+              : '.'
+            : noti.actionType === 'update_thread'
+              ? `: "${noti.threadTitle}"`
+              : ''),
+        'info',
+      );
+    };
+
+    return notificationSource.close;
+  });
 </script>
 
 {#snippet sidebar()}
@@ -32,6 +62,18 @@
       <Icon type={item.icon} />
     </NavigationItem>
   {/each}
+
+  <NavigationItem title="Notifications" href="/notifications">
+    <div class="relative">
+      <Icon type="bell" />
+      {#if data.notificationCount > 0}
+        <Badge
+          class="absolute -top-2 -right-3"
+          text={data.notificationCount > 99 ? '99+' : `${data.notificationCount}`}
+        />
+      {/if}
+    </div>
+  </NavigationItem>
 
   {#if data.self.role === 'admin'}
     <NavigationItem title="Users" href="/users">
@@ -44,8 +86,18 @@
   <header
     class="fixed top-0 z-4 flex h-(--header-height) w-full items-center bg-zinc-50 px-2 box-shadow md:px-4 dark:border-b dark:border-zinc-700 dark:bg-zinc-900"
   >
-    <IconButton class="mr-2 inline p-2 lg:hidden" onclick={() => (showNav = !showNav)} round>
+    <IconButton
+      class="relative mr-2 inline p-2 lg:hidden"
+      onclick={() => (showNav = !showNav)}
+      round
+    >
       <Icon type="bar" />
+      {#if data.notificationCount > 0}
+        <Badge
+          class="absolute -top-1 -right-2"
+          text={data.notificationCount > 99 ? '99+' : `${data.notificationCount}`}
+        />
+      {/if}
     </IconButton>
     <span class="text-3xl">
       <img class="aspect-square h-10 w-10" src="/favicon.svg" alt="logo" />
@@ -97,7 +149,7 @@
         transition:fade={{ duration: 200 }}
       ></div>
       <aside
-        class="fixed top-0 left-0 z-7 flex h-screen w-80 flex-col flex-nowrap items-center gap-4 rounded-r-lg border-gray-400 bg-zinc-200 p-3 box-shadow dark:border-gray-700 dark:bg-zinc-950"
+        class="fixed top-0 left-0 z-7 flex h-screen w-80 flex-col flex-nowrap items-center gap-4 rounded-r-lg border-r border-zinc-400 bg-zinc-200 p-3 box-shadow dark:border-zinc-700 dark:bg-zinc-950"
         transition:slide={{ duration: 200, axis: 'x' }}
       >
         {@render sidebar()}

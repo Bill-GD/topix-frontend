@@ -2,11 +2,19 @@
 
 import type { AxiosResponseHeaders } from 'axios';
 
-export type ToastMessage = {
-  id: number;
-  message: string;
-  type: 'success' | 'error';
-};
+export const CookieName = {
+  accessToken: '_at',
+  refreshToken: '_rt',
+  currentUser: '_self',
+} as const;
+
+export const NotificationActions = {
+  react: 'react',
+  updateThread: 'update_thread',
+  follow: 'follow',
+} as const;
+
+export type NotificationTypes = (typeof NotificationActions)[keyof typeof NotificationActions];
 
 export type ApiResponse = {
   readonly headers: AxiosResponseHeaders;
@@ -17,11 +25,11 @@ export type ApiResponse = {
   readonly data: Record<string, unknown> | string[] | null;
 };
 
-export const CookieName = {
-  accessToken: '_at',
-  refreshToken: '_rt',
-  currentUser: '_self',
-} as const;
+export type ToastMessage = {
+  id: number;
+  message: string;
+  type: 'success' | 'info' | 'error';
+};
 
 export type CurrentUser = {
   id: number;
@@ -126,6 +134,18 @@ export type ChatMessage = {
   sender: Owner;
   content: string;
   sentAt: string;
+};
+
+export type Notification = {
+  id: string;
+  actor: Owner;
+  actorCount: number;
+  actionType: NotificationTypes;
+  objectId: number;
+  receiverId: number;
+  dateCreated: string;
+  postContent: string | null;
+  threadTitle: string | null;
 };
 
 export type UnaryVoidFunction<T> = (arg: T) => void;

@@ -1,5 +1,6 @@
 import { API_PORT, API_SERVER } from '$env/static/public';
 import { Toaster } from '$lib/components/toast';
+import type { Notification } from '$lib/utils/types';
 import type { Attachment } from 'svelte/attachments';
 import tippy, { type Placement } from 'tippy.js';
 import { type ActionResult, type Cookies, fail } from '@sveltejs/kit';
@@ -204,4 +205,28 @@ export function getFeedSearchParams(searchString: string, extra?: Map<string, st
   }
 
   return params;
+}
+
+export function formatNotification(noti: Notification) {
+  let action: string, url: string;
+
+  switch (noti.actionType) {
+    case 'react': {
+      action = 'reacted to your <b>post</b>';
+      url = `/post/${noti.objectId}`;
+      break;
+    }
+    case 'update_thread': {
+      action = 'updated their thread';
+      url = `/threads/${noti.objectId}`;
+      break;
+    }
+    case 'follow': {
+      action = 'followed you.';
+      url = `/user/${noti.actor.username}`;
+      break;
+    }
+  }
+
+  return { ...noti, action, url };
 }

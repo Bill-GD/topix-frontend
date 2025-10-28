@@ -4,9 +4,18 @@ import { error } from '@sveltejs/kit';
 import type { LayoutServerLoad } from './$types';
 
 export const load: LayoutServerLoad = async ({ cookies }) => {
+  const notiRes = await AxiosHandler.get(
+    '/notification/count',
+    cookies.get(CookieName.accessToken),
+  );
+  const notificationCount = notiRes.data as unknown as number;
+
   const currentUserCookie = cookies.get(CookieName.currentUser);
   if (currentUserCookie && currentUserCookie.trim() !== '') {
-    return { self: JSON.parse(currentUserCookie) as CurrentUser };
+    return {
+      notificationCount,
+      self: JSON.parse(currentUserCookie) as CurrentUser,
+    };
   }
 
   const res = await AxiosHandler.get('/user/me', cookies.get(CookieName.accessToken));
@@ -15,7 +24,10 @@ export const load: LayoutServerLoad = async ({ cookies }) => {
       path: '/',
       maxAge: 3600,
     });
-    return { self: res.data as CurrentUser };
+    return {
+      notificationCount,
+      self: res.data as CurrentUser,
+    };
   }
 
   error(res.status, res.message);
