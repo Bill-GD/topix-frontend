@@ -46,7 +46,7 @@
   {#if searched}
     <Button
       class="w-fit"
-      type="dark"
+      type="base"
       outline
       onclick={() => {
         goto(`/chat`, { replaceState: true });

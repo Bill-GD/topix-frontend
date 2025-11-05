@@ -201,7 +201,7 @@
         </button>
       {:else if tags && tags.length > 0}
         <Button
-          type="dark"
+          type="base"
           outline
           onclick={(ev) => {
             ev.preventDefault();
@@ -306,7 +306,7 @@
     </Button>
     <Button
       class="w-full"
-      type="dark"
+      type="base"
       onclick={() => {
         hideModal();
         selectedTag = null;
@@ -316,7 +316,7 @@
     </Button>
     <Button
       class="w-full"
-      type="dark"
+      type="base"
       onclick={() => {
         hideModal();
         selectedTag = chosenTag = null;

@@ -235,7 +235,7 @@
       <Button class="w-full" type="danger" onclick={hideModal}>Delete</Button>
     </form>
 
-    <Button class="w-full" type="dark" onclick={hideModal}>Cancel</Button>
+    <Button class="w-full" type="base" onclick={hideModal}>Cancel</Button>
   </ModalFooter>
 </Modal>
 
@@ -257,7 +257,7 @@
       <Button class="w-full" type="danger" onclick={hideModal}>Leave</Button>
     </form>
 
-    <Button class="w-full" type="dark" onclick={hideModal}>Cancel</Button>
+    <Button class="w-full" type="base" onclick={hideModal}>Cancel</Button>
   </ModalFooter>
 </Modal>
 
@@ -299,7 +299,7 @@
       {:else if data.tags && data.tags.length > 0}
         <Button
           class="w-fit"
-          type="dark"
+          type="base"
           outline
           onclick={(ev) => {
             ev.preventDefault();
@@ -314,7 +314,7 @@
         <Button class="w-full" type="success" onclick={hideModal}>Create</Button>
         <Button
           class="w-full"
-          type="dark"
+          type="base"
           onclick={(ev) => {
             ev.preventDefault();
             hideModal();
@@ -352,7 +352,7 @@
     </Button>
     <Button
       class="w-full"
-      type="dark"
+      type="base"
       onclick={() => {
         showTagModal = false;
         selectedTag = null;
@@ -362,7 +362,7 @@
     </Button>
     <Button
       class="w-full"
-      type="dark"
+      type="base"
       onclick={() => {
         showTagModal = false;
         selectedTag = chosenTag = null;

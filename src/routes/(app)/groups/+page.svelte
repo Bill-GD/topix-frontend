@@ -61,7 +61,7 @@
     {#if searched}
       <Button
         class="mr-auto"
-        type="dark"
+        type="base"
         outline
         onclick={() => {
           goto(`/groups`, { replaceState: true });
@@ -148,7 +148,7 @@
         </Button>
         <Button
           class="w-full"
-          type="dark"
+          type="base"
           onclick={(ev) => {
             ev.preventDefault();
             hideModal();

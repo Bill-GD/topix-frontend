@@ -102,7 +102,7 @@
 
   <Button
     class="flex items-center justify-center gap-4"
-    type="dark"
+    type="base"
     href={page.url.searchParams.has('oauth') ? '/google-oauth' : ''}
     disabled={page.url.searchParams.has('oauth')}
   >

@@ -180,7 +180,7 @@
       <Button class="w-full" type="danger" onclick={hideModal}>Delete</Button>
     </form>
 
-    <Button class="w-full" type="dark" onclick={hideModal}>Cancel</Button>
+    <Button class="w-full" type="base" onclick={hideModal}>Cancel</Button>
   </ModalFooter>
 </Modal>
 
@@ -207,7 +207,7 @@
       <Button class="w-full" type="success" onclick={hideModal}>Update</Button>
       <Button
         class="w-full"
-        type="dark"
+        type="base"
         onclick={(ev) => {
           ev.preventDefault();
           hideModal();

@@ -12,6 +12,7 @@
   import { onMount } from 'svelte';
   import { fade, slide } from 'svelte/transition';
   import type { LayoutProps } from './$types';
+  import { page } from '$app/state';
 
   let { data, children }: LayoutProps = $props();
 
@@ -24,6 +25,8 @@
     { title: 'Search', href: '/search', icon: 'search' },
     { title: 'Chat', href: '/chat', icon: 'message' },
     { title: 'Groups', href: '/groups', icon: 'group' },
+    { title: 'Notifications', href: '/notifications', icon: 'bell' },
+    { title: 'Users', href: '/users', icon: 'user' },
   ];
 
   const theme = getTheme();
@@ -58,33 +61,39 @@
 
 {#snippet sidebar()}
   {#each navItems as item}
-    <NavigationItem title={item.title} href={item.href}>
-      <Icon type={item.icon} />
-    </NavigationItem>
-  {/each}
-
-  <NavigationItem title="Notifications" href="/notifications">
-    <div class="relative">
-      <Icon type="bell" />
-      {#if data.notificationCount > 0}
-        <Badge
-          class="absolute -top-2 -right-3"
-          text={data.notificationCount > 99 ? '99+' : `${data.notificationCount}`}
-        />
+    {#if item.href.includes('/users')}
+      {#if data.self.role === 'admin'}
+        <NavigationItem
+          class={[page.url.pathname === item.href && 'font-semibold text-sky-600']}
+          title={item.title}
+          href={item.href}
+        >
+          <Icon type={item.icon} />
+        </NavigationItem>
       {/if}
-    </div>
-  </NavigationItem>
-
-  {#if data.self.role === 'admin'}
-    <NavigationItem title="Users" href="/users">
-      <Icon type="user" />
-    </NavigationItem>
-  {/if}
+    {:else}
+      <NavigationItem
+        class={['relative', page.url.pathname === item.href && 'font-semibold text-sky-600']}
+        title={item.title}
+        href={item.href}
+      >
+        <Icon type={item.icon} />
+        {#if item.href.includes('notification')}
+          {#if data.notificationCount > 0}
+            <Badge
+              class="absolute -top-2 -right-3"
+              text={data.notificationCount > 99 ? '99+' : `${data.notificationCount}`}
+            />
+          {/if}
+        {/if}
+      </NavigationItem>
+    {/if}
+  {/each}
 {/snippet}
 
 <main class="min-h-screen">
   <header
-    class="fixed top-0 z-4 flex h-(--header-height) w-full items-center bg-zinc-50 px-2 box-shadow md:px-4 dark:border-b dark:border-zinc-700 dark:bg-zinc-900"
+    class="fixed top-0 z-4 flex h-(--header-height) w-full items-center bg-zinc-100 px-2 box-shadow md:px-4 dark:border-b dark:border-zinc-700 dark:bg-zinc-900"
   >
     <IconButton
       class="relative mr-2 inline p-2 lg:hidden"

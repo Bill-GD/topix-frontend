@@ -230,9 +230,7 @@
 
         <DropdownMenu position="top" align="left" horizontal>
           {#snippet trigger()}
-            <div
-              class="z-1 flex items-center gap-2 rounded-md bg-zinc-200 p-2 box-shadow hover:bg-linear-0 hover:from-zinc-200 hover:to-zinc-50 hover:to-95% dark:bg-zinc-600 dark:hover:from-zinc-600 dark:hover:to-zinc-500"
-            >
+            <div class="reaction-button">
               <Icon
                 type={(reaction ?? 'noReaction') as keyof typeof reactions}
                 class={[reaction !== null && reactions[reaction as keyof typeof reactions]]}
@@ -262,10 +260,7 @@
         </DropdownMenu>
       </form>
 
-      <a
-        class="z-1 flex items-center gap-2 rounded-md bg-zinc-200 p-2 box-shadow hover:bg-linear-0 hover:from-zinc-200 hover:to-zinc-50 hover:to-95% dark:bg-zinc-600 dark:hover:from-zinc-600 dark:hover:to-zinc-500"
-        href={detail ? null : `/post/${post.id}`}
-      >
+      <a class="reaction-button" href={detail ? null : `/post/${post.id}`}>
         <Icon type="reply" size="sm" />
         {post.replyCount}
       </a>
@@ -291,7 +286,7 @@
       <Button class="w-full" type="danger" onclick={hideModal}>Delete</Button>
       <input type="text" name="post-id" value={post.id} hidden readonly />
     </form>
-    <Button class="w-full" type="dark" onclick={hideModal}>Cancel</Button>
+    <Button class="w-full" type="base" onclick={hideModal}>Cancel</Button>
   </ModalFooter>
 </Modal>
 
@@ -314,7 +309,7 @@
       <Button class="w-full" type="success" onclick={hideModal}>Update</Button>
       <Button
         class="w-full"
-        type="dark"
+        type="base"
         onclick={(ev) => {
           ev.preventDefault();
           hideModal();
@@ -331,3 +326,11 @@
 Post component: shows OP, content, interaction counts...  
 Reaction requires `?/react` formaction
 -->
+
+<style lang="postcss">
+  @reference "@/app.css";
+
+  .reaction-button {
+    @apply z-1 flex items-center gap-2 rounded-md bg-zinc-50 p-2 box-shadow hover:bg-zinc-150 dark:bg-zinc-800 dark:hover:bg-zinc-700;
+  }
+</style>

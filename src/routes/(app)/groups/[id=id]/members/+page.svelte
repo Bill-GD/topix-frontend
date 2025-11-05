@@ -193,7 +193,7 @@
       <input type="number" name="member-id" value={selectedMemberId} hidden readonly />
       <Button class="w-full" type="primary" onclick={hideModal}>Change</Button>
     </form>
-    <Button class="w-full" type="dark" onclick={hideModal}>Cancel</Button>
+    <Button class="w-full" type="base" onclick={hideModal}>Cancel</Button>
   </ModalFooter>
 </Modal>
 
@@ -215,6 +215,6 @@
       <input type="number" name="member-id" value={selectedMemberId} hidden readonly />
       <Button class="w-full" type="danger" onclick={hideModal}>Remove</Button>
     </form>
-    <Button class="w-full" type="dark" onclick={hideModal}>Cancel</Button>
+    <Button class="w-full" type="base" onclick={hideModal}>Cancel</Button>
   </ModalFooter>
 </Modal>

@@ -35,7 +35,7 @@ import { faUserPlus } from '@fortawesome/free-solid-svg-icons/faUserPlus';
 import { faVideo } from '@fortawesome/free-solid-svg-icons/faVideo';
 import { faXmark } from '@fortawesome/free-solid-svg-icons/faXmark';
 
-export type ButtonType = 'primary' | 'danger' | 'dark' | 'success';
+export type ButtonType = 'primary' | 'danger' | 'base' | 'success';
 
 export const Icons = {
   info: faInfoCircle,

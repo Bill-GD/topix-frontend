@@ -22,7 +22,7 @@
 
 <Button
   class={[className]}
-  type="dark"
+  type="base"
   outline
   onclick={(ev) => {
     ev.preventDefault();

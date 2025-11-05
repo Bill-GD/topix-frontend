@@ -81,7 +81,7 @@
           </DropdownMenu>
         {:else}
           <IconButton
-            type="dark"
+            type="base"
             class="w-full"
             {@attach tooltip('Message')}
             onclick={async () => {
@@ -127,7 +127,7 @@
                 };
               }}
             >
-              <IconButton type="dark" class="w-full" {@attach tooltip('Follow')}>
+              <IconButton type="base" class="w-full" {@attach tooltip('Follow')}>
                 <Icon type="follow" size="sm" />
               </IconButton>
               <input type="number" name="user-id" value={data.user.id} hidden readonly />
@@ -258,7 +258,7 @@
       <Button class="w-full" type="success" onclick={hideModal}>Create</Button>
       <Button
         class="w-full"
-        type="dark"
+        type="base"
         onclick={(ev) => {
           ev.preventDefault();
           hideModal();

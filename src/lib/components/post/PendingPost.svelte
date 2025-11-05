@@ -103,7 +103,7 @@
       <input type="number" name="post-id" value={post.id} hidden readonly />
       <Button class="w-full" type="success" onclick={hideModal}>Approve</Button>
     </form>
-    <Button class="w-full" type="dark" onclick={hideModal}>Cancel</Button>
+    <Button class="w-full" type="base" onclick={hideModal}>Cancel</Button>
   </ModalFooter>
 </Modal>
 
@@ -125,6 +125,6 @@
       <input type="number" name="post-id" value={post.id} hidden readonly />
       <Button class="w-full" type="danger" onclick={hideModal}>Remove</Button>
     </form>
-    <Button class="w-full" type="dark" onclick={hideModal}>Cancel</Button>
+    <Button class="w-full" type="base" onclick={hideModal}>Cancel</Button>
   </ModalFooter>
 </Modal>

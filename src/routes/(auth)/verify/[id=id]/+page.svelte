@@ -36,5 +36,5 @@
   </FloatingLabelInput>
 
   <Button formaction="?/otp" type="success">Send</Button>
-  <Button formaction="?/resend" type="dark">Send again</Button>
+  <Button formaction="?/resend" type="base">Send again</Button>
 </form>

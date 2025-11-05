@@ -57,7 +57,7 @@
   {#if searched}
     <Button
       class="mr-auto"
-      type="dark"
+      type="base"
       outline
       onclick={() => {
         goto(`/users`, { replaceState: true });
@@ -140,6 +140,6 @@
       <Button class="w-full" type="danger" onclick={hideModal}>Delete</Button>
       <input type="text" name="username" value={username} hidden readonly />
     </form>
-    <Button class="w-full" type="dark" onclick={hideModal}>Cancel</Button>
+    <Button class="w-full" type="base" onclick={hideModal}>Cancel</Button>
   </ModalFooter>
 </Modal>

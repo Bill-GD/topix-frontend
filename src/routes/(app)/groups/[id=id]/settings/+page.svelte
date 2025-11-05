@@ -191,7 +191,7 @@
       <input type="text" name="tag-id" value={selectedTag?.id} hidden readonly />
       <Button class="w-full" type="danger" onclick={hideModal}>Delete</Button>
     </form>
-    <Button class="w-full" type="dark" onclick={hideModal}>Cancel</Button>
+    <Button class="w-full" type="base" onclick={hideModal}>Cancel</Button>
   </ModalFooter>
 </Modal>
 

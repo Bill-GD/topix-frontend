@@ -23,5 +23,5 @@
   {href}
 >
   {@render children()}
-  <span class="text-xl dark:text-white">{title}</span>
+  <span class="text-xl">{title}</span>
 </a>
