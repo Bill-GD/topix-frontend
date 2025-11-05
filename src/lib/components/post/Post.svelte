@@ -71,7 +71,7 @@
 <article
   class={[
     'relative flex flex-col gap-4 box',
-    canClickPost && 'cursor-pointer hover:bg-zinc-100 dark:hover:bg-zinc-800/80',
+    canClickPost && 'cursor-pointer box-hover',
     className,
   ]}
 >
@@ -231,8 +231,7 @@
         <DropdownMenu position="top" align="left" horizontal>
           {#snippet trigger()}
             <div
-              class="z-1 flex cursor-pointer items-center gap-2 rounded-md bg-zinc-200 p-2 hover:bg-zinc-300 dark:bg-zinc-600
-dark:hover:bg-zinc-500"
+              class="z-1 flex items-center gap-2 rounded-md bg-zinc-200 p-2 box-shadow hover:bg-linear-0 hover:from-zinc-200 hover:to-zinc-50 hover:to-95% dark:bg-zinc-600 dark:hover:from-zinc-600 dark:hover:to-zinc-500"
             >
               <Icon
                 type={(reaction ?? 'noReaction') as keyof typeof reactions}
@@ -264,8 +263,7 @@ dark:hover:bg-zinc-500"
       </form>
 
       <a
-        class="z-1 flex items-center gap-2 rounded-md bg-zinc-200 p-2 hover:bg-zinc-300 dark:bg-zinc-600
-dark:hover:bg-zinc-500"
+        class="z-1 flex items-center gap-2 rounded-md bg-zinc-200 p-2 box-shadow hover:bg-linear-0 hover:from-zinc-200 hover:to-zinc-50 hover:to-95% dark:bg-zinc-600 dark:hover:from-zinc-600 dark:hover:to-zinc-500"
         href={detail ? null : `/post/${post.id}`}
       >
         <Icon type="reply" size="sm" />

@@ -46,10 +46,7 @@
 
   {#if tab === 'all'}
     {#each members as user}
-      <a
-        class="flex flex-col gap-4 box hover:bg-zinc-100 md:flex-row dark:hover:bg-zinc-800/80"
-        href="/user/{user.username}"
-      >
+      <a class="flex flex-col gap-4 box box-hover md:flex-row" href="/user/{user.username}">
         <div class="flex items-center gap-4">
           <img
             class="profile-picture-md"
@@ -100,10 +97,7 @@
       <p class="notice-text">No pending members.</p>
     {:else}
       {#each members as user}
-        <a
-          class="flex flex-col gap-4 box hover:bg-zinc-100 md:flex-row dark:hover:bg-zinc-900/40"
-          href="/user/{user.username}"
-        >
+        <a class="flex flex-col gap-4 box box-hover md:flex-row" href="/user/{user.username}">
           <div class="flex items-center gap-4">
             <img
               class="profile-picture-md"

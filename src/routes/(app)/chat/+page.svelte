@@ -66,10 +66,7 @@
     </p>
   {:else}
     {#each channels as channel, index (channel.id)}
-      <a
-        class="flex items-center gap-4 box p-2 hover:bg-zinc-100 dark:hover:bg-zinc-800/80"
-        href="/chat/{channel.id}"
-      >
+      <a class="flex items-center gap-4 box box-hover p-2" href="/chat/{channel.id}">
         <img
           class="profile-picture-sm md:profile-picture-md md:p-2"
           src={others[index]?.profilePicture ?? '/images/default-user-profile-icon.jpg'}

@@ -71,10 +71,7 @@
     <p class="p-4 text-center text-xl font-semibold">No result found.</p>
   {:else}
     {#each users as user}
-      <a
-        class="flex items-center gap-4 box hover:bg-zinc-100 dark:hover:bg-zinc-800/80"
-        href="/user/{user.username}"
-      >
+      <a class="flex items-center gap-4 box box-hover" href="/user/{user.username}">
         <img
           class="profile-picture-md"
           src={user.profilePicture ?? '/images/default-user-profile-icon.jpg'}

@@ -22,10 +22,7 @@
     <p class="notice-text">You have no notification.</p>
   {:else}
     {#each notifications as noti}
-      <a
-        class="flex items-center gap-4 box hover:bg-zinc-100 dark:hover:bg-zinc-800/80"
-        href={noti.url}
-      >
+      <a class="flex items-center gap-4 box box-hover" href={noti.url}>
         <img
           class="profile-picture-xs sm:profile-picture-sm"
           src={noti.actor.profilePicture ?? '/images/default-user-profile-icon.jpg'}
