@@ -109,73 +109,76 @@
     </IconButton>
   </div>
 
-  <div
-    class="flex scrollbar h-full flex-col-reverse overflow-y-scroll"
-    bind:this={messageContainer}
-  >
-    {#each messages as { message, hideSender, showTimeDivider }}
-      <div
-        class={['flex items-center gap-2 ', hideSender ? 'mt-px' : 'mt-2']}
-        onmouseenter={() => (hoverId = message.id)}
-        onmouseleave={() => (hoverId = -1)}
-        tabindex="-1"
-        role="dialog"
-      >
-        {#if hideSender}
-          <div class="profile-picture-xs sm:profile-picture-sm"></div>
-        {:else}
-          <img
-            class="profile-picture-xs sm:profile-picture-sm"
-            src={message.sender.profilePicture ?? '/images/default-user-profile-icon.jpg'}
-            alt="profile"
-          />
-        {/if}
+  <div class="message-frame h-full bg-zinc-150 px-2 dark:bg-zinc-950">
+    <div
+      bind:this={messageContainer}
+      class="flex scrollbar h-full flex-col-reverse overflow-y-scroll"
+    >
+      <div class="pb-2"></div>
+      {#each messages as { message, hideSender, showTimeDivider }}
         <div
-          class="max-w-5/6 rounded-md bg-zinc-100 px-3 py-2 md:max-w-3/4 dark:bg-zinc-800"
-          {@attach tooltip(new Date(message.sentAt).toLocaleString('en-GB'))}
+          class={['flex items-center gap-2 ', hideSender ? 'mt-px' : 'mt-2']}
+          onmouseenter={() => (hoverId = message.id)}
+          onmouseleave={() => (hoverId = -1)}
+          tabindex="-1"
+          role="dialog"
         >
-          {message.content}
+          {#if hideSender}
+            <div class="profile-picture-xs sm:profile-picture-sm"></div>
+          {:else}
+            <img
+              class="profile-picture-xs sm:profile-picture-sm"
+              src={message.sender.profilePicture ?? '/images/default-user-profile-icon.jpg'}
+              alt="profile"
+            />
+          {/if}
+          <div
+            class="max-w-5/6 rounded-md bg-zinc-50 px-3 py-2 md:max-w-3/4 dark:bg-zinc-800"
+            {@attach tooltip(new Date(message.sentAt).toLocaleString('en-GB'))}
+          >
+            {message.content}
+          </div>
+
+          {#if data.self.id === message.sender.id && message.id === hoverId && otherUser}
+            <DropdownMenu class="h-fit" position="top" align="right">
+              {#snippet trigger()}
+                <IconButton class="p-1" round>
+                  <Icon class="text-zinc-500" type="menu" size="sm" />
+                </IconButton>
+              {/snippet}
+
+              <DropdownItem
+                class="text-red-500"
+                onclick={() => ws.emit('remove', { channelId: params.id, messageId: message.id })}
+              >
+                Delete
+              </DropdownItem>
+            </DropdownMenu>
+          {/if}
         </div>
-
-        {#if data.self.id === message.sender.id && message.id === hoverId && otherUser}
-          <DropdownMenu class="h-fit" position="top" align="right">
-            {#snippet trigger()}
-              <IconButton class="p-1" round>
-                <Icon class="text-zinc-500" type="menu" size="sm" />
-              </IconButton>
-            {/snippet}
-
-            <DropdownItem
-              class="text-red-500"
-              onclick={() => ws.emit('remove', { channelId: params.id, messageId: message.id })}
-            >
-              Delete
-            </DropdownItem>
-          </DropdownMenu>
+        {#if showTimeDivider}
+          <p class="mt-4 mb-2 text-center text-sm font-semibold text-zinc-500">
+            {new Date(message.sentAt).toLocaleString('en-gb')}
+          </p>
         {/if}
-      </div>
-      {#if showTimeDivider}
-        <p class="mt-4 mb-2 text-center text-sm font-semibold text-zinc-500">
-          {new Date(message.sentAt).toLocaleString('en-gb')}
-        </p>
-      {/if}
-    {/each}
+      {/each}
 
-    <Scroller
-      endedText="No more messages."
-      disabled={disableScroller}
-      attachmentCallback={async () => {
-        const res = await fetch(
-          `/api/chat?id=${params.id}&messages&timestamp=${Date.parse(messages.at(-1)!.message.sentAt)}`,
-        );
-        const newData = await res.json();
-        disableScroller = res.headers.get('x-end-of-list') === 'true';
-        messages = processMessageList([...messages.map((e) => e.message), ...newData]);
-      }}
-      detachCleanup={() => {
-        disableScroller = false;
-      }}
-    />
+      <Scroller
+        endedText="No more messages."
+        disabled={disableScroller}
+        attachmentCallback={async () => {
+          const res = await fetch(
+            `/api/chat?id=${params.id}&messages&timestamp=${Date.parse(messages.at(-1)!.message.sentAt)}`,
+          );
+          const newData = await res.json();
+          disableScroller = res.headers.get('x-end-of-list') === 'true';
+          messages = processMessageList([...messages.map((e) => e.message), ...newData]);
+        }}
+        detachCleanup={() => {
+          disableScroller = false;
+        }}
+      />
+    </div>
   </div>
 
   {#if otherUser}
@@ -218,3 +221,15 @@
     <Button class="w-full" type="base" onclick={hideModal}>Cancel</Button>
   </ModalFooter>
 </Modal>
+
+<style lang="postcss">
+  @reference "@/app.css";
+
+  .message-frame {
+    @apply relative overflow-hidden rounded-md;
+  }
+
+  .message-frame::before {
+    @apply pointer-events-none absolute inset-0 z-1 inset-shadow-sm inset-shadow-zinc-600/40 content-[''] dark:inset-shadow-black;
+  }
+</style>
