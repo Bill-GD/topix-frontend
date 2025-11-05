@@ -127,7 +127,7 @@
     >
       <FloatingLabelInput
         class="w-full"
-        labelClass="not-peer-placeholder-shown:bg-zinc-200 not-peer-placeholder-shown:dark:bg-zinc-900"
+        labelClass="peer-[&:focus,&:not(:placeholder-shown)]:bg-zinc-200 peer-[&:focus,&:not(:placeholder-shown)]:dark:bg-zinc-900"
         name="group-name"
         bind:value={groupName}
         required

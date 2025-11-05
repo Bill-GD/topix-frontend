@@ -47,7 +47,7 @@
   <div class="flex flex-col gap-4">
     <FloatingLabelInput
       class="w-full"
-      labelClass="not-peer-placeholder-shown:bg-zinc-50 not-peer-placeholder-shown:dark:bg-zinc-900"
+      labelClass="peer-[&:focus,&:not(:placeholder-shown)]:bg-zinc-50 peer-[&:focus,&:not(:placeholder-shown)]:dark:bg-zinc-900"
       name="email"
       type="email"
       value={data.email}
@@ -60,7 +60,7 @@
 
     <FloatingLabelInput
       class="w-full"
-      labelClass="not-peer-placeholder-shown:bg-zinc-50 not-peer-placeholder-shown:dark:bg-zinc-900"
+      labelClass="peer-[&:focus,&:not(:placeholder-shown)]:bg-zinc-50 peer-[&:focus,&:not(:placeholder-shown)]:dark:bg-zinc-900"
       name="username"
       type="text"
       value={data.username}
@@ -73,7 +73,7 @@
 
     <FloatingLabelInput
       class="w-full"
-      labelClass="not-peer-placeholder-shown:bg-zinc-50 not-peer-placeholder-shown:dark:bg-zinc-900"
+      labelClass="peer-[&:focus,&:not(:placeholder-shown)]:bg-zinc-50 peer-[&:focus,&:not(:placeholder-shown)]:dark:bg-zinc-900"
       name="password"
       type="password"
       peekable
@@ -85,7 +85,7 @@
 
     <FloatingLabelInput
       class="w-full"
-      labelClass="not-peer-placeholder-shown:bg-zinc-50 not-peer-placeholder-shown:dark:bg-zinc-900"
+      labelClass="peer-[&:focus,&:not(:placeholder-shown)]:bg-zinc-50 peer-[&:focus,&:not(:placeholder-shown)]:dark:bg-zinc-900"
       name="confirm-password"
       type="password"
       peekable
