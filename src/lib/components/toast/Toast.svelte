@@ -33,7 +33,7 @@
     out:fade={{ duration: 300 }}
   >
     <Icon class={['mx-2 py-1', types[toast.type][0]]} size="lg" type={types[toast.type][1]} />
-    <p class={['font-semibold', types[toast.type][0]]}>
+    <p class="font-semibold">
       {@html toast.message}
     </p>
   </div>
