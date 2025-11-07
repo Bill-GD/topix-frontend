@@ -120,7 +120,7 @@
       method="post"
       use:enhance={() => {
         return async ({ result, update }) => {
-          await formResultToast(result, toaster);
+          await formResultToast(result, toaster, 'Group created successfully.');
           await update();
         };
       }}

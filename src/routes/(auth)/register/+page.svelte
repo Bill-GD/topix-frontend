@@ -97,13 +97,15 @@
 
     <Button type="success" disabled={emailVerificationDisabled}>Register</Button>
   </div>
+</form>
 
+<div class="mt-6 flex flex-col gap-6">
   <Divider />
 
   <Button
     class="flex items-center justify-center gap-4"
     type="base"
-    href={page.url.searchParams.has('oauth') ? '/google-oauth' : ''}
+    href={page.url.searchParams.has('oauth') ? '' : '/google-oauth'}
     disabled={page.url.searchParams.has('oauth')}
   >
     <img class="profile-picture-xs" src="/images/google-logo.svg" alt="google-logo" />
@@ -111,4 +113,4 @@
   </Button>
 
   <Link href="/login">Already have an account?</Link>
-</form>
+</div>

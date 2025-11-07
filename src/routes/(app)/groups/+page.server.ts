@@ -1,7 +1,7 @@
 import { AxiosHandler } from '$lib/utils/axios-handler';
 import { dataUrlToFile } from '$lib/utils/helpers';
 import { CookieName, type Group } from '$lib/utils/types';
-import { type Actions, fail } from '@sveltejs/kit';
+import { type Actions, fail, redirect } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ fetch, url }) => {
@@ -37,6 +37,7 @@ export const actions: Actions = {
     });
 
     if (!res.success) return fail(res.status, { success: false, message: res.message });
-    return { success: true, message: res.message };
+    // return { success: true, message: res.message };
+    redirect(303, `/groups/${res.data}`);
   },
 };

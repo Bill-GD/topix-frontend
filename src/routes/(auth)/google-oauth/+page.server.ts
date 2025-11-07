@@ -1,7 +1,7 @@
 import { _GOOGLE_CLIENT_ID, _GOOGLE_CLIENT_SECRET } from '$env/static/private';
 import { CookieName } from '$lib/utils/types';
-import { error, redirect } from '@sveltejs/kit';
 import { google } from 'googleapis';
+import { error, redirect } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ url, cookies }) => {
