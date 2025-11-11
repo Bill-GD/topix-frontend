@@ -1,9 +1,9 @@
 <script lang="ts">
-  import { Button, IconButton } from '$lib/components/button';
+  import { Button } from '$lib/components/button';
   import { Icon } from '$lib/components/misc';
+  import { Post } from '$lib/components/post';
   import { Toast } from '$lib/components/toast';
   import { getTheme } from '$lib/utils/theme.svelte';
-  import { Post } from '$lib/components/post';
   import type { PageProps } from './$types';
 
   let { data }: PageProps = $props();
@@ -16,44 +16,57 @@
 </svelte:head>
 
 <div class="flex flex-col gap-4 p-4">
-  <IconButton class="absolute top-4 right-4 z-1 p-2" onclick={() => theme.toggle()}>
+  <Button class="absolute top-4 right-4 z-1 p-2" onclick={() => theme.toggle()}>
     <Icon class="text-zinc-800 dark:text-zinc-300" type={theme.isDark ? 'moon' : 'sun'} />
-  </IconButton>
+  </Button>
 
-  <div class="flex gap-4">
+  <div class="flex flex-wrap gap-4">
     <Button type="base">Base</Button>
     <Button type="base" outline>Base</Button>
+    <Button type="base" disabled>Base</Button>
+    <Button type="base" outline disabled>Base</Button>
 
     <Button type="primary">Primary</Button>
     <Button type="primary" outline>Primary</Button>
+    <Button type="primary" disabled>Primary</Button>
+    <Button type="primary" outline disabled>Primary</Button>
 
     <Button type="success">Success</Button>
     <Button type="success" outline>Success</Button>
+    <Button type="success" disabled>Success</Button>
+    <Button type="success" outline disabled>Success</Button>
 
     <Button type="danger">Danger</Button>
     <Button type="danger" outline>Danger</Button>
+    <Button type="danger" disabled>Danger</Button>
+    <Button type="danger" outline disabled>Danger</Button>
   </div>
 
   <div class="flex gap-4">
-    <IconButton class="p-2">
-      <Icon type="add" size="sm" />
-    </IconButton>
+    <Button class="p-2"><Icon type="add" size="sm" /></Button>
+    <Button class="p-2" disabled><Icon type="add" size="sm" /></Button>
+    <Button class="p-2" outline><Icon type="add" size="sm" /></Button>
+    <Button class="p-2" outline disabled><Icon type="add" size="sm" /></Button>
 
-    <IconButton type="base">
-      <Icon type="add" size="sm" />
-    </IconButton>
+    <Button type="base"><Icon type="add" size="sm" /></Button>
+    <Button type="base" disabled><Icon type="add" size="sm" /></Button>
+    <Button type="base" outline><Icon type="add" size="sm" /></Button>
+    <Button type="base" outline disabled><Icon type="add" size="sm" /></Button>
 
-    <IconButton type="primary">
-      <Icon type="add" size="sm" />
-    </IconButton>
+    <Button type="primary"><Icon type="add" size="sm" /></Button>
+    <Button type="primary" disabled><Icon type="add" size="sm" /></Button>
+    <Button type="primary" outline><Icon type="add" size="sm" /></Button>
+    <Button type="primary" outline disabled><Icon type="add" size="sm" /></Button>
 
-    <IconButton type="success">
-      <Icon type="add" size="sm" />
-    </IconButton>
+    <Button type="success"><Icon type="add" size="sm" /></Button>
+    <Button type="success" disabled><Icon type="add" size="sm" /></Button>
+    <Button type="success" outline><Icon type="add" size="sm" /></Button>
+    <Button type="success" outline disabled><Icon type="add" size="sm" /></Button>
 
-    <IconButton type="danger">
-      <Icon type="add" size="sm" />
-    </IconButton>
+    <Button type="danger"><Icon type="add" size="sm" /></Button>
+    <Button type="danger" disabled><Icon type="add" size="sm" /></Button>
+    <Button type="danger" outline><Icon type="add" size="sm" /></Button>
+    <Button type="danger" outline disabled><Icon type="add" size="sm" /></Button>
   </div>
 
   <div class="flex gap-4">

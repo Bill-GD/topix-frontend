@@ -8,9 +8,11 @@
   let {
     class: className,
     toast,
+    persistent = false,
   }: {
     class?: ClassValue;
     toast: ToastMessage;
+    persistent?: boolean;
   } = $props();
 
   const types: {
@@ -34,14 +36,14 @@
   let mounted = $state<boolean>(false);
   onMount(() => {
     mounted = true;
-    setTimeout(() => (mounted = false), 4000);
+    if (!persistent) setTimeout(() => (mounted = false), 4000);
   });
 </script>
 
 {#if mounted}
   <div
     class={[
-      'flex w-fit items-center gap-2 box border-l-5',
+      'flex w-fit items-center gap-2 rounded-lg border-l-5 p-4 box-shadow',
       types[toast.type].border,
       types[toast.type].bg,
       className,
