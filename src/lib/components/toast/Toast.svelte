@@ -2,7 +2,7 @@
   import type { ToastMessage } from '$lib/utils/types';
   import { onMount } from 'svelte';
   import type { ClassValue } from 'svelte/elements';
-  import { fade, slide } from 'svelte/transition';
+  import { fade, fly } from 'svelte/transition';
   import Icon from '../misc/Icon.svelte';
 
   let {
@@ -13,10 +13,22 @@
     toast: ToastMessage;
   } = $props();
 
-  const types: { [toast.type]: [ClassValue, 'success' | 'info' | 'error'] } = {
-    success: ['text-green-500', 'success'],
-    error: ['text-red-700', 'error'],
-    info: ['text-sky-600', 'info'],
+  const types: {
+    [toast.type]: {
+      fg: ClassValue;
+      border: ClassValue;
+      bg: ClassValue;
+      icon: 'success' | 'info' | 'error';
+    };
+  } = {
+    success: {
+      fg: 'text-green-500',
+      border: 'border-green-500',
+      bg: 'bg-green-50',
+      icon: 'success',
+    },
+    error: { fg: 'text-red-600', border: 'border-red-600', bg: 'bg-red-50', icon: 'error' },
+    info: { fg: 'text-sky-600', border: 'border-sky-600', bg: 'bg-sky-50', icon: 'info' },
   };
 
   let mounted = $state<boolean>(false);
@@ -28,12 +40,17 @@
 
 {#if mounted}
   <div
-    class={['flex w-fit items-center gap-2 box dark:bg-zinc-950', className]}
-    in:slide={{ duration: 200 }}
+    class={[
+      'flex w-fit items-center gap-2 box border-l-5',
+      types[toast.type].border,
+      types[toast.type].bg,
+      className,
+    ]}
+    in:fly={{ duration: 200, x: -200 }}
     out:fade={{ duration: 300 }}
   >
-    <Icon class={['mx-2 py-1', types[toast.type][0]]} size="lg" type={types[toast.type][1]} />
-    <p class="font-semibold">
+    <Icon class={['mx-1 py-1', types[toast.type].fg]} size="lg" type={types[toast.type].icon} />
+    <p class={[types[toast.type].fg]}>
       {@html toast.message}
     </p>
   </div>

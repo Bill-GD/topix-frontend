@@ -7,7 +7,7 @@ export class Toaster {
 
   addToast(message: string, type: 'success' | 'info' | 'error') {
     this.toasts.push({ id: this.#toastId++, message, type });
-    setTimeout(() => this.toasts.shift(), 4100);
+    setTimeout(() => this.toasts.shift(), 4400);
   }
 }
 
