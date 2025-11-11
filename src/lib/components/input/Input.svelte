@@ -130,6 +130,6 @@ the input in a relative positioned element.
   @reference '@/app.css';
 
   .main-input {
-    @apply w-full rounded-md border border-gray-700 bg-transparent focus:ring-0 focus:outline-2 focus:outline-gray-700;
+    @apply w-full rounded-md border border-zinc-300 bg-transparent dark:border-zinc-700;
   }
 </style>

@@ -15,7 +15,11 @@
   <title>Login - topix</title>
 </svelte:head>
 
-<p class="text-4xl font-semibold dark:text-white">Sign in to your account</p>
+<p class="mb-4 text-4xl font-semibold dark:text-white">Log in to your account</p>
+<span>
+  <span class="text-zinc-500">Don't have an account?</span>
+  <Link href="/register">Sign up</Link>
+</span>
 
 <form
   class="mt-8 flex flex-col gap-6"
@@ -31,7 +35,7 @@
   <div class="flex flex-col gap-4">
     <FloatingLabelInput
       class="w-full"
-      labelClass="peer-[&:focus,&:not(:placeholder-shown)]:bg-zinc-50 peer-[&:focus,&:not(:placeholder-shown)]:dark:bg-zinc-900"
+      labelClass="peer-[&:focus,&:not(:placeholder-shown)]:bg-zinc-50 peer-[&:focus,&:not(:placeholder-shown)]:dark:bg-zinc-950"
       name="username"
       type="text"
       required
@@ -41,7 +45,7 @@
 
     <FloatingLabelInput
       class="w-full"
-      labelClass="peer-[&:focus,&:not(:placeholder-shown)]:bg-zinc-50 peer-[&:focus,&:not(:placeholder-shown)]:dark:bg-zinc-900"
+      labelClass="peer-[&:focus,&:not(:placeholder-shown)]:bg-zinc-50 peer-[&:focus,&:not(:placeholder-shown)]:dark:bg-zinc-950"
       name="password"
       type="password"
       bind:value={password}
@@ -53,8 +57,4 @@
 
     <Button type="success">Login</Button>
   </div>
-
-  <Divider />
-
-  <Link href="/register">Don't have an account?</Link>
 </form>

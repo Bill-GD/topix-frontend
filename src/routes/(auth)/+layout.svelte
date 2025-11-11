@@ -14,7 +14,7 @@
 </Button>
 
 <main class="flex h-screen items-center justify-center">
-  <div class="mx-2 box text-center md:w-1/2 lg:w-1/3 xl:w-1/4">
+  <div class="mx-2 text-center">
     {@render children?.()}
   </div>
 </main>
