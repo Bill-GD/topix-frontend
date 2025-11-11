@@ -5,10 +5,12 @@ import { error, redirect } from '@sveltejs/kit';
 import type { LayoutServerLoad } from './$types';
 
 export const load: LayoutServerLoad = async ({ locals, cookies, route, url }) => {
-  if (!locals.hasAT) {
+  if (locals.hasAT) {
+    if (url.pathname === '/' || route.id?.includes('(auth)')) return redirect(303, '/home');
+  } else {
     if (!locals.hasRT) {
       if (route.id?.includes('(auth)')) return;
-      redirect(303, '/login');
+      return redirect(303, '/login');
     }
 
     const res = await AxiosHandler.post(
@@ -30,10 +32,7 @@ export const load: LayoutServerLoad = async ({ locals, cookies, route, url }) =>
       maxAge: Number(resObject['time']),
     });
     locals.hasAT = true;
-    if (!route.id?.includes('(app)')) redirect(303, '/home');
-  }
-
-  if (locals.hasAT && (url.pathname === '/' || route.id?.includes('(auth)'))) {
-    redirect(303, '/home');
+    if (route.id?.includes('(app)') || url.pathname === '/dev') return;
+    return redirect(303, '/home');
   }
 };

@@ -91,7 +91,7 @@
   {/each}
 {/snippet}
 
-<main class="min-h-screen">
+<main class="min-h-screen bg-zinc-200">
   <header
     class="fixed top-0 z-4 flex h-(--header-height) w-full items-center bg-zinc-100 px-2 box-shadow md:px-4 dark:border-b dark:border-zinc-700 dark:bg-zinc-900"
   >

@@ -1,0 +1,144 @@
+<script lang="ts">
+  import { Button, IconButton } from '$lib/components/button';
+  import { Icon } from '$lib/components/misc';
+  import { Toast } from '$lib/components/toast';
+  import { getTheme } from '$lib/utils/theme.svelte';
+  import { Post } from '$lib/components/post';
+  import type { PageProps } from './$types';
+
+  let { data }: PageProps = $props();
+
+  const theme = getTheme();
+</script>
+
+<svelte:head>
+  <title>Dev page</title>
+</svelte:head>
+
+<div class="flex flex-col gap-4 p-4">
+  <IconButton class="absolute top-4 right-4 z-1 p-2" onclick={() => theme.toggle()}>
+    <Icon class="text-zinc-800 dark:text-zinc-300" type={theme.isDark ? 'moon' : 'sun'} />
+  </IconButton>
+
+  <div class="flex gap-4">
+    <Button type="base">Base</Button>
+    <Button type="base" outline>Base</Button>
+
+    <Button type="primary">Primary</Button>
+    <Button type="primary" outline>Primary</Button>
+
+    <Button type="success">Success</Button>
+    <Button type="success" outline>Success</Button>
+
+    <Button type="danger">Danger</Button>
+    <Button type="danger" outline>Danger</Button>
+  </div>
+
+  <div class="flex gap-4">
+    <IconButton class="p-2">
+      <Icon type="add" size="sm" />
+    </IconButton>
+
+    <IconButton type="base">
+      <Icon type="add" size="sm" />
+    </IconButton>
+
+    <IconButton type="primary">
+      <Icon type="add" size="sm" />
+    </IconButton>
+
+    <IconButton type="success">
+      <Icon type="add" size="sm" />
+    </IconButton>
+
+    <IconButton type="danger">
+      <Icon type="add" size="sm" />
+    </IconButton>
+  </div>
+
+  <div class="flex gap-4">
+    <Toast
+      toast={{
+        id: 1,
+        message: 'Toast message',
+        type: 'success',
+      }}
+      persistent
+    />
+    <Toast
+      toast={{
+        id: 1,
+        message: 'Toast message',
+        type: 'info',
+      }}
+      persistent
+    />
+    <Toast
+      toast={{
+        id: 1,
+        message: 'Toast message',
+        type: 'error',
+      }}
+      persistent
+    />
+  </div>
+
+  <Post
+    self={data.self}
+    post={{
+      id: 0,
+      content: 'example content',
+      mediaPaths: [],
+      reaction: 'like',
+      reactionCount: 1,
+      replyCount: 0,
+      dateCreated: '',
+      dateUpdated: '',
+      owner: {
+        id: 0,
+        profilePicture: '',
+        displayName: 'Owner',
+        username: 'owner',
+      },
+      threadId: 0,
+      threadOwnerId: 0,
+      threadTitle: 'Thread title',
+      threadVisibility: 'public',
+      groupId: null,
+      groupName: null,
+      groupApproved: false,
+      groupVisibility: 'public',
+      joinedGroup: true,
+      tag: null,
+      visibility: 'public',
+      parentPost: {
+        id: 0,
+        content: 'example post',
+        mediaPaths: [],
+        reaction: 'like',
+        reactionCount: 0,
+        replyCount: 0,
+        owner: {
+          id: 0,
+          profilePicture: '',
+          displayName: 'Owner',
+          username: 'owner',
+        },
+        threadId: 0,
+        threadOwnerId: 0,
+        threadTitle: 'Thread title',
+        threadVisibility: 'public',
+        groupId: null,
+        groupName: null,
+        groupApproved: false,
+        groupVisibility: 'public',
+        joinedGroup: true,
+        tag: null,
+        visibility: 'public',
+        dateCreated: '',
+        dateUpdated: '',
+      },
+    }}
+    showThreadAndGroupName
+  />
+</div>
