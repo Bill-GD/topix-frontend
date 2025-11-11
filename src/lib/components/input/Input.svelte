@@ -2,7 +2,7 @@
   import { generateId } from '$lib/utils/helpers';
   import type { Snippet } from 'svelte';
   import type { ClassValue, HTMLInputTypeAttribute } from 'svelte/elements';
-  import IconButton from '../button/IconButton.svelte';
+  import Button from '../button/Button.svelte';
   import Icon from '../misc/Icon.svelte';
 
   let {
@@ -77,7 +77,7 @@
 {/if}
 
 {#if clearable && value.length > 0}
-  <IconButton
+  <Button
     class="absolute top-1/2 p-1 {peekable && initType === 'password'
       ? 'right-8'
       : 'right-1'} -translate-y-1/2"
@@ -90,12 +90,12 @@
       class="text-gray-600 hover:text-gray-900 dark:hover:text-gray-400"
       size="sm"
     />
-  </IconButton>
+  </Button>
 {/if}
 
 {#if peekable && initType === 'password'}
   {#key peeking}
-    <IconButton
+    <Button
       class="absolute top-1/2 right-1 -translate-y-1/2 p-1"
       buttonType="button"
       round
@@ -114,7 +114,7 @@
           size="sm"
         />
       {/if}
-    </IconButton>
+    </Button>
   {/key}
 {/if}
 

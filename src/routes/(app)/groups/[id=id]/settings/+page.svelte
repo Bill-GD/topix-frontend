@@ -1,7 +1,7 @@
 <script lang="ts">
   import { enhance } from '$app/forms';
   import { page } from '$app/state';
-  import { Button, IconButton } from '$lib/components/button';
+  import { Button } from '$lib/components/button';
   import { FloatingLabelInput, Input } from '$lib/components/input';
   import { Tab, TabBar } from '$lib/components/link';
   import { Flair, Icon, ReturnHeader, VisibilitySelector } from '$lib/components/misc';
@@ -103,7 +103,7 @@
       {#each data.tags as tag (tag.id)}
         <div class="flex w-min items-center gap-2 box p-2">
           <Flair {tag} />
-          <IconButton
+          <Button
             class="p-2 hover:bg-zinc-300"
             onclick={() => {
               showModal = 'delete';
@@ -111,7 +111,7 @@
             }}
           >
             <Icon type="delete" class="text-red-500" size="sm" />
-          </IconButton>
+          </Button>
         </div>
       {/each}
     </div>

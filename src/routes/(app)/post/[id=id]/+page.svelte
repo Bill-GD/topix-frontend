@@ -1,11 +1,11 @@
 <script lang="ts">
   import { page } from '$app/state';
-  import { IconButton } from '$lib/components/button';
   import { Icon, ReturnHeader } from '$lib/components/misc';
   import { ImageCarousel, Post } from '$lib/components/post';
   import { PostUpload } from '$lib/components/upload';
   import { fade } from 'svelte/transition';
   import type { PageProps } from './$types';
+  import { Button } from '$lib/components/button';
 
   let { data }: PageProps = $props();
   const isReply = $derived(data.post.parentPost !== undefined);
@@ -70,9 +70,9 @@
 {#if viewImage}
   <div class={['fixed inset-0 z-8 flex backdrop-blur-xl']} transition:fade={{ duration: 250 }}>
     <a class="z-9 h-screen" href="/post/{data.post.id}" data-sveltekit-replacestate>
-      <IconButton class="absolute top-4 right-4 z-9 p-2">
+      <Button class="absolute top-4 right-4 z-9 p-2">
         <Icon type="close" />
-      </IconButton>
+      </Button>
     </a>
     <ImageCarousel
       images={data.post.mediaPaths}

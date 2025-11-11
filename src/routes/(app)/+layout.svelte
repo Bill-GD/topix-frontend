@@ -1,5 +1,6 @@
 <script lang="ts">
-  import { IconButton } from '$lib/components/button';
+  import { page } from '$app/state';
+  import { Button } from '$lib/components/button';
   import { DropdownItem, DropdownMenu } from '$lib/components/dropdown';
   import { Switch } from '$lib/components/input';
   import { NavigationItem } from '$lib/components/link';
@@ -12,7 +13,6 @@
   import { onMount } from 'svelte';
   import { fade, slide } from 'svelte/transition';
   import type { LayoutProps } from './$types';
-  import { page } from '$app/state';
 
   let { data, children }: LayoutProps = $props();
 
@@ -95,11 +95,7 @@
   <header
     class="fixed top-0 z-4 flex h-(--header-height) w-full items-center bg-zinc-100 px-2 box-shadow md:px-4 dark:border-b dark:border-zinc-700 dark:bg-zinc-900"
   >
-    <IconButton
-      class="relative mr-2 inline p-2 lg:hidden"
-      onclick={() => (showNav = !showNav)}
-      round
-    >
+    <Button class="relative mr-2 inline p-2 lg:hidden" onclick={() => (showNav = !showNav)}>
       <Icon type="bar" />
       {#if data.notificationCount > 0}
         <Badge
@@ -107,7 +103,7 @@
           text={data.notificationCount > 99 ? '99+' : `${data.notificationCount}`}
         />
       {/if}
-    </IconButton>
+    </Button>
     <span class="text-3xl">
       <img class="aspect-square h-10 w-10" src="/favicon.svg" alt="logo" />
     </span>

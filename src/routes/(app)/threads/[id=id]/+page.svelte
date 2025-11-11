@@ -1,6 +1,6 @@
 <script lang="ts">
   import { enhance } from '$app/forms';
-  import { Button, IconButton } from '$lib/components/button';
+  import { Button } from '$lib/components/button';
   import { DropdownItem, DropdownMenu } from '$lib/components/dropdown';
   import { Input } from '$lib/components/input';
   import { Scroller } from '$lib/components/layout';
@@ -72,9 +72,9 @@
 
       <DropdownMenu class="ml-auto h-fit" position="bottom" align="right">
         {#snippet trigger()}
-          <IconButton class="p-2" round>
+          <Button class="p-2" round>
             <Icon type="menu" size="sm" />
-          </IconButton>
+          </Button>
         {/snippet}
 
         {#if data.self.id !== data.thread.owner.id}

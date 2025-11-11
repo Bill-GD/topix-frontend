@@ -2,7 +2,7 @@
   import { enhance } from '$app/forms';
   import { goto } from '$app/navigation';
   import { page } from '$app/state';
-  import { Button, IconButton } from '$lib/components/button';
+  import { Button } from '$lib/components/button';
   import { Input } from '$lib/components/input';
   import { Scroller } from '$lib/components/layout';
   import { Icon, ReturnHeader } from '$lib/components/misc';
@@ -87,7 +87,7 @@
         </div>
 
         {#if user.role !== 'admin'}
-          <IconButton
+          <Button
             class="ml-auto p-2"
             onclick={() => {
               showModal = 'delete';
@@ -95,7 +95,7 @@
             }}
           >
             <Icon type="delete" class="text-red-500" />
-          </IconButton>
+          </Button>
         {/if}
       </a>
     {/each}

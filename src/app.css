@@ -82,7 +82,11 @@ input::-webkit-calendar-picker-indicator {
 }
 
 @utility box-shadow {
-  @apply shadow-sm shadow-zinc-600/40 transition-shadow duration-150 ease-in hover:shadow-md dark:shadow-zinc-950;
+  @apply shadow-sm shadow-zinc-600/40 dark:shadow-zinc-950;
+}
+
+@utility box-shadow-hover {
+  @apply transition-shadow duration-150 ease-in hover:shadow-md;
 }
 
 @utility box {
@@ -118,7 +122,7 @@ input::-webkit-calendar-picker-indicator {
 }
 
 .btn-base-outline {
-  @apply btn text-zinc-800 outline-zinc-700 hover:bg-zinc-600 hover:text-white dark:text-zinc-400 dark:hover:bg-zinc-800;
+  @apply btn bg-transparent text-zinc-900 outline outline-zinc-300 hover:bg-zinc-100 active:bg-zinc-200 dark:text-zinc-400 dark:outline-zinc-700 dark:hover:bg-zinc-800 dark:hover:text-zinc-200 dark:active:bg-zinc-700;
 }
 
 .btn-primary-outline {

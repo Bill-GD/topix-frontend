@@ -2,7 +2,7 @@
   import { enhance } from '$app/forms';
   import { goto } from '$app/navigation';
   import { page } from '$app/state';
-  import { Button, IconButton } from '$lib/components/button';
+  import { Button } from '$lib/components/button';
   import { DropdownItem, DropdownMenu } from '$lib/components/dropdown';
   import { FloatingLabelInput } from '$lib/components/input';
   import { Scroller } from '$lib/components/layout';
@@ -72,15 +72,15 @@
         {#if data.self.id === data.user.id}
           <DropdownMenu class="ml-auto h-fit" position="bottom" align="right">
             {#snippet trigger()}
-              <IconButton class="p-2" {@attach tooltip('Options')} round>
+              <Button class="p-2" {@attach tooltip('Options')} round>
                 <Icon type="bar" size="sm" />
-              </IconButton>
+              </Button>
             {/snippet}
 
             <DropdownItem href="/user/{data.self.username}/hidden">View hidden items</DropdownItem>
           </DropdownMenu>
         {:else}
-          <IconButton
+          <Button
             type="base"
             class="w-full"
             {@attach tooltip('Message')}
@@ -98,7 +98,7 @@
             }}
           >
             <Icon type="message" size="sm" />
-          </IconButton>
+          </Button>
 
           {#if data.user.followed}
             <form
@@ -111,9 +111,9 @@
                 };
               }}
             >
-              <IconButton type="danger" class="w-full" {@attach tooltip('Unfollow')}>
+              <Button type="danger" class="w-full" {@attach tooltip('Unfollow')}>
                 <Icon type="unfollow" size="sm" />
-              </IconButton>
+              </Button>
               <input type="number" name="user-id" value={data.user.id} hidden readonly />
             </form>
           {:else}
@@ -127,9 +127,9 @@
                 };
               }}
             >
-              <IconButton type="base" class="w-full" {@attach tooltip('Follow')}>
+              <Button type="base" class="w-full" {@attach tooltip('Follow')}>
                 <Icon type="follow" size="sm" />
-              </IconButton>
+              </Button>
               <input type="number" name="user-id" value={data.user.id} hidden readonly />
             </form>
           {/if}

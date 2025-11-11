@@ -1,6 +1,6 @@
 <script lang="ts">
   import { enhance } from '$app/forms';
-  import { Button, IconButton } from '$lib/components/button';
+  import { Button } from '$lib/components/button';
   import { DropdownItem, DropdownMenu } from '$lib/components/dropdown';
   import { Input } from '$lib/components/input';
   import { Scroller } from '$lib/components/layout';
@@ -104,9 +104,9 @@
       {otherUser?.displayName ?? '[Deleted user]'}
     </a>
 
-    <IconButton class="ml-auto p-2 hover:bg-zinc-300" onclick={() => (showModal = 'delete')}>
+    <Button class="ml-auto p-2 hover:bg-zinc-300" onclick={() => (showModal = 'delete')}>
       <Icon type="delete" class="text-red-500" size="sm" />
-    </IconButton>
+    </Button>
   </div>
 
   <div class="message-frame h-full bg-zinc-150 px-2 dark:bg-zinc-950">
@@ -142,9 +142,9 @@
           {#if data.self.id === message.sender.id && message.id === hoverId && otherUser}
             <DropdownMenu class="h-fit" position="top" align="right">
               {#snippet trigger()}
-                <IconButton class="p-1" round>
+                <Button class="p-1" round>
                   <Icon class="text-zinc-500" type="menu" size="sm" />
-                </IconButton>
+                </Button>
               {/snippet}
 
               <DropdownItem

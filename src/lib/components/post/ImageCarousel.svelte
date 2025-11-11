@@ -1,8 +1,8 @@
 <script lang="ts">
   import { page } from '$app/state';
   import type { ClassValue } from 'svelte/elements';
-  import { IconButton } from '../button';
   import { Icon } from '../misc';
+  import Button from '../button/Button.svelte';
 
   let {
     images,
@@ -39,14 +39,14 @@
 
 <div class="relative min-w-1/2">
   {#if imageIndex > 0}
-    <IconButton
-      class="absolute top-1/2 left-2 z-1 -translate-y-1/2 bg-zinc-800/60 p-3 hover:bg-zinc-700/60"
+    <Button
+      class="absolute top-1/2 left-2 z-1 -translate-y-1/2 bg-zinc-800/60 hover:bg-zinc-700/60"
       onclick={() => {
         imageIndex = Math.max(0, imageIndex - 1);
       }}
     >
       <Icon class="text-zinc-300" type="back" size="sm" />
-    </IconButton>
+    </Button>
   {/if}
 
   {#if allowClickingImage}
@@ -88,13 +88,13 @@
   {/if}
 
   {#if imageIndex < images.length - 1}
-    <IconButton
-      class="absolute top-1/2 right-2 z-1 -translate-y-1/2 bg-zinc-800/60 p-3 hover:bg-zinc-700/60"
+    <Button
+      class="absolute top-1/2 right-2 z-1 -translate-y-1/2 bg-zinc-800/60 hover:bg-zinc-700/60"
       onclick={() => {
         imageIndex = Math.min(images.length - 1, imageIndex + 1);
       }}
     >
       <Icon class="text-zinc-300" type="next" size="sm" />
-    </IconButton>
+    </Button>
   {/if}
 </div>

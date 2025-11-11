@@ -1,6 +1,6 @@
 <script lang="ts">
   import { Button } from '$lib/components/button';
-  import { Icon } from '$lib/components/misc';
+  import { Icon, ReturnHeader } from '$lib/components/misc';
   import { Post } from '$lib/components/post';
   import { Toast } from '$lib/components/toast';
   import { getTheme } from '$lib/utils/theme.svelte';
@@ -21,7 +21,7 @@
   </Button>
 
   <div class="flex flex-wrap gap-4">
-    <Button type="base">Base</Button>
+    <Button class="px-4" type="base">Base</Button>
     <Button type="base" outline>Base</Button>
     <Button type="base" disabled>Base</Button>
     <Button type="base" outline disabled>Base</Button>
@@ -43,10 +43,10 @@
   </div>
 
   <div class="flex gap-4">
-    <Button class="p-2"><Icon type="add" size="sm" /></Button>
-    <Button class="p-2" disabled><Icon type="add" size="sm" /></Button>
-    <Button class="p-2" outline><Icon type="add" size="sm" /></Button>
-    <Button class="p-2" outline disabled><Icon type="add" size="sm" /></Button>
+    <Button><Icon type="add" size="sm" /></Button>
+    <Button disabled><Icon type="add" size="sm" /></Button>
+    <Button outline><Icon type="add" size="sm" /></Button>
+    <Button outline disabled><Icon type="add" size="sm" /></Button>
 
     <Button type="base"><Icon type="add" size="sm" /></Button>
     <Button type="base" disabled><Icon type="add" size="sm" /></Button>
@@ -108,7 +108,7 @@
       dateCreated: '',
       dateUpdated: '',
       owner: {
-        id: 0,
+        id: 1,
         profilePicture: '',
         displayName: 'Owner',
         username: 'owner',
@@ -154,4 +154,6 @@
     }}
     showThreadAndGroupName
   />
+
+  <ReturnHeader>Return</ReturnHeader>
 </div>

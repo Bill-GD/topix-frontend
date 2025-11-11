@@ -5,7 +5,6 @@
   import type { CurrentUser, Post } from '$lib/utils/types';
   import type { ClassValue } from 'svelte/elements';
   import Button from '../button/Button.svelte';
-  import IconButton from '../button/IconButton.svelte';
   import DropdownItem from '../dropdown/DropdownItem.svelte';
   import DropdownMenu from '../dropdown/DropdownMenu.svelte';
   import Flair from '../misc/Flair.svelte';
@@ -163,9 +162,9 @@
     {#if !hideOptions && (self.id === post.owner.id || self.role === 'admin')}
       <DropdownMenu class="ml-auto" position="bottom" align="right">
         {#snippet trigger()}
-          <IconButton class="p-2" round>
+          <Button class="p-2" round>
             <Icon type="menu" size="xs" />
-          </IconButton>
+          </Button>
         {/snippet}
 
         {#if detail && self.id === post.owner.id && allowEditVisibility}

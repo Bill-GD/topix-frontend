@@ -2,7 +2,7 @@
   import { enhance } from '$app/forms';
   import { goto } from '$app/navigation';
   import { page } from '$app/state';
-  import { Button, IconButton } from '$lib/components/button';
+  import { Button } from '$lib/components/button';
   import { DropdownItem, DropdownMenu } from '$lib/components/dropdown';
   import { FloatingLabelInput, Input } from '$lib/components/input';
   import { Scroller } from '$lib/components/layout';
@@ -77,13 +77,13 @@
 
         <div class="ml-auto flex items-center gap-2">
           {#if data.group.status === true}
-            <IconButton
+            <Button
               class="p-2"
               onclick={() => (showModal = 'search')}
               {@attach tooltip('Search posts')}
             >
               <Icon type="search" size="sm" />
-            </IconButton>
+            </Button>
           {/if}
           {#if data.group.status !== null}
             <Button class="hover:bg-zinc-800" type="primary" disabled>
@@ -107,9 +107,9 @@
 
           <DropdownMenu class="ml-auto" position="bottom" align="right">
             {#snippet trigger()}
-              <IconButton class="p-2" round>
+              <Button class="p-2" round>
                 <Icon type="menu" size="sm" />
-              </IconButton>
+              </Button>
             {/snippet}
 
             <DropdownItem href="/groups/{data.group.id}/members">Members</DropdownItem>
