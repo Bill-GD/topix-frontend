@@ -36,17 +36,19 @@
 <ReturnHeader>Members</ReturnHeader>
 
 <div class="flex flex-col gap-4">
-  <TabBar>
-    {#each items as item}
-      <Tab href="?tab={item}" selected={tab === item}>
-        {capitalize(item)}
-      </Tab>
-    {/each}
-  </TabBar>
+  {#if data.self.id === data.group.owner.id}
+    <TabBar>
+      {#each items as item}
+        <Tab href="?tab={item}" selected={tab === item}>
+          {capitalize(item)}
+        </Tab>
+      {/each}
+    </TabBar>
+  {/if}
 
   {#if tab === 'all'}
     {#each members as user}
-      <a class="flex flex-col gap-4 box box-hover md:flex-row" href="/user/{user.username}">
+      <div class="flex flex-col gap-4 box box-hover md:flex-row">
         <div class="flex items-center gap-4">
           <img
             class="profile-picture-md"
@@ -55,7 +57,9 @@
           />
           <div class="flex flex-col gap-2">
             <div class="flex items-baseline gap-2">
-              <span class="text-xl font-semibold">{user.displayName}</span>
+              <a class="text-xl font-semibold hover:underline" href="/user/{user.username}">
+                {user.displayName}
+              </a>
               <span class="text-gray-500">@{user.username}</span>
             </div>
             <p>Joined at {new Date(user.dateJoined!).toDateString()}</p>
@@ -69,7 +73,6 @@
               type="primary"
               onclick={(ev) => {
                 ev.preventDefault();
-                ev.stopPropagation();
                 selectedMemberId = user.id;
                 showModal = 'owner';
               }}
@@ -81,7 +84,6 @@
               type="danger"
               onclick={(ev) => {
                 ev.preventDefault();
-                ev.stopPropagation();
                 selectedMemberId = user.id;
                 showModal = 'remove';
               }}
@@ -90,14 +92,16 @@
             </Button>
           </div>
         {/if}
-      </a>
+      </div>
     {/each}
   {:else if tab === 'pending'}
-    {#if data.members.length <= 0}
+    {#if !data.group.status || data.self.id !== data.group.owner.id}
+      <p class="notice-text">You don't have permission to view this page.</p>
+    {:else if data.members.length <= 0}
       <p class="notice-text">No pending members.</p>
     {:else}
       {#each members as user}
-        <a class="flex flex-col gap-4 box box-hover md:flex-row" href="/user/{user.username}">
+        <div class="flex flex-col gap-4 box box-hover md:flex-row">
           <div class="flex items-center gap-4">
             <img
               class="profile-picture-md"
@@ -106,7 +110,9 @@
             />
             <div class="flex flex-col gap-2">
               <div class="flex items-baseline gap-2">
-                <span class="text-xl font-semibold">{user.displayName}</span>
+                <a class="text-xl font-semibold hover:underline" href="/user/{user.username}"
+                  >{user.displayName}</a
+                >
                 <span class="text-gray-500">@{user.username}</span>
               </div>
               <p>Requested at {new Date(user.dateRequested).toDateString()}</p>
@@ -147,7 +153,7 @@
               </Button>
             </form>
           {/if}
-        </a>
+        </div>
       {/each}
     {/if}
   {/if}

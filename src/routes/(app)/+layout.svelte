@@ -166,7 +166,7 @@
     </aside>
   {/if}
 
-  <div class="center-width mx-auto px-4 md:px-0">
+  <div class="center-width mx-auto px-4 pb-4 md:px-0">
     {@render children?.()}
   </div>
 </main>
