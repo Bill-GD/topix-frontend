@@ -69,15 +69,21 @@
 
 {#if viewImage}
   <div class={['fixed inset-0 z-8 flex backdrop-blur-xl']} transition:fade={{ duration: 250 }}>
-    <a class="z-9 h-screen" href="/post/{data.post.id}" data-sveltekit-replacestate>
-      <Button class="absolute top-4 right-4 z-9 p-2">
+    <a
+      class="absolute top-4 right-4 z-9 h-fit"
+      href="/post/{data.post.id}"
+      data-sveltekit-replacestate
+    >
+      <Button class="p-2">
         <Icon type="close" />
       </Button>
     </a>
-    <ImageCarousel
-      images={data.post.mediaPaths}
-      imageClass="max-h-screen px-4 rounded-md"
-      transparentBackground
-    />
+    <div class="absolute inset-0 flex justify-center">
+      <ImageCarousel
+        images={data.post.mediaPaths}
+        imageClass="max-h-screen px-4 rounded-md"
+        transparentBackground
+      />
+    </div>
   </div>
 {/if}
