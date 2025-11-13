@@ -119,11 +119,16 @@
 
       <DropdownMenu position="bottom" align="right">
         {#snippet trigger()}
-          <img
-            class="profile-picture-sm cursor-pointer hover:bg-zinc-700/60"
-            src={data.self.profilePicture ?? '/images/default-user-profile-icon.jpg'}
-            alt="profile"
-          />
+          <div class="relative">
+            <img
+              class="profile-picture-sm hover:bg-zinc-700/60"
+              src={data.self.profilePicture ?? '/images/default-user-profile-icon.jpg'}
+              alt="profile"
+            />
+            <div
+              class="absolute inset-0 z-1 cursor-pointer rounded-full bg-transparent hover:bg-zinc-300/20"
+            ></div>
+          </div>
         {/snippet}
 
         <DropdownItem class="flex items-center gap-3" href="/user/{data.self.username}">
