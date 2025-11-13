@@ -1,6 +1,7 @@
 <script lang="ts">
   import { Button } from '$lib/components/button';
   import { Icon, ReturnHeader } from '$lib/components/misc';
+  import { UserOverview } from '$lib/components/overview';
   import { Post } from '$lib/components/post';
   import { Toast } from '$lib/components/toast';
   import { getTheme } from '$lib/utils/theme.svelte';
@@ -96,6 +97,8 @@
     />
   </div>
 
+  <ReturnHeader>Return</ReturnHeader>
+
   <Post
     self={data.self}
     post={{
@@ -109,7 +112,7 @@
       dateUpdated: '',
       owner: {
         id: 1,
-        profilePicture: '',
+        profilePicture: null,
         displayName: 'Owner',
         username: 'owner',
       },
@@ -133,7 +136,7 @@
         replyCount: 0,
         owner: {
           id: 0,
-          profilePicture: '',
+          profilePicture: null,
           displayName: 'Owner',
           username: 'owner',
         },
@@ -155,5 +158,34 @@
     showThreadAndGroupName
   />
 
-  <ReturnHeader>Return</ReturnHeader>
+  <div class="flex gap-4">
+    <UserOverview
+      user={{
+        id: 0,
+        profilePicture: null,
+        displayName: 'Owner',
+        username: 'owner',
+        chatChannelId: null,
+        description: null,
+        followed: false,
+        followerCount: 0,
+        followingCount: 0,
+        role: 'user',
+      }}
+    />
+    <UserOverview
+      user={{
+        id: 0,
+        profilePicture: null,
+        displayName: 'Owner',
+        username: 'owner',
+        chatChannelId: null,
+        description: null,
+        followed: false,
+        followerCount: 0,
+        followingCount: 0,
+        role: 'admin',
+      }}
+    />
+  </div>
 </div>
