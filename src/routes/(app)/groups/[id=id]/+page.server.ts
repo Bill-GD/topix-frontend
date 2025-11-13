@@ -34,10 +34,10 @@ export const load: PageServerLoad = async ({ cookies, params, url, parent, fetch
                 searchString,
                 new Map<string, string>([
                   ['groupId', params.id],
-                  ['accepted', 'true'],
+                  ['approved', 'true'],
                 ]),
               )
-            : `groupId=${params.id}&accepted=true`
+            : `groupId=${params.id}&approved=true`
         }`,
       );
 
