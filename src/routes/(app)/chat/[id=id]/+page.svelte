@@ -104,7 +104,7 @@
       {otherUser?.displayName ?? '[Deleted user]'}
     </a>
 
-    <Button class="ml-auto p-2 hover:bg-zinc-300" onclick={() => (showModal = 'delete')}>
+    <Button class="ml-auto p-2" onclick={() => (showModal = 'delete')}>
       <Icon type="delete" class="text-red-500" size="sm" />
     </Button>
   </div>

@@ -34,7 +34,7 @@
 
   {#if user.role !== 'admin'}
     <Button
-      class="ml-auto p-2"
+      class="ml-auto p-2 dark:hover:bg-zinc-700"
       onclick={(ev) => {
         ev.preventDefault();
         showModal = true;

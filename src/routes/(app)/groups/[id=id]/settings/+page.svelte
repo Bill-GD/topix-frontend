@@ -104,7 +104,7 @@
         <div class="flex w-min items-center gap-2 box p-2">
           <Flair {tag} />
           <Button
-            class="p-2 hover:bg-zinc-300"
+            class="p-2"
             onclick={() => {
               showModal = 'delete';
               selectedTag = tag;
