@@ -1,10 +1,14 @@
 <script lang="ts">
+  import { tooltip } from '$lib/utils/helpers';
   import type { Snippet } from 'svelte';
   import type { ClassValue } from 'svelte/elements';
 
   let {
     title,
     href,
+    inHeader = false,
+    isCurrent = false,
+    noPadding = false,
     children,
     class: className,
   }: {
@@ -12,16 +16,35 @@
     href: string;
     children: Snippet;
     class?: ClassValue;
+    inHeader?: boolean;
+    isCurrent?: boolean;
+    noPadding?: boolean;
   } = $props();
 </script>
 
-<a
-  class={[
-    'flex h-fit w-full cursor-pointer items-center gap-3 rounded-md p-3 py-2 hover:bg-zinc-300 dark:hover:bg-zinc-800/80',
-    className,
-  ]}
-  {href}
->
-  {@render children()}
-  <span class="text-xl">{title}</span>
-</a>
+{#if inHeader}
+  <a
+    class={[
+      'rounded-md hover:bg-zinc-200 dark:hover:bg-zinc-800',
+      isCurrent && 'bg-blue-100 text-blue-600',
+      !noPadding && 'px-6 py-2',
+      className,
+    ]}
+    {href}
+    {@attach tooltip(title, 'bottom')}
+  >
+    {@render children()}
+  </a>
+{:else}
+  <a
+    class={[
+      'flex h-fit w-full cursor-pointer items-center gap-3 rounded-md px-3 py-2 hover:bg-zinc-200 dark:hover:bg-zinc-800',
+      isCurrent && 'font-semibold text-blue-600',
+      className,
+    ]}
+    {href}
+  >
+    {@render children()}
+    <span class="text-xl">{title}</span>
+  </a>
+{/if}

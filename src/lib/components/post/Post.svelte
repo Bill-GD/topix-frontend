@@ -330,6 +330,6 @@ Reaction requires `?/react` formaction
   @reference "@/app.css";
 
   .reaction-button {
-    @apply z-1 flex items-center gap-2 rounded-md bg-zinc-50 p-2 box-shadow hover:bg-zinc-150 dark:bg-zinc-800 dark:hover:bg-zinc-700;
+    @apply z-1 flex items-center gap-2 rounded-md bg-zinc-50 p-2 box-shadow hover:bg-zinc-100 dark:bg-zinc-800 dark:hover:bg-zinc-700;
   }
 </style>
