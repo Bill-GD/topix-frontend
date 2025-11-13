@@ -75,9 +75,9 @@
 
 <main class="relative min-h-screen bg-zinc-100 dark:bg-zinc-950">
   <header
-    class="fixed top-0 z-4 flex h-(--header-height) w-full items-center bg-zinc-100 px-2 box-shadow md:px-4 dark:border-b dark:border-zinc-700 dark:bg-zinc-900"
+    class="sticky top-0 z-4 flex w-full items-center bg-zinc-100 p-2 box-shadow md:px-4 dark:border-b dark:border-zinc-700 dark:bg-zinc-900"
   >
-    <Button class="relative mr-2 inline p-2 sm:hidden" onclick={() => (showNav = !showNav)}>
+    <Button class="relative mr-2 inline p-2 md:hidden" onclick={() => (showNav = !showNav)}>
       <Icon type="bar" />
       {#if data.notificationCount > 0}
         <Badge
@@ -90,7 +90,10 @@
       <img class="aspect-square h-8 w-8" src="/favicon.svg" alt="logo" />
     </span>
 
-    <div class="ml-auto hidden items-center gap-4 sm:flex">
+    <!-- <div class="ml-auto items-center gap-4 sm:flex"> -->
+    <div
+      class="center-width absolute top-1/2 left-1/2 hidden w-full -translate-1/2 justify-between gap-4 md:flex"
+    >
       {@render navbar(true)}
     </div>
 
@@ -140,9 +143,9 @@
           Dark mode
           <Switch class="w-1/3" checked={theme.isDark} onchange={() => theme.toggle()} />
         </DropdownItem>
-        <DropdownItem class="font-semibold text-red-500" href="/logout" rel="external"
-          >Log out</DropdownItem
-        >
+        <DropdownItem class="font-semibold text-red-500" href="/logout" rel="external">
+          Log out
+        </DropdownItem>
       </DropdownMenu>
     </div>
   </header>
@@ -163,9 +166,15 @@
     </aside>
   {/if}
 
-  <div class="pt-(--header-height)">
-    <div class="mx-auto md:w-3/4 md:self-center xl:w-1/2 2xl:w-1/3">
-      {@render children?.()}
-    </div>
+  <div class="center-width mx-auto px-4 md:px-0">
+    {@render children?.()}
   </div>
 </main>
+
+<style lang="postcss">
+  @reference '@/app.css';
+
+  .center-width {
+    @apply md:w-2/3 lg:w-1/2 2xl:w-1/3;
+  }
+</style>

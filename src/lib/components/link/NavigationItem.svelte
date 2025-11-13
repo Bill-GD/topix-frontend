@@ -25,9 +25,11 @@
 {#if inHeader}
   <a
     class={[
-      'rounded-md hover:bg-zinc-200 dark:hover:bg-zinc-800',
-      isCurrent && 'bg-blue-100 text-blue-600',
-      !noPadding && 'px-6 py-2',
+      'flex justify-center rounded-md',
+      isCurrent
+        ? 'bg-blue-100 text-blue-600 hover:bg-blue-200/80 dark:bg-sky-700/15 dark:hover:bg-sky-700/25'
+        : 'hover:bg-zinc-200 dark:hover:bg-zinc-800',
+      !noPadding && 'flex-grow-1 py-2',
       className,
     ]}
     {href}
