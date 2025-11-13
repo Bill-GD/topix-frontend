@@ -1,15 +1,12 @@
 <script lang="ts">
   import { Button } from '$lib/components/button';
-  import { Icon, ReturnHeader } from '$lib/components/misc';
+  import { Icon, ReturnHeader, ThemeToggle } from '$lib/components/misc';
   import { UserOverview } from '$lib/components/overview';
   import { Post } from '$lib/components/post';
   import { Toast } from '$lib/components/toast';
-  import { getTheme } from '$lib/utils/theme.svelte';
   import type { PageProps } from './$types';
 
   let { data }: PageProps = $props();
-
-  const theme = getTheme();
 </script>
 
 <svelte:head>
@@ -17,9 +14,7 @@
 </svelte:head>
 
 <div class="flex flex-col gap-4 p-4">
-  <Button class="absolute top-4 right-4 z-1 p-2" onclick={() => theme.toggle()}>
-    <Icon class="text-zinc-800 dark:text-zinc-300" type={theme.isDark ? 'moon' : 'sun'} />
-  </Button>
+  <ThemeToggle class="absolute top-4 right-4 z-1" />
 
   <div class="flex flex-wrap gap-4">
     <Button class="px-4" type="base">Base</Button>

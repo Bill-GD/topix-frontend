@@ -4,7 +4,7 @@
   import { DropdownItem, DropdownMenu } from '$lib/components/dropdown';
   import { Switch } from '$lib/components/input';
   import { NavigationItem } from '$lib/components/link';
-  import { Badge, Icon } from '$lib/components/misc';
+  import { Badge, Icon, ThemeToggle } from '$lib/components/misc';
   import { getToaster } from '$lib/components/toast';
   import type { Icons } from '$lib/components/types';
   import { formatNotification, getApiUrl } from '$lib/utils/helpers';
@@ -98,6 +98,8 @@
     </div>
 
     <div class="ml-auto flex items-center gap-4">
+      <ThemeToggle class="hover:bg-zinc-150 md:hidden dark:hover:bg-zinc-800" />
+
       <NavigationItem
         class="p-2"
         title="Notifications"
@@ -139,7 +141,10 @@
           </div>
         </DropdownItem>
         <DropdownItem href="/settings">Settings</DropdownItem>
-        <DropdownItem class="flex items-center justify-between" onclick={() => theme.toggle()}>
+        <DropdownItem
+          class="hidden items-center justify-between md:flex"
+          onclick={() => theme.toggle()}
+        >
           Dark mode
           <Switch class="w-1/3" checked={theme.isDark} onchange={() => theme.toggle()} />
         </DropdownItem>
