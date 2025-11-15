@@ -79,12 +79,6 @@
   >
     <Button class="relative mr-2 inline p-2 md:hidden" onclick={() => (showNav = !showNav)}>
       <Icon type="bar" />
-      {#if data.notificationCount > 0}
-        <Badge
-          class="absolute -top-1 -right-2"
-          text={data.notificationCount > 99 ? '99+' : `${data.notificationCount}`}
-        />
-      {/if}
     </Button>
     <span class="text-3xl">
       <img class="aspect-square h-8 w-8" src="/favicon.svg" alt="logo" />
