@@ -7,7 +7,7 @@
 </script>
 
 <a class="flex cursor-pointer items-center gap-4 box box-hover" href="/groups/{group.id}">
-  <div class="w-30 overflow-hidden rounded-md">
+  <div class="max-h-20 w-30 overflow-hidden rounded-md">
     <img src={group.bannerPicture ?? '/images/no-image.jpg'} alt="group-banner" />
   </div>
 

@@ -50,11 +50,13 @@
 
 <div class="flex flex-col gap-4">
   <div class="box p-0">
-    <img
-      class="object-fit rounded-t-lg"
-      src={data.group.bannerPicture ?? '/images/no-image.jpg'}
-      alt="group-banner"
-    />
+    <div class="max-h-56 overflow-clip rounded-t-lg">
+      <img
+        class="-z-[1] w-full"
+        src={data.group.bannerPicture ?? '/images/no-image.jpg'}
+        alt="group-banner"
+      />
+    </div>
 
     <div class="flex flex-col gap-2 p-4">
       <p class="text-4xl font-bold">{data.group.name}</p>

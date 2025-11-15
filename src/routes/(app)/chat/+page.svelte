@@ -61,7 +61,7 @@
       {#if searched}
         No result found.
       {:else}
-        You have no chat channel yet.
+        You have no ongoing conversation yet.
       {/if}
     </p>
   {:else}

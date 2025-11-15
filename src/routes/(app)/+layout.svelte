@@ -101,7 +101,7 @@
       <ThemeToggle class="hover:bg-zinc-150 md:hidden dark:hover:bg-zinc-800" />
 
       <NavigationItem
-        class="p-2"
+        class="relative p-2"
         title="Notifications"
         href="/notifications"
         isCurrent={page.url.pathname === '/notifications'}
@@ -111,7 +111,7 @@
         <Icon type="bell" />
         {#if data.notificationCount > 0}
           <Badge
-            class="absolute -top-2 -right-3"
+            class="absolute top-0 right-0"
             text={data.notificationCount > 99 ? '99+' : `${data.notificationCount}`}
           />
         {/if}
