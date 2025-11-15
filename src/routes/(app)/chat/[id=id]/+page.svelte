@@ -117,20 +117,26 @@
       <div class="pb-2"></div>
       {#each messages as { message, hideSender, showTimeDivider }}
         <div
-          class={['flex items-center gap-2 ', hideSender ? 'mt-px' : 'mt-2']}
+          class={[
+            'flex items-center gap-2 ',
+            data.self.id === message.sender.id && 'flex-row-reverse',
+            hideSender ? 'mt-px' : 'mt-2',
+          ]}
           onmouseenter={() => (hoverId = message.id)}
           onmouseleave={() => (hoverId = -1)}
           tabindex="-1"
           role="dialog"
         >
-          {#if hideSender}
-            <div class="profile-picture-xs sm:profile-picture-sm"></div>
-          {:else}
-            <img
-              class="profile-picture-xs sm:profile-picture-sm"
-              src={message.sender.profilePicture ?? '/images/default-user-profile-icon.jpg'}
-              alt="profile"
-            />
+          {#if data.self.id !== message.sender.id}
+            {#if hideSender}
+              <div class="profile-picture-xs sm:profile-picture-sm"></div>
+            {:else}
+              <img
+                class="profile-picture-xs sm:profile-picture-sm"
+                src={message.sender.profilePicture ?? '/images/default-user-profile-icon.jpg'}
+                alt="profile"
+              />
+            {/if}
           {/if}
           <div
             class="max-w-5/6 rounded-md bg-zinc-50 px-3 py-2 md:max-w-3/4 dark:bg-zinc-800"

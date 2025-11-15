@@ -77,7 +77,7 @@
             {others[index]?.displayName ?? '[Deleted user]'}
           </span>
           <span class="line-clamp-1 overflow-ellipsis text-zinc-400">
-            {channel.lastMessage ?? 'No message'}
+            {channel.lastMessage}
           </span>
         </div>
         <div class="mr-2 ml-auto flex items-center gap-2">
