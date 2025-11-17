@@ -187,7 +187,7 @@
 <Modal show={showModal === 'update'} backdropCallback={hideModal} center>
   <ModalHeader>Update thread</ModalHeader>
   <form
-    class="flex w-full flex-col gap-4"
+    class="mt-4 flex w-full flex-col gap-4"
     action="?/update-thread"
     method="post"
     use:enhance={() => {

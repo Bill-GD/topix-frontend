@@ -292,7 +292,7 @@
 <Modal show={showModal === 'visibility'} backdropCallback={hideModal} center>
   <ModalHeader>Change post visibility</ModalHeader>
   <form
-    class="flex w-full flex-col gap-4"
+    class="mt-4 flex w-full flex-col gap-4"
     action="?/update-post-visibility"
     method="post"
     use:enhance={() => {

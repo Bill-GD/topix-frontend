@@ -2,6 +2,8 @@
   import type { Snippet } from 'svelte';
   import type { ClassValue } from 'svelte/elements';
   import { fade, scale } from 'svelte/transition';
+  import Button from '../button/Button.svelte';
+  import Icon from '../misc/Icon.svelte';
 
   let {
     class: className,
@@ -31,18 +33,21 @@
     onclick={backdropCallback}
     out:fade={{ duration: 300 }}
   ></div>
-  <div in:fade={{ duration: 200 }} out:fade={{ duration: 300 }}>
-    <div
-      class={[
-        'fixed top-1/2 left-1/2 flex w-11/12 -translate-1/2 flex-col gap-4 box transition-all md:max-w-1/2 md:p-6 dark:border-gray-700 dark:bg-zinc-900',
-        upper ? 'z-13' : 'z-11',
-        center && 'text-center',
-        className,
-      ]}
-      {id}
-      in:scale={{ duration: 200, start: 0.75 }}
-      out:scale={{ duration: 300, start: 0.75 }}
-    >
+  <div
+    class={[
+      'fixed top-1/2 left-1/2 flex w-11/12 -translate-1/2 flex-col gap-4 box transition-all md:max-w-1/2 md:p-6 dark:border-gray-700 dark:bg-zinc-900',
+      upper ? 'z-13' : 'z-11',
+      center && 'text-center',
+      className,
+    ]}
+    {id}
+    in:scale={{ duration: 200, start: 0.75 }}
+    out:scale={{ duration: 300, start: 0.75 }}
+  >
+    <Button class="absolute top-2 right-2" onclick={() => (show = false)}>
+      <Icon type="close" size="sm" />
+    </Button>
+    <div in:fade={{ duration: 200 }} out:fade={{ duration: 300 }}>
       {@render children()}
     </div>
   </div>

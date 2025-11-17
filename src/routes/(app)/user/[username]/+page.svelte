@@ -233,7 +233,7 @@
 <Modal show={showModal === 'thread'} backdropCallback={hideModal} center>
   <ModalHeader>Create thread</ModalHeader>
   <form
-    class="flex w-full flex-col gap-4"
+    class="mt-4 flex w-full flex-col gap-4"
     action="?/create-thread"
     method="post"
     use:enhance={() => {
