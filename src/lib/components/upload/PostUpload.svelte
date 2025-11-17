@@ -330,7 +330,7 @@
   @reference '@/app.css';
 
   .editor {
-    @apply min-h-24 w-full rounded-md border border-gray-700 p-4 focus:border-gray-300;
+    @apply min-h-16 w-full rounded-md border border-gray-700 p-4 focus:border-gray-300;
   }
 
   .editor.empty::after {
