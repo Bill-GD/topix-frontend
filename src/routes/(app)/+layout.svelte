@@ -64,7 +64,7 @@
       <NavigationItem
         title={item.title}
         href={item.href}
-        isCurrent={page.url.pathname === item.href}
+        isCurrent={page.url.pathname.includes(item.href)}
         {inHeader}
       >
         <Icon type={item.icon} />
@@ -80,9 +80,9 @@
     <Button class="relative mr-2 inline p-2 md:hidden" onclick={() => (showNav = !showNav)}>
       <Icon type="bar" />
     </Button>
-    <span class="text-3xl">
+    <a class="text-3xl" href="/home">
       <img class="aspect-square h-8 w-8" src="/favicon.svg" alt="logo" />
-    </span>
+    </a>
 
     <!-- <div class="ml-auto items-center gap-4 sm:flex"> -->
     <div
