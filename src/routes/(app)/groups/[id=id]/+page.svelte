@@ -78,6 +78,18 @@
         </div>
 
         <div class="ml-auto flex items-center gap-2">
+          {#if searched}
+            <Button
+              class="mr-auto"
+              type="base"
+              outline
+              onclick={() => {
+                goto(`/groups/${data.group.id}`, { replaceState: true });
+              }}
+            >
+              Clear result
+            </Button>
+          {/if}
           {#if data.group.status === true}
             <Button
               class="p-2"
