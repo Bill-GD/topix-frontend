@@ -1,9 +1,6 @@
 import { AxiosHandler, handlePostDeletion, handleReaction } from '$lib/utils/axios-handler';
 import { getPostUploadForm } from '$lib/utils/helpers';
-import {
-  CookieName, type Group, type Post, type Thread,
-  type User,
-} from '$lib/utils/types';
+import { CookieName, type Group, type Post, type Thread, type User } from '$lib/utils/types';
 import { type Actions, error, fail, isActionFailure } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 

@@ -23,7 +23,7 @@
     tags,
     threadId,
     groupId,
-    groupApproved = false,
+    groupApproved = true,
     showVisibilitySelector = false,
     hideBox = false,
     postCallback,

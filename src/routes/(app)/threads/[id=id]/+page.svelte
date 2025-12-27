@@ -153,7 +153,6 @@
       placeholder="Add new post"
       postCallback={hideModal}
       groupId={data.thread.groupId ?? undefined}
-      groupApproved
       hideBox
     />
   </ModalBody>

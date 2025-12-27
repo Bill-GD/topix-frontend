@@ -58,7 +58,6 @@
   placeholder="Enter your reply"
   threadId={data.post.threadId ?? undefined}
   groupId={data.post.groupId ?? undefined}
-  groupApproved
 />
 
 <div class="flex flex-col gap-4">
