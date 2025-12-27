@@ -198,7 +198,9 @@
       }}
     >
       <Input bind:value={messageInput} placeholder="Send a message" />
-      <Button type="success">Send</Button>
+      <Button type="success">
+        <Icon type="send" />
+      </Button>
     </form>
   {:else}
     <p class="pt-4 text-center">You can no longer send message.</p>
