@@ -106,12 +106,7 @@
 <div class="mt-6 flex flex-col gap-6">
   <Divider>Or sign up with</Divider>
 
-  <Button
-    type="base"
-    outline
-    href={page.url.searchParams.has('oauth') ? '' : '/google-oauth'}
-    disabled={page.url.searchParams.has('oauth')}
-  >
+  <Button type="base" outline href="/google-oauth">
     <img class="mx-auto profile-picture-xs" src="/images/google-logo.svg" alt="google-logo" />
   </Button>
 </div>
