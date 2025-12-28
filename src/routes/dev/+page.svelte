@@ -157,6 +157,7 @@
     <UserOverview
       user={{
         id: 0,
+        email: 'owner@gmail.com',
         profilePicture: null,
         displayName: 'Owner',
         username: 'owner',
@@ -171,6 +172,7 @@
     <UserOverview
       user={{
         id: 0,
+        email: 'owner@gmail.com',
         profilePicture: null,
         displayName: 'Owner',
         username: 'owner',

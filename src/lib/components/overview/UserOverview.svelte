@@ -17,20 +17,21 @@
   }
 </script>
 
-<div class="relative">
-  <a class="absolute inset-0 z-0" href="/user/{user.username}" aria-label="link"></a>
-  <div class="flex items-center gap-4 box box-hover">
+<div class="relative box box-hover">
+  <a class="absolute inset-0" href="/user/{user.username}" aria-label="link"></a>
+  <div class="flex items-center gap-4">
     <img
       class="profile-picture-md"
       src={user.profilePicture ?? '/images/default-user-profile-icon.jpg'}
       alt="profile"
     />
-    <div class="flex flex-col gap-2">
+    <div class="flex flex-col">
       <p class="text-gray-700">#{user.id}</p>
       <div class="flex items-baseline gap-2">
         <span class="text-xl font-semibold">{user.displayName}</span>
         <span class="text-gray-500">@{user.username}</span>
       </div>
+      <p>Email: {user.email}</p>
       <p>Role: {user.role}</p>
     </div>
 

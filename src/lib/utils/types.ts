@@ -42,6 +42,7 @@ export type CurrentUser = {
 
 export type User = {
   id: number;
+  email: string;
   username: string;
   displayName: string;
   description: string | null;
