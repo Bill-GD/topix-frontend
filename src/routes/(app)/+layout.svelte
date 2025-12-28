@@ -7,7 +7,7 @@
   import { Badge, Icon, ThemeToggle } from '$lib/components/misc';
   import { getToaster } from '$lib/components/toast';
   import type { Icons } from '$lib/components/types';
-  import { formatNotification, getApiUrl } from '$lib/utils/helpers';
+  import { getApiUrl } from '$lib/utils/helpers';
   import { getTheme } from '$lib/utils/theme.svelte';
   import type { Notification } from '$lib/utils/types';
   import { onMount } from 'svelte';
@@ -37,21 +37,9 @@
     notificationSource = new EventSource(`${getApiUrl()}/notification/sse`);
 
     notificationSource.onmessage = ({ data: msgData }) => {
-      const noti = formatNotification(JSON.parse(msgData) as Notification);
+      const noti = JSON.parse(msgData) as Notification;
       if (noti.receiverId !== data.self.id) return;
-      toaster.addToast(
-        `<b>${noti.actor.displayName}</b>` +
-          (noti.actorCount > 1 ? ` and ${noti.actorCount - 1} other` : '') +
-          ` ${noti.action}` +
-          (noti.actionType === 'react'
-            ? noti.postContent
-              ? `: "${noti.postContent}"`
-              : '.'
-            : noti.actionType === 'update_thread'
-              ? `: "${noti.threadTitle}"`
-              : ''),
-        'info',
-      );
+      toaster.addToast(noti, 'info');
     };
 
     return notificationSource.close;

@@ -212,7 +212,7 @@ export function formatNotification(noti: Notification) {
 
   switch (noti.actionType) {
     case 'react': {
-      action = 'reacted to your <b>post</b>';
+      action = 'reacted to your post';
       url = `/post/${noti.objectId}`;
       break;
     }

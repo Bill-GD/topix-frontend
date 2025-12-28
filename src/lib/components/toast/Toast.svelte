@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { formatNotification } from '$lib/utils/helpers';
   import type { ToastMessage } from '$lib/utils/types';
   import { onMount } from 'svelte';
   import type { ClassValue } from 'svelte/elements';
@@ -34,6 +35,8 @@
   };
 
   let mounted = $state<boolean>(false);
+  let noti = toast.notiPayload !== undefined ? formatNotification(toast.notiPayload) : null;
+
   onMount(() => {
     mounted = true;
     if (!persistent) setTimeout(() => (mounted = false), 4000);
@@ -53,7 +56,20 @@
   >
     <Icon class={['mx-1 py-1', types[toast.type].fg]} size="lg" type={types[toast.type].icon} />
     <p class={[types[toast.type].fg]}>
-      {@html toast.message}
+      {#if toast.message !== undefined}
+        {toast.message}
+      {:else if noti}
+        <b>{noti.actor.displayName}</b>
+        {noti.actorCount > 1 ? ` and ${noti.actorCount - 1} other` : ''}
+        {noti.action}
+        {noti.actionType === 'react'
+          ? noti.postContent
+            ? `: "${noti.postContent}"`
+            : '.'
+          : noti.actionType === 'update_thread'
+            ? `: "${noti.threadTitle}"`
+            : ''}
+      {/if}
     </p>
   </div>
 {/if}
