@@ -110,9 +110,9 @@
             />
             <div class="flex flex-col gap-2">
               <div class="flex items-baseline gap-2">
-                <a class="text-xl font-semibold hover:underline" href="/user/{user.username}"
-                  >{user.displayName}</a
-                >
+                <a class="text-xl font-semibold hover:underline" href="/user/{user.username}">
+                  {user.displayName}
+                </a>
                 <span class="text-gray-500">@{user.username}</span>
               </div>
               <p>Requested at {new Date(user.dateRequested).toDateString()}</p>

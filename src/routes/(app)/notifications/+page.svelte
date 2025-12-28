@@ -82,7 +82,7 @@
         const res = await fetch(`/api/notifications?page=${++pageIndex}`);
         const newData = await res.json();
         disableScroller = res.headers.get('x-end-of-list') === 'true';
-        notifications = [...notifications, ...newData].map(formatNotification);
+        notifications = [...notifications, ...newData.map(formatNotification)];
       }}
       detachCleanup={() => {
         pageIndex = 1;
