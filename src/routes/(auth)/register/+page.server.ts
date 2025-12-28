@@ -61,13 +61,6 @@ export const actions: Actions = {
       }
     }
 
-    const emailRegex =
-      /^[a-zA-Z0-9]+([._-][0-9a-zA-Z]+)*@[a-zA-Z0-9]+([.-][0-9a-zA-Z]+)*\.[a-zA-Z]{2,}$/;
-
-    if (!RegExp(emailRegex).test(dto.email)) {
-      return fail(400, { success: false, message: 'Email format is invalid.' });
-    }
-
     const res = await AxiosHandler.post('/auth/register', dto);
     if (!res.success) {
       let message = res.message;

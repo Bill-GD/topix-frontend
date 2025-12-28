@@ -5,7 +5,6 @@
   import type { Post } from '$lib/utils/types';
   import type { ClassValue } from 'svelte/elements';
   import Button from '../button/Button.svelte';
-  import IconButton from '../button/IconButton.svelte';
   import Flair from '../misc/Flair.svelte';
   import Icon from '../misc/Icon.svelte';
   import Modal from '../modal/Modal.svelte';
@@ -76,12 +75,12 @@
   </div>
 
   <div class="ml-auto flex gap-2">
-    <IconButton type="success" onclick={() => (showModal = 'approve')}>
+    <Button type="success" onclick={() => (showModal = 'approve')}>
       <Icon type="check" size="sm" />
-    </IconButton>
-    <IconButton type="danger" onclick={() => (showModal = 'remove')}>
+    </Button>
+    <Button type="danger" onclick={() => (showModal = 'remove')}>
       <Icon type="close" size="sm" />
-    </IconButton>
+    </Button>
   </div>
 </div>
 
@@ -103,7 +102,7 @@
       <input type="number" name="post-id" value={post.id} hidden readonly />
       <Button class="w-full" type="success" onclick={hideModal}>Approve</Button>
     </form>
-    <Button class="w-full" type="dark" onclick={hideModal}>Cancel</Button>
+    <Button class="w-full" type="base" onclick={hideModal}>Cancel</Button>
   </ModalFooter>
 </Modal>
 
@@ -125,6 +124,6 @@
       <input type="number" name="post-id" value={post.id} hidden readonly />
       <Button class="w-full" type="danger" onclick={hideModal}>Remove</Button>
     </form>
-    <Button class="w-full" type="dark" onclick={hideModal}>Cancel</Button>
+    <Button class="w-full" type="base" onclick={hideModal}>Cancel</Button>
   </ModalFooter>
 </Modal>

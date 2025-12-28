@@ -21,6 +21,7 @@ import { faLock } from '@fortawesome/free-solid-svg-icons/faLock';
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons/faMagnifyingGlass';
 import { faMessage } from '@fortawesome/free-solid-svg-icons/faMessage';
 import { faMoon } from '@fortawesome/free-solid-svg-icons/faMoon';
+import { faPaperPlane } from '@fortawesome/free-solid-svg-icons/faPaperPlane';
 import { faPen } from '@fortawesome/free-solid-svg-icons/faPen';
 import { faPlus } from '@fortawesome/free-solid-svg-icons/faPlus';
 import { faReply } from '@fortawesome/free-solid-svg-icons/faReply';
@@ -35,9 +36,10 @@ import { faUserPlus } from '@fortawesome/free-solid-svg-icons/faUserPlus';
 import { faVideo } from '@fortawesome/free-solid-svg-icons/faVideo';
 import { faXmark } from '@fortawesome/free-solid-svg-icons/faXmark';
 
-export type ButtonType = 'primary' | 'danger' | 'dark' | 'success';
+export type ButtonType = 'primary' | 'danger' | 'base' | 'success';
 
 export const Icons = {
+  send: faPaperPlane,
   info: faInfoCircle,
   bell: faBell,
   sun: faSun,

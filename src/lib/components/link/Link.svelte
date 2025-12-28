@@ -17,7 +17,7 @@
 
 <a
   class={[
-    'cursor-pointer text-sky-600 visited:text-purple-800 hover:text-sky-500 active:text-sky-500 active:underline',
+    'cursor-pointer text-blue-600 hover:text-blue-500 active:text-blue-500 active:underline',
     className,
   ]}
   {target}

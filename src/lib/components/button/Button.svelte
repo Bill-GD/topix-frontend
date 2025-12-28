@@ -13,26 +13,29 @@
     children,
     class: className,
     formaction,
+    buttonType,
+    round = false,
     ...otherProps
   }: {
     id?: string;
-    type: ButtonType;
+    type?: ButtonType;
     outline?: boolean;
     href?: string;
     formaction?: string;
     onclick?: VoidFunction | UnaryVoidFunction<Event>;
     disabled?: boolean;
+    round?: boolean;
     children?: Snippet;
+    buttonType?: 'submit' | 'reset' | 'button' | null;
     class?: ClassValue;
   } = $props();
 
-  const buttonClass = `btn-${type}${outline ? '-outline' : ''}`;
-  const textColor = buttonClass !== 'btn' && !buttonClass.includes('outline') ? 'text-white' : '';
+  const buttonClass = type ? `btn-${type}${outline ? '-outline' : ''}` : 'btn';
 </script>
 
 {#if href}
   <a
-    class={[buttonClass, textColor, 'inline-flex no-underline', className]}
+    class={[buttonClass, 'inline-flex no-underline', round && 'rounded-full', className]}
     role="button"
     {href}
     {onclick}
@@ -42,10 +45,11 @@
   </a>
 {:else}
   <button
-    class={[buttonClass, textColor, 'font-semibold', className]}
+    class={[buttonClass, 'font-semibold', round && 'rounded-full', className]}
     {formaction}
     {onclick}
     {disabled}
+    type={buttonType}
     {...otherProps}
   >
     {@render children?.()}

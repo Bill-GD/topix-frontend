@@ -2,7 +2,7 @@
   let {
     disabled,
     hideText = false,
-    endedText = 'You reached the end.',
+    endedText = `You've reached the end.`,
     attachmentCallback,
     detachCleanup,
   }: {

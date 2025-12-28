@@ -2,7 +2,7 @@
   import { enhance } from '$app/forms';
   import { goto } from '$app/navigation';
   import { page } from '$app/state';
-  import { Button, IconButton } from '$lib/components/button';
+  import { Button } from '$lib/components/button';
   import { DropdownItem, DropdownMenu } from '$lib/components/dropdown';
   import { FloatingLabelInput, Input } from '$lib/components/input';
   import { Scroller } from '$lib/components/layout';
@@ -50,11 +50,13 @@
 
 <div class="flex flex-col gap-4">
   <div class="box p-0">
-    <img
-      class="object-fit rounded-t-lg"
-      src={data.group.bannerPicture ?? '/images/no-image.jpg'}
-      alt="group-banner"
-    />
+    <div class="max-h-56 overflow-clip rounded-t-lg">
+      <img
+        class="-z-[1] w-full"
+        src={data.group.bannerPicture ?? '/images/no-image.jpg'}
+        alt="group-banner"
+      />
+    </div>
 
     <div class="flex flex-col gap-2 p-4">
       <p class="text-4xl font-bold">{data.group.name}</p>
@@ -76,14 +78,26 @@
         </div>
 
         <div class="ml-auto flex items-center gap-2">
+          {#if searched}
+            <Button
+              class="mr-auto"
+              type="base"
+              outline
+              onclick={() => {
+                goto(`/groups/${data.group.id}`, { replaceState: true });
+              }}
+            >
+              Clear result
+            </Button>
+          {/if}
           {#if data.group.status === true}
-            <IconButton
+            <Button
               class="p-2"
               onclick={() => (showModal = 'search')}
               {@attach tooltip('Search posts')}
             >
               <Icon type="search" size="sm" />
-            </IconButton>
+            </Button>
           {/if}
           {#if data.group.status !== null}
             <Button class="hover:bg-zinc-800" type="primary" disabled>
@@ -107,9 +121,9 @@
 
           <DropdownMenu class="ml-auto" position="bottom" align="right">
             {#snippet trigger()}
-              <IconButton class="p-2" round>
+              <Button class="p-2" round>
                 <Icon type="menu" size="sm" />
-              </IconButton>
+              </Button>
             {/snippet}
 
             <DropdownItem href="/groups/{data.group.id}/members">Members</DropdownItem>
@@ -235,7 +249,7 @@
       <Button class="w-full" type="danger" onclick={hideModal}>Delete</Button>
     </form>
 
-    <Button class="w-full" type="dark" onclick={hideModal}>Cancel</Button>
+    <Button class="w-full" type="base" onclick={hideModal}>Cancel</Button>
   </ModalFooter>
 </Modal>
 
@@ -257,7 +271,7 @@
       <Button class="w-full" type="danger" onclick={hideModal}>Leave</Button>
     </form>
 
-    <Button class="w-full" type="dark" onclick={hideModal}>Cancel</Button>
+    <Button class="w-full" type="base" onclick={hideModal}>Cancel</Button>
   </ModalFooter>
 </Modal>
 
@@ -278,7 +292,7 @@
       <FloatingLabelInput
         class="w-full"
         name="thread-title"
-        labelClass="not-peer-placeholder-shown:bg-zinc-200 not-peer-placeholder-shown:dark:bg-zinc-900"
+        labelClass="peer-[&:focus,&:not(:placeholder-shown)]:bg-zinc-50 peer-[&:focus,&:not(:placeholder-shown)]:dark:bg-zinc-900"
         bind:value={threadTitle}
       >
         Title
@@ -299,7 +313,7 @@
       {:else if data.tags && data.tags.length > 0}
         <Button
           class="w-fit"
-          type="dark"
+          type="base"
           outline
           onclick={(ev) => {
             ev.preventDefault();
@@ -314,7 +328,7 @@
         <Button class="w-full" type="success" onclick={hideModal}>Create</Button>
         <Button
           class="w-full"
-          type="dark"
+          type="base"
           onclick={(ev) => {
             ev.preventDefault();
             hideModal();
@@ -352,7 +366,7 @@
     </Button>
     <Button
       class="w-full"
-      type="dark"
+      type="base"
       onclick={() => {
         showTagModal = false;
         selectedTag = null;
@@ -362,7 +376,7 @@
     </Button>
     <Button
       class="w-full"
-      type="dark"
+      type="base"
       onclick={() => {
         showTagModal = false;
         selectedTag = chosenTag = null;

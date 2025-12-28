@@ -22,7 +22,11 @@
   <title>Register - topix</title>
 </svelte:head>
 
-<p class="text-4xl font-semibold">Sign up for topix</p>
+<p class="mb-4 text-4xl font-semibold">Sign up for topix</p>
+<span>
+  <span class="text-zinc-500">Already have an account?</span>
+  <Link href="/login">Login</Link>
+</span>
 
 <form
   class="mt-8 flex flex-col gap-6"
@@ -47,7 +51,7 @@
   <div class="flex flex-col gap-4">
     <FloatingLabelInput
       class="w-full"
-      labelClass="not-peer-placeholder-shown:bg-zinc-50 not-peer-placeholder-shown:dark:bg-zinc-900"
+      labelClass="peer-[&:focus,&:not(:placeholder-shown)]:bg-zinc-50 peer-[&:focus,&:not(:placeholder-shown)]:dark:bg-zinc-950"
       name="email"
       type="email"
       value={data.email}
@@ -60,7 +64,7 @@
 
     <FloatingLabelInput
       class="w-full"
-      labelClass="not-peer-placeholder-shown:bg-zinc-50 not-peer-placeholder-shown:dark:bg-zinc-900"
+      labelClass="peer-[&:focus,&:not(:placeholder-shown)]:bg-zinc-50 peer-[&:focus,&:not(:placeholder-shown)]:dark:bg-zinc-950"
       name="username"
       type="text"
       value={data.username}
@@ -73,7 +77,7 @@
 
     <FloatingLabelInput
       class="w-full"
-      labelClass="not-peer-placeholder-shown:bg-zinc-50 not-peer-placeholder-shown:dark:bg-zinc-900"
+      labelClass="peer-[&:focus,&:not(:placeholder-shown)]:bg-zinc-50 peer-[&:focus,&:not(:placeholder-shown)]:dark:bg-zinc-950"
       name="password"
       type="password"
       peekable
@@ -85,7 +89,7 @@
 
     <FloatingLabelInput
       class="w-full"
-      labelClass="not-peer-placeholder-shown:bg-zinc-50 not-peer-placeholder-shown:dark:bg-zinc-900"
+      labelClass="peer-[&:focus,&:not(:placeholder-shown)]:bg-zinc-50 peer-[&:focus,&:not(:placeholder-shown)]:dark:bg-zinc-950"
       name="confirm-password"
       type="password"
       peekable
@@ -97,18 +101,12 @@
 
     <Button type="success" disabled={emailVerificationDisabled}>Register</Button>
   </div>
-
-  <Divider />
-
-  <Button
-    class="flex items-center justify-center gap-4"
-    type="dark"
-    href={page.url.searchParams.has('oauth') ? '/google-oauth' : ''}
-    disabled={page.url.searchParams.has('oauth')}
-  >
-    <img class="profile-picture-xs" src="/images/google-logo.svg" alt="google-logo" />
-    Sign up with Google
-  </Button>
-
-  <Link href="/login">Already have an account?</Link>
 </form>
+
+<div class="mt-6 flex flex-col gap-6">
+  <Divider>Or sign up with</Divider>
+
+  <Button type="base" outline href="/google-oauth">
+    <img class="mx-auto profile-picture-xs" src="/images/google-logo.svg" alt="google-logo" />
+  </Button>
+</div>

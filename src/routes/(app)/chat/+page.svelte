@@ -46,7 +46,7 @@
   {#if searched}
     <Button
       class="w-fit"
-      type="dark"
+      type="base"
       outline
       onclick={() => {
         goto(`/chat`, { replaceState: true });
@@ -61,15 +61,12 @@
       {#if searched}
         No result found.
       {:else}
-        You have no chat channel yet.
+        You have no ongoing conversation yet.
       {/if}
     </p>
   {:else}
     {#each channels as channel, index (channel.id)}
-      <a
-        class="flex items-center gap-4 box p-2 hover:bg-zinc-100 dark:hover:bg-zinc-800/80"
-        href="/chat/{channel.id}"
-      >
+      <a class="flex items-center gap-4 box box-hover p-2" href="/chat/{channel.id}">
         <img
           class="profile-picture-sm md:profile-picture-md md:p-2"
           src={others[index]?.profilePicture ?? '/images/default-user-profile-icon.jpg'}
@@ -80,7 +77,7 @@
             {others[index]?.displayName ?? '[Deleted user]'}
           </span>
           <span class="line-clamp-1 overflow-ellipsis text-zinc-400">
-            {channel.lastMessage ?? 'No message'}
+            {channel.lastMessage}
           </span>
         </div>
         <div class="mr-2 ml-auto flex items-center gap-2">

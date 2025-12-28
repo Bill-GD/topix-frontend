@@ -7,7 +7,6 @@
   import { onMount } from 'svelte';
   import type { ClassValue } from 'svelte/elements';
   import Button from '../button/Button.svelte';
-  import IconButton from '../button/IconButton.svelte';
   import Flair from '../misc/Flair.svelte';
   import Icon from '../misc/Icon.svelte';
   import VisibilitySelector from '../misc/VisibilitySelector.svelte';
@@ -24,7 +23,7 @@
     tags,
     threadId,
     groupId,
-    groupApproved = false,
+    groupApproved = true,
     showVisibilitySelector = false,
     hideBox = false,
     postCallback,
@@ -146,7 +145,7 @@
       <div class="flex flex-wrap gap-4 pb-2">
         {#each images as file, index (index)}
           <div class="relative">
-            <IconButton
+            <Button
               class="absolute top-0 right-0"
               onclick={(ev) => {
                 ev.preventDefault();
@@ -154,7 +153,7 @@
               }}
             >
               <Icon class="text-gray-500 hover:cursor-pointer hover:text-gray-300" type="close" />
-            </IconButton>
+            </Button>
 
             <img
               class="aspect-square h-30 w-30 rounded-md"
@@ -173,7 +172,7 @@
           <source src={video.url} type="video/mp4" />
         </video>
 
-        <IconButton
+        <Button
           class="absolute top-0 right-0"
           onclick={(ev) => {
             ev.preventDefault();
@@ -182,7 +181,7 @@
           }}
         >
           <Icon class="text-gray-500 hover:cursor-pointer hover:text-gray-300" type="close" />
-        </IconButton>
+        </Button>
       </div>
     {/if}
 
@@ -201,7 +200,7 @@
         </button>
       {:else if tags && tags.length > 0}
         <Button
-          type="dark"
+          type="base"
           outline
           onclick={(ev) => {
             ev.preventDefault();
@@ -306,7 +305,7 @@
     </Button>
     <Button
       class="w-full"
-      type="dark"
+      type="base"
       onclick={() => {
         hideModal();
         selectedTag = null;
@@ -316,7 +315,7 @@
     </Button>
     <Button
       class="w-full"
-      type="dark"
+      type="base"
       onclick={() => {
         hideModal();
         selectedTag = chosenTag = null;
@@ -331,7 +330,7 @@
   @reference '@/app.css';
 
   .editor {
-    @apply min-h-24 w-full rounded-md border border-gray-700 p-4 focus:border-gray-300;
+    @apply min-h-16 w-full rounded-md border border-gray-700 p-4 focus:border-gray-300;
   }
 
   .editor.empty::after {

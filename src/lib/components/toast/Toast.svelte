@@ -1,40 +1,75 @@
 <script lang="ts">
+  import { formatNotification } from '$lib/utils/helpers';
   import type { ToastMessage } from '$lib/utils/types';
   import { onMount } from 'svelte';
   import type { ClassValue } from 'svelte/elements';
-  import { fade, slide } from 'svelte/transition';
+  import { fade, fly } from 'svelte/transition';
   import Icon from '../misc/Icon.svelte';
 
   let {
     class: className,
     toast,
+    persistent = false,
   }: {
     class?: ClassValue;
     toast: ToastMessage;
+    persistent?: boolean;
   } = $props();
 
-  const types: { [toast.type]: [ClassValue, 'success' | 'info' | 'error'] } = {
-    success: ['text-green-500', 'success'],
-    error: ['text-red-700', 'error'],
-    info: ['text-sky-600', 'info'],
+  const types: {
+    [toast.type]: {
+      fg: ClassValue;
+      border: ClassValue;
+      bg: ClassValue;
+      icon: 'success' | 'info' | 'error';
+    };
+  } = {
+    success: {
+      fg: 'text-green-500',
+      border: 'border-green-500',
+      bg: 'bg-green-50',
+      icon: 'success',
+    },
+    error: { fg: 'text-red-600', border: 'border-red-600', bg: 'bg-red-50', icon: 'error' },
+    info: { fg: 'text-sky-600', border: 'border-sky-600', bg: 'bg-sky-50', icon: 'info' },
   };
 
   let mounted = $state<boolean>(false);
+  let noti = toast.notiPayload !== undefined ? formatNotification(toast.notiPayload) : null;
+
   onMount(() => {
     mounted = true;
-    setTimeout(() => (mounted = false), 4000);
+    if (!persistent) setTimeout(() => (mounted = false), 4000);
   });
 </script>
 
 {#if mounted}
   <div
-    class={['flex w-fit items-center gap-2 box dark:bg-zinc-950', className]}
-    in:slide={{ duration: 200 }}
+    class={[
+      'flex w-fit items-center gap-2 rounded-lg border-l-5 p-4 box-shadow',
+      types[toast.type].border,
+      types[toast.type].bg,
+      className,
+    ]}
+    in:fly={{ duration: 200, x: -200 }}
     out:fade={{ duration: 300 }}
   >
-    <Icon class={['mx-2 py-1', types[toast.type][0]]} size="lg" type={types[toast.type][1]} />
-    <p class={['font-semibold', types[toast.type][0]]}>
-      {@html toast.message}
+    <Icon class={['mx-1 py-1', types[toast.type].fg]} size="lg" type={types[toast.type].icon} />
+    <p class={[types[toast.type].fg]}>
+      {#if toast.message !== undefined}
+        {toast.message}
+      {:else if noti}
+        <b>{noti.actor.displayName}</b>
+        {noti.actorCount > 1 ? ` and ${noti.actorCount - 1} other` : ''}
+        {noti.action}
+        {noti.actionType === 'react'
+          ? noti.postContent
+            ? `: "${noti.postContent}"`
+            : '.'
+          : noti.actionType === 'update_thread'
+            ? `: "${noti.threadTitle}"`
+            : ''}
+      {/if}
     </p>
   </div>
 {/if}

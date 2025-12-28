@@ -5,7 +5,6 @@
   import type { CurrentUser, Post } from '$lib/utils/types';
   import type { ClassValue } from 'svelte/elements';
   import Button from '../button/Button.svelte';
-  import IconButton from '../button/IconButton.svelte';
   import DropdownItem from '../dropdown/DropdownItem.svelte';
   import DropdownMenu from '../dropdown/DropdownMenu.svelte';
   import Flair from '../misc/Flair.svelte';
@@ -71,7 +70,7 @@
 <article
   class={[
     'relative flex flex-col gap-4 box',
-    canClickPost && 'cursor-pointer hover:bg-zinc-100 dark:hover:bg-zinc-800/80',
+    canClickPost && 'cursor-pointer box-hover',
     className,
   ]}
 >
@@ -163,9 +162,9 @@
     {#if !hideOptions && (self.id === post.owner.id || self.role === 'admin')}
       <DropdownMenu class="ml-auto" position="bottom" align="right">
         {#snippet trigger()}
-          <IconButton class="p-2" round>
+          <Button class="p-2" round>
             <Icon type="menu" size="xs" />
-          </IconButton>
+          </Button>
         {/snippet}
 
         {#if detail && self.id === post.owner.id && allowEditVisibility}
@@ -230,10 +229,7 @@
 
         <DropdownMenu position="top" align="left" horizontal>
           {#snippet trigger()}
-            <div
-              class="z-1 flex cursor-pointer items-center gap-2 rounded-md bg-zinc-200 p-2 hover:bg-zinc-300 dark:bg-zinc-600
-dark:hover:bg-zinc-500"
-            >
+            <div class="reaction-button">
               <Icon
                 type={(reaction ?? 'noReaction') as keyof typeof reactions}
                 class={[reaction !== null && reactions[reaction as keyof typeof reactions]]}
@@ -263,11 +259,7 @@ dark:hover:bg-zinc-500"
         </DropdownMenu>
       </form>
 
-      <a
-        class="z-1 flex items-center gap-2 rounded-md bg-zinc-200 p-2 hover:bg-zinc-300 dark:bg-zinc-600
-dark:hover:bg-zinc-500"
-        href={detail ? null : `/post/${post.id}`}
-      >
+      <a class="reaction-button" href={detail ? null : `/post/${post.id}`}>
         <Icon type="reply" size="sm" />
         {post.replyCount}
       </a>
@@ -293,14 +285,14 @@ dark:hover:bg-zinc-500"
       <Button class="w-full" type="danger" onclick={hideModal}>Delete</Button>
       <input type="text" name="post-id" value={post.id} hidden readonly />
     </form>
-    <Button class="w-full" type="dark" onclick={hideModal}>Cancel</Button>
+    <Button class="w-full" type="base" onclick={hideModal}>Cancel</Button>
   </ModalFooter>
 </Modal>
 
 <Modal show={showModal === 'visibility'} backdropCallback={hideModal} center>
   <ModalHeader>Change post visibility</ModalHeader>
   <form
-    class="flex w-full flex-col gap-4"
+    class="mt-4 flex w-full flex-col gap-4"
     action="?/update-post-visibility"
     method="post"
     use:enhance={() => {
@@ -316,7 +308,7 @@ dark:hover:bg-zinc-500"
       <Button class="w-full" type="success" onclick={hideModal}>Update</Button>
       <Button
         class="w-full"
-        type="dark"
+        type="base"
         onclick={(ev) => {
           ev.preventDefault();
           hideModal();
@@ -333,3 +325,11 @@ dark:hover:bg-zinc-500"
 Post component: shows OP, content, interaction counts...  
 Reaction requires `?/react` formaction
 -->
+
+<style lang="postcss">
+  @reference "@/app.css";
+
+  .reaction-button {
+    @apply z-1 flex items-center gap-2 rounded-md bg-zinc-50 p-2 box-shadow hover:bg-zinc-100 dark:bg-zinc-800 dark:hover:bg-zinc-700;
+  }
+</style>

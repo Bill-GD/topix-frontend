@@ -2,7 +2,7 @@
   import { enhance } from '$app/forms';
   import { goto } from '$app/navigation';
   import { page } from '$app/state';
-  import { Button, IconButton } from '$lib/components/button';
+  import { Button } from '$lib/components/button';
   import { DropdownItem, DropdownMenu } from '$lib/components/dropdown';
   import { FloatingLabelInput } from '$lib/components/input';
   import { Scroller } from '$lib/components/layout';
@@ -72,16 +72,16 @@
         {#if data.self.id === data.user.id}
           <DropdownMenu class="ml-auto h-fit" position="bottom" align="right">
             {#snippet trigger()}
-              <IconButton class="p-2" {@attach tooltip('Options')} round>
+              <Button class="p-2" {@attach tooltip('Options')} round>
                 <Icon type="bar" size="sm" />
-              </IconButton>
+              </Button>
             {/snippet}
 
             <DropdownItem href="/user/{data.self.username}/hidden">View hidden items</DropdownItem>
           </DropdownMenu>
         {:else}
-          <IconButton
-            type="dark"
+          <Button
+            type="base"
             class="w-full"
             {@attach tooltip('Message')}
             onclick={async () => {
@@ -98,7 +98,7 @@
             }}
           >
             <Icon type="message" size="sm" />
-          </IconButton>
+          </Button>
 
           {#if data.user.followed}
             <form
@@ -111,9 +111,9 @@
                 };
               }}
             >
-              <IconButton type="danger" class="w-full" {@attach tooltip('Unfollow')}>
+              <Button type="danger" class="w-full" {@attach tooltip('Unfollow')}>
                 <Icon type="unfollow" size="sm" />
-              </IconButton>
+              </Button>
               <input type="number" name="user-id" value={data.user.id} hidden readonly />
             </form>
           {:else}
@@ -127,9 +127,9 @@
                 };
               }}
             >
-              <IconButton type="dark" class="w-full" {@attach tooltip('Follow')}>
+              <Button type="base" class="w-full" {@attach tooltip('Follow')}>
                 <Icon type="follow" size="sm" />
-              </IconButton>
+              </Button>
               <input type="number" name="user-id" value={data.user.id} hidden readonly />
             </form>
           {/if}
@@ -233,7 +233,7 @@
 <Modal show={showModal === 'thread'} backdropCallback={hideModal} center>
   <ModalHeader>Create thread</ModalHeader>
   <form
-    class="flex w-full flex-col gap-4"
+    class="mt-4 flex w-full flex-col gap-4"
     action="?/create-thread"
     method="post"
     use:enhance={() => {
@@ -246,7 +246,7 @@
     <FloatingLabelInput
       class="w-full"
       name="thread-title"
-      labelClass="not-peer-placeholder-shown:bg-zinc-200 not-peer-placeholder-shown:dark:bg-zinc-900"
+      labelClass="peer-[&:focus,&:not(:placeholder-shown)]:bg-zinc-50 peer-[&:focus,&:not(:placeholder-shown)]:dark:bg-zinc-900"
       bind:value={threadTitle}
     >
       Title
@@ -258,7 +258,7 @@
       <Button class="w-full" type="success" onclick={hideModal}>Create</Button>
       <Button
         class="w-full"
-        type="dark"
+        type="base"
         onclick={(ev) => {
           ev.preventDefault();
           hideModal();

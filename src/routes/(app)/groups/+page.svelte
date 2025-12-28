@@ -61,7 +61,7 @@
     {#if searched}
       <Button
         class="mr-auto"
-        type="dark"
+        type="base"
         outline
         onclick={() => {
           goto(`/groups`, { replaceState: true });
@@ -120,14 +120,14 @@
       method="post"
       use:enhance={() => {
         return async ({ result, update }) => {
-          await formResultToast(result, toaster);
+          await formResultToast(result, toaster, 'Group created successfully.');
           await update();
         };
       }}
     >
       <FloatingLabelInput
         class="w-full"
-        labelClass="not-peer-placeholder-shown:bg-zinc-200 not-peer-placeholder-shown:dark:bg-zinc-900"
+        labelClass="peer-[&:focus,&:not(:placeholder-shown)]:bg-zinc-50 peer-[&:focus,&:not(:placeholder-shown)]:dark:bg-zinc-900"
         name="group-name"
         bind:value={groupName}
         required
@@ -148,7 +148,7 @@
         </Button>
         <Button
           class="w-full"
-          type="dark"
+          type="base"
           onclick={(ev) => {
             ev.preventDefault();
             hideModal();

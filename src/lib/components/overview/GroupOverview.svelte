@@ -6,11 +6,8 @@
   let { group, showOwner = false }: { group: Group; showOwner?: boolean } = $props();
 </script>
 
-<a
-  class="flex cursor-pointer items-center gap-4 box hover:bg-zinc-200 dark:hover:bg-zinc-800/80"
-  href="/groups/{group.id}"
->
-  <div class="w-30 overflow-hidden rounded-md">
+<a class="flex cursor-pointer items-center gap-4 box box-hover" href="/groups/{group.id}">
+  <div class="max-h-20 w-30 overflow-hidden rounded-md">
     <img src={group.bannerPicture ?? '/images/no-image.jpg'} alt="group-banner" />
   </div>
 

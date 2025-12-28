@@ -28,7 +28,7 @@
 >
   <FloatingLabelInput
     class="w-full"
-    labelClass="not-peer-placeholder-shown:bg-zinc-50 not-peer-placeholder-shown:dark:bg-zinc-900"
+    labelClass="peer-[&:focus,&:not(:placeholder-shown)]:bg-zinc-50 peer-[&:focus,&:not(:placeholder-shown)]:dark:bg-zinc-950"
     name="otp"
     type="text"
   >
@@ -36,5 +36,5 @@
   </FloatingLabelInput>
 
   <Button formaction="?/otp" type="success">Send</Button>
-  <Button formaction="?/resend" type="dark">Send again</Button>
+  <Button formaction="?/resend" type="base">Send again</Button>
 </form>

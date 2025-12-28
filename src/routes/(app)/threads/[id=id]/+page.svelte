@@ -1,6 +1,6 @@
 <script lang="ts">
   import { enhance } from '$app/forms';
-  import { Button, IconButton } from '$lib/components/button';
+  import { Button } from '$lib/components/button';
   import { DropdownItem, DropdownMenu } from '$lib/components/dropdown';
   import { Input } from '$lib/components/input';
   import { Scroller } from '$lib/components/layout';
@@ -72,9 +72,9 @@
 
       <DropdownMenu class="ml-auto h-fit" position="bottom" align="right">
         {#snippet trigger()}
-          <IconButton class="p-2" round>
+          <Button class="p-2" round>
             <Icon type="menu" size="sm" />
-          </IconButton>
+          </Button>
         {/snippet}
 
         {#if data.self.id !== data.thread.owner.id}
@@ -153,7 +153,6 @@
       placeholder="Add new post"
       postCallback={hideModal}
       groupId={data.thread.groupId ?? undefined}
-      groupApproved
       hideBox
     />
   </ModalBody>
@@ -180,14 +179,14 @@
       <Button class="w-full" type="danger" onclick={hideModal}>Delete</Button>
     </form>
 
-    <Button class="w-full" type="dark" onclick={hideModal}>Cancel</Button>
+    <Button class="w-full" type="base" onclick={hideModal}>Cancel</Button>
   </ModalFooter>
 </Modal>
 
 <Modal show={showModal === 'update'} backdropCallback={hideModal} center>
   <ModalHeader>Update thread</ModalHeader>
   <form
-    class="flex w-full flex-col gap-4"
+    class="mt-4 flex w-full flex-col gap-4"
     action="?/update-thread"
     method="post"
     use:enhance={() => {
@@ -207,7 +206,7 @@
       <Button class="w-full" type="success" onclick={hideModal}>Update</Button>
       <Button
         class="w-full"
-        type="dark"
+        type="base"
         onclick={(ev) => {
           ev.preventDefault();
           hideModal();

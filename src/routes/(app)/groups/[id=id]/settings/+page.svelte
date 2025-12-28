@@ -1,7 +1,7 @@
 <script lang="ts">
   import { enhance } from '$app/forms';
   import { page } from '$app/state';
-  import { Button, IconButton } from '$lib/components/button';
+  import { Button } from '$lib/components/button';
   import { FloatingLabelInput, Input } from '$lib/components/input';
   import { Tab, TabBar } from '$lib/components/link';
   import { Flair, Icon, ReturnHeader, VisibilitySelector } from '$lib/components/misc';
@@ -103,15 +103,15 @@
       {#each data.tags as tag (tag.id)}
         <div class="flex w-min items-center gap-2 box p-2">
           <Flair {tag} />
-          <IconButton
-            class="p-2 hover:bg-zinc-300"
+          <Button
+            class="p-2"
             onclick={() => {
               showModal = 'delete';
               selectedTag = tag;
             }}
           >
             <Icon type="delete" class="text-red-500" size="sm" />
-          </IconButton>
+          </Button>
         </div>
       {/each}
     </div>
@@ -147,7 +147,7 @@
       <div class="flex items-center gap-4">
         <FloatingLabelInput
           name="name"
-          labelClass="not-peer-placeholder-shown:bg-zinc-200 not-peer-placeholder-shown:dark:bg-zinc-900"
+          labelClass="peer-[&:focus,&:not(:placeholder-shown)]:bg-zinc-50 peer-[&:focus,&:not(:placeholder-shown)]:dark:bg-zinc-900"
           bind:value={tagName}
           clearable
         >
@@ -191,7 +191,7 @@
       <input type="text" name="tag-id" value={selectedTag?.id} hidden readonly />
       <Button class="w-full" type="danger" onclick={hideModal}>Delete</Button>
     </form>
-    <Button class="w-full" type="dark" onclick={hideModal}>Cancel</Button>
+    <Button class="w-full" type="base" onclick={hideModal}>Cancel</Button>
   </ModalFooter>
 </Modal>
 

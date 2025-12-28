@@ -28,7 +28,8 @@ export type ApiResponse = {
 
 export type ToastMessage = {
   id: number;
-  message: string;
+  message?: string;
+  notiPayload?: Notification;
   type: 'success' | 'info' | 'error';
 };
 
@@ -42,6 +43,7 @@ export type CurrentUser = {
 
 export type User = {
   id: number;
+  email: string;
   username: string;
   displayName: string;
   description: string | null;

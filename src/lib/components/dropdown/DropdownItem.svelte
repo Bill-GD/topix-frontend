@@ -24,7 +24,7 @@
     <a
       class={[
         'block w-max min-w-full rounded-md px-3 py-2',
-        !noHover && 'hover:bg-zinc-200 dark:hover:bg-zinc-700',
+        !noHover && 'hover:bg-zinc-150 dark:hover:bg-zinc-700',
         className,
       ]}
       {href}
@@ -37,7 +37,7 @@
     <button
       class={[
         'block w-full cursor-pointer rounded-md px-3 py-2 text-left',
-        !noHover && 'hover:bg-zinc-200 dark:hover:bg-zinc-700',
+        !noHover && 'hover:bg-zinc-150 dark:hover:bg-zinc-700',
         className,
       ]}
       {onclick}
